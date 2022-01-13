@@ -13,6 +13,7 @@ use App\Models\UserType;
 use App\Models\NumberCombination;
 use App\Models\ResultMaster;
 use App\Models\NextGameDraw;
+use App\Models\PayOutSlab;
 
 class DatabaseSeeder extends Seeder
 {
@@ -31,6 +32,16 @@ class DatabaseSeeder extends Seeder
         UserType::create(['user_type_name' => 'Stockist']);
         UserType::create(['user_type_name' => 'Terminal']);
         $this->command->info('User Type creation Finished');
+
+
+
+        PayOutSlab::insert([
+            ['slab_range' => '100-116', 'slab_status' => 'Very high'],
+            ['slab_range' => '116-132', 'slab_status' => 'High'],
+            ['slab_range' => '132-148', 'slab_status' => 'Medium'],
+            ['slab_range' => '148-164', 'slab_status' => 'Low'],
+            ['slab_range' => '164-180', 'slab_status' => 'Very low'],
+        ]);
 
         User::create(['user_name'=>'Arindam Biswas','email'=>'1001','password'=>"b8c37e33defde51cf91e1e03e51657da",'mobile1'=>'9836444999','user_type_id'=>1,'closing_balance' => 5000]);
         User::create(['user_name'=>'Ananda Sen','email'=>'1002','password'=>"fba9d88164f3e2d9109ee770223212a0",'mobile1'=>'9536485201','user_type_id'=>2,'closing_balance' => 5000]);
