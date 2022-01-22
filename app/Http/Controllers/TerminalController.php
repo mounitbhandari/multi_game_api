@@ -39,36 +39,33 @@ class TerminalController extends Controller
     public function create_terminal(Request $request){
         $requestedData = (object)$request->json()->all();
 
-//        $userRelation = UserRelationWithOther::whereStockistId($requestedData->stockistId)->whereTerminalId(null)->first();
-//        return response()->json(['success'=>1,'data'=> $userRelation], 200,[],JSON_NUMERIC_CHECK);
-
         DB::beginTransaction();
         try{
-            $customVoucher=CustomVoucher::where('voucher_name','=',"terminal")->where('accounting_year',"=",2021)->first();
-            if($customVoucher) {
-                //already exist
-                $customVoucher->last_counter = $customVoucher->last_counter + 1;
-                $customVoucher->save();
-            }else{
-                //fresh entry
-                $customVoucher= new CustomVoucher();
-                $customVoucher->voucher_name="terminal";
-                $customVoucher->accounting_year= 2021;
-                $customVoucher->last_counter=3000;
-                $customVoucher->delimiter='-';
-                $customVoucher->prefix='T';
-                $customVoucher->save();
-            }
-            //adding Zeros before number
-            $counter = $customVoucher->last_counter;
-            //creating stockist user_id
-            $user_id = $counter;
+//            $customVoucher=CustomVoucher::where('voucher_name','=',"terminal")->where('accounting_year',"=",2021)->first();
+//            if($customVoucher) {
+//                //already exist
+//                $customVoucher->last_counter = $customVoucher->last_counter + 1;
+//                $customVoucher->save();
+//            }else{
+//                //fresh entry
+//                $customVoucher= new CustomVoucher();
+//                $customVoucher->voucher_name="terminal";
+//                $customVoucher->accounting_year= 2021;
+//                $customVoucher->last_counter=3000;
+//                $customVoucher->delimiter='-';
+//                $customVoucher->prefix='T';
+//                $customVoucher->save();
+//            }
+//            //adding Zeros before number
+//            $counter = $customVoucher->last_counter;
+//            //creating stockist user_id
+//            $user_id = $counter;
 
             $user = new User();
             $user->user_name = $requestedData->terminalName;
-            $user->email = $user_id;
-            $user->password = md5($user_id);
-            $user->user_type_id = 4;
+            $user->email = $requestedData->pin;
+            $user->password = md5($requestedData->pin);
+            $user->user_type_id = 5;
             $user->created_by = $requestedData->createdBy;
             $user->opening_balance = 0;
             $user->closing_balance = 0;
@@ -88,7 +85,6 @@ class TerminalController extends Controller
                 $userRelation->terminal_id = $user->id;
                 $userRelation->save();
             }
-
 
             DB::commit();
         }catch(\Exception $e){

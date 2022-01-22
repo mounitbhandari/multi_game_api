@@ -124,30 +124,30 @@ class StockistController extends Controller
 
         DB::beginTransaction();
         try{
-            $customVoucher=CustomVoucher::where('voucher_name','=',"stockist")->where('accounting_year',"=",2021)->first();
-            if($customVoucher) {
-                //already exist
-                $customVoucher->last_counter = $customVoucher->last_counter + 1;
-                $customVoucher->save();
-            }else{
-                //fresh entry
-                $customVoucher= new CustomVoucher();
-                $customVoucher->voucher_name="stockist";
-                $customVoucher->accounting_year= 2021;
-                $customVoucher->last_counter=1;
-                $customVoucher->delimiter='-';
-                $customVoucher->prefix='S';
-                $customVoucher->save();
-            }
-            //adding Zeros before number
-            $counter = str_pad($customVoucher->last_counter,5,"0",STR_PAD_LEFT);
-            //creating stockist user_id
-            $user_id = $customVoucher->prefix.$counter;
+//            $customVoucher=CustomVoucher::where('voucher_name','=',"stockist")->where('accounting_year',"=",2021)->first();
+//            if($customVoucher) {
+//                //already exist
+//                $customVoucher->last_counter = $customVoucher->last_counter + 1;
+//                $customVoucher->save();
+//            }else{
+//                //fresh entry
+//                $customVoucher= new CustomVoucher();
+//                $customVoucher->voucher_name="stockist";
+//                $customVoucher->accounting_year= 2021;
+//                $customVoucher->last_counter=1;
+//                $customVoucher->delimiter='-';
+//                $customVoucher->prefix='S';
+//                $customVoucher->save();
+//            }
+//            //adding Zeros before number
+//            $counter = str_pad($customVoucher->last_counter,5,"0",STR_PAD_LEFT);
+//            //creating stockist user_id
+//            $user_id = $customVoucher->prefix.$counter;
 
             $user = new User();
             $user->user_name = $requestedData->userName;
-            $user->email = $user_id;
-            $user->password = md5($user_id);
+            $user->email = $requestedData->pin;
+            $user->password = md5($requestedData->pin);
             $user->user_type_id = 4;
             $user->created_by = $requestedData->createdBy;
             $user->opening_balance = 0;
