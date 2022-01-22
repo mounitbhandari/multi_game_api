@@ -2,20 +2,63 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CustomVoucher;
 use App\Models\SuperStockist;
 use App\Http\Requests\StoreSuperStockistRequest;
 use App\Http\Requests\UpdateSuperStockistRequest;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\DB;
 
 class SuperStockistController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function create_super_stockist(Request $request)
     {
-        //
+
+        $requestedData = (object)$request->json()->all();
+
+        DB::beginTransaction();
+        try{
+            $customVoucher=CustomVoucher::where('voucher_name','=',"super stockist")->where('accounting_year',"=",2021)->first();
+            if($customVoucher) {
+                //already exist
+                $customVoucher->last_counter = $customVoucher->last_counter + 1;
+                $customVoucher->save();
+            }else{
+                //fresh entry
+                $customVoucher= new CustomVoucher();
+                $customVoucher->voucher_name="super stockist";
+                $customVoucher->accounting_year= 2021;
+                $customVoucher->last_counter=1;
+                $customVoucher->delimiter='-';
+                $customVoucher->prefix='SS';
+                $customVoucher->save();
+            }
+            //adding Zeros before number
+            $counter = str_pad($customVoucher->last_counter,4,"0",STR_PAD_LEFT);
+            //creating stockist user_id
+            $user_id = $customVoucher->prefix.$counter;
+
+            $user = new User();
+            $user->user_name = $requestedData->userName;
+            $user->email = $user_id;
+            $user->password = md5($user_id);
+            $user->user_type_id = 3;
+            $user->created_by = $requestedData->createdBy;
+            $user->opening_balance = 0;
+            $user->closing_balance = 0;
+            $user->save();
+
+            DB::commit();
+        }catch(\Exception $e){
+            DB::rollBack();
+            return response()->json(['success'=>0, 'data' => null, 'error'=>$e->getMessage()], 500);
+        }
+
+        return response()->json(['success'=>1,'data'=> $user], 200,[],JSON_NUMERIC_CHECK);
     }
 
     /**

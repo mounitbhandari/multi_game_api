@@ -7,6 +7,7 @@ use App\Http\Resources\StockistResource;
 use App\Models\PlayMaster;
 use App\Models\RechargeToUser;
 use App\Models\User;
+use App\Models\UserRelationWithOther;
 use App\Models\UserType;
 use App\Models\CustomVoucher;
 use Illuminate\Http\Request;
@@ -147,11 +148,17 @@ class StockistController extends Controller
             $user->user_name = $requestedData->userName;
             $user->email = $user_id;
             $user->password = md5($user_id);
-            $user->user_type_id = 3;
+            $user->user_type_id = 4;
+            $user->created_by = $requestedData->createdBy;
             $user->opening_balance = 0;
             $user->closing_balance = 0;
-
             $user->save();
+
+            $userRelation = new UserRelationWithOther();
+            $userRelation->super_stockist_id = $requestedData->superStockistId;
+            $userRelation->stockist_id = $user->id;
+            $userRelation->save();
+
             DB::commit();
         }catch(\Exception $e){
             DB::rollBack();

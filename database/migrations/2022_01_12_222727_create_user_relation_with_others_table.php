@@ -15,8 +15,13 @@ class CreateUserRelationWithOthersTable extends Migration
     {
         Schema::create('user_relation_with_others', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('parent_id')->references('id')->on('users')->onDelete('cascade');
+//            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
+//            $table->foreignId('parent_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('super_stockist_id');
+            $table->integer('stockist_id')->nullable(true);
+            $table->integer('terminal_id')->nullable(true);
+            $table->integer('changed_for')->nullable(true);
+            $table->date('end_date')->nullable(true);
             $table->timestamps();
         });
     }

@@ -21,6 +21,7 @@ use App\Http\Controllers\TerminalController;
 use App\Http\Controllers\CPanelReportController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\TerminalReportController;
+use App\Http\Controllers\SuperStockistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -133,6 +134,9 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
 
 Route::group(array('prefix' => 'dev'), function() {
+
+    Route::post('superStockists',[SuperStockistController::class, 'create_super_stockist']);
+    Route::post('stockists',[StockistController::class, 'create_stockist']);
 
     Route::get('activateGame/{id}', [GameController::class, 'activate_game']);
 

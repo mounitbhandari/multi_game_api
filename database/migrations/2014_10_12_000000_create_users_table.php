@@ -25,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->foreignId('user_type_id')->references('id')->on('user_types')->onDelete('cascade');
             $table->decimal('opening_balance')->default(0);
             $table->decimal('closing_balance')->default(0);
+            $table ->integer('created_by')->nullable(true);
             $table->tinyInteger('inforce')->default(1);
             $table->timestamps();
         });
