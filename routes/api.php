@@ -137,6 +137,7 @@ Route::group(array('prefix' => 'dev'), function() {
 
     Route::post('superStockists',[SuperStockistController::class, 'create_super_stockist']);
     Route::post('stockists',[StockistController::class, 'create_stockist']);
+    Route::post('terminals',[TerminalController::class, 'create_terminal']);
 
     Route::get('activateGame/{id}', [GameController::class, 'activate_game']);
 

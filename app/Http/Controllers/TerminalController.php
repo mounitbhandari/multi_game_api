@@ -1,11 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\UserRelationWithOther;
 use App\Models\UserType;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Models\RechargeToUser;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
 use App\Models\CustomVoucher;
 
@@ -35,6 +38,9 @@ class TerminalController extends Controller
     public function create_terminal(Request $request){
         $requestedData = (object)$request->json()->all();
 
+//        $userRelation = UserRelationWithOther::whereStockistId($requestedData->stockistId)->whereTerminalId(null)->first();
+//        return response()->json(['success'=>1,'data'=> $userRelation], 200,[],JSON_NUMERIC_CHECK);
+
         DB::beginTransaction();
         try{
             $customVoucher=CustomVoucher::where('voucher_name','=',"terminal")->where('accounting_year',"=",2021)->first();
@@ -62,15 +68,30 @@ class TerminalController extends Controller
             $user->email = $user_id;
             $user->password = md5($user_id);
             $user->user_type_id = 4;
+            $user->created_by = $requestedData->createdBy;
             $user->opening_balance = 0;
             $user->closing_balance = 0;
-
             $user->save();
-            $stockistToTerminal= new StockistToTerminal();
 
-            $stockistToTerminal->terminal_id = $user->id;
-            $stockistToTerminal->stockist_id = $requestedData->stockistId;
-            $stockistToTerminal->save();
+//            $stockistToTerminal= new StockistToTerminal();
+//            $stockistToTerminal->terminal_id = $user->id;
+//            $stockistToTerminal->stockist_id = $requestedData->stockistId;
+//            $stockistToTerminal->save();
+
+            $userRelation = UserRelationWithOther::whereStockistId($requestedData->stockistId)->whereTerminalId(null)->first();
+
+            if($userRelation){
+                $userRelation->super_stockist_id = $requestedData->superStockistId;
+                $userRelation->stockist_id = $requestedData->stockistId;
+                $userRelation->terminal_id = $user->id;
+                $userRelation->save();
+            }else{
+                $userRelation = new UserRelationWithOther();
+                $userRelation->super_stockist_id = $requestedData->superStockistId;
+                $userRelation->stockist_id = $requestedData->stockistId;
+                $userRelation->terminal_id = $user->id;
+                $userRelation->save();
+            }
 
 
             DB::commit();
