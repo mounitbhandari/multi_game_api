@@ -7,6 +7,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Models\RechargeToUser;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\DB;
@@ -73,11 +74,6 @@ class TerminalController extends Controller
             $user->closing_balance = 0;
             $user->save();
 
-//            $stockistToTerminal= new StockistToTerminal();
-//            $stockistToTerminal->terminal_id = $user->id;
-//            $stockistToTerminal->stockist_id = $requestedData->stockistId;
-//            $stockistToTerminal->save();
-
             $userRelation = UserRelationWithOther::whereStockistId($requestedData->stockistId)->whereTerminalId(null)->first();
 
             if($userRelation){
@@ -106,9 +102,6 @@ class TerminalController extends Controller
 
     public function update_terminal(Request $request){
 
-
-
-
         $requestedData = (object)$request->json()->all();
 
         $terminalId = $requestedData->terminalId;
@@ -119,20 +112,21 @@ class TerminalController extends Controller
         $terminal->user_name = $terminalName;
         $terminal->save();
 
-        $stockistToTerminal = StockistToTerminal::where('terminal_id',$terminalId)->first();
-        if(!empty($stockistToTerminal)){
-            $stockistToTerminal->stockist_id = $stockist_id;
-            $stockistToTerminal->save();
-        }else{
-            $stockistToTerminal = new StockistToTerminal();
-            $stockistToTerminal->terminal_id = $terminalId;
-            $stockistToTerminal->stockist_id = $stockist_id;
-            $stockistToTerminal->save();
+        $userRelation = UserRelationWithOther::whereTerminalId($terminalId)->whereActive(1)->first();
+        if($stockist_id != ($userRelation->stockist_id)){
+            $userRelation->changed_for = $terminalId;
+            $userRelation->end_date = Carbon::today();
+            $userRelation->active = 0;
+            $userRelation->save();
+
+            $userRelationCreate = new UserRelationWithOther();
+            $userRelationCreate->super_stockist_id = $userRelation->super_stockist_id;
+            $userRelationCreate->stockist_id = $stockist_id;
+            $userRelationCreate->terminal_id = $terminalId;
+            $userRelationCreate->save();
         }
 
-
         return response()->json(['success'=>1,'data'=> new TerminalResource($terminal)], 200,[],JSON_NUMERIC_CHECK);
-        // return response()->json(['data'=> $stockistToTerminal]);
     }
 
     public function update_balance_to_terminal(Request $request){
