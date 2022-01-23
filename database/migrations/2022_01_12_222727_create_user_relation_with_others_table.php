@@ -20,6 +20,7 @@ class CreateUserRelationWithOthersTable extends Migration
             $table->integer('super_stockist_id');
             $table->integer('stockist_id')->nullable(true);
             $table->integer('terminal_id')->nullable(true);
+            $table->integer('changed_by')->nullable(true);
             $table->integer('changed_for')->nullable(true);
             $table->date('end_date')->nullable(true);
             $table->tinyInteger('active')->default(1);

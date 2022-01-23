@@ -111,6 +111,7 @@ class TerminalController extends Controller
         $userRelation = UserRelationWithOther::whereTerminalId($terminalId)->whereActive(1)->first();
         if($stockist_id != ($userRelation->stockist_id)){
             $userRelation->changed_for = $terminalId;
+            $userRelation->changed_by = $requestedData->userId;
             $userRelation->end_date = Carbon::today();
             $userRelation->active = 0;
             $userRelation->save();

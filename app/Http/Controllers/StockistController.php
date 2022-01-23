@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\UserRelationWithOther;
 use App\Models\UserType;
 use App\Models\CustomVoucher;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -170,14 +171,37 @@ class StockistController extends Controller
 
     public function update_stockist(Request $request){
         $requestedData = (object)$request->json()->all();
-        $id = $requestedData->id;
-        $user_name = $requestedData->userName;
-        $stockist = User::findOrFail($id);
-        $stockist->user_name = $user_name;
-        $stockist->save();
-        return response()->json(['success'=>1,'data'=> new StockistResource($stockist)], 200,[],JSON_NUMERIC_CHECK);
-        // return response()->json(['success'=>1,'data'=>$id], 200,[],JSON_NUMERIC_CHECK);
 
+        $stockist_id = $requestedData->stockistId;
+        $super_stockist_id = $requestedData->superStockistId;
+        $stockist_name = $requestedData->stockistName;
+
+        $stockist = User::findOrFail($stockist_id);
+        $stockist->user_name = $stockist_name;
+        $stockist->save();
+
+        $userRelation = UserRelationWithOther::whereStockistId($stockist_id)->whereActive(1)->first();
+
+        if($userRelation->super_stockist_id != $super_stockist_id){
+            $userRelations = UserRelationWithOther::whereStockistId($stockist_id)->whereActive(1)->get();
+
+            foreach ($userRelations as $user){
+                $userRelation = UserRelationWithOther::whereId($user->id)->first();
+                $userRelation->changed_for = $stockist_id;
+                $userRelation->changed_by = $requestedData->userId;
+                $userRelation->end_date = Carbon::today();
+                $userRelation->active = 0;
+                $userRelation->save();
+
+                $userRelationSave = new UserRelationWithOther();
+                $userRelationSave->super_stockist_id = $super_stockist_id;
+                $userRelationSave->stockist_id = $stockist_id;
+                $userRelationSave->terminal_id = $user->terminal_id;
+                $userRelationSave->save();
+            }
+        }
+
+        return response()->json(['success'=>1,'data'=> $stockist], 200,[],JSON_NUMERIC_CHECK);
     }
 
     public function update_balance_to_stockist(Request $request){
