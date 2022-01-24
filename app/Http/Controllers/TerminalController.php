@@ -41,25 +41,6 @@ class TerminalController extends Controller
 
         DB::beginTransaction();
         try{
-//            $customVoucher=CustomVoucher::where('voucher_name','=',"terminal")->where('accounting_year',"=",2021)->first();
-//            if($customVoucher) {
-//                //already exist
-//                $customVoucher->last_counter = $customVoucher->last_counter + 1;
-//                $customVoucher->save();
-//            }else{
-//                //fresh entry
-//                $customVoucher= new CustomVoucher();
-//                $customVoucher->voucher_name="terminal";
-//                $customVoucher->accounting_year= 2021;
-//                $customVoucher->last_counter=3000;
-//                $customVoucher->delimiter='-';
-//                $customVoucher->prefix='T';
-//                $customVoucher->save();
-//            }
-//            //adding Zeros before number
-//            $counter = $customVoucher->last_counter;
-//            //creating stockist user_id
-//            $user_id = $counter;
 
             $user = new User();
             $user->user_name = $requestedData->terminalName;

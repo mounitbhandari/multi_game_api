@@ -22,25 +22,6 @@ class SuperStockistController extends Controller
 
         DB::beginTransaction();
         try{
-//            $customVoucher=CustomVoucher::where('voucher_name','=',"super stockist")->where('accounting_year',"=",2021)->first();
-//            if($customVoucher) {
-//                //already exist
-//                $customVoucher->last_counter = $customVoucher->last_counter + 1;
-//                $customVoucher->save();
-//            }else{
-//                //fresh entry
-//                $customVoucher= new CustomVoucher();
-//                $customVoucher->voucher_name="super stockist";
-//                $customVoucher->accounting_year= 2021;
-//                $customVoucher->last_counter=1;
-//                $customVoucher->delimiter='-';
-//                $customVoucher->prefix='SS';
-//                $customVoucher->save();
-//            }
-//            //adding Zeros before number
-//            $counter = str_pad($customVoucher->last_counter,4,"0",STR_PAD_LEFT);
-//            //creating stockist user_id
-//            $user_id = $customVoucher->prefix.$counter;
 
             $user = new User();
             $user->user_name = $requestedData->userName;
