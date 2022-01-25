@@ -61,17 +61,19 @@ class TerminalController extends Controller
 
             $userRelation = UserRelationWithOther::whereStockistId($requestedData->stockistId)->whereTerminalId(null)->first();
 
+//            return response()->json(['success'=>$requestedData,'data'=> $userRelation], 200,[],JSON_NUMERIC_CHECK);
+
             if($userRelation){
-                $userRelation->super_stockist_id = $requestedData->superStockistId;
+//                $userRelation->super_stockist_id = $requestedData->superStockistId;
                 $userRelation->stockist_id = $requestedData->stockistId;
                 $userRelation->terminal_id = $user->id;
                 $userRelation->save();
             }else{
-                $userRelation = new UserRelationWithOther();
-                $userRelation->super_stockist_id = $requestedData->superStockistId;
-                $userRelation->stockist_id = $requestedData->stockistId;
-                $userRelation->terminal_id = $user->id;
-                $userRelation->save();
+                $userRelationNew = new UserRelationWithOther();
+                $userRelationNew->super_stockist_id = $requestedData->superStockistId;
+                $userRelationNew->stockist_id = $requestedData->stockistId;
+                $userRelationNew->terminal_id = $user->id;
+                $userRelationNew->save();
             }
 
             DB::commit();
@@ -93,9 +95,11 @@ class TerminalController extends Controller
         $terminalId = $requestedData->terminalId;
         $terminalName = $requestedData->terminalName;
         $stockist_id = $requestedData->stockistId;
+        $super_stockist_id = $requestedData->superStockistId;
 
         $terminal = User::findOrFail($terminalId);
         $terminal->user_name = $terminalName;
+        $terminal->email = $requestedData->pin;
         $terminal->save();
 
         $userRelation = UserRelationWithOther::whereTerminalId($terminalId)->whereActive(1)->first();
@@ -106,8 +110,13 @@ class TerminalController extends Controller
             $userRelation->active = 0;
             $userRelation->save();
 
+            $userRelationNull = new UserRelationWithOther();
+            $userRelationNull->super_stockist_id = $userRelation->super_stockist_id;
+            $userRelationNull->stockist_id = $userRelation->stockist_id;
+            $userRelationNull->save();
+
             $userRelationCreate = new UserRelationWithOther();
-            $userRelationCreate->super_stockist_id = $userRelation->super_stockist_id;
+            $userRelationCreate->super_stockist_id = $super_stockist_id;
             $userRelationCreate->stockist_id = $stockist_id;
             $userRelationCreate->terminal_id = $terminalId;
             $userRelationCreate->save();

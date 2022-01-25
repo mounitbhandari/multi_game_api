@@ -7,6 +7,7 @@ use App\Models\SuperStockist;
 use App\Http\Requests\StoreSuperStockistRequest;
 use App\Http\Requests\UpdateSuperStockistRequest;
 use App\Models\User;
+use App\Models\UserRelationWithOther;
 use App\Models\UserType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -49,15 +50,11 @@ class SuperStockistController extends Controller
         return response()->json(['success'=>1,'data'=> $data], 200,[],JSON_NUMERIC_CHECK);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreSuperStockistRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreSuperStockistRequest $request)
+    public function getSuperStockistByStockist(Request $request)
     {
-        //
+        $requestedData = (object)$request->json()->all();
+        $data = UserRelationWithOther::whereStockistId($requestedData->stockistId)->first();
+        return response()->json(['success'=>1,'data'=> $data], 200,[],JSON_NUMERIC_CHECK);
     }
 
     /**
