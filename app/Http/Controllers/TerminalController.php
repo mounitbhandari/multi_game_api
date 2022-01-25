@@ -25,8 +25,15 @@ use Illuminate\Support\Facades\Validator;
 class TerminalController extends Controller
 {
     public function get_all_terminals(){
-        $terminals = UserType::find(4)->users;
+//        $terminals = UserType::find(5)->users;
+//        $terminals = User::select()->whereUserTypeId(5)
+//            ->join('user_relation_with_others','users.id','user_relation_with_others.terminal_id')
+//            ->get();
+        $terminals = DB::select("select users.id, users.user_name, users.email, users.password, users.remember_token, users.mobile1, users.user_type_id, users.opening_balance, users.closing_balance, users.created_by, users.inforce, user_relation_with_others.super_stockist_id, user_relation_with_others.stockist_id, user_relation_with_others.terminal_id, user_relation_with_others.changed_by, user_relation_with_others.active, user_relation_with_others.end_date, user_relation_with_others.changed_for from users
+            inner join user_relation_with_others on users.id = user_relation_with_others.terminal_id
+            where user_relation_with_others.active = 1");
         return TerminalResource::collection($terminals);
+//        return $terminals;
     }
 
     // public function get_stockist_by_terminal_id(){
@@ -80,6 +87,8 @@ class TerminalController extends Controller
     public function update_terminal(Request $request){
 
         $requestedData = (object)$request->json()->all();
+
+//        return response()->json(['success'=>1,'data'=>$requestedData], 200,[],JSON_NUMERIC_CHECK);
 
         $terminalId = $requestedData->terminalId;
         $terminalName = $requestedData->terminalName;

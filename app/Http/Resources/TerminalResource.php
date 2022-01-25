@@ -15,12 +15,7 @@ use App\Http\Resources\StockistResource;
  */
 class TerminalResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
+
     public function toArray($request)
     {
         return [
@@ -31,7 +26,8 @@ class TerminalResource extends JsonResource
             // 'stockist' =>($this->stockist_id!= null) ? new StockistResource($this->stockist_id) : null,
             'stockist' => is_null($this->stockist_id) ? 'empty':new UserResource(User::find($this->stockist_id)),
             'stockistId' => $this->stockist_id,
-
+            'superStockist' => is_null($this->super_stockist_id) ? 'empty':new UserResource(User::find($this->super_stockist_id)),
+            'superStockistId' => $this->super_stockist_id,
         ];
     }
 }
