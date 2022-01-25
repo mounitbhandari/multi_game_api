@@ -128,6 +128,9 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::get('updateAutoGenerate/{id}', [GameController::class, 'update_auto_generate']);
     Route::get('activateGame/{id}', [GameController::class, 'activate_game']);
 
+    Route::post('superStockists',[SuperStockistController::class, 'create_super_stockist']);
+    Route::get('superStockists',[SuperStockistController::class, 'get_super_stockist']);
+
 });
 
 
