@@ -7,6 +7,7 @@ use App\Models\SuperStockist;
 use App\Http\Requests\StoreSuperStockistRequest;
 use App\Http\Requests\UpdateSuperStockistRequest;
 use App\Models\User;
+use App\Models\UserType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -42,14 +43,10 @@ class SuperStockistController extends Controller
         return response()->json(['success'=>1,'data'=> $user], 200,[],JSON_NUMERIC_CHECK);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function get_super_stockist()
     {
-        //
+        $data = UserType::find(3)->users;
+        return response()->json(['success'=>1,'data'=> $data], 200,[],JSON_NUMERIC_CHECK);
     }
 
     /**

@@ -136,6 +136,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 Route::group(array('prefix' => 'dev'), function() {
 
     Route::post('superStockists',[SuperStockistController::class, 'create_super_stockist']);
+    Route::get('superStockists',[SuperStockistController::class, 'get_super_stockist']);
     Route::post('stockists',[StockistController::class, 'create_stockist']);
     Route::put('stockists',[StockistController::class, 'update_stockist']);
     Route::post('terminals',[TerminalController::class, 'create_terminal']);

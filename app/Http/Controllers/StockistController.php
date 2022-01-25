@@ -102,21 +102,17 @@ class StockistController extends Controller
 
     public function get_all_stockists(){
 
-        $stockists = UserType::find(3)->users;
-//        return response()->json(['success'=>1,'data'=>StockistResource::collection($stockists)], 200,[],JSON_NUMERIC_CHECK);
+        $stockists = UserType::find(4)->users;
         return StockistResource::collection($stockists);
     }
 
     public function get_stockist($id){
 
-//        $stockists = UserType::find(3)->users;
         $stockists = User::select()
             ->join('user_types','user_types.id','users.user_type_id')
             ->where('users.id',$id)
             ->where('user_type_id',3)
             ->first();
-//        return response()->json(['success'=>1,'data'=>StockistResource::collection($stockists)], 200,[],JSON_NUMERIC_CHECK);
-//        return StockistResource::collection($stockists);
         return StockistResource::collection($stockists);
     }
 
