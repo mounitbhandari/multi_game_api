@@ -12,7 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        'http://kfatafat.com/matka_api/public/api/*',
-        'https://kfatafat.com/matka_api/public/api/*'
+        'http://all.kfatafat.com/multi_game_api/public/api/*',
+        'https://all.kfatafat.com/multi_game_api/public/api/*'
     ];
 }
