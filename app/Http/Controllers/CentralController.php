@@ -40,7 +40,6 @@ class CentralController extends Controller
 
         }
 
-
         $resultMasterController = new ResultMasterController();
         $jsonData = $resultMasterController->save_auto_result($lastDrawId);
 
