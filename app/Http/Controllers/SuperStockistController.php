@@ -57,15 +57,12 @@ class SuperStockistController extends Controller
         return response()->json(['success'=>1,'data'=> $data], 200,[],JSON_NUMERIC_CHECK);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\SuperStockist  $superStockist
-     * @return \Illuminate\Http\Response
-     */
-    public function show(SuperStockist $superStockist)
+    public function getStockistBySuperStockistId($id)
     {
-        //
+        $data = DB::select("select distinct users.id,user_relation_with_others.super_stockist_id, user_relation_with_others.stockist_id, users.user_name from user_relation_with_others
+            inner join users on user_relation_with_others.stockist_id = users.id
+            where user_relation_with_others.super_stockist_id = ".$id);
+        return response()->json(['success'=>1,'data'=> $data], 200,[],JSON_NUMERIC_CHECK);
     }
 
     /**
