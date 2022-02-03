@@ -186,7 +186,7 @@ class StockistController extends Controller
         $rules = array(
             'beneficiaryUid'=> ['required',
                 function($attribute, $value, $fail){
-                    $stockist=User::where('id', $value)->where('user_type_id','=',3)->first();
+                    $stockist=User::where('id', $value)->where('user_type_id','=',4)->first();
                     if(!$stockist){
                         return $fail($value.' is not a valid stockist id');
                     }

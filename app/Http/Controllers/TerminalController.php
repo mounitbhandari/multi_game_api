@@ -145,7 +145,7 @@ class TerminalController extends Controller
        $rules = array(
            'beneficiaryUid'=> ['required',
                function($attribute, $value, $fail){
-                   $terminal=User::where('id', $value)->where('user_type_id','=',4)->first();
+                   $terminal=User::where('id', $value)->where('user_type_id','=',5)->first();
                    if(!$terminal){
                        return $fail($value.' is not a valid terminal id');
                    }
