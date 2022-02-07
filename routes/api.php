@@ -22,6 +22,7 @@ use App\Http\Controllers\CPanelReportController;
 use App\Http\Controllers\GameController;
 use App\Http\Controllers\TerminalReportController;
 use App\Http\Controllers\SuperStockistController;
+use App\Http\Controllers\PayOutSlabController;
 
 /*
 |--------------------------------------------------------------------------
@@ -132,12 +133,17 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::get('superStockists',[SuperStockistController::class, 'get_super_stockist']);
     Route::get('getStockistBySuperStockistId/{id}',[SuperStockistController::class, 'getStockistBySuperStockistId']);
 
+//    PAYOUT SLABS
+    Route::get('payoutSlabs',[PayOutSlabController::class, 'get_all_payout_slabs']);
+
 });
 
 
 
 
 Route::group(array('prefix' => 'dev'), function() {
+
+    Route::get('terminals',[TerminalController::class, 'get_all_terminals']);
 
     Route::post('superStockists',[SuperStockistController::class, 'create_super_stockist']);
     Route::get('superStockists',[SuperStockistController::class, 'get_super_stockist']);
@@ -146,6 +152,8 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::put('stockists',[StockistController::class, 'update_stockist']);
     Route::post('terminals',[TerminalController::class, 'create_terminal']);
     Route::put('terminals',[TerminalController::class, 'update_terminal']);
+
+    Route::get('payoutSlabs',[PayOutSlabController::class, 'get_all_payout_slabs']);
 
     Route::get('activateGame/{id}', [GameController::class, 'activate_game']);
 

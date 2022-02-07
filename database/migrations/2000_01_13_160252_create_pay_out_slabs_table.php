@@ -16,6 +16,7 @@ class CreatePayOutSlabsTable extends Migration
         Schema::create('pay_out_slabs', function (Blueprint $table) {
             $table->id();
             $table->string('slab_range')->nullable(false);
+            $table->integer('slab_value')->nullable(false);
             $table->string('slab_status')->nullable(false);
             $table->timestamps();
         });

@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('mobile1',15)->nullable(true);
 
             $table->foreignId('user_type_id')->references('id')->on('user_types')->onDelete('cascade');
+            $table->foreignId('pay_out_slab_id')->references('id')->on('pay_out_slabs')->onDelete('cascade');
             $table->decimal('opening_balance')->default(0);
             $table->decimal('closing_balance')->default(0);
             $table ->integer('created_by')->nullable(true);

@@ -5,17 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\PayOutSlab;
 use App\Http\Requests\StorePayOutSlabRequest;
 use App\Http\Requests\UpdatePayOutSlabRequest;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class PayOutSlabController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function get_all_payout_slabs()
     {
-        //
+        $data = PayOutSlab::get();
+        return response()->json(['success'=>1,'data'=> $data], 200,[],JSON_NUMERIC_CHECK);
     }
 
     /**

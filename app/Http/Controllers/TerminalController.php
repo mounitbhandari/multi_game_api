@@ -55,6 +55,7 @@ class TerminalController extends Controller
             $user->password = md5($requestedData->pin);
             $user->user_type_id = 5;
             $user->created_by = $requestedData->createdBy;
+            $user->pay_out_slab_id = $requestedData->payoutSlabId;
             $user->opening_balance = 0;
             $user->closing_balance = 0;
             $user->save();
