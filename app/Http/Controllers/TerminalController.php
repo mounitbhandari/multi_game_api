@@ -62,8 +62,6 @@ class TerminalController extends Controller
 
             $userRelation = UserRelationWithOther::whereStockistId($requestedData->stockistId)->whereTerminalId(null)->first();
 
-//            return response()->json(['success'=>$requestedData,'data'=> $userRelation], 200,[],JSON_NUMERIC_CHECK);
-
             if($userRelation){
 //                $userRelation->super_stockist_id = $requestedData->superStockistId;
                 $userRelation->stockist_id = $requestedData->stockistId;
