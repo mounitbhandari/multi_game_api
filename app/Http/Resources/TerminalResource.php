@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\PayOutSlab;
 use App\Models\User;
 
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -25,6 +26,8 @@ class TerminalResource extends JsonResource
             'balance' =>$this->closing_balance,
             // 'stockist' =>($this->stockist_id!= null) ? new StockistResource($this->stockist_id) : null,
             'stockist' => is_null($this->stockist_id) ? 'empty':new UserResource(User::find($this->stockist_id)),
+//            'payoutSlab' => PayOutSlab::find($this->pay_out_slab_id),
+            'payoutSlabId' => $this->pay_out_slab_id,
             'stockistId' => $this->stockist_id,
             'superStockist' => is_null($this->super_stockist_id) ? 'empty':new UserResource(User::find($this->super_stockist_id)),
             'superStockistId' => $this->super_stockist_id,
