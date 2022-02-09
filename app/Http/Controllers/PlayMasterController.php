@@ -38,6 +38,20 @@ class PlayMasterController extends Controller
         return response()->json(['success' => 1, 'data' => $playMaster, 'id'=>$playMaster->id, 'point'=>$user->closing_balance], 200);
     }
 
+    public function get_total_sale($today, $draw_id)
+    {
+        $total = DB::select(DB::raw("select sum(play_details.quantity*play_details.mrp) as total_balance from play_details
+        inner join play_masters ON play_masters.id = play_details.play_master_id
+        where play_masters.draw_master_id = $draw_id  and date(play_details.created_at)= "."'".$today."'"."
+        "));
+
+        if(!empty($total) && isset($total[0]->total_balance) && !empty($total[0]->total_balance)){
+            return $total[0]->total_balance;
+        }else{
+            return 0;
+        }
+    }
+
     public function claimPrize(Request $request){
         $requestedData = (object)$request->json()->all();
         $playMasterId = $requestedData->play_master_id;

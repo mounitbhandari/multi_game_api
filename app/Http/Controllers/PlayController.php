@@ -102,19 +102,21 @@ class PlayController extends Controller
                 }
                 if($detail->gameTypeId == 1){
                     $numberCombinationIds = SingleNumber::find($detail->singleNumberId)->number_combinations->pluck('id');
-                    foreach ($numberCombinationIds as $numberCombinationId){
+//                    foreach ($numberCombinationIds as $numberCombinationId){
                         $playDetails = new PlayDetails();
                         $playDetails->play_master_id = $playMaster->id;
                         $playDetails->game_type_id = $detail->gameTypeId;
-                        $playDetails->number_combination_id = $numberCombinationId;
+//                        $playDetails->number_combination_id = $numberCombinationId;
+                        $playDetails->number_combination_id = $detail->singleNumberId;
                         $playDetails->quantity = $detail->quantity;
-                        $playDetails->mrp = round($detail->mrp/22,4);
+//                        $playDetails->mrp = round($detail->mrp/22,4);
+                        $playDetails->mrp = $detail->mrp;
                         $playDetails->commission = $gameType->commission;
                         $playDetails->payout = $gameType->payout;
                         $playDetails->save();
                         $output_play_details[] = $playDetails;
 
-                    }
+//                    }
                 }
 
             }
