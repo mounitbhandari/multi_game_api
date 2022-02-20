@@ -92,7 +92,7 @@ class PlayController extends Controller
                     $playDetails = new PlayDetails();
                     $playDetails->play_master_id = $playMaster->id;
                     $playDetails->game_type_id = $detail->gameTypeId;
-                    $playDetails->number_combination_id = $detail->numberCombinationId;
+                    $playDetails->combination_number_id = $detail->numberCombinationId;
                     $playDetails->quantity = $detail->quantity;
                     $playDetails->mrp = $detail->mrp;
                     $playDetails->commission = $gameType->commission;
@@ -106,8 +106,8 @@ class PlayController extends Controller
                         $playDetails = new PlayDetails();
                         $playDetails->play_master_id = $playMaster->id;
                         $playDetails->game_type_id = $detail->gameTypeId;
-//                        $playDetails->number_combination_id = $numberCombinationId;
-                        $playDetails->number_combination_id = $detail->singleNumberId;
+//                        $playDetails->combination_number_id = $numberCombinationId;
+                        $playDetails->combination_number_id = $detail->singleNumberId;
                         $playDetails->quantity = $detail->quantity;
 //                        $playDetails->mrp = round($detail->mrp/22,4);
                         $playDetails->mrp = $detail->mrp;
@@ -144,7 +144,7 @@ class PlayController extends Controller
         $output_array = array();
         $single_game_data = PlayDetails::select(DB::raw('max(single_numbers.single_number) as single_number')
             ,DB::raw('max(play_details.quantity) as quantity'))
-            ->join('number_combinations','play_details.number_combination_id','number_combinations.id')
+            ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
             ->join('single_numbers','number_combinations.single_number_id','single_numbers.id')
             ->where('play_details.play_master_id',$play_master_id)
             ->where('play_details.game_type_id',1)
@@ -155,7 +155,7 @@ class PlayController extends Controller
 
         $triple_game_data = PlayDetails::select('number_combinations.visible_triple_number','play_details.quantity',
             'single_numbers.single_number')
-            ->join('number_combinations','play_details.number_combination_id','number_combinations.id')
+            ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
             ->join('single_numbers','number_combinations.single_number_id','single_numbers.id')
             ->where('play_details.play_master_id',$play_master_id)
             ->where('play_details.game_type_id',2)
