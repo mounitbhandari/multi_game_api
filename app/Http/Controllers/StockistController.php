@@ -182,7 +182,7 @@ class StockistController extends Controller
             }
         }
 
-        return response()->json(['success'=>1,'data'=> $stockist], 200,[],JSON_NUMERIC_CHECK);
+        return response()->json(['success'=>1,'data'=> new StockistResource($stockist)], 200,[],JSON_NUMERIC_CHECK);
     }
 
     public function update_balance_to_stockist(Request $request){

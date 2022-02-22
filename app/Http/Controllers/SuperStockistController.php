@@ -44,7 +44,7 @@ class SuperStockistController extends Controller
             return response()->json(['success'=>0, 'data' => null, 'error'=>$e->getMessage()], 500);
         }
 
-        return response()->json(['success'=>1,'data'=> $user], 200,[],JSON_NUMERIC_CHECK);
+        return response()->json(['success'=>1,'data'=> new SuperStockistResource($user)], 200,[],JSON_NUMERIC_CHECK);
     }
 
     public function get_super_stockist()

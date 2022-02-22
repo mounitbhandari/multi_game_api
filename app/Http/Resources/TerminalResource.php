@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\PayOutSlab;
 use App\Models\User;
 
+use App\Models\UserRelationWithOther;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\StockistResource;
 
@@ -25,11 +26,11 @@ class TerminalResource extends JsonResource
             'pin' => $this->email,
             'balance' =>$this->closing_balance,
             'commission' =>$this->commission,
-            'stockist' => is_null($this->stockist_id) ? 'empty':new UserResource(User::find($this->stockist_id)),
+            'stockist' => new StockistResource(User::find((UserRelationWithOther::whereTerminalId($this->id)->first())->stockist_id)),
             'payoutSlabId' => $this->pay_out_slab_id,
-            'stockistId' => $this->stockist_id,
-            'superStockist' => is_null($this->super_stockist_id) ? 'empty':new UserResource(User::find($this->super_stockist_id)),
-            'superStockistId' => $this->super_stockist_id,
+            'stockistId' => (UserRelationWithOther::whereTerminalId($this->id)->first())->stockist_id,
+            'superStockist' => new SuperStockistResource(User::find((UserRelationWithOther::whereTerminalId($this->id)->first())->super_stockist_id)),
+            'superStockistId' => (UserRelationWithOther::whereTerminalId($this->id)->first())->super_stockist_id,
         ];
     }
 }

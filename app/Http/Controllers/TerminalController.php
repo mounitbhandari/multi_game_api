@@ -107,6 +107,7 @@ class TerminalController extends Controller
         $terminal->user_name = $terminalName;
         $terminal->email = $requestedData->pin;
         $terminal->pay_out_slab_id = $requestedData->payoutSlabId;
+        $terminal->commission = $requestedData->commission;
         $terminal->save();
 
         $userRelation = UserRelationWithOther::whereTerminalId($terminalId)->whereActive(1)->first();
