@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SuperStockistResource;
 use App\Models\CustomVoucher;
 use App\Models\SuperStockist;
 use App\Http\Requests\StoreSuperStockistRequest;
@@ -49,7 +50,21 @@ class SuperStockistController extends Controller
     public function get_super_stockist()
     {
         $data = UserType::find(3)->users;
-        return response()->json(['success'=>1,'data'=> $data], 200,[],JSON_NUMERIC_CHECK);
+//        return SuperStockistResource::collection($data);
+        return response()->json(['success'=>1,'data'=>SuperStockistResource::collection($data)], 200,[],JSON_NUMERIC_CHECK);
+    }
+
+    public function update_super_stockist(Request $request){
+
+        $requestedData = (object)$request->json()->all();
+
+        $user = User::find($requestedData->id);
+        $user->user_name = $requestedData->userName;
+        $user->commission = $requestedData->commission;
+        $user->save();
+
+
+        return response()->json(['success'=>1,'data'=> $user], 200,[],JSON_NUMERIC_CHECK);
     }
 
     public function getSuperStockistByStockist(Request $request)

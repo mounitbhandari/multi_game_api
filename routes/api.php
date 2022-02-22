@@ -130,6 +130,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::get('activateGame/{id}', [GameController::class, 'activate_game']);
 
     Route::post('superStockists',[SuperStockistController::class, 'create_super_stockist']);
+    Route::put('superStockists',[SuperStockistController::class, 'update_super_stockist']);
     Route::get('superStockists',[SuperStockistController::class, 'get_super_stockist']);
     Route::get('getStockistBySuperStockistId/{id}',[SuperStockistController::class, 'getStockistBySuperStockistId']);
 
