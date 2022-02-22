@@ -103,6 +103,7 @@ class StockistController extends Controller
     public function get_all_stockists(){
 
         $stockists = UserType::find(4)->users;
+//        return response()->json(['success'=> 1, 'data' => $stockists], 200);
         return StockistResource::collection($stockists);
     }
 
@@ -129,6 +130,7 @@ class StockistController extends Controller
             $user->user_type_id = 4;
             $user->pay_out_slab_id = 1;
             $user->created_by = $requestedData->createdBy;
+            $user->commission = $requestedData->commission;
             $user->opening_balance = 0;
             $user->closing_balance = 0;
             $user->save();
@@ -156,6 +158,7 @@ class StockistController extends Controller
 
         $stockist = User::findOrFail($stockist_id);
         $stockist->user_name = $stockist_name;
+        $stockist->commission = $requestedData->commission;
         $stockist->save();
 
         $userRelation = UserRelationWithOther::whereStockistId($stockist_id)->whereActive(1)->first();

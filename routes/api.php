@@ -214,7 +214,7 @@ Route::group(array('prefix' => 'dev'), function() {
     // Route::get('test',[Test::class, 'index']);
 
 
-    // Route::get('stockists',[StockistController::class, 'get_all_stockists']);
+     Route::get('stockists',[StockistController::class, 'get_all_stockists']);
     // Route::get('stockists/{id}',[StockistController::class, 'get_stockist']);
     // Route::post('stockists',[StockistController::class, 'create_stockist']);
     // Route::put('stockists',[StockistController::class, 'update_stockist']);

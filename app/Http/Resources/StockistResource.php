@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\User;
 use App\Models\UserRelationWithOther;
 use Illuminate\Http\Resources\Json\JsonResource;
 use function PHPUnit\Framework\isNull;
@@ -23,7 +24,12 @@ class StockistResource extends JsonResource
 //            'userTypeId' => ($this->user_type)->id,
             'userTypeId' => $this->user_type_id,
             'balance' => $this->closing_balance,
-            'superStockistId' => is_Null(UserRelationWithOther::whereStockistId($this->id)->whereActive(1)->first())? 'null': (UserRelationWithOther::whereStockistId($this->id)->whereActive(1)->first())->super_stockist_id
+            'commission' => $this->commission,
+            'superStockistId' => is_Null(UserRelationWithOther::whereStockistId($this->id)->whereActive(1)->first())? 'null': (UserRelationWithOther::whereStockistId($this->id)->whereActive(1)->first())->super_stockist_id,
+            'superStockistName' =>User::find((UserRelationWithOther::whereStockistId($this->id)->whereActive(1)->first())->super_stockist_id)->user_name,
+            'superStockistPin' =>User::find((UserRelationWithOther::whereStockistId($this->id)->whereActive(1)->first())->super_stockist_id)->email
+//            'superStockistName' => (User::find(3))
+
         ];
     }
 }

@@ -45,8 +45,8 @@ class DatabaseSeeder extends Seeder
 
         User::create(['user_name'=>'Arindam Biswas','email'=>'1001','password'=>"b8c37e33defde51cf91e1e03e51657da",'mobile1'=>'9836444999','pay_out_slab_id'=>1, 'user_type_id'=>1,'closing_balance' => 5000]);
         User::create(['user_name'=>'Ananda Sen','email'=>'1002','password'=>"fba9d88164f3e2d9109ee770223212a0",'mobile1'=>'9536485201','pay_out_slab_id'=>1,'user_type_id'=>2,'closing_balance' => 5000]);
-        User::create(['user_name'=>'Mahesh Roy','email'=>'1003','password'=>"aa68c75c4a77c87f97fb686b2f068676",'mobile1'=>'8532489030','pay_out_slab_id'=>1,'user_type_id'=>3,'closing_balance' => 5000]);
-        User::create(['user_name'=>'Ramesh Ghosh','email'=>'1004','password'=>"fed33392d3a48aa149a87a38b875ba4a",'mobile1'=>'9587412358','pay_out_slab_id'=>1,'user_type_id'=>4,'closing_balance' => 5000]);
+//        User::create(['user_name'=>'Mahesh Roy','email'=>'1003','password'=>"aa68c75c4a77c87f97fb686b2f068676",'mobile1'=>'8532489030','pay_out_slab_id'=>1,'user_type_id'=>3,'closing_balance' => 5000]);
+//        User::create(['user_name'=>'Ramesh Ghosh','email'=>'1004','password'=>"fed33392d3a48aa149a87a38b875ba4a",'mobile1'=>'9587412358','pay_out_slab_id'=>1,'user_type_id'=>4,'closing_balance' => 5000]);
 
         SingleNumber::insert([
             ['single_number' => 1, 'single_order' => 1],
