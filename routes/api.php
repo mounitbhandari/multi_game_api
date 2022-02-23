@@ -133,6 +133,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::put('superStockists',[SuperStockistController::class, 'update_super_stockist']);
     Route::get('superStockists',[SuperStockistController::class, 'get_super_stockist']);
     Route::get('getStockistBySuperStockistId/{id}',[SuperStockistController::class, 'getStockistBySuperStockistId']);
+    Route::put('superStockists/balance',[SuperStockistController::class, 'update_balance_to_super_stockist']);
 
 //    PAYOUT SLABS
     Route::get('payoutSlabs',[PayOutSlabController::class, 'get_all_payout_slabs']);
