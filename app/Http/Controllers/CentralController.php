@@ -32,6 +32,8 @@ class CentralController extends Controller
         $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId);
         $single = GameType::find(1);
 
+//        return response()->json(['success'=>0, 'message' => $totalSale], 401);
+
         $payout = ($totalSale*($single->payout))/100;
         $targetValue = floor($payout/$single->winning_price);
 

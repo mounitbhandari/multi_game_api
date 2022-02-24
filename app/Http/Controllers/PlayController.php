@@ -12,6 +12,7 @@ use App\Models\PlayDetails;
 use App\Models\PlayMaster;
 use App\Models\SingleNumber;
 use App\Models\User;
+use App\Models\UserRelationWithOther;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -37,7 +38,7 @@ class PlayController extends Controller
             'drawMasterId'=>'required|exists:draw_masters,id',
             'terminalId'=> ['required',
                 function($attribute, $value, $fail){
-                    $terminal=User::where('id', $value)->where('user_type_id','=',4)->first();
+                    $terminal=User::where('id', $value)->where('user_type_id','=',5)->first();
                     if(!$terminal){
                         return $fail($value.' is not a valid terminal id');
                     }
@@ -70,6 +71,8 @@ class PlayController extends Controller
         }
         //end of validation for playDetails
 
+        $userRelationId = UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first();
+
         $output_array = array();
 
         DB::beginTransaction();
@@ -79,7 +82,8 @@ class PlayController extends Controller
             $playMaster->draw_master_id = $inputPlayMaster->drawMasterId;
             $playMaster->user_id = $inputPlayMaster->terminalId;
             $playMaster->game_id = $inputPlayMaster->gameId;
-            $playMaster->user_relation_id = $inputPlayMaster->userRelationId;
+//            $playMaster->user_relation_id = $inputPlayMaster->userRelationId;
+            $playMaster->user_relation_id = $userRelationId->id;
             $playMaster->save();
             $output_array['play_master'] = new PlayMasterResource($playMaster);
 

@@ -171,7 +171,7 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::post('cPanel/barcodeReportByDate', [CPanelReportController::class, 'barcode_wise_report_by_date']);
     // Route::post('stockist/customerSaleReports', [StockistController::class, 'customer_sale_reports']);
 
-    // Route::post('stockist/barcodeReportByDate', [StockistController::class, 'barcode_wise_report_by_date']);
+     Route::post('stockist/barcodeReportByDate', [StockistController::class, 'barcode_wise_report_by_date']);
 
     // Route::get("users",[UserController::class,'getAllUsers']);
     // Route::patch("users",[UserController::class,'update']);

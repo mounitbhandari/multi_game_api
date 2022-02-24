@@ -39,11 +39,13 @@ class CPanelReportController extends Controller
 
     public function barcode_wise_report_by_date(Request $request){
         $requestedData = (object)$request->json()->all();
+
+//        return response()->json(['success'=> 1, 'data' => $requestedData], 200);
         $start_date = $requestedData->startDate;
         $end_date = $requestedData->endDate;
 
 
-        $x = $this->get_total_quantity_by_barcode(1);
+//        $x = $this->get_total_quantity_by_barcode(1);
 
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
             ,'draw_masters.visible_time as draw_time',
@@ -79,7 +81,7 @@ class CPanelReportController extends Controller
         $data['barcode'] = Str::substr($playMaster->barcode_number,0,8);
         $singleGameData = PlayDetails::select(DB::raw('max(single_numbers.single_number) as single_number')
             ,DB::raw('max(play_details.quantity) as quantity'))
-            ->join('number_combinations','play_details.number_combination_id','number_combinations.id')
+            ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
             ->join('single_numbers','number_combinations.single_number_id','single_numbers.id')
             ->where('play_details.play_master_id',$play_master_id)
             ->where('play_details.game_type_id',1)
@@ -91,7 +93,7 @@ class CPanelReportController extends Controller
 
         $tripleGameData = PlayDetails::select('number_combinations.visible_triple_number','single_numbers.single_number'
             ,'play_details.quantity')
-            ->join('number_combinations','play_details.number_combination_id','number_combinations.id')
+            ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
             ->join('single_numbers','number_combinations.single_number_id','single_numbers.id')
             ->where('play_details.play_master_id',$play_master_id)
             ->where('play_details.game_type_id',2)
@@ -113,23 +115,23 @@ class CPanelReportController extends Controller
         foreach ($play_game_ids as $game_id){
             if($game_id == 1){
                 $singleGamePrize = PlayMaster::join('play_details','play_masters.id','play_details.play_master_id')
-                    ->join('number_combinations','play_details.number_combination_id','number_combinations.id')
+                    ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
                     ->join('game_types','play_details.game_type_id','game_types.id')
                     ->select(DB::raw("max(play_details.quantity)* max(game_types.winning_price) as prize_value") )
                     ->where('play_masters.id',$play_master_id)
                     ->where('play_details.game_type_id',$game_id)
-                    ->where('play_details.number_combination_id',$result_number_combination_id)
+                    ->where('play_details.combination_number_id',$result_number_combination_id)
                     ->groupBy('number_combinations.single_number_id')
                     ->first();
             }
             if($game_id == 2){
                 $tripleGamePrize = PlayMaster::join('play_details','play_masters.id','play_details.play_master_id')
-                    ->join('number_combinations','play_details.number_combination_id','number_combinations.id')
+                    ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
                     ->join('game_types','play_details.game_type_id','game_types.id')
                     ->select(DB::raw("play_details.quantity * game_types.winning_price as prize_value") )
                     ->where('play_masters.id',$play_master_id)
                     ->where('play_details.game_type_id',$game_id)
-                    ->where('play_details.number_combination_id',$result_number_combination_id)
+                    ->where('play_details.combination_number_id',$result_number_combination_id)
                     ->first();
             }
         }
@@ -151,14 +153,14 @@ class CPanelReportController extends Controller
         foreach ($play_game_ids as $game_id){
             if($game_id == 1){
                 $singleGameQuantity = DB::select("select sum(quantity) as total_quantity from(select max(quantity) as quantity from play_details
-inner join number_combinations ON number_combinations.id = play_details.number_combination_id
+inner join number_combinations ON number_combinations.id = play_details.combination_number_id
 where play_details.play_master_id=".$play_master_id." and play_details.game_type_id=1
 group by number_combinations.single_number_id) as table1")[0];
 
             }
             if($game_id == 2){
                 $tripleGameQuantity = DB::select("select sum(quantity) as total_quantity from play_details
-inner join number_combinations ON number_combinations.id = play_details.number_combination_id
+inner join number_combinations ON number_combinations.id = play_details.combination_number_id
 where play_details.play_master_id=".$play_master_id." and play_details.game_type_id= 2
 group by play_details.play_master_id")[0];
 
@@ -180,13 +182,13 @@ group by play_details.play_master_id")[0];
         foreach ($play_game_ids as $game_id){
             if($game_id == 1){
                 $singleGameTotalAmount = DB::select("select sum(quantity)*max(mrp) as total_amount from(select max(quantity) as quantity,round(max(mrp)*22) as mrp from play_details
-                inner join number_combinations ON number_combinations.id = play_details.number_combination_id
+                inner join number_combinations ON number_combinations.id = play_details.combination_number_id
                 where play_details.play_master_id= ".$play_master_id." and play_details.game_type_id=1
                 group by number_combinations.single_number_id) as table1")[0];
             }
             if($game_id == 2){
                 $tripleGameTotalAmount = DB::select("select sum(quantity*mrp) as total_amount from play_details
-                inner join number_combinations ON number_combinations.id = play_details.number_combination_id
+                inner join number_combinations ON number_combinations.id = play_details.combination_number_id
                 where play_details.play_master_id= ".$play_master_id." and play_details.game_type_id= 2
                 group by play_details.play_master_id")[0];
             }
