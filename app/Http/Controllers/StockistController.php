@@ -215,6 +215,10 @@ class StockistController extends Controller
             $beneficiaryObj->closing_balance = $beneficiaryObj->closing_balance + $amount;
             $beneficiaryObj->save();
 
+            $user = User::findOrFail($requestedData->rechargeDoneByUid);
+            $user->closing_balance = $user->closing_balance - $amount;
+            $user->save();
+
             $rechargeToUser = new RechargeToUser();
             $rechargeToUser->beneficiary_uid = $requestedData->beneficiaryUid;
             $rechargeToUser->recharge_done_by_uid = $requestedData->rechargeDoneByUid;

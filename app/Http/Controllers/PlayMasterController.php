@@ -52,6 +52,41 @@ class PlayMasterController extends Controller
         }
     }
 
+    public function get_total_sale_by_terminal($today, $draw_id, $userId)
+    {
+        $total = 0;
+        $total = DB::select("select ifnull(sum(play_details.quantity*play_details.mrp),0) as total_balance from play_details
+        inner join play_masters ON play_masters.id = play_details.play_master_id
+        where date(play_details.created_at) = ? and  play_masters.draw_master_id = ? and play_masters.user_id = ?", [$today, $draw_id, $userId]);
+
+        if(!empty($total) && isset($total[0]->total_balance) && !empty($total[0]->total_balance)){
+            return $total[0]->total_balance;
+        }else{
+            return 0;
+        }
+    }
+
+    public function get_total_sale_by_gameType($today, $draw_id, $gameType, $userId)
+    {
+//        $total = DB::select(DB::raw("select ifnull(sum(play_details.quantity*play_details.mrp),0) as total_balance from play_details
+//        inner join play_masters ON play_masters.id = play_details.play_master_id
+//        where play_masters.draw_master_id = $draw_id  and date(play_details.created_at)= "."'".$today."'"." and play_details.game_type_id = "."'".$gameType."'"." and play_masters.game_id = "."'".$game."'"."
+//        "));
+
+        $total = 0;
+        $total = DB::select("select ifnull(sum(play_details.quantity*play_details.mrp),0) as total_balance from play_details
+        inner join play_masters ON play_masters.id = play_details.play_master_id
+        where date(play_details.created_at) = ? and play_masters.draw_master_id = ? and play_details.game_type_id = ? and play_masters.user_id = ?", [$today, $draw_id, $gameType, $userId]);
+
+        return $total[0]->total_balance;
+
+        if(!empty($total) && isset($total[0]->total_balance) && !empty($total[0]->total_balance)){
+            return $total[0]->total_balance;
+        }else{
+            return 0;
+        }
+    }
+
     public function claimPrize(Request $request){
         $requestedData = (object)$request->json()->all();
         $playMasterId = $requestedData->play_master_id;

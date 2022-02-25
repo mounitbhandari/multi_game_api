@@ -8,11 +8,13 @@ use App\Http\Resources\PlayMasterResource;
 use App\Http\Resources\PrintSingleGameInputResource;
 use App\Http\Resources\PrintTripleGameInputResource;
 use App\Models\GameType;
+use App\Models\PayOutSlab;
 use App\Models\PlayDetails;
 use App\Models\PlayMaster;
 use App\Models\SingleNumber;
 use App\Models\User;
 use App\Models\UserRelationWithOther;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -72,6 +74,7 @@ class PlayController extends Controller
         //end of validation for playDetails
 
         $userRelationId = UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first();
+        $payoutSlabValue = (PayOutSlab::find((User::find($inputPlayMaster->terminalId))->pay_out_slab_id))->slab_value;
 
         $output_array = array();
 
@@ -100,7 +103,8 @@ class PlayController extends Controller
                     $playDetails->quantity = $detail->quantity;
                     $playDetails->mrp = $detail->mrp;
                     $playDetails->commission = $gameType->commission;
-                    $playDetails->payout = $gameType->payout;
+                    $playDetails->global_payout = $gameType->payout;
+                    $playDetails->terminal_payout = $payoutSlabValue;
                     $playDetails->save();
                     $output_play_details[] = $playDetails;
                 }
@@ -116,11 +120,25 @@ class PlayController extends Controller
 //                        $playDetails->mrp = round($detail->mrp/22,4);
                         $playDetails->mrp = $detail->mrp;
                         $playDetails->commission = $gameType->commission;
-                        $playDetails->payout = $gameType->payout;
+                        $playDetails->global_payout = $gameType->payout;
+                        $playDetails->terminal_payout = $payoutSlabValue;
                         $playDetails->save();
                         $output_play_details[] = $playDetails;
 
 //                    }
+                }
+                if($detail->gameTypeId == 3){
+                    $playDetails = new PlayDetails();
+                    $playDetails->play_master_id = $playMaster->id;
+                    $playDetails->game_type_id = $detail->gameTypeId;
+                    $playDetails->combination_number_id = $detail->numberCombinationId;
+                    $playDetails->quantity = $detail->quantity;
+                    $playDetails->mrp = $detail->mrp;
+                    $playDetails->commission = $gameType->commission;
+                    $playDetails->global_payout = $gameType->payout;
+                    $playDetails->terminal_payout = $payoutSlabValue;
+                    $playDetails->save();
+                    $output_play_details[] = $playDetails;
                 }
 
             }

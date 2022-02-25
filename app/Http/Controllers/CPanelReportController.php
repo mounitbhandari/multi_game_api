@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DrawMaster;
+use App\Models\Game;
+use App\Models\GameType;
 use App\Models\ResultMaster;
+use App\Models\User;
 use Faker\Core\Number;
 use Illuminate\Http\Request;
 use App\Models\PlayMaster;
@@ -306,5 +310,41 @@ group by play_details.play_master_id")[0];
 
 
 //        return response()->json(['success'=> 1, 'data' => $start_date, 'fdsf'=>$end_date], 200);
+    }
+
+    public function load_report(){
+        $today= Carbon::today()->format('Y-m-d');
+        $playMasterControllerObj = new PlayMasterController();
+        $lastDrawId = (DrawMaster::whereActive(1)->first())->id;
+//        $totalSale = $playMasterControllerObj->get_total_sale_by_game($today,$lastDrawId,1);
+
+//        $games = Game::get();
+//        $gameTypes = GameType::get();
+        $x = [];
+        $temp = [];
+
+        $users = User::whereUserTypeId(5)->get();
+
+        foreach ($users as $user){
+//            foreach ($gameTypes as $gameType){
+//                $temp = [];
+                $temp = [
+                    'terminal_name' => $user->user_name,
+//                    'game_name' => $gameType->game_type_name,
+                    'total_sale' => $playMasterControllerObj->get_total_sale_by_terminal($today,$lastDrawId,$user->id),
+
+//                    'single' =>  (($gameType->id) === 1)? $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,1):0,
+//                    'triple' => (($gameType->id) === 2)? $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,2):0,
+//                    '12-Card' => (($gameType->id) === 3)? $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,3):0,
+
+                    'single' =>  $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,1,$user->id),
+                    'triple' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,2,$user->id),
+                    '12-Card' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,3,$user->id),
+                ];
+                array_push($x, (object)$temp);
+//            }
+        }
+
+        return response()->json(['success'=> 1, 'data' => $x], 200);
     }
 }

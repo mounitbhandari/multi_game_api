@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 
+use App\Models\CardCombination;
 use App\Models\DrawMaster;
 use App\Models\Game;
 use App\Models\GameType;
@@ -59,6 +60,24 @@ class DatabaseSeeder extends Seeder
             ['single_number' => 8, 'single_order' => 8],
             ['single_number' => 9, 'single_order' => 9],
             ['single_number' => 0, 'single_order' => 10]
+        ]);
+
+        CardCombination::insert([
+            ['rank_name'=>'Jack','suit_name'=>'Club','rank_initial'=>'J'],
+            ['rank_name'=>'Jack','suit_name'=>'Diamon','rank_initial'=>'J'],
+            ['rank_name'=>'Jack','suit_name'=>'Heart','rank_initial'=>'J'],
+            ['rank_name'=>'Jack','suit_name'=>'Spade','rank_initial'=>'J'],
+
+            ['rank_name'=>'Queen','suit_name'=>'Club','rank_initial'=>'Q'],
+            ['rank_name'=>'Queen','suit_name'=>'Diamon','rank_initial'=>'Q'],
+            ['rank_name'=>'Queen','suit_name'=>'Heart','rank_initial'=>'Q'],
+            ['rank_name'=>'Queen','suit_name'=>'Spade','rank_initial'=>'Q'],
+
+            ['rank_name'=>'King','suit_name'=>'Club','rank_initial'=>'K'],
+            ['rank_name'=>'King','suit_name'=>'Diamon','rank_initial'=>'K'],
+            ['rank_name'=>'King','suit_name'=>'Heart','rank_initial'=>'K'],
+            ['rank_name'=>'King','suit_name'=>'Spade','rank_initial'=>'K'],
+
         ]);
 
         NumberCombination::insert([
@@ -359,7 +378,8 @@ class DatabaseSeeder extends Seeder
         GameType::insert([
             ['game_type_name'=>'single','game_type_initial' => '' ,'mrp'=> 1.00, 'winning_price'=>9, 'winning_bonus_percent'=>0.2, 'commission'=>0.00, 'payout'=>150,'default_payout'=>150],
             ['game_type_name'=>'triple','game_type_initial' => '' ,'mrp'=> 1.00, 'winning_price'=>100, 'winning_bonus_percent'=>0.2, 'commission'=>0.00, 'payout'=>150,'default_payout'=>150],
-            ['game_type_name'=>'double','game_type_initial' => '' ,'mrp'=> 1.00, 'winning_price'=>100, 'winning_bonus_percent'=>0.2, 'commission'=>0.00, 'payout'=>150,'default_payout'=>150]
+//            ['game_type_name'=>'double','game_type_initial' => '' ,'mrp'=> 1.00, 'winning_price'=>100, 'winning_bonus_percent'=>0.2, 'commission'=>0.00, 'payout'=>150,'default_payout'=>150]
+            ['game_type_name'=>'12-Card','game_type_initial' => '' ,'mrp'=> 1.00, 'winning_price'=>100, 'winning_bonus_percent'=>0.2, 'commission'=>0.00, 'payout'=>150,'default_payout'=>150]
         ]);
 
         // Product has separate file

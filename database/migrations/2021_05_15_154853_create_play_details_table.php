@@ -21,7 +21,8 @@ class CreatePlayDetailsTable extends Migration
             $table->integer('quantity')->nullable(false);
             $table->decimal('mrp',5,4)->default(0);
             $table->decimal('commission',10,2)->default(0);
-            $table->decimal('payout',10,2)->default(0);
+            $table->decimal('terminal_payout',10,2)->default(0);
+            $table->decimal('global_payout',10,2)->default(0);
 
             $table->timestamps();
         });
