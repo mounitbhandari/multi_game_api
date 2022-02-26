@@ -18,6 +18,7 @@ class CreateCardCombinationsTable extends Migration
             $table->string('rank_name')->nullable(false);
             $table->string('suit_name')->nullable(false);
             $table->string('rank_initial')->nullable(false);
+            $table ->foreignId('card_combination_type_id')->references('id')->on('card_combination_types')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -23,6 +23,7 @@ use App\Http\Controllers\GameController;
 use App\Http\Controllers\TerminalReportController;
 use App\Http\Controllers\SuperStockistController;
 use App\Http\Controllers\PayOutSlabController;
+use App\Http\Controllers\CardCombinationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -144,6 +145,13 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
 
 Route::group(array('prefix' => 'dev'), function() {
+
+    //card_api
+    Route::get('getTwelveCards',[CardCombinationController::class, 'get_all_twelve_card']);
+    Route::get('getSixteenCards',[CardCombinationController::class, 'get_all_sixteen_card']);
+
+
+
 
     Route::get('terminals',[TerminalController::class, 'get_all_terminals']);
 

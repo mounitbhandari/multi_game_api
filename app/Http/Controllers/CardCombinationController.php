@@ -8,24 +8,17 @@ use App\Http\Requests\UpdateCardCombinationRequest;
 
 class CardCombinationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function get_all_twelve_card()
     {
-        //
+        $data = CardCombination::whereCardCombinationTypeId(1)->get();
+        return response()->json(['success'=>1,'data'=> $data], 200,[],JSON_NUMERIC_CHECK);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function get_all_sixteen_card()
     {
-        //
+        $data = CardCombination::whereCardCombinationTypeId(2)->get();
+        return response()->json(['success'=>1,'data'=> $data], 200,[],JSON_NUMERIC_CHECK);
     }
 
     /**
