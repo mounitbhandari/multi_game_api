@@ -7,11 +7,6 @@ use Illuminate\Database\Seeder;
 
 class DrawMasterSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         DrawMaster::insert([

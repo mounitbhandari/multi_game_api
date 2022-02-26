@@ -7,11 +7,6 @@ use Illuminate\Database\Seeder;
 
 class CardCombinationSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         CardCombination::insert([

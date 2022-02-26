@@ -6,11 +6,6 @@ use Illuminate\Database\Seeder;
 
 class SuperStockistSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         //

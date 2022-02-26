@@ -7,11 +7,6 @@ use Illuminate\Database\Seeder;
 
 class UserTypeSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         UserType::create(['user_type_name' => 'Admin']);

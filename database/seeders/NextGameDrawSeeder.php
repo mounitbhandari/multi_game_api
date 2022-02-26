@@ -7,11 +7,6 @@ use Illuminate\Database\Seeder;
 
 class NextGameDrawSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         NextGameDraw::create(['next_draw_id' => 2, 'last_draw_id' => 1, 'game_id'=>1]);

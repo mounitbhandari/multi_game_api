@@ -2,27 +2,13 @@
 
 namespace Database\Seeders;
 
-
-use App\Models\CardCombination;
-use App\Models\DrawMaster;
-use App\Models\Game;
-use App\Models\GameType;
-use App\Models\SingleNumber;
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\UserType;
-use App\Models\NumberCombination;
 use App\Models\ResultMaster;
-use App\Models\NextGameDraw;
-use App\Models\PayOutSlab;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
+
     public function run()
     {
 
