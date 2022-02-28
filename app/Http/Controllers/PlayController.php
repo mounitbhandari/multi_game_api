@@ -141,19 +141,19 @@ class PlayController extends Controller
                     $output_play_details[] = $playDetails;
                 }
 
-//                if($detail->gameTypeId == 4){
-//                    $playDetails = new PlayDetails();
-//                    $playDetails->play_master_id = $playMaster->id;
-//                    $playDetails->game_type_id = $detail->gameTypeId;
-//                    $playDetails->combination_number_id = $detail->cardCombinationId;
-//                    $playDetails->quantity = $detail->quantity;
-//                    $playDetails->mrp = $detail->mrp;
-//                    $playDetails->commission = $gameType->commission;
-//                    $playDetails->global_payout = $gameType->payout;
-//                    $playDetails->terminal_payout = $payoutSlabValue;
-//                    $playDetails->save();
-//                    $output_play_details[] = $playDetails;
-//                }
+                if($detail->gameTypeId == 5){
+                    $playDetails = new PlayDetails();
+                    $playDetails->play_master_id = $playMaster->id;
+                    $playDetails->game_type_id = $detail->gameTypeId;
+                    $playDetails->combination_number_id = $detail->doubleCombinationId;
+                    $playDetails->quantity = $detail->quantity;
+                    $playDetails->mrp = $gameType->mrp;
+                    $playDetails->commission = $gameType->commission;
+                    $playDetails->global_payout = $gameType->payout;
+                    $playDetails->terminal_payout = $payoutSlabValue;
+                    $playDetails->save();
+                    $output_play_details[] = $playDetails;
+                }
 
             }
             $output_array['game_input'] = $this->get_game_input_details_by_play_master_id($playMaster->id);
