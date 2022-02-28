@@ -139,6 +139,9 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 //    PAYOUT SLABS
     Route::get('payoutSlabs',[PayOutSlabController::class, 'get_all_payout_slabs']);
 
+    Route::get('cPanel/loadReport', [CPanelReportController::class, 'load_report']);
+
+
 });
 
 

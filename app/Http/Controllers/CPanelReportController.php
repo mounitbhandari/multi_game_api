@@ -339,7 +339,9 @@ group by play_details.play_master_id")[0];
 
                     'single' =>  $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,1,$user->id),
                     'triple' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,2,$user->id),
-                    '12-Card' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,3,$user->id),
+                    'twelve_card' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,3,$user->id),
+                    'sixteen_card' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,4,$user->id),
+                    'double' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,5,$user->id),
                 ];
                 array_push($x, (object)$temp);
 //            }
