@@ -17,11 +17,12 @@ class DatabaseSeeder extends Seeder
         $this->call(CardCombinationTypeSeeder::class);
         $this->call(CardCombinationSeeder::class);
         $this->call(SingleNumberSeeder::class);
-        $this->call(NumberCombinationSeeder::class);
+//        $this->call(NumberCombinationSeeder::class);
         $this->call(GameSeeder::class);
         $this->call(DrawMasterSeeder::class);
         $this->call(GameTypeSeeder::class);
         $this->call(NextGameDrawSeeder::class);
+        $this->call(DoubleNumberCombinationSeeder::class);
 
 
 
@@ -31,22 +32,22 @@ class DatabaseSeeder extends Seeder
 //        User::create(['user_name'=>'Ramesh Ghosh','email'=>'1004','password'=>"fed33392d3a48aa149a87a38b875ba4a",'mobile1'=>'9587412358','pay_out_slab_id'=>1,'user_type_id'=>4,'closing_balance' => 5000]);
 
         //resultMaster
-        ResultMaster::insert([
-            ['draw_master_id'=>1,'number_combination_id'=>54,'game_id'=>1,'game_date'=>'2021-12-25'],
-            ['draw_master_id'=>2,'number_combination_id'=>11,'game_id'=>3,'game_date'=>'2021-05-24'],
-            ['draw_master_id'=>3,'number_combination_id'=>65,'game_id'=>2,'game_date'=>'2021-05-24'],
-            ['draw_master_id'=>4,'number_combination_id'=>55,'game_id'=>2,'game_date'=>'2021-05-24'],
-            ['draw_master_id'=>5,'number_combination_id'=>37,'game_id'=>4,'game_date'=>'2021-05-24'],
-
-            ['draw_master_id'=>1,'number_combination_id'=>44,'game_id'=>4,'game_date'=>'2021-05-23'],
-            ['draw_master_id'=>2,'number_combination_id'=>11,'game_id'=>2,'game_date'=>'2021-05-23'],
-            ['draw_master_id'=>3,'number_combination_id'=>15,'game_id'=>1,'game_date'=>'2021-05-23'],
-            ['draw_master_id'=>4,'number_combination_id'=>55,'game_id'=>3,'game_date'=>'2021-05-23'],
-            ['draw_master_id'=>5,'number_combination_id'=>17,'game_id'=>1,'game_date'=>'2021-05-23'],
-            ['draw_master_id'=>6,'number_combination_id'=>47,'game_id'=>1,'game_date'=>'2021-05-23'],
-            ['draw_master_id'=>7,'number_combination_id'=>15,'game_id'=>2,'game_date'=>'2021-05-23'],
-            ['draw_master_id'=>8,'number_combination_id'=>86,'game_id'=>1,'game_date'=>'2021-05-23'],
-        ]);
+//        ResultMaster::insert([
+//            ['draw_master_id'=>1,'number_combination_id'=>54,'game_id'=>1,'game_date'=>'2021-12-25'],
+//            ['draw_master_id'=>2,'number_combination_id'=>11,'game_id'=>3,'game_date'=>'2021-05-24'],
+//            ['draw_master_id'=>3,'number_combination_id'=>65,'game_id'=>2,'game_date'=>'2021-05-24'],
+//            ['draw_master_id'=>4,'number_combination_id'=>55,'game_id'=>2,'game_date'=>'2021-05-24'],
+//            ['draw_master_id'=>5,'number_combination_id'=>37,'game_id'=>4,'game_date'=>'2021-05-24'],
+//
+//            ['draw_master_id'=>1,'number_combination_id'=>44,'game_id'=>4,'game_date'=>'2021-05-23'],
+//            ['draw_master_id'=>2,'number_combination_id'=>11,'game_id'=>2,'game_date'=>'2021-05-23'],
+//            ['draw_master_id'=>3,'number_combination_id'=>15,'game_id'=>1,'game_date'=>'2021-05-23'],
+//            ['draw_master_id'=>4,'number_combination_id'=>55,'game_id'=>3,'game_date'=>'2021-05-23'],
+//            ['draw_master_id'=>5,'number_combination_id'=>17,'game_id'=>1,'game_date'=>'2021-05-23'],
+//            ['draw_master_id'=>6,'number_combination_id'=>47,'game_id'=>1,'game_date'=>'2021-05-23'],
+//            ['draw_master_id'=>7,'number_combination_id'=>15,'game_id'=>2,'game_date'=>'2021-05-23'],
+//            ['draw_master_id'=>8,'number_combination_id'=>86,'game_id'=>1,'game_date'=>'2021-05-23'],
+//        ]);
 
     }
 }

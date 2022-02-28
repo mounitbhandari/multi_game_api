@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\SingleNumbers;
+use App\Models\DoubleNumberCombination;
 use App\Models\NumberCombination;
 use App\Models\SingleNumber;
 use Illuminate\Http\Request;
@@ -10,11 +11,6 @@ use App\Http\Resources\NumberCombinationsResource;
 
 class NumberCombinationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $result = NumberCombination::get();
@@ -29,5 +25,31 @@ class NumberCombinationController extends Controller
         $singleNumbers = SingleNumber::orderBy('single_order')->get();
 
         return response()->json(['success'=>1,'data'=> SingleNumbers::collection($singleNumbers)], 200,[],JSON_NUMERIC_CHECK);
+    }
+
+    public function create_migration(){
+
+        for($i=0; $i<1000; $i++){
+            $data = str_pad($i,3,'0', STR_PAD_LEFT);
+            $x = str_split($data);
+            $singleNumberId = (SingleNumber::whereSingleNumber($x[2])->first())->id;
+
+            $numberCombination = new NumberCombination();
+            $numberCombination->single_number_id = $singleNumberId;
+            $numberCombination->triple_number = $data;
+            $numberCombination->visible_triple_number = $data;
+            $numberCombination->save();
+
+            if($i<100){
+                    $data1 = str_pad($i,2,'0', STR_PAD_LEFT);
+                    $doubleNumberCombination = new DoubleNumberCombination();
+                    $doubleNumberCombination->single_number_id = $singleNumberId;
+                    $doubleNumberCombination->double_number = $data1;
+                    $doubleNumberCombination->visible_double_number = $data1;
+                    $doubleNumberCombination->save();
+            }
+        }
+
+        return response()->json(['success'=>1,'data'=> "Successfully added"], 200,[],JSON_NUMERIC_CHECK);
     }
 }

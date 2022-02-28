@@ -150,6 +150,8 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::get('getTwelveCards',[CardCombinationController::class, 'get_all_twelve_card']);
     Route::get('getSixteenCards',[CardCombinationController::class, 'get_all_sixteen_card']);
 
+    Route::get('seedingData',[NumberCombinationController::class, 'create_migration']);
+
 
 
 
