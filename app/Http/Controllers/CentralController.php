@@ -7,6 +7,7 @@ use App\Models\Game;
 use App\Models\GameType;
 use App\Models\NumberCombination;
 use App\Models\PlayMaster;
+use App\Models\SingleNumber;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\NextGameDraw;
@@ -25,6 +26,31 @@ class CentralController extends Controller
         $nextDrawId = $nextGameDrawObj->next_draw_id;
         $lastDrawId = $nextGameDrawObj->last_draw_id;
         $playMasterControllerObj = new PlayMasterController();
+
+        //payouts
+        $singleNumber = (GameType::find(1));
+        $doubleNumber = (GameType::find(5));
+        $tripleNumber = (GameType::find(2));
+
+        //total sales
+        $singleNumberTotalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,1);
+        $doubleNumberTotalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,5);
+        $tripleNumberTotalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,2);
+
+//        $allGameTotalSale = 1200;
+        $allGameTotalSale = (($singleNumberTotalSale*($singleNumber->payout))/100) + (($doubleNumberTotalSale*($doubleNumber->payout))/100) + (($tripleNumberTotalSale*($tripleNumber->payout))/100);
+
+        $tripleValue = ((int)($allGameTotalSale/($tripleNumber->winning_price))) * ($tripleNumber->winning_price);
+
+        $totalQuantities = $playMasterControllerObj->get_total_quantity($today,$lastDrawId);
+
+
+        return response()->json(['single_number'=>$singleNumberTotalSale
+            , 'double_number' => $doubleNumberTotalSale
+            , 'triple_number' => $tripleNumberTotalSale
+            , 'totalSale' => $allGameTotalSale
+            , 'totalQuantity' => $totalQuantities
+            , 'triple value' => $tripleValue], 200);
 
         $playMasterObj = new TerminalReportController();
         $playMasterObj->updateCancellation();

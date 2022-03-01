@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PlayGameSave;
 use App\Http\Resources\PlayDetailsResource;
+use App\Models\GameType;
 use App\Models\PlayDetails;
 use App\Models\PlayMaster;
 use App\Models\User;
@@ -38,18 +39,56 @@ class PlayMasterController extends Controller
         return response()->json(['success' => 1, 'data' => $playMaster, 'id'=>$playMaster->id, 'point'=>$user->closing_balance], 200);
     }
 
-    public function get_total_sale($today, $draw_id)
+    public function get_total_quantity($today, $draw_id)
     {
-        $total = DB::select(DB::raw("select sum(play_details.quantity*play_details.mrp) as total_balance from play_details
-        inner join play_masters ON play_masters.id = play_details.play_master_id
-        where play_masters.draw_master_id = $draw_id  and date(play_details.created_at)= "."'".$today."'"."
-        "));
 
-        if(!empty($total) && isset($total[0]->total_balance) && !empty($total[0]->total_balance)){
-            return $total[0]->total_balance;
-        }else{
-            return 0;
+        $gameTypes = GameType::get();
+        $temp = [];
+
+        foreach ($gameTypes as $gameType){
+            if($gameType->id === 1){
+                $temp['single_number'] =  (DB::select("select ifnull(sum(play_details.quantity*play_details.mrp),0) as total_balance from play_details
+                inner join play_masters ON play_masters.id = play_details.play_master_id
+                where date(play_details.created_at) = ? and play_masters.draw_master_id = ? and play_details.game_type_id = ?", [$today, $draw_id, 1]))[0]->total_balance;
+            }
+
+            if($gameType->id === 5){
+                $temp['double_number'] =  (DB::select("select ifnull(sum(play_details.quantity*play_details.mrp),0) as total_balance from play_details
+                inner join play_masters ON play_masters.id = play_details.play_master_id
+                where date(play_details.created_at) = ? and play_masters.draw_master_id = ? and play_details.game_type_id = ?", [$today, $draw_id, 5]))[0]->total_balance;
+            }
+
+            if($gameType->id === 2){
+                $temp['triple_number'] =  (DB::select("select ifnull(sum(play_details.quantity*play_details.mrp),0) as total_balance from play_details
+                inner join play_masters ON play_masters.id = play_details.play_master_id
+                where date(play_details.created_at) = ? and play_masters.draw_master_id = ? and play_details.game_type_id = ?", [$today, $draw_id, 2]))[0]->total_balance;
+            }
         }
+
+        return $temp;
+
+    }
+
+    public function get_total_sale($today, $draw_id, $gameType)
+    {
+//        $total = DB::select(DB::raw("select sum(play_details.quantity*play_details.mrp) as total_balance from play_details
+//        inner join play_masters ON play_masters.id = play_details.play_master_id
+//        where play_masters.draw_master_id = $draw_id  and date(play_details.created_at)= "."'".$today."'"."
+//        "));
+//
+//        if(!empty($total) && isset($total[0]->total_balance) && !empty($total[0]->total_balance)){
+//            return $total[0]->total_balance;
+//        }else{
+//            return 0;
+//        }
+
+
+        $total = DB::select("select ifnull(sum(play_details.quantity*play_details.mrp),0) as total_balance from play_details
+        inner join play_masters ON play_masters.id = play_details.play_master_id
+        where date(play_details.created_at) = ? and play_masters.draw_master_id = ? and play_details.game_type_id = ?", [$today, $draw_id, $gameType]);
+
+        return $total[0]->total_balance;
+
     }
 
     public function get_total_sale_by_terminal($today, $draw_id, $userId)

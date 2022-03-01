@@ -333,10 +333,6 @@ group by play_details.play_master_id")[0];
 //                    'game_name' => $gameType->game_type_name,
                     'total_sale' => $playMasterControllerObj->get_total_sale_by_terminal($today,$lastDrawId,$user->id),
 
-//                    'single' =>  (($gameType->id) === 1)? $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,1):0,
-//                    'triple' => (($gameType->id) === 2)? $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,2):0,
-//                    '12-Card' => (($gameType->id) === 3)? $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,3):0,
-
                     'single' =>  $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,1,$user->id),
                     'triple' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,2,$user->id),
                     'twelve_card' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,3,$user->id),
