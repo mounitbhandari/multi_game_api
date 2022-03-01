@@ -40,17 +40,43 @@ class CentralController extends Controller
 //        $allGameTotalSale = 1200;
         $allGameTotalSale = (($singleNumberTotalSale*($singleNumber->payout))/100) + (($doubleNumberTotalSale*($doubleNumber->payout))/100) + (($tripleNumberTotalSale*($tripleNumber->payout))/100);
 
-        $tripleValue = ((int)($allGameTotalSale/($tripleNumber->winning_price))) * ($tripleNumber->winning_price);
+        //triple number
+        $tripleValue = (int)($allGameTotalSale/($tripleNumber->winning_price));
 
-        $totalQuantities = $playMasterControllerObj->get_total_quantity($today,$lastDrawId);
+        $tripleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 2
+            order by quantity desc
+            limit 1",[$tripleValue])[0];
+        $tripleNumberAmount = ($tripleNumberTargetData->quantity) * $tripleNumber->winning_price;
+
+        //double number
+        $doubleValue = (int)(($allGameTotalSale - $tripleNumberAmount)/($doubleNumber->winning_price));
+        $doubleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 5
+            order by quantity desc
+            limit 1",[$doubleValue])[0];
+        $doubleNumberAmount = ($doubleNumberTargetData->quantity) * $doubleNumber->winning_price;
+
+        //single number
+        $singleValue = (int)(($allGameTotalSale - ($tripleNumberAmount + $doubleNumberAmount))/($singleNumber->winning_price));
+        $singleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 1
+            order by quantity desc
+            limit 1",[$singleValue])[0];
+        $singleNumberAmount = ($singleNumberTargetData->quantity) * $singleNumber->winning_price;
+//        $allGameTotalSale = $allGameTotalSale - $doubleNumberAmount;
+
+
+//        $totalQuantities = $playMasterControllerObj->get_total_quantity($today,$lastDrawId);
 
 
         return response()->json(['single_number'=>$singleNumberTotalSale
             , 'double_number' => $doubleNumberTotalSale
             , 'triple_number' => $tripleNumberTotalSale
             , 'totalSale' => $allGameTotalSale
-            , 'totalQuantity' => $totalQuantities
-            , 'triple value' => $tripleValue], 200);
+//            , 'tripleValue' => $tripleValue
+            , 'tripleAmount' => $tripleNumberAmount
+//            , 'doubleValue' => $doubleValue
+            , 'doubleAmount' => $doubleNumberAmount
+//            , 'singleValue' => $singleValue
+            , 'singleAmount' => $singleNumberAmount], 200);
 
         $playMasterObj = new TerminalReportController();
         $playMasterObj->updateCancellation();
