@@ -43,25 +43,58 @@ class CentralController extends Controller
         //triple number
         $tripleValue = (int)($allGameTotalSale/($tripleNumber->winning_price));
 
-        $tripleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 2
+        $tripleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 2 and date(created_at) = ?
             order by quantity desc
-            limit 1",[$tripleValue])[0];
-        $tripleNumberAmount = ($tripleNumberTargetData->quantity) * $tripleNumber->winning_price;
+            limit 1",[$tripleValue, $today]);
+
+        if(empty($tripleNumberTargetData)){
+            $tripleNumberTargetData = DB::select("select * from play_details where quantity > ? and game_type_id = 2 and date(created_at) = ?
+            order by quantity
+            limit 1",[$tripleValue, $today]);
+        }
+
+        if(empty($tripleNumberTargetData)) {
+            $tripleNumberAmount = (0) * $tripleNumber->winning_price;
+        }else{
+            $tripleNumberAmount = ($tripleNumberTargetData[0]->quantity) * $tripleNumber->winning_price;
+        }
+
 
         //double number
         $doubleValue = (int)(($allGameTotalSale - $tripleNumberAmount)/($doubleNumber->winning_price));
-        $doubleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 5
+        $doubleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 5 and date(created_at) = ?
             order by quantity desc
-            limit 1",[$doubleValue])[0];
-        $doubleNumberAmount = ($doubleNumberTargetData->quantity) * $doubleNumber->winning_price;
+            limit 1",[$doubleValue, $today]);
+
+        if(empty($doubleNumberTargetData)){
+            $doubleNumberTargetData = DB::select("select * from play_details where quantity > ? and game_type_id = 5 and date(created_at) = ?
+            order by quantity
+            limit 1",[$doubleValue, $today]);
+        }
+
+        if(empty($doubleNumberTargetData)) {
+            $doubleNumberAmount = (0) * $doubleNumber->winning_price;
+        }else{
+            $doubleNumberAmount = ($doubleNumberTargetData[0]->quantity) * $doubleNumber->winning_price;
+        }
 
         //single number
         $singleValue = (int)(($allGameTotalSale - ($tripleNumberAmount + $doubleNumberAmount))/($singleNumber->winning_price));
-        $singleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 1
+        $singleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 1 and date(created_at) = ?
             order by quantity desc
-            limit 1",[$singleValue])[0];
-        $singleNumberAmount = ($singleNumberTargetData->quantity) * $singleNumber->winning_price;
-//        $allGameTotalSale = $allGameTotalSale - $doubleNumberAmount;
+            limit 1",[$singleValue, $today]);
+
+        if(empty($singleNumberTargetData)){
+            $singleNumberTargetData = DB::select("select * from play_details where quantity > ? and game_type_id = 1 and date(created_at) = ?
+            order by quantity
+            limit 1",[$singleValue, $today]);
+        }
+
+        if(empty($singleNumberTargetData)) {
+            $singleNumberAmount = (0) * $singleNumber->winning_price;
+        }else{
+            $singleNumberAmount = ($singleNumberTargetData[0]->quantity) * $singleNumber->winning_price;
+        }
 
 
 //        $totalQuantities = $playMasterControllerObj->get_total_quantity($today,$lastDrawId);
