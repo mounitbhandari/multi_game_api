@@ -27,89 +27,180 @@ class CentralController extends Controller
         $lastDrawId = $nextGameDrawObj->last_draw_id;
         $playMasterControllerObj = new PlayMasterController();
 
-        //payouts
-        $singleNumber = (GameType::find(1));
-        $doubleNumber = (GameType::find(5));
-        $tripleNumber = (GameType::find(2));
 
-        //total sales
-        $singleNumberTotalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,1);
-        $doubleNumberTotalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,5);
-        $tripleNumberTotalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,2);
+//        $singleNumberTotalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,3);
+//        return response()->json(['success'=>$id, 'message' => $singleNumberTotalSale], 200);
+
+        if($id == 1){
+            //payouts
+            $singleNumber = (GameType::find(1));
+            $doubleNumber = (GameType::find(5));
+            $tripleNumber = (GameType::find(2));
+
+            //total sales
+            $singleNumberTotalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,1);
+            $doubleNumberTotalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,5);
+            $tripleNumberTotalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,2);
 
 //        $allGameTotalSale = 1200;
-        $allGameTotalSale = (($singleNumberTotalSale*($singleNumber->payout))/100) + (($doubleNumberTotalSale*($doubleNumber->payout))/100) + (($tripleNumberTotalSale*($tripleNumber->payout))/100);
+            $allGameTotalSale = (($singleNumberTotalSale*($singleNumber->payout))/100) + (($doubleNumberTotalSale*($doubleNumber->payout))/100) + (($tripleNumberTotalSale*($tripleNumber->payout))/100);
 
-        //triple number
-        $tripleValue = (int)($allGameTotalSale/($tripleNumber->winning_price));
+            //triple number
+            $tripleValue = (int)($allGameTotalSale/($tripleNumber->winning_price));
 
-        $tripleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 2 and date(created_at) = ?
+            $tripleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 2 and date(created_at) = ?
             order by quantity desc
             limit 1",[$tripleValue, $today]);
 
-        if(empty($tripleNumberTargetData)){
-            $tripleNumberTargetData = DB::select("select * from play_details where quantity > ? and game_type_id = 2 and date(created_at) = ?
+            if(empty($tripleNumberTargetData)){
+                $tripleNumberTargetData = DB::select("select * from play_details where quantity > ? and game_type_id = 2 and date(created_at) = ?
             order by quantity
             limit 1",[$tripleValue, $today]);
-        }
+            }
 
-        if(empty($tripleNumberTargetData)) {
-            $tripleNumberAmount = (0) * $tripleNumber->winning_price;
-        }else{
-            $tripleNumberAmount = ($tripleNumberTargetData[0]->quantity) * $tripleNumber->winning_price;
-        }
+            if(empty($tripleNumberTargetData)) {
+                $tripleNumberAmount = (0) * $tripleNumber->winning_price;
+            }else{
+                $tripleNumberAmount = ($tripleNumberTargetData[0]->quantity) * $tripleNumber->winning_price;
+            }
 
 
-        //double number
-        $doubleValue = (int)(($allGameTotalSale - $tripleNumberAmount)/($doubleNumber->winning_price));
-        $doubleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 5 and date(created_at) = ?
+            //double number
+            $doubleValue = (int)(($allGameTotalSale - $tripleNumberAmount)/($doubleNumber->winning_price));
+            $doubleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 5 and date(created_at) = ?
             order by quantity desc
             limit 1",[$doubleValue, $today]);
 
-        if(empty($doubleNumberTargetData)){
-            $doubleNumberTargetData = DB::select("select * from play_details where quantity > ? and game_type_id = 5 and date(created_at) = ?
+            if(empty($doubleNumberTargetData)){
+                $doubleNumberTargetData = DB::select("select * from play_details where quantity > ? and game_type_id = 5 and date(created_at) = ?
             order by quantity
             limit 1",[$doubleValue, $today]);
-        }
+            }
 
-        if(empty($doubleNumberTargetData)) {
-            $doubleNumberAmount = (0) * $doubleNumber->winning_price;
-        }else{
-            $doubleNumberAmount = ($doubleNumberTargetData[0]->quantity) * $doubleNumber->winning_price;
-        }
+            if(empty($doubleNumberTargetData)) {
+                $doubleNumberAmount = (0) * $doubleNumber->winning_price;
+            }else{
+                $doubleNumberAmount = ($doubleNumberTargetData[0]->quantity) * $doubleNumber->winning_price;
+            }
 
-        //single number
-        $singleValue = (int)(($allGameTotalSale - ($tripleNumberAmount + $doubleNumberAmount))/($singleNumber->winning_price));
-        $singleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 1 and date(created_at) = ?
+            //single number
+            $singleValue = (int)(($allGameTotalSale - ($tripleNumberAmount + $doubleNumberAmount))/($singleNumber->winning_price));
+            $singleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 1 and date(created_at) = ?
             order by quantity desc
             limit 1",[$singleValue, $today]);
 
-        if(empty($singleNumberTargetData)){
-            $singleNumberTargetData = DB::select("select * from play_details where quantity > ? and game_type_id = 1 and date(created_at) = ?
+            if(empty($singleNumberTargetData)){
+                $singleNumberTargetData = DB::select("select * from play_details where quantity > ? and game_type_id = 1 and date(created_at) = ?
             order by quantity
             limit 1",[$singleValue, $today]);
-        }
+            }
 
-        if(empty($singleNumberTargetData)) {
-            $singleNumberAmount = (0) * $singleNumber->winning_price;
-        }else{
-            $singleNumberAmount = ($singleNumberTargetData[0]->quantity) * $singleNumber->winning_price;
-        }
-
+            if(empty($singleNumberTargetData)) {
+                $singleNumberAmount = (0) * $singleNumber->winning_price;
+            }else{
+                $singleNumberAmount = ($singleNumberTargetData[0]->quantity) * $singleNumber->winning_price;
+            }
 
 //        $totalQuantities = $playMasterControllerObj->get_total_quantity($today,$lastDrawId);
 
 
-        return response()->json(['single_number'=>$singleNumberTotalSale
-            , 'double_number' => $doubleNumberTotalSale
-            , 'triple_number' => $tripleNumberTotalSale
-            , 'totalSale' => $allGameTotalSale
+            return response()->json(['single_number'=>$singleNumberTotalSale
+                , 'double_number' => $doubleNumberTotalSale
+                , 'triple_number' => $tripleNumberTotalSale
+                , 'totalSale' => $allGameTotalSale
 //            , 'tripleValue' => $tripleValue
-            , 'tripleAmount' => $tripleNumberAmount
+                , 'tripleAmount' => $tripleNumberAmount
 //            , 'doubleValue' => $doubleValue
-            , 'doubleAmount' => $doubleNumberAmount
+                , 'doubleAmount' => $doubleNumberAmount
 //            , 'singleValue' => $singleValue
-            , 'singleAmount' => $singleNumberAmount], 200);
+                , 'singleAmount' => $singleNumberAmount], 200);
+
+        }
+
+        if($id == 2){
+            $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,3);
+            $gameType = GameType::find(3);
+            $payout = ($totalSale * ($gameType->payout)) / 100;
+            $targetValue = floor($payout / $gameType->winning_price);
+
+            $result = DB::select(DB::raw("select card_combinations.id as card_combination_id,
+                sum(play_details.quantity) as total_quantity
+                from play_details
+                inner join play_masters ON play_masters.id = play_details.play_master_id
+                inner join card_combinations ON card_combinations.id = play_details.combination_number_id
+                where play_details.game_type_id = 3 and card_combinations.card_combination_type_id = 1 and play_masters.draw_master_id = $lastDrawId and date(play_details.created_at)= " . "'" . $today . "'" . "
+                group by card_combinations.id
+                having sum(play_details.quantity)<= $targetValue
+                order by rand() limit 1"));
+
+            if (empty($result)) {
+                // empty value
+                $result = DB::select(DB::raw("SELECT card_combinations.id as card_combination_id
+                    FROM card_combinations
+                    WHERE card_combination_type_id = 1 and card_combinations.id NOT IN(SELECT DISTINCT
+                    play_details.combination_number_id FROM play_details
+                    INNER JOIN play_masters on play_details.play_master_id= play_masters.id
+                    WHERE  play_details.game_type_id=3 and DATE(play_masters.created_at) = " . "'" . $today . "'" . " and play_masters.draw_master_id = $lastDrawId)
+                    ORDER by rand() LIMIT 1"));
+            }
+
+            if (empty($result)) {
+                $result = DB::select(DB::raw("select card_combinations.id as card_combination_id,
+                    sum(play_details.quantity) as total_quantity
+                    from play_details
+                    inner join play_masters ON play_masters.id = play_details.play_master_id
+                    inner join card_combinations ON card_combinations.id = play_details.combination_number_id
+                    where  play_details.game_type_id=3 and card_combination_type_id = 1 and play_masters.draw_master_id = $lastDrawId and date(play_details.created_at)= " . "'" . $today . "'" . "
+                    group by card_combinations.id
+                    having sum(play_details.quantity)>= $targetValue
+                    order by rand() limit 1"));
+            }
+
+            return response()->json(['success'=>1, 'message' => $result], 200);
+        }
+
+        if($id == 3){
+            $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,3);
+            $gameType = GameType::find(4);
+            $payout = ($totalSale * ($gameType->payout)) / 100;
+            $targetValue = floor($payout / $gameType->winning_price);
+
+            $result = DB::select(DB::raw("select card_combinations.id as card_combination_id,
+                sum(play_details.quantity) as total_quantity
+                from play_details
+                inner join play_masters ON play_masters.id = play_details.play_master_id
+                inner join card_combinations ON card_combinations.id = play_details.combination_number_id
+                where play_details.game_type_id = 4 and card_combinations.card_combination_type_id = 2 and play_masters.draw_master_id = $lastDrawId and date(play_details.created_at)= " . "'" . $today . "'" . "
+                group by card_combinations.id
+                having sum(play_details.quantity)<= $targetValue
+                order by rand() limit 1"));
+
+            if (empty($result)) {
+                // empty value
+                $result = DB::select(DB::raw("SELECT card_combinations.id as card_combination_id
+                    FROM card_combinations
+                    WHERE card_combination_type_id = 2 and card_combinations.id NOT IN(SELECT DISTINCT
+                    play_details.combination_number_id FROM play_details
+                    INNER JOIN play_masters on play_details.play_master_id= play_masters.id
+                    WHERE  play_details.game_type_id=4 and DATE(play_masters.created_at) = " . "'" . $today . "'" . " and play_masters.draw_master_id = $lastDrawId)
+                    ORDER by rand() LIMIT 1"));
+            }
+
+            if (empty($result)) {
+                $result = DB::select(DB::raw("select card_combinations.id as card_combination_id,
+                    sum(play_details.quantity) as total_quantity
+                    from play_details
+                    inner join play_masters ON play_masters.id = play_details.play_master_id
+                    inner join card_combinations ON card_combinations.id = play_details.combination_number_id
+                    where  play_details.game_type_id=4 and card_combination_type_id = 2 and play_masters.draw_master_id = $lastDrawId and date(play_details.created_at)= " . "'" . $today . "'" . "
+                    group by card_combinations.id
+                    having sum(play_details.quantity)>= $targetValue
+                    order by rand() limit 1"));
+            }
+
+            return response()->json(['success'=>1, 'message' => $result], 200);
+        }
+
 
         $playMasterObj = new TerminalReportController();
         $playMasterObj->updateCancellation();
