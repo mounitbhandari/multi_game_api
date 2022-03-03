@@ -236,7 +236,13 @@ class CentralController extends Controller
                     order by rand() limit 1"));
             }
 
-            return response()->json(['success'=>1, 'message' => $result], 200);
+            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,3,$result[0]->card_combination_id))->content(),true);
+
+            if($playMasterSaveCheck['success'] == 0){
+                return response()->json(['success'=>0, 'message' => 'Save error 12 Card'], 401);
+            }
+
+            return response()->json(['success'=>1, 'message' => 'Result added'], 200);
         }
 
         if($id == 3){
@@ -283,7 +289,13 @@ class CentralController extends Controller
                     order by rand() limit 1"));
             }
 
-            return response()->json(['success'=>1, 'message' => $result], 200);
+            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,4,$result[0]->card_combination_id))->content(),true);
+
+            if($playMasterSaveCheck['success'] == 0){
+                return response()->json(['success'=>0, 'message' => 'Save error 16 Card'], 401);
+            }
+
+            return response()->json(['success'=>1, 'message' => 'Result added'], 200);
         }
 
         return response()->json(['success'=>0, 'message' => 'Error Occurred'], 400);

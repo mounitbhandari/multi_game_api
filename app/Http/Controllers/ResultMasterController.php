@@ -201,7 +201,7 @@ class ResultMasterController extends Controller
         $game_id = (DrawMaster::whereId($draw_id)->first())->game_id;
         $game_gen = (Game::whereId($game_id)->first())->auto_generate;
 
-        if($game_gen == "yes"){
+        if($game_gen == "no"){
             return response()->json(['success'=>1, 'data' => 'Auto generate is deactivated'], 200);
         }
 
