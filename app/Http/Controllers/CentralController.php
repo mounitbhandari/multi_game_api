@@ -21,17 +21,27 @@ class CentralController extends Controller
 
     public function createResult($id){
 
+        $game = Game::find($id);
+        if(!$game){
+            return response()->json(['success'=>0, 'message' => 'Incorrect Game Id'], 200);
+        }
+        if($game->active == "no"){
+            return response()->json(['success'=>0, 'message' => 'Game not active'], 200);
+        }
+
         $today= Carbon::today()->format('Y-m-d');
-        $nextGameDrawObj = NextGameDraw::first();
-        $nextDrawId = $nextGameDrawObj->next_draw_id;
-        $lastDrawId = $nextGameDrawObj->last_draw_id;
+//        $nextGameDrawObj = NextGameDraw::first();
+        $nextDrawId = null;
+        $lastDrawId = null;
         $playMasterControllerObj = new PlayMasterController();
 
 
-//        $singleNumberTotalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,3);
-//        return response()->json(['success'=>$id, 'message' => $singleNumberTotalSale], 200);
-
         if($id == 1){
+
+            $nextGameDrawObj = NextGameDraw::whereGameId($id);
+            $nextDrawId = $nextGameDrawObj->next_draw_id;
+            $lastDrawId = $nextGameDrawObj->last_draw_id;
+
             //payouts
             $singleNumber = (GameType::find(1));
             $doubleNumber = (GameType::find(5));
@@ -159,6 +169,11 @@ class CentralController extends Controller
         }
 
         if($id == 2){
+
+            $nextGameDrawObj = NextGameDraw::whereGameId($id);
+            $nextDrawId = $nextGameDrawObj->next_draw_id;
+            $lastDrawId = $nextGameDrawObj->last_draw_id;
+
             $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,3);
             $gameType = GameType::find(3);
             $payout = ($totalSale * ($gameType->payout)) / 100;
@@ -201,6 +216,11 @@ class CentralController extends Controller
         }
 
         if($id == 3){
+
+            $nextGameDrawObj = NextGameDraw::whereGameId($id);
+            $nextDrawId = $nextGameDrawObj->next_draw_id;
+            $lastDrawId = $nextGameDrawObj->last_draw_id;
+
             $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,3);
             $gameType = GameType::find(4);
             $payout = ($totalSale * ($gameType->payout)) / 100;
