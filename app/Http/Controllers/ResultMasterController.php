@@ -7,7 +7,9 @@ use App\Models\Game;
 use App\Models\ManualResult;
 use App\Models\NextGameDraw;
 use App\Models\NumberCombination;
+use App\Models\ResultDetail;
 use App\Models\ResultMaster;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -193,8 +195,56 @@ class ResultMasterController extends Controller
 
     }
 
+    public function save_auto_result($draw_id, $game_type_id, $combination_number_id)
+    {
 
-    public function save_auto_result($draw_id)
+        $game_id = (DrawMaster::whereId($draw_id)->first())->game_id;
+        $game_gen = (Game::whereId($game_id)->first())->auto_generate;
+
+        if($game_gen == "yes"){
+            return response()->json(['success'=>1, 'data' => 'Auto generate is deactivated'], 200);
+        }
+
+//        $resultMaster = new ResultMaster();
+//        $resultMaster->draw_master_id = $draw_id;
+//        $resultMaster->game_id = $game_id;
+//        $resultMaster->game_date = Carbon::today();
+//        $resultMaster-> save();
+//
+//        return response()->json(['success'=>1, 'data' => $resultMaster], 200);
+
+        $resultMaster = ResultMaster::whereGameId($game_id)->whereDrawMasterId($draw_id)->first();
+
+        if($resultMaster){
+            $resultDetail = new ResultDetail();
+            $resultDetail->result_master_id = $resultMaster->id;
+            $resultDetail->game_type_id = $game_type_id;
+            $resultDetail->combination_number_id = $combination_number_id;
+            $resultDetail->save();
+        }else{
+            $resultMaster = new ResultMaster();
+            $resultMaster->draw_master_id = $draw_id;
+            $resultMaster->game_id = $game_id;
+            $resultMaster->game_date = Carbon::today();
+            $resultMaster-> save();
+
+            $resultDetail = new ResultDetail();
+            $resultDetail->result_master_id = $resultMaster->id;
+            $resultDetail->game_type_id = $game_type_id;
+            $resultDetail->combination_number_id = $combination_number_id;
+            $resultDetail->save();
+        }
+
+
+        if(isset($resultMaster->id)){
+            return response()->json(['success'=>1, 'data' => 'added result'], 200);
+        }else{
+            return response()->json(['success'=>0, 'data' => 'result not added'], 500);
+        }
+    }
+
+
+    public function save_auto_result_previous($draw_id)
     {
 
         $game_id = (DrawMaster::whereId($draw_id)->first())->game_id;

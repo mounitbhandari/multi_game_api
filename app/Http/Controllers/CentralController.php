@@ -34,6 +34,7 @@ class CentralController extends Controller
 //        $nextDrawId = null;
 //        $lastDrawId = null;
         $playMasterControllerObj = new PlayMasterController();
+        $resultMasterControllerObj = new ResultMasterController();
 
 
 
@@ -65,8 +66,8 @@ class CentralController extends Controller
             order by quantity desc
             limit 1",[$tripleValue, $today, $lastDrawId]);
 
-            if(empty($doubleNumberTargetData)) {
-                $doubleNumberTargetData = DB::select("select id as combination_number_id, 0 as quantity from single_numbers
+            if(empty($tripleNumberTargetData)) {
+                $tripleNumberTargetData = DB::select("select id as combination_number_id, 0 as quantity from single_numbers
                     where id not in (select combination_number_id from play_details
                     inner join play_masters on play_details.play_master_id = play_masters.id
                     where game_type_id = 2 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?)
@@ -86,6 +87,12 @@ class CentralController extends Controller
                 $tripleNumberAmount = (0) * $tripleNumber->winning_price;
             }else{
                 $tripleNumberAmount = ($tripleNumberTargetData[0]->quantity) * $tripleNumber->winning_price;
+            }
+
+            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,2,$tripleNumberTargetData[0]->combination_number_id))->content(),true);
+
+            if($playMasterSaveCheck['success'] == 0){
+                return response()->json(['success'=>0, 'message' => 'Save error triple number'], 401);
             }
 
 
@@ -120,6 +127,13 @@ class CentralController extends Controller
                 $doubleNumberAmount = ($doubleNumberTargetData[0]->quantity) * $doubleNumber->winning_price;
             }
 
+            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,5,$doubleNumberTargetData[0]->combination_number_id))->content(),true);
+
+            if($playMasterSaveCheck['success'] == 0){
+                return response()->json(['success'=>0, 'message' => 'Save error double number'], 401);
+            }
+
+
             //single number
             $singleValue = (int)(($allGameTotalSale - ($tripleNumberAmount + $doubleNumberAmount))/($singleNumber->winning_price));
             $singleNumberTargetData = DB::select("select * from play_details
@@ -153,6 +167,12 @@ class CentralController extends Controller
                 $singleNumberAmount = ($singleNumberTargetData[0]->quantity) * $singleNumber->winning_price;
             }
 
+            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,1,$singleNumberTargetData[0]->combination_number_id))->content(),true);
+
+            if($playMasterSaveCheck['success'] == 0){
+                return response()->json(['success'=>0, 'message' => 'Save error single number'], 401);
+            }
+
 //        $totalQuantities = $playMasterControllerObj->get_total_quantity($today,$lastDrawId);
 
 
@@ -160,12 +180,15 @@ class CentralController extends Controller
                 , 'double_number' => $doubleNumberTotalSale
                 , 'triple_number' => $tripleNumberTotalSale
                 , 'totalSale' => $allGameTotalSale
-//            , 'tripleValue' => $tripleValue
+                , 'tripleValue' => $tripleValue
                 , 'tripleAmount' => $tripleNumberAmount
-//            , 'doubleValue' => $doubleValue
+                , 'tripleTargetData' => $tripleNumberTargetData
+                , 'doubleValue' => $doubleValue
                 , 'doubleAmount' => $doubleNumberAmount
-//            , 'singleValue' => $singleValue
-                , 'singleAmount' => $singleNumberAmount], 200);
+                , 'singleValue' => $singleValue
+                , 'singleAmount' => $singleNumberAmount
+                , 'returnCheck' => $playMasterSaveCheck['success']
+            ], 200);
 
         }
 
@@ -262,6 +285,8 @@ class CentralController extends Controller
 
             return response()->json(['success'=>1, 'message' => $result], 200);
         }
+
+        return response()->json(['success'=>0, 'message' => 'Error Occurred'], 400);
 
 
         $playMasterObj = new TerminalReportController();
