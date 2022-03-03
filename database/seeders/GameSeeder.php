@@ -10,9 +10,9 @@ class GameSeeder extends Seeder
     public function run()
     {
         Game::insert([
-            ['game_name'=> 'FATAFAT'],
-            ['game_name'=> 'SHIRDI'],
-            ['game_name'=> 'MUMBAI MAIN BAZAR',],
+            ['game_name'=> 'SINGLE DOUBLE TRIPLE'],
+            ['game_name'=> '12 CARD'],
+            ['game_name'=> '16 CARD',],
             ['game_name'=> 'KALYAN MATKA'],
         ]);
     }

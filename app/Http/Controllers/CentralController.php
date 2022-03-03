@@ -48,14 +48,18 @@ class CentralController extends Controller
             //triple number
             $tripleValue = (int)($allGameTotalSale/($tripleNumber->winning_price));
 
-            $tripleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 2 and date(created_at) = ?
+            $tripleNumberTargetData = DB::select("select * from play_details
+            inner join play_masters on play_details.play_master_id = play_masters.id
+            where quantity <= ? and game_type_id = 2 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
             order by quantity desc
-            limit 1",[$tripleValue, $today]);
+            limit 1",[$tripleValue, $today, $lastDrawId]);
 
             if(empty($tripleNumberTargetData)){
-                $tripleNumberTargetData = DB::select("select * from play_details where quantity > ? and game_type_id = 2 and date(created_at) = ?
+                $tripleNumberTargetData = DB::select("select * from play_details
+            inner join play_masters on play_details.play_master_id = play_masters.id
+            where quantity > ? and game_type_id = 2 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
             order by quantity
-            limit 1",[$tripleValue, $today]);
+            limit 1",[$tripleValue, $today, $lastDrawId]);
             }
 
             if(empty($tripleNumberTargetData)) {
@@ -67,14 +71,18 @@ class CentralController extends Controller
 
             //double number
             $doubleValue = (int)(($allGameTotalSale - $tripleNumberAmount)/($doubleNumber->winning_price));
-            $doubleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 5 and date(created_at) = ?
+            $doubleNumberTargetData = DB::select("select * from play_details
+            inner join play_masters on play_details.play_master_id = play_masters.id
+            where quantity <= ? and game_type_id = 5 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
             order by quantity desc
-            limit 1",[$doubleValue, $today]);
+            limit 1",[$doubleValue, $today, $lastDrawId]);
 
             if(empty($doubleNumberTargetData)){
-                $doubleNumberTargetData = DB::select("select * from play_details where quantity > ? and game_type_id = 5 and date(created_at) = ?
+                $doubleNumberTargetData = DB::select("select * from play_details
+            inner join play_masters on play_details.play_master_id = play_masters.id
+            where quantity > ? and game_type_id = 5 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
             order by quantity
-            limit 1",[$doubleValue, $today]);
+            limit 1",[$doubleValue, $today, $lastDrawId]);
             }
 
             if(empty($doubleNumberTargetData)) {
@@ -85,14 +93,18 @@ class CentralController extends Controller
 
             //single number
             $singleValue = (int)(($allGameTotalSale - ($tripleNumberAmount + $doubleNumberAmount))/($singleNumber->winning_price));
-            $singleNumberTargetData = DB::select("select * from play_details where quantity <= ? and game_type_id = 1 and date(created_at) = ?
+            $singleNumberTargetData = DB::select("select * from play_details
+            inner join play_masters on play_details.play_master_id = play_masters.id
+            where quantity <= ? and game_type_id = 1 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
             order by quantity desc
-            limit 1",[$singleValue, $today]);
+            limit 1",[$singleValue, $today, $lastDrawId]);
 
             if(empty($singleNumberTargetData)){
-                $singleNumberTargetData = DB::select("select * from play_details where quantity > ? and game_type_id = 1 and date(created_at) = ?
+                $singleNumberTargetData = DB::select("select * from play_details
+            inner join play_masters on play_details.play_master_id = play_masters.id
+            where quantity > ? and game_type_id = 1 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
             order by quantity
-            limit 1",[$singleValue, $today]);
+            limit 1",[$singleValue, $today, $lastDrawId]);
             }
 
             if(empty($singleNumberTargetData)) {
