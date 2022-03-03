@@ -31,14 +31,15 @@ class CentralController extends Controller
 
         $today= Carbon::today()->format('Y-m-d');
 //        $nextGameDrawObj = NextGameDraw::first();
-        $nextDrawId = null;
-        $lastDrawId = null;
+//        $nextDrawId = null;
+//        $lastDrawId = null;
         $playMasterControllerObj = new PlayMasterController();
+
 
 
         if($id == 1){
 
-            $nextGameDrawObj = NextGameDraw::whereGameId($id);
+            $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
             $nextDrawId = $nextGameDrawObj->next_draw_id;
             $lastDrawId = $nextGameDrawObj->last_draw_id;
 
@@ -170,7 +171,7 @@ class CentralController extends Controller
 
         if($id == 2){
 
-            $nextGameDrawObj = NextGameDraw::whereGameId($id);
+            $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
             $nextDrawId = $nextGameDrawObj->next_draw_id;
             $lastDrawId = $nextGameDrawObj->last_draw_id;
 
@@ -217,7 +218,7 @@ class CentralController extends Controller
 
         if($id == 3){
 
-            $nextGameDrawObj = NextGameDraw::whereGameId($id);
+            $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
             $nextDrawId = $nextGameDrawObj->next_draw_id;
             $lastDrawId = $nextGameDrawObj->last_draw_id;
 
