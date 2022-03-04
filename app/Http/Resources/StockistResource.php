@@ -26,7 +26,8 @@ class StockistResource extends JsonResource
             'commission' => $this->commission,
             'superStockistId' => is_Null(UserRelationWithOther::whereStockistId($this->id)->whereActive(1)->first())? 'null': (UserRelationWithOther::whereStockistId($this->id)->whereActive(1)->first())->super_stockist_id,
             'superStockistName' =>User::find((UserRelationWithOther::whereStockistId($this->id)->whereActive(1)->first())->super_stockist_id)->user_name,
-            'superStockistPin' =>User::find((UserRelationWithOther::whereStockistId($this->id)->whereActive(1)->first())->super_stockist_id)->email
+            'superStockistPin' =>User::find((UserRelationWithOther::whereStockistId($this->id)->whereActive(1)->first())->super_stockist_id)->email,
+            'superStockistBalance' =>User::find((UserRelationWithOther::whereStockistId($this->id)->whereActive(1)->first())->super_stockist_id)->closing_balance
 //            'superStockistName' => (User::find(3))
 
         ];
