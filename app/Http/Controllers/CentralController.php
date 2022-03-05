@@ -30,13 +30,8 @@ class CentralController extends Controller
         }
 
         $today= Carbon::today()->format('Y-m-d');
-//        $nextGameDrawObj = NextGameDraw::first();
-//        $nextDrawId = null;
-//        $lastDrawId = null;
         $playMasterControllerObj = new PlayMasterController();
         $resultMasterControllerObj = new ResultMasterController();
-
-
 
         if($id == 1){
 
@@ -173,22 +168,65 @@ class CentralController extends Controller
                 return response()->json(['success'=>0, 'message' => 'Save error single number'], 401);
             }
 
+//            $tempDrawMasterLastDraw = DrawMaster::whereId($lastDrawId)->whereGameId($id)->first();
+//            $tempDrawMasterLastDraw->active = 0;
+//            $tempDrawMasterLastDraw->is_draw_over = 'yes';
+//            $tempDrawMasterLastDraw->update();
+//
+//            $tempDrawMasterNextDraw = DrawMaster::whereId($nextDrawId)->whereGameId($id)->first();
+//            $tempDrawMasterNextDraw->active = 1;
+//            $tempDrawMasterNextDraw->update();
+//
+//                $totalDraw = DrawMaster::whereGameId($id)->count();
+//                $gameCountLastDraw = DrawMaster::whereGameId($id)->where('id', '<=', $lastDrawId)->count();
+//                $gameCountNextDraw = DrawMaster::whereGameId($id)->where('id', '<=', $nextDrawId)->count();
+//
+//                if($gameCountNextDraw==$totalDraw){
+//                    $nextDrawId = (DrawMaster::whereGameId($id)->first())->id;
+//                }
+//                else {
+//                    $nextDrawId = $nextDrawId + 1;
+//                }
+//
+//                if($gameCountLastDraw==$totalDraw){
+//                    $lastDrawId = (DrawMaster::whereGameId($id)->first())->id;
+//                }
+//                else{
+//                    $lastDrawId = $lastDrawId + 1;
+//                }
+//
+//                $nextGameDrawObj->next_draw_id = $nextDrawId;
+//                $nextGameDrawObj->last_draw_id = $lastDrawId;
+//                $nextGameDrawObj->save();
+//
+//                $tempPlayMaster = PlayMaster::select()->where('is_cancelable',1)->whereGameId($id)->get();
+//                foreach ($tempPlayMaster as $x){
+//                    $y = PlayMaster::find($x->id);
+//                    $y->is_cancelable = 0;
+//                    $y->update();
+//                }
+//
+//                return response()->json(['success'=>1, 'message' => 'Result added'], 200);
+
+
+
+
 //        $totalQuantities = $playMasterControllerObj->get_total_quantity($today,$lastDrawId);
 
 
-            return response()->json(['single_number'=>$singleNumberTotalSale
-                , 'double_number' => $doubleNumberTotalSale
-                , 'triple_number' => $tripleNumberTotalSale
-                , 'totalSale' => $allGameTotalSale
-                , 'tripleValue' => $tripleValue
-                , 'tripleAmount' => $tripleNumberAmount
-                , 'tripleTargetData' => $tripleNumberTargetData
-                , 'doubleValue' => $doubleValue
-                , 'doubleAmount' => $doubleNumberAmount
-                , 'singleValue' => $singleValue
-                , 'singleAmount' => $singleNumberAmount
-                , 'returnCheck' => $playMasterSaveCheck['success']
-            ], 200);
+//            return response()->json(['single_number'=>$singleNumberTotalSale
+//                , 'double_number' => $doubleNumberTotalSale
+//                , 'triple_number' => $tripleNumberTotalSale
+//                , 'totalSale' => $allGameTotalSale
+//                , 'tripleValue' => $tripleValue
+//                , 'tripleAmount' => $tripleNumberAmount
+//                , 'tripleTargetData' => $tripleNumberTargetData
+//                , 'doubleValue' => $doubleValue
+//                , 'doubleAmount' => $doubleNumberAmount
+//                , 'singleValue' => $singleValue
+//                , 'singleAmount' => $singleNumberAmount
+//                , 'returnCheck' => $playMasterSaveCheck['success']
+//            ], 200);
 
         }
 
@@ -242,7 +280,47 @@ class CentralController extends Controller
                 return response()->json(['success'=>0, 'message' => 'Save error 12 Card'], 401);
             }
 
-            return response()->json(['success'=>1, 'message' => 'Result added'], 200);
+
+            $tempDrawMasterLastDraw = DrawMaster::whereId($lastDrawId)->whereGameId($id)->first();
+            $tempDrawMasterLastDraw->active = 0;
+            $tempDrawMasterLastDraw->is_draw_over = 'yes';
+            $tempDrawMasterLastDraw->update();
+
+            $tempDrawMasterNextDraw = DrawMaster::whereId($nextDrawId)->whereGameId($id)->first();
+            $tempDrawMasterNextDraw->active = 1;
+            $tempDrawMasterNextDraw->update();
+
+            $totalDraw = DrawMaster::whereGameId($id)->count();
+            $gameCountLastDraw = DrawMaster::whereGameId($id)->where('id', '<=', $lastDrawId)->count();
+            $gameCountNextDraw = DrawMaster::whereGameId($id)->where('id', '<=', $nextDrawId)->count();
+
+            if($gameCountNextDraw==$totalDraw){
+                $nextDrawId = (DrawMaster::whereGameId($id)->first())->id;
+            }
+            else {
+                $nextDrawId = $nextDrawId + 1;
+            }
+
+            if($gameCountLastDraw==$totalDraw){
+                $lastDrawId = (DrawMaster::whereGameId($id)->first())->id;
+            }
+            else{
+                $lastDrawId = $lastDrawId + 1;
+            }
+
+            $nextGameDrawObj->next_draw_id = $nextDrawId;
+            $nextGameDrawObj->last_draw_id = $lastDrawId;
+            $nextGameDrawObj->save();
+
+            $tempPlayMaster = PlayMaster::select()->where('is_cancelable',1)->whereGameId($id)->get();
+            foreach ($tempPlayMaster as $x){
+                $y = PlayMaster::find($x->id);
+                $y->is_cancelable = 0;
+                $y->update();
+            }
+
+//            return response()->json(['success'=>1, 'message' => 'Result added'], 200);
+
         }
 
         if($id == 3){
@@ -295,10 +373,50 @@ class CentralController extends Controller
                 return response()->json(['success'=>0, 'message' => 'Save error 16 Card'], 401);
             }
 
-            return response()->json(['success'=>1, 'message' => 'Result added'], 200);
+//            return response()->json(['success'=>1, 'message' => 'Result added'], 200);
         }
 
-        return response()->json(['success'=>0, 'message' => 'Error Occurred'], 400);
+        $tempDrawMasterLastDraw = DrawMaster::whereId($lastDrawId)->whereGameId($id)->first();
+        $tempDrawMasterLastDraw->active = 0;
+        $tempDrawMasterLastDraw->is_draw_over = 'yes';
+        $tempDrawMasterLastDraw->update();
+
+        $tempDrawMasterNextDraw = DrawMaster::whereId($nextDrawId)->whereGameId($id)->first();
+        $tempDrawMasterNextDraw->active = 1;
+        $tempDrawMasterNextDraw->update();
+
+        $totalDraw = DrawMaster::whereGameId($id)->count();
+        $gameCountLastDraw = DrawMaster::whereGameId($id)->where('id', '<=', $lastDrawId)->count();
+        $gameCountNextDraw = DrawMaster::whereGameId($id)->where('id', '<=', $nextDrawId)->count();
+
+        if($gameCountNextDraw==$totalDraw){
+            $nextDrawId = (DrawMaster::whereGameId($id)->first())->id;
+        }
+        else {
+            $nextDrawId = $nextDrawId + 1;
+        }
+
+        if($gameCountLastDraw==$totalDraw){
+            $lastDrawId = (DrawMaster::whereGameId($id)->first())->id;
+        }
+        else{
+            $lastDrawId = $lastDrawId + 1;
+        }
+
+        $nextGameDrawObj->next_draw_id = $nextDrawId;
+        $nextGameDrawObj->last_draw_id = $lastDrawId;
+        $nextGameDrawObj->save();
+
+        $tempPlayMaster = PlayMaster::select()->where('is_cancelable',1)->whereGameId($id)->get();
+        foreach ($tempPlayMaster as $x){
+            $y = PlayMaster::find($x->id);
+            $y->is_cancelable = 0;
+            $y->update();
+        }
+
+        return response()->json(['success'=>1, 'message' => 'Result added'], 200);
+
+//        return response()->json(['success'=>0, 'message' => 'Error Occurred'], 400);
 
 
         $playMasterObj = new TerminalReportController();
