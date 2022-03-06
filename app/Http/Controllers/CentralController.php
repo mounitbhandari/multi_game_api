@@ -168,50 +168,6 @@ class CentralController extends Controller
                 return response()->json(['success'=>0, 'message' => 'Save error single number'], 401);
             }
 
-//            $tempDrawMasterLastDraw = DrawMaster::whereId($lastDrawId)->whereGameId($id)->first();
-//            $tempDrawMasterLastDraw->active = 0;
-//            $tempDrawMasterLastDraw->is_draw_over = 'yes';
-//            $tempDrawMasterLastDraw->update();
-//
-//            $tempDrawMasterNextDraw = DrawMaster::whereId($nextDrawId)->whereGameId($id)->first();
-//            $tempDrawMasterNextDraw->active = 1;
-//            $tempDrawMasterNextDraw->update();
-//
-//                $totalDraw = DrawMaster::whereGameId($id)->count();
-//                $gameCountLastDraw = DrawMaster::whereGameId($id)->where('id', '<=', $lastDrawId)->count();
-//                $gameCountNextDraw = DrawMaster::whereGameId($id)->where('id', '<=', $nextDrawId)->count();
-//
-//                if($gameCountNextDraw==$totalDraw){
-//                    $nextDrawId = (DrawMaster::whereGameId($id)->first())->id;
-//                }
-//                else {
-//                    $nextDrawId = $nextDrawId + 1;
-//                }
-//
-//                if($gameCountLastDraw==$totalDraw){
-//                    $lastDrawId = (DrawMaster::whereGameId($id)->first())->id;
-//                }
-//                else{
-//                    $lastDrawId = $lastDrawId + 1;
-//                }
-//
-//                $nextGameDrawObj->next_draw_id = $nextDrawId;
-//                $nextGameDrawObj->last_draw_id = $lastDrawId;
-//                $nextGameDrawObj->save();
-//
-//                $tempPlayMaster = PlayMaster::select()->where('is_cancelable',1)->whereGameId($id)->get();
-//                foreach ($tempPlayMaster as $x){
-//                    $y = PlayMaster::find($x->id);
-//                    $y->is_cancelable = 0;
-//                    $y->update();
-//                }
-//
-//                return response()->json(['success'=>1, 'message' => 'Result added'], 200);
-
-
-
-
-//        $totalQuantities = $playMasterControllerObj->get_total_quantity($today,$lastDrawId);
 
 
 //            return response()->json(['single_number'=>$singleNumberTotalSale
@@ -319,8 +275,6 @@ class CentralController extends Controller
                 $y->update();
             }
 
-//            return response()->json(['success'=>1, 'message' => 'Result added'], 200);
-
         }
 
         if($id == 3){
@@ -419,86 +373,86 @@ class CentralController extends Controller
 //        return response()->json(['success'=>0, 'message' => 'Error Occurred'], 400);
 
 
-        $playMasterObj = new TerminalReportController();
-        $playMasterObj->updateCancellation();
-
-        $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId);
-        $single = GameType::find(1);
-
-//        return response()->json(['success'=>0, 'message' => $totalSale], 401);
-
-        $payout = ($totalSale*($single->payout))/100;
-        $targetValue = floor($payout/$single->winning_price);
-
-        // result less than equal to target value
-        $result = DB::select(DB::raw("select single_numbers.id as single_number_id,single_numbers.single_number,sum(play_details.quantity) as total_quantity  from play_details
-        inner join play_masters ON play_masters.id = play_details.play_master_id
-        inner join single_numbers ON single_numbers.id = play_details.single_number_id
-        where play_masters.draw_master_id = $lastDrawId  and date(play_details.created_at)= "."'".$today."'"."
-        group by single_numbers.single_number,single_numbers.id
-        having sum(play_details.quantity)<= $targetValue
-        order by rand() limit 1"));
-
-        // select empty item for result
-        if(empty($result)){
-            // empty value
-            $result = DB::select(DB::raw("SELECT single_numbers.id as single_number_id FROM single_numbers WHERE id NOT IN(SELECT DISTINCT
-        play_details.single_number_id FROM play_details
-        INNER JOIN play_masters on play_details.play_master_id= play_masters.id
-        WHERE  DATE(play_masters.created_at) = "."'".$today."'"." and play_masters.draw_master_id = $lastDrawId) ORDER by rand() LIMIT 1"));
-        }
-
-        // result greater than equal to target value
-
-        if(empty($result)){
-            $result = DB::select(DB::raw("select single_numbers.id as single_number_id,single_numbers.single_number,sum(play_details.quantity) as total_quantity  from play_details
-            inner join play_masters ON play_masters.id = play_details.play_master_id
-            inner join single_numbers ON single_numbers.id = play_details.single_number_id
-            where play_masters.draw_master_id= $lastDrawId  and date(play_details.created_at)= "."'".$today."'"."
-            group by single_numbers.single_number,single_numbers.id
-            having sum(play_details.quantity)> $targetValue
-            order by rand() limit 1"));
-        }
-
-        $single_number_result_id = $result[0]->single_number_id;
-
-        DrawMaster::query()->update(['active' => 0]);
-        if(!empty($nextGameDrawObj)){
-            DrawMaster::findOrFail($nextDrawId)->update(['active' => 1]);
-        }
-
-
-        $resultMasterController = new ResultMasterController();
-        $jsonData = $resultMasterController->save_auto_result($lastDrawId,$single_number_result_id);
-
-        $resultCreatedObj = json_decode($jsonData->content(),true);
-
-
-        if( !empty($resultCreatedObj) && $resultCreatedObj['success']==1){
-
-            $totalDraw = DrawMaster::count();
-            if($nextDrawId==$totalDraw){
-                $nextDrawId = 1;
-            }
-            else {
-                $nextDrawId = $nextDrawId + 1;
-            }
-
-            if($lastDrawId==$totalDraw){
-                $lastDrawId = 1;
-            }
-            else{
-                $lastDrawId = $lastDrawId + 1;
-            }
-
-            $nextGameDrawObj->next_draw_id = $nextDrawId;
-            $nextGameDrawObj->last_draw_id = $lastDrawId;
-            $nextGameDrawObj->save();
-
-            return response()->json(['success'=>1, 'message' => 'Result added'], 200);
-        }else{
-            return response()->json(['success'=>0, 'message' => 'Result not added'], 401);
-        }
+//        $playMasterObj = new TerminalReportController();
+//        $playMasterObj->updateCancellation();
+//
+//        $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId);
+//        $single = GameType::find(1);
+//
+////        return response()->json(['success'=>0, 'message' => $totalSale], 401);
+//
+//        $payout = ($totalSale*($single->payout))/100;
+//        $targetValue = floor($payout/$single->winning_price);
+//
+//        // result less than equal to target value
+//        $result = DB::select(DB::raw("select single_numbers.id as single_number_id,single_numbers.single_number,sum(play_details.quantity) as total_quantity  from play_details
+//        inner join play_masters ON play_masters.id = play_details.play_master_id
+//        inner join single_numbers ON single_numbers.id = play_details.single_number_id
+//        where play_masters.draw_master_id = $lastDrawId  and date(play_details.created_at)= "."'".$today."'"."
+//        group by single_numbers.single_number,single_numbers.id
+//        having sum(play_details.quantity)<= $targetValue
+//        order by rand() limit 1"));
+//
+//        // select empty item for result
+//        if(empty($result)){
+//            // empty value
+//            $result = DB::select(DB::raw("SELECT single_numbers.id as single_number_id FROM single_numbers WHERE id NOT IN(SELECT DISTINCT
+//        play_details.single_number_id FROM play_details
+//        INNER JOIN play_masters on play_details.play_master_id= play_masters.id
+//        WHERE  DATE(play_masters.created_at) = "."'".$today."'"." and play_masters.draw_master_id = $lastDrawId) ORDER by rand() LIMIT 1"));
+//        }
+//
+//        // result greater than equal to target value
+//
+//        if(empty($result)){
+//            $result = DB::select(DB::raw("select single_numbers.id as single_number_id,single_numbers.single_number,sum(play_details.quantity) as total_quantity  from play_details
+//            inner join play_masters ON play_masters.id = play_details.play_master_id
+//            inner join single_numbers ON single_numbers.id = play_details.single_number_id
+//            where play_masters.draw_master_id= $lastDrawId  and date(play_details.created_at)= "."'".$today."'"."
+//            group by single_numbers.single_number,single_numbers.id
+//            having sum(play_details.quantity)> $targetValue
+//            order by rand() limit 1"));
+//        }
+//
+//        $single_number_result_id = $result[0]->single_number_id;
+//
+//        DrawMaster::query()->update(['active' => 0]);
+//        if(!empty($nextGameDrawObj)){
+//            DrawMaster::findOrFail($nextDrawId)->update(['active' => 1]);
+//        }
+//
+//
+//        $resultMasterController = new ResultMasterController();
+//        $jsonData = $resultMasterController->save_auto_result($lastDrawId,$single_number_result_id);
+//
+//        $resultCreatedObj = json_decode($jsonData->content(),true);
+//
+//
+//        if( !empty($resultCreatedObj) && $resultCreatedObj['success']==1){
+//
+//            $totalDraw = DrawMaster::count();
+//            if($nextDrawId==$totalDraw){
+//                $nextDrawId = 1;
+//            }
+//            else {
+//                $nextDrawId = $nextDrawId + 1;
+//            }
+//
+//            if($lastDrawId==$totalDraw){
+//                $lastDrawId = 1;
+//            }
+//            else{
+//                $lastDrawId = $lastDrawId + 1;
+//            }
+//
+//            $nextGameDrawObj->next_draw_id = $nextDrawId;
+//            $nextGameDrawObj->last_draw_id = $lastDrawId;
+//            $nextGameDrawObj->save();
+//
+//            return response()->json(['success'=>1, 'message' => 'Result added'], 200);
+//        }else{
+//            return response()->json(['success'=>0, 'message' => 'Result not added'], 401);
+//        }
 
     }
 
