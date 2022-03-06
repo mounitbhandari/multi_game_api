@@ -24,9 +24,11 @@ class SingleNumberController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function get_all_single_number()
     {
-        //
+        $result = SingleNumber::get();
+        return response()->json(['success'=>1,'data'=>SingleNumbers::collection($result)], 200);
+
     }
 
     /**

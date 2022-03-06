@@ -24,6 +24,7 @@ use App\Http\Controllers\TerminalReportController;
 use App\Http\Controllers\SuperStockistController;
 use App\Http\Controllers\PayOutSlabController;
 use App\Http\Controllers\CardCombinationController;
+use App\Http\Controllers\DoubleNumberCombinationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -125,6 +126,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::post('getResultByDate', [ResultMasterController::class, 'get_result_by_date']);
 
     Route::get('getGame', [GameController::class, 'getGame']);
+    Route::get('getSingleNumber', [SingleNumberController::class, 'get_all_single_number']);
 
 
     Route::get('updateAutoGenerate/{id}', [GameController::class, 'update_auto_generate']);
@@ -177,7 +179,7 @@ Route::group(array('prefix' => 'dev'), function() {
 
      Route::post('createAutoResult/{id}', [CentralController::class, 'createResult']);
 
-    // Route::get('getGame', [GameController::class, 'getGame']);
+    Route::get('getGame', [GameController::class, 'getGame']);
 
     Route::post('getResultByDate', [ResultMasterController::class, 'get_result_by_date']);
 
@@ -191,7 +193,10 @@ Route::group(array('prefix' => 'dev'), function() {
     // Route::patch("users",[UserController::class,'update']);
 
     //single_numbers
-    // Route::get("singleNumbers",[SingleNumberController::class,'index']);
+    Route::get("singleNumbers",[SingleNumberController::class,'index']);
+    Route::get('getSingleNumber', [SingleNumberController::class, 'get_all_single_number']);
+    Route::get('getDoubleNumber', [DoubleNumberCombinationController::class, 'get_all_double_number']);
+
 
     //number_combinations
     // Route::get("numberCombinations",[NumberCombinationController::class,'index']);
@@ -206,7 +211,7 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::get('drawTimes/dates/{id}',[DrawMasterController::class,'get_incomplete_games_by_date']);
 
     //game_types
-    // Route::get('gameTypes',[GameTypeController::class,'index']);
+    Route::get('gameTypes',[GameTypeController::class,'index']);
 
     //play_masters
      Route::post('buyTicket',[PlayController::class,'save_play_details']);

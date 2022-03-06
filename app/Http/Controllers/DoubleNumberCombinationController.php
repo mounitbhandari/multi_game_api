@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DoubleNumberCombination;
 use App\Http\Requests\StoreDoubleNumberCombinationRequest;
 use App\Http\Requests\UpdateDoubleNumberCombinationRequest;
+use PhpParser\Node\Expr\Cast\Double;
 
 class DoubleNumberCombinationController extends Controller
 {
@@ -13,9 +14,12 @@ class DoubleNumberCombinationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function get_all_double_number()
     {
-        //
+        $double = DoubleNumberCombination::get();
+
+        return response()->json(['success'=>1,'data'=> $double], 200);
+
     }
 
     /**

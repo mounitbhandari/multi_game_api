@@ -13,6 +13,7 @@ class GameTypeController extends Controller
     {
         $result = GameType::get();
 //        $result = get_age('1977-05-20');
+        // return response()->json(['success'=>1,'data'=> $result], 200,[],JSON_NUMERIC_CHECK);
         return response()->json(['success'=>1,'data'=> GameTypeResource::collection($result)], 200,[],JSON_NUMERIC_CHECK);
     }
 
