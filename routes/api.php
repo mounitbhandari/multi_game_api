@@ -144,6 +144,10 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::get('cPanel/loadReport', [CPanelReportController::class, 'load_report']);
 
 
+    Route::get('getDoubleNumber', [DoubleNumberCombinationController::class, 'get_all_double_number']);
+
+
+
 });
 
 

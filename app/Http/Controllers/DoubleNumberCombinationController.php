@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DoubleNumberCombination;
 use App\Http\Requests\StoreDoubleNumberCombinationRequest;
 use App\Http\Requests\UpdateDoubleNumberCombinationRequest;
+use App\Http\Resources\DoubleNumberCombinationResource;
 use PhpParser\Node\Expr\Cast\Double;
 
 class DoubleNumberCombinationController extends Controller
@@ -18,7 +19,9 @@ class DoubleNumberCombinationController extends Controller
     {
         $double = DoubleNumberCombination::get();
 
-        return response()->json(['success'=>1,'data'=> $double], 200);
+        // return response()->json(['success'=>1,'data'=> $double], 200);
+        return response()->json(['success'=>1,'data'=> DoubleNumberCombinationResource::collection($double)], 200,[],JSON_NUMERIC_CHECK);
+
 
     }
 
