@@ -16,6 +16,7 @@ class CreateGameTypesTable extends Migration
         Schema::create('game_types', function (Blueprint $table) {
             $table->id();
             $table->string('game_type_name',20)->nullable(true);
+            $table ->foreignId('game_id')->references('id')->on('games')->onDelete('cascade');
             $table->string('game_type_initial',10)->nullable(true);
             $table->decimal('mrp',5,2)->default(0);
             $table->decimal('winning_price',10,2)->default(0);
@@ -23,6 +24,7 @@ class CreateGameTypesTable extends Migration
             $table->decimal('commission',10,2)->default(0);
             $table->decimal('payout',10,2)->default(0);
             $table->decimal('default_payout',10,2)->default(0);
+            $table->integer('multiplexer')->default(1);
             $table->timestamps();
         });
     }

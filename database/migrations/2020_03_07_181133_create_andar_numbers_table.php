@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateGamesTable extends Migration
+class CreateAndarNumbersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateGamesTable extends Migration
      */
     public function up()
     {
-        Schema::create('games', function (Blueprint $table) {
+        Schema::create('andar_numbers', function (Blueprint $table) {
             $table->id();
-            $table->string('game_name');
-            $table->enum('auto_generate',['yes','no'])->default('no');
-            $table->enum('active',['yes','no'])->default('yes');
-            $table->tinyInteger('inforce')->default(1);
+            $table->integer('andar_number')->nullable(false)->unique();
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ class CreateGamesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('games');
+        Schema::dropIfExists('andar_numbers');
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\BaharNumber;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\ResultMaster;
@@ -22,6 +23,8 @@ class DatabaseSeeder extends Seeder
         $this->call(DrawMasterSeeder::class);
         $this->call(GameTypeSeeder::class);
         $this->call(NextGameDrawSeeder::class);
+        $this->call(AndarNumberSeeder::class);
+        $this->call(BaharNumberSeeder::class);
         $this->call(DoubleNumberCombinationSeeder::class);
 
 

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\SingleNumbers;
+use App\Models\AndarNumber;
+use App\Models\BaharNumber;
 use App\Models\DoubleNumberCombination;
 use App\Models\NumberCombination;
 use App\Models\SingleNumber;
@@ -41,12 +43,15 @@ class NumberCombinationController extends Controller
             $numberCombination->save();
 
             if($i<100){
-                    $data1 = str_pad($i,2,'0', STR_PAD_LEFT);
-                    $doubleNumberCombination = new DoubleNumberCombination();
-                    $doubleNumberCombination->single_number_id = $singleNumberId;
-                    $doubleNumberCombination->double_number = $data1;
-                    $doubleNumberCombination->visible_double_number = $data1;
-                    $doubleNumberCombination->save();
+                $data1 = str_pad($i,2,'0', STR_PAD_LEFT);
+                $doubleNumberCombination = new DoubleNumberCombination();
+                $doubleNumberCombination->single_number_id = $singleNumberId;
+                $doubleNumberCombination->double_number = $data1;
+                $doubleNumberCombination->visible_double_number = $data1;
+                $doubleSplit = str_split($data1);
+                $doubleNumberCombination->andar_number_id = (AndarNumber::whereAndarNumber($doubleSplit[0])->first())->id;
+                $doubleNumberCombination->bahar_number_id = (BaharNumber::whereBaharNumber($doubleSplit[1])->first())->id;
+                $doubleNumberCombination->save();
             }
         }
 

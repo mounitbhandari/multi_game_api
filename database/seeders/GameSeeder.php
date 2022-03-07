@@ -13,7 +13,8 @@ class GameSeeder extends Seeder
             ['game_name'=> 'SINGLE DOUBLE TRIPLE'],
             ['game_name'=> '12 CARD'],
             ['game_name'=> '16 CARD',],
-            ['game_name'=> 'KALYAN MATKA'],
+            ['game_name'=> 'Single'],
+            ['game_name'=> 'Double'],
         ]);
     }
 }
