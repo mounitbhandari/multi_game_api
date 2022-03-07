@@ -2,6 +2,9 @@
 
 namespace App\Http\Resources;
 
+use App\Models\AndarNumber;
+use App\Models\BaharNumber;
+use App\Models\SingleNumber;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class DoubleNumberCombinationResource extends JsonResource
@@ -16,10 +19,10 @@ class DoubleNumberCombinationResource extends JsonResource
     {
         return [
             'doubleNumberCombinationId' => $this->id,
-            'singleNumberId' => $this->single_number_id,
+            'singleNumber' => new SingleNumberSimpleResource(SingleNumber::find( $this->single_number_id,)),
             'doubleNumber' => $this->double_number,
-            'visibleDoubleNumber' => $this->visible_double_number,
-
+            'andarNumber' => new AndarResource(AndarNumber::find($this->andar_number_id)),
+            'baharNumber' => new BaharResource(BaharNumber::find($this->bahar_number_id)),
         ];
     }
 }

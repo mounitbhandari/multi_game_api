@@ -12,4 +12,8 @@ class SingleNumber extends Model
     public function number_combinations(){
         return $this->hasMany(NumberCombination::class,'single_number_id');
     }
+
+    protected $hidden = [
+        "inforce","created_at","updated_at",
+    ];
 }

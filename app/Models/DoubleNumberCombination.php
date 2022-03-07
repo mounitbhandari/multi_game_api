@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DoubleNumberCombination extends Model
 {
     use HasFactory;
+    protected $hidden = [
+        "inforce","created_at","updated_at",
+    ];
 }

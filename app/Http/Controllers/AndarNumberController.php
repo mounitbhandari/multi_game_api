@@ -8,14 +8,10 @@ use App\Http\Requests\UpdateAndarNumberRequest;
 
 class AndarNumberController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function get_all_andar_number()
     {
-        //
+        $data = AndarNumber::get();
+        return response()->json(['success'=>1,'data'=> $data], 200,[],JSON_NUMERIC_CHECK);
     }
 
     /**

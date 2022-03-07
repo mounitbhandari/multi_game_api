@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class AndarNumber extends Model
 {
     use HasFactory;
+    protected $hidden = [
+        "inforce","created_at","updated_at",
+    ];
 }
