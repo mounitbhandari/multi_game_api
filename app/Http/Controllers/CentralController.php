@@ -330,6 +330,46 @@ class CentralController extends Controller
 //            return response()->json(['success'=>1, 'message' => 'Result added'], 200);
         }
 
+        if($id == 4){
+
+            $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
+            $nextDrawId = $nextGameDrawObj->next_draw_id;
+            $lastDrawId = $nextGameDrawObj->last_draw_id;
+
+            $singleValue = $playMasterControllerObj->get_total_sale($today,$lastDrawId,6);
+            $singleNumberTargetData = DB::select("select * from play_details
+                inner join play_masters on play_details.play_master_id = play_masters.id
+                where quantity <= ? and game_type_id = 1 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+                order by quantity desc
+                limit 1",[$singleValue, $today, $lastDrawId]);
+
+            //empty check
+            if(empty($singleNumberTargetData)) {
+                $singleNumberTargetData = DB::select("select id as combination_number_id, 0 as quantity from single_numbers
+                    where id not in (select combination_number_id from play_details
+                    inner join play_masters on play_details.play_master_id = play_masters.id
+                    where game_type_id = 1 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?)
+                    order by RAND()
+                    limit 1",[$today, $lastDrawId]);
+            }
+
+            // greater target value
+            if(empty($singleNumberTargetData)){
+                $singleNumberTargetData = DB::select("select * from play_details
+                    inner join play_masters on play_details.play_master_id = play_masters.id
+                    where quantity > ? and game_type_id = 1 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+                    order by quantity
+                    limit 1",[$singleValue, $today, $lastDrawId]);
+            }
+
+            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,1,$singleNumberTargetData[0]->combination_number_id))->content(),true);
+
+            if($playMasterSaveCheck['success'] == 0){
+                return response()->json(['success'=>0, 'message' => 'Save error single number'], 401);
+            }
+
+        }
+
         $tempDrawMasterLastDraw = DrawMaster::whereId($lastDrawId)->whereGameId($id)->first();
         $tempDrawMasterLastDraw->active = 0;
         $tempDrawMasterLastDraw->is_draw_over = 'yes';

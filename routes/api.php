@@ -25,6 +25,8 @@ use App\Http\Controllers\SuperStockistController;
 use App\Http\Controllers\PayOutSlabController;
 use App\Http\Controllers\CardCombinationController;
 use App\Http\Controllers\DoubleNumberCombinationController;
+use App\Http\Controllers\AndarNumberController;
+use App\Http\Controllers\BaharNumberController;
 
 /*
 |--------------------------------------------------------------------------
@@ -143,10 +145,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
     Route::get('cPanel/loadReport', [CPanelReportController::class, 'load_report']);
 
-
     Route::get('getDoubleNumber', [DoubleNumberCombinationController::class, 'get_all_double_number']);
-
-
 
 });
 
@@ -161,8 +160,8 @@ Route::group(array('prefix' => 'dev'), function() {
 
     Route::get('seedingData',[NumberCombinationController::class, 'create_migration']);
 
-
-
+    Route::get('getAndarNumbers',[AndarNumberController::class, 'get_all_andar_number']);
+    Route::get('getBaharNumbers',[BaharNumberController::class, 'get_all_bahar_number']);
 
     Route::get('terminals',[TerminalController::class, 'get_all_terminals']);
 

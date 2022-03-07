@@ -155,6 +155,62 @@ class PlayController extends Controller
                     $output_play_details[] = $playDetails;
                 }
 
+                if($detail->gameTypeId == 6){
+                    $playDetails = new PlayDetails();
+                    $playDetails->play_master_id = $playMaster->id;
+                    $playDetails->game_type_id = $detail->gameTypeId;
+                    $playDetails->combination_number_id = $detail->singleNumberId;
+                    $playDetails->quantity = $detail->quantity;
+                    $playDetails->mrp = $gameType->mrp;
+                    $playDetails->commission = $gameType->commission;
+                    $playDetails->global_payout = $gameType->payout;
+                    $playDetails->terminal_payout = $payoutSlabValue;
+                    $playDetails->save();
+                    $output_play_details[] = $playDetails;
+                }
+
+                if($detail->gameTypeId == 7){
+                    $playDetails = new PlayDetails();
+                    $playDetails->play_master_id = $playMaster->id;
+                    $playDetails->game_type_id = $detail->gameTypeId;
+                    $playDetails->combination_number_id = $detail->doubleCombinationId;
+                    $playDetails->quantity = $detail->quantity;
+                    $playDetails->mrp = $gameType->mrp;
+                    $playDetails->commission = $gameType->commission;
+                    $playDetails->global_payout = $gameType->payout;
+                    $playDetails->terminal_payout = $payoutSlabValue;
+                    $playDetails->save();
+                    $output_play_details[] = $playDetails;
+                }
+
+                if($detail->gameTypeId == 8){
+                    $playDetails = new PlayDetails();
+                    $playDetails->play_master_id = $playMaster->id;
+                    $playDetails->game_type_id = $detail->gameTypeId;
+                    $playDetails->combination_number_id = $detail->amdarCombinationId;
+                    $playDetails->quantity = $detail->quantity;
+                    $playDetails->mrp = $gameType->mrp;
+                    $playDetails->commission = $gameType->commission;
+                    $playDetails->global_payout = $gameType->payout;
+                    $playDetails->terminal_payout = $payoutSlabValue;
+                    $playDetails->save();
+                    $output_play_details[] = $playDetails;
+                }
+
+                if($detail->gameTypeId == 9){
+                    $playDetails = new PlayDetails();
+                    $playDetails->play_master_id = $playMaster->id;
+                    $playDetails->game_type_id = $detail->gameTypeId;
+                    $playDetails->combination_number_id = $detail->baharCombinationId;
+                    $playDetails->quantity = $detail->quantity;
+                    $playDetails->mrp = $gameType->mrp;
+                    $playDetails->commission = $gameType->commission;
+                    $playDetails->global_payout = $gameType->payout;
+                    $playDetails->terminal_payout = $payoutSlabValue;
+                    $playDetails->save();
+                    $output_play_details[] = $playDetails;
+                }
+
             }
             $output_array['game_input'] = $this->get_game_input_details_by_play_master_id($playMaster->id);
 

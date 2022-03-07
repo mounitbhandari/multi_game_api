@@ -2,20 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BaharResource;
 use App\Models\BaharNumber;
 use App\Http\Requests\StoreBaharNumberRequest;
 use App\Http\Requests\UpdateBaharNumberRequest;
 
 class BaharNumberController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function get_all_bahar_number()
     {
-        //
+        $data = BaharNumber::get();
+        return response()->json(['success'=>1,'data'=>BaharResource::collection($data)], 200,[],JSON_NUMERIC_CHECK);
     }
 
     /**

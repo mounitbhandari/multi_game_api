@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AndarResource;
 use App\Models\AndarNumber;
 use App\Http\Requests\StoreAndarNumberRequest;
 use App\Http\Requests\UpdateAndarNumberRequest;
@@ -11,7 +12,7 @@ class AndarNumberController extends Controller
     public function get_all_andar_number()
     {
         $data = AndarNumber::get();
-        return response()->json(['success'=>1,'data'=> $data], 200,[],JSON_NUMERIC_CHECK);
+        return response()->json(['success'=>1,'data'=>AndarResource::collection($data)], 200,[],JSON_NUMERIC_CHECK);
     }
 
     /**
