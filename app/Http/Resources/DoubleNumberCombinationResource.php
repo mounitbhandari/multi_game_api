@@ -21,6 +21,7 @@ class DoubleNumberCombinationResource extends JsonResource
             'doubleNumberCombinationId' => $this->id,
             'singleNumber' => new SingleNumberSimpleResource(SingleNumber::find( $this->single_number_id,)),
             'doubleNumber' => $this->double_number,
+            'visibleDoubleNumber' => $this->visible_double_number,
             'andarNumber' => new AndarResource(AndarNumber::find($this->andar_number_id)),
             'baharNumber' => new BaharResource(BaharNumber::find($this->bahar_number_id)),
         ];
