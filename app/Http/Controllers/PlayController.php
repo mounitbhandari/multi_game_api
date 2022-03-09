@@ -104,6 +104,7 @@ class PlayController extends Controller
                     $playDetails->mrp = $gameType->mrp;
                     $playDetails->commission = $gameType->commission;
                     $playDetails->global_payout = $gameType->payout;
+                    $playDetails->multiplexer = $gameType->multiplexer;
                     $playDetails->terminal_payout = $payoutSlabValue;
                     $playDetails->save();
                     $output_play_details[] = $playDetails;
@@ -122,6 +123,7 @@ class PlayController extends Controller
                         $playDetails->commission = $gameType->commission;
                         $playDetails->global_payout = $gameType->payout;
                         $playDetails->terminal_payout = $payoutSlabValue;
+                        $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
                         $output_play_details[] = $playDetails;
 
@@ -137,6 +139,7 @@ class PlayController extends Controller
                     $playDetails->commission = $gameType->commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
+                    $playDetails->multiplexer = $gameType->multiplexer;
                     $playDetails->save();
                     $output_play_details[] = $playDetails;
                 }
@@ -151,6 +154,7 @@ class PlayController extends Controller
                     $playDetails->commission = $gameType->commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
+                    $playDetails->multiplexer = $gameType->multiplexer;
                     $playDetails->save();
                     $output_play_details[] = $playDetails;
                 }
@@ -165,6 +169,7 @@ class PlayController extends Controller
                     $playDetails->commission = $gameType->commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
+                    $playDetails->multiplexer = $gameType->multiplexer;
                     $playDetails->save();
                     $output_play_details[] = $playDetails;
                 }
@@ -179,6 +184,7 @@ class PlayController extends Controller
                     $playDetails->commission = $gameType->commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
+                    $playDetails->multiplexer = $gameType->multiplexer;
                     $playDetails->save();
                     $output_play_details[] = $playDetails;
                 }
@@ -193,6 +199,7 @@ class PlayController extends Controller
                     $playDetails->commission = $gameType->commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
+                    $playDetails->multiplexer = $gameType->multiplexer;
                     $playDetails->save();
                     $output_play_details[] = $playDetails;
                 }
@@ -207,6 +214,7 @@ class PlayController extends Controller
                     $playDetails->commission = $gameType->commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
+                    $playDetails->multiplexer = $gameType->multiplexer;
                     $playDetails->save();
                     $output_play_details[] = $playDetails;
                 }
