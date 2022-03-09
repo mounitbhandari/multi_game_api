@@ -35,6 +35,7 @@ class GameTypeResource extends JsonResource
             'commission' => $this->commission,
             'payout' => $this->payout,
             'defaultPayout' => $this->default_payout,
+            'multiplexer' => $this->multiplexer,
 
         ];
     }

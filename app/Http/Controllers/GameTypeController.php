@@ -32,31 +32,40 @@ class GameTypeController extends Controller
             for($i=0; $i<3; $i++){
                 $gameType = GameType::find($idGameType[$i]);
                 $gameType->payout = ($inputPayoutDetails[0])['newPayout'];
+                $gameType->multiplexer = ($inputPayoutDetails[0])['multiplexer'];
+                $gameType->save();
+            }
+            $getAllGameType = GameType::get();
+            return response()->json(['success'=>1,'data'=> GameTypeResource::collection($getAllGameType)], 200,[],JSON_NUMERIC_CHECK);
+        }else{
+//            $detail = (object)$inputPayoutDetails;
+            for($i=0; $i<3; $i++){
+                $gameType = GameType::find(($inputPayoutDetails[0])['gameTypeId']);
+                $gameType->payout = ($inputPayoutDetails[0])['newPayout'];
+                $gameType->multiplexer = ($inputPayoutDetails[0])['multiplexer'];
                 $gameType->save();
             }
             $getAllGameType = GameType::get();
             return response()->json(['success'=>1,'data'=> GameTypeResource::collection($getAllGameType)], 200,[],JSON_NUMERIC_CHECK);
         }
 
-        DB::beginTransaction();
-        try{
-            $outputPayoutDetails = array();
-            foreach($inputPayoutDetails as $inputPayoutDetail){
-                $detail = (object)$inputPayoutDetail;
-                $gameType = GameType::find($detail->gameTypeId);
-                $gameType->payout = $detail->newPayout;
-                $gameType->save();
-                $outputPayoutDetails[] = $gameType;
-            }
-            DB::commit();
-        }catch(\Exception $e){
-            DB::rollBack();
-            return response()->json(['success'=>0, 'data' => null, 'error'=>$e->getMessage()], 500);
-        }
+//        DB::beginTransaction();
+//        try{
+//            $outputPayoutDetails = array();
+//            foreach($inputPayoutDetails as $inputPayoutDetail){
+//                $detail = (object)$inputPayoutDetail;
+//                $gameType = GameType::find($detail->gameTypeId);
+//                $gameType->payout = $detail->newPayout;
+//                $gameType->save();
+//                $outputPayoutDetails[] = $gameType;
+//            }
+//            DB::commit();
+//        }catch(\Exception $e){
+//            DB::rollBack();
+//            return response()->json(['success'=>0, 'data' => null, 'error'=>$e->getMessage()], 500);
+//        }
 
         $getAllGameType = GameType::get();
-
-
         return response()->json(['success'=>1,'data'=> GameTypeResource::collection($getAllGameType)], 200,[],JSON_NUMERIC_CHECK);
     }
 

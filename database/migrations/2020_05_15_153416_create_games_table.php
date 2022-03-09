@@ -16,8 +16,9 @@ class CreateGamesTable extends Migration
         Schema::create('games', function (Blueprint $table) {
             $table->id();
             $table->string('game_name');
-            $table->enum('auto_generate',['yes','no'])->default('no');
+            $table->enum('auto_generate',['yes','no'])->default('yes');
             $table->enum('active',['yes','no'])->default('yes');
+            $table->enum('multiplexer_random',['yes','no'])->default('no');
             $table->tinyInteger('inforce')->default(1);
             $table->timestamps();
         });
