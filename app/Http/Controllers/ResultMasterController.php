@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\DrawMaster;
 use App\Models\Game;
+use App\Models\GameType;
 use App\Models\ManualResult;
 use App\Models\NextGameDraw;
 use App\Models\NumberCombination;
@@ -200,6 +201,7 @@ class ResultMasterController extends Controller
 
         $game_id = (DrawMaster::whereId($draw_id)->first())->game_id;
         $game_gen = (Game::whereId($game_id)->first())->auto_generate;
+        $game_multiplexer = (GameType::find($game_type_id))->multiplexer;
 
         if($game_gen == "no"){
             return response()->json(['success'=>1, 'data' => 'Auto generate is deactivated'], 200);
@@ -220,6 +222,7 @@ class ResultMasterController extends Controller
             $resultDetail->result_master_id = $resultMaster->id;
             $resultDetail->game_type_id = $game_type_id;
             $resultDetail->combination_number_id = $combination_number_id;
+            $resultDetail->multiplexer = $game_multiplexer;
             $resultDetail->save();
         }else{
             $resultMaster = new ResultMaster();
@@ -232,6 +235,7 @@ class ResultMasterController extends Controller
             $resultDetail->result_master_id = $resultMaster->id;
             $resultDetail->game_type_id = $game_type_id;
             $resultDetail->combination_number_id = $combination_number_id;
+            $resultDetail->multiplexer = $game_multiplexer;
             $resultDetail->save();
         }
 

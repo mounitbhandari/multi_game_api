@@ -80,7 +80,6 @@ class UserController extends Controller
             DB::rollBack();
             return response()->json(['success'=>0, 'data' => null, 'error'=>$e->getMessage()], 500);
         }
-
         return response()->json(['success'=>1,'data'=> new UserResource($user)], 200,[],JSON_NUMERIC_CHECK);
     }
 

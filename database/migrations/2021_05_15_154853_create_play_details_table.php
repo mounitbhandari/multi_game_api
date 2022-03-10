@@ -22,7 +22,7 @@ class CreatePlayDetailsTable extends Migration
             $table->decimal('mrp',5,4)->default(0);
             $table->decimal('commission',10,2)->default(0);
             $table->decimal('terminal_payout',10,2)->default(0);
-            $table->integer('multiplexer')->nullable(false);
+//            $table->integer('multiplexer')->nullable(false);
             $table->decimal('global_payout',10,2)->default(0);
 
             $table->timestamps();

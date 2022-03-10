@@ -18,6 +18,7 @@ class CreateResultDetailsTable extends Migration
             $table->foreignId('result_master_id')->references('id')->on('result_masters')->onDelete('cascade');
             $table ->foreignId('game_type_id')->references('id')->on('game_types')->onDelete('cascade');
             $table ->integer('combination_number_id');
+            $table ->integer('multiplexer');
             $table->timestamps();
         });
     }
