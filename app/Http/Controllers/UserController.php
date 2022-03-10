@@ -83,4 +83,13 @@ class UserController extends Controller
 
         return response()->json(['success'=>1,'data'=> new UserResource($user)], 200,[],JSON_NUMERIC_CHECK);
     }
+
+    public function check_pin(Request $request){
+        $requestedData = ($request->json()->all())[0];
+        $userPinValidation = User::whereEmail($requestedData)->first();
+        if($userPinValidation){
+            return response()->json(['success'=>0], 200,[],JSON_NUMERIC_CHECK);
+        }
+        return response()->json(['success'=>1], 200,[],JSON_NUMERIC_CHECK);
+    }
 }

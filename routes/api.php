@@ -147,6 +147,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
     Route::get('getDoubleNumber', [DoubleNumberCombinationController::class, 'get_all_double_number']);
 
+    Route::post('pinCheckValidation',[UserController::class, 'check_pin']);
+
 });
 
 
@@ -157,6 +159,8 @@ Route::group(array('prefix' => 'dev'), function() {
     //card_api
     Route::get('getTwelveCards',[CardCombinationController::class, 'get_all_twelve_card']);
     Route::get('getSixteenCards',[CardCombinationController::class, 'get_all_sixteen_card']);
+
+    Route::post('pinCheckValidation',[UserController::class, 'check_pin']);
 
     Route::get('seedingData',[NumberCombinationController::class, 'create_migration']);
 
