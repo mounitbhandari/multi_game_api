@@ -29,7 +29,7 @@ class CreateManualResultsTable extends Migration
             $table->tinyInteger('inforce')->default(1);
             $table->timestamps();
 
-            $table->unique(['draw_master_id', 'game_date', 'game_id']);
+            $table->unique(['draw_master_id', 'game_date', 'game_type_id']);
         });
     }
 
