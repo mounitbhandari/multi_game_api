@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DrawMaster;
 use App\Models\Game;
 use App\Models\GameType;
+use App\Models\NextGameDraw;
 use App\Models\ResultMaster;
 use App\Models\User;
 use Faker\Core\Number;
@@ -315,7 +316,13 @@ group by play_details.play_master_id")[0];
     public function load_report(){
         $today= Carbon::today()->format('Y-m-d');
         $playMasterControllerObj = new PlayMasterController();
-        $lastDrawId = (DrawMaster::whereActive(1)->first())->id;
+//        $lastDrawId = (DrawMaster::whereActive(1)->first())->id;
+
+        $lastDrawId1 = (NextGameDraw::whereGameId(1)->first())->last_draw_id;
+        $lastDrawId2 = (NextGameDraw::whereGameId(2)->first())->last_draw_id;
+        $lastDrawId3 = (NextGameDraw::whereGameId(3)->first())->last_draw_id;
+        $lastDrawId4 = (NextGameDraw::whereGameId(4)->first())->last_draw_id;
+        $lastDrawId5 = (NextGameDraw::whereGameId(5)->first())->last_draw_id;
 //        $totalSale = $playMasterControllerObj->get_total_sale_by_game($today,$lastDrawId,1);
 
 //        $games = Game::get();
@@ -331,13 +338,25 @@ group by play_details.play_master_id")[0];
                 $temp = [
                     'terminal_name' => $user->user_name,
 //                    'game_name' => $gameType->game_type_name,
-                    'total_sale' => $playMasterControllerObj->get_total_sale_by_terminal($today,$lastDrawId,$user->id),
-
-                    'single' =>  $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,1,$user->id),
-                    'triple' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,2,$user->id),
-                    'twelve_card' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,3,$user->id),
-                    'sixteen_card' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,4,$user->id),
-                    'double' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId,5,$user->id),
+//                    'total_sale' => $playMasterControllerObj->get_total_sale_by_terminal($today,$lastDrawId,$user->id),
+                    'total_sale' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId1,1,$user->id)
+                        + $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId1,2,$user->id)
+                        + $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId2,3,$user->id)
+                        + $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId3,4,$user->id)
+                        + $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId1,5,$user->id)
+                        + $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId4,6,$user->id)
+                        + $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId5,7,$user->id)
+                        + $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId5,8,$user->id)
+                        + $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId5,9,$user->id),
+                    'single' =>  $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId1,1,$user->id),
+                    'triple' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId1,2,$user->id),
+                    'twelve_card' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId2,3,$user->id),
+                    'sixteen_card' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId3,4,$user->id),
+                    'double' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId1,5,$user->id),
+                    'singleI' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId4,6,$user->id),
+                    'doubleI' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId5,7,$user->id),
+                    'andar' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId5,8,$user->id),
+                    'bahar' => $playMasterControllerObj->get_total_sale_by_gameType($today,$lastDrawId5,9,$user->id),
                 ];
                 array_push($x, (object)$temp);
 //            }
