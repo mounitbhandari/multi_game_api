@@ -41,45 +41,45 @@ class ManualResultController extends Controller
 //        }
         $requestedData = (object)$request->json()->all();
 
-        $drawMasterTemp = DrawMaster::whereGameId($requestedData->gameId)->whereId($requestedData->drawMasterId)->first();
-        if ($drawMasterTemp->is_draw_over === 'yes'){
-
-            $manualResult = new ManualResult();
-            $manualResult->draw_master_id = $requestedData->drawMasterId;
-            $manualResult->number_combination_id = $requestedData->numberCombinationId;
-            $manualResult->game_id = $requestedData->gameId;
-            $manualResult->game_date = Carbon::today();
-            $manualResult->save();
-
-            $resultMaster = new ResultMaster();
-            $resultMaster->draw_master_id = $requestedData->drawMasterId;
-            $resultMaster->number_combination_id = $requestedData->numberCombinationId;
-            $resultMaster->game_id = $requestedData->gameId;
-            $resultMaster->game_date = Carbon::today();
-            $resultMaster->save();
-
-            return response()->json(['success'=>1,'data'=> new ManualResultResource($manualResult)], 200,[],JSON_NUMERIC_CHECK);
-        }else{
-            $manualResult = ManualResult::whereGameId($requestedData->gameId)->whereGameDate(Carbon::today())->first();
-
-            if($manualResult){
+//        $drawMasterTemp = DrawMaster::whereGameId($requestedData->gameId)->whereId($requestedData->drawMasterId)->first();
+//        if ($drawMasterTemp->is_draw_over === 'yes'){
+//
+//            $manualResult = new ManualResult();
+//            $manualResult->draw_master_id = $requestedData->drawMasterId;
+//            $manualResult->number_combination_id = $requestedData->numberCombinationId;
+//            $manualResult->game_id = $requestedData->gameId;
+//            $manualResult->game_date = Carbon::today();
+//            $manualResult->save();
+//
+//            $resultMaster = new ResultMaster();
+//            $resultMaster->draw_master_id = $requestedData->drawMasterId;
+//            $resultMaster->number_combination_id = $requestedData->numberCombinationId;
+//            $resultMaster->game_id = $requestedData->gameId;
+//            $resultMaster->game_date = Carbon::today();
+//            $resultMaster->save();
+//
+//            return response()->json(['success'=>1,'data'=> new ManualResultResource($manualResult)], 200,[],JSON_NUMERIC_CHECK);
+//        }else{
+//            $manualResult = ManualResult::whereGameId($requestedData->gameId)->whereGameDate(Carbon::today())->first();
+//
+//            if($manualResult){
+////                $manualResult = new ManualResult();
+//                $manualResult->draw_master_id = $requestedData->drawMasterId;
+//                $manualResult->number_combination_id = $requestedData->numberCombinationId;
+//                $manualResult->game_id = $requestedData->gameId;
+//                $manualResult->game_date = Carbon::today();
+//                $manualResult->update();
+//            }else{
 //                $manualResult = new ManualResult();
-                $manualResult->draw_master_id = $requestedData->drawMasterId;
-                $manualResult->number_combination_id = $requestedData->numberCombinationId;
-                $manualResult->game_id = $requestedData->gameId;
-                $manualResult->game_date = Carbon::today();
-                $manualResult->update();
-            }else{
-                $manualResult = new ManualResult();
-                $manualResult->draw_master_id = $requestedData->drawMasterId;
-                $manualResult->number_combination_id = $requestedData->numberCombinationId;
-                $manualResult->game_id = $requestedData->gameId;
-                $manualResult->game_date = Carbon::today();
-                $manualResult->save();
-            }
-
-            return response()->json(['success'=>1,'data'=> new ManualResultResource($manualResult)], 200,[],JSON_NUMERIC_CHECK);
-        }
+//                $manualResult->draw_master_id = $requestedData->drawMasterId;
+//                $manualResult->number_combination_id = $requestedData->numberCombinationId;
+//                $manualResult->game_id = $requestedData->gameId;
+//                $manualResult->game_date = Carbon::today();
+//                $manualResult->save();
+//            }
+//
+//            return response()->json(['success'=>1,'data'=> new ManualResultResource($manualResult)], 200,[],JSON_NUMERIC_CHECK);
+//        }
 
 //        DB::beginTransaction();
 //        try{
@@ -98,6 +98,21 @@ class ManualResultController extends Controller
 //        }
 //
 //        return response()->json(['success'=>1,'data'=> new ManualResultResource($manualResult)], 200,[],JSON_NUMERIC_CHECK);
+
+
+        $requestedData = $request->json()->all();
+
+        foreach ($requestedData as $data){
+            $manualResult = new ManualResult();
+            $manualResult->draw_master_id = $data['drawMasterId'];
+            $manualResult->combination_number_id = $data['combinationNumberId'];
+            $manualResult->game_type_id = $data['gameTypeId'];
+            $manualResult->game_date = Carbon::today();
+            $manualResult->save();
+        }
+
+        return response()->json(['success'=>1,'data'=> $requestedData], 200,[],JSON_NUMERIC_CHECK);
+
     }
 
     /**
