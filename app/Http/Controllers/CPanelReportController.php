@@ -154,58 +154,68 @@ class CPanelReportController extends Controller
     public function get_total_quantity_by_barcode($play_master_id){
         $play_master = PlayMaster::findOrFail($play_master_id);
         $play_game_ids = PlayDetails::where('play_master_id',$play_master_id)->distinct()->pluck('game_type_id');
-        $total_quantity = 0;
-        foreach ($play_game_ids as $game_id){
-            if($game_id == 1){
-                $singleGameQuantity = DB::select("select sum(quantity) as total_quantity from(select max(quantity) as quantity from play_details
-inner join number_combinations ON number_combinations.id = play_details.combination_number_id
-where play_details.play_master_id=".$play_master_id." and play_details.game_type_id=1
-group by number_combinations.single_number_id) as table1")[0];
+//        $total_quantity = 0;
+//        foreach ($play_game_ids as $game_id){
+//            if($game_id == 1){
+//                $singleGameQuantity = DB::select("select sum(quantity) as total_quantity from(select max(quantity) as quantity from play_details
+//inner join number_combinations ON number_combinations.id = play_details.combination_number_id
+//where play_details.play_master_id=".$play_master_id." and play_details.game_type_id=1
+//group by number_combinations.single_number_id) as table1")[0];
+//
+//            }
+//            if($game_id == 2){
+//                $tripleGameQuantity = DB::select("select sum(quantity) as total_quantity from play_details
+//inner join number_combinations ON number_combinations.id = play_details.combination_number_id
+//where play_details.play_master_id=".$play_master_id." and play_details.game_type_id= 2
+//group by play_details.play_master_id")[0];
+//
+//            }
+//        }
+//
+//        if(!empty($singleGameQuantity)){
+//            $total_quantity+= $singleGameQuantity->total_quantity;
+//        }
+//        if(!empty($tripleGameQuantity)){
+//            $total_quantity+= $tripleGameQuantity->total_quantity;
+//        }
+//        return $total_quantity;
 
-            }
-            if($game_id == 2){
-                $tripleGameQuantity = DB::select("select sum(quantity) as total_quantity from play_details
-inner join number_combinations ON number_combinations.id = play_details.combination_number_id
-where play_details.play_master_id=".$play_master_id." and play_details.game_type_id= 2
-group by play_details.play_master_id")[0];
+        $data = (DB::select("select sum(play_details.quantity) as total_quantity from play_details where play_master_id = ".$play_master_id)[0])->total_quantity;
 
-            }
-        }
-
-        if(!empty($singleGameQuantity)){
-            $total_quantity+= $singleGameQuantity->total_quantity;
-        }
-        if(!empty($tripleGameQuantity)){
-            $total_quantity+= $tripleGameQuantity->total_quantity;
-        }
-        return $total_quantity;
+        return $data;
     }
 
     public function get_total_amount_by_barcode($play_master_id){
         $play_game_ids = PlayDetails::where('play_master_id',$play_master_id)->distinct()->pluck('game_type_id');
-        $total_amount = 0;
-        foreach ($play_game_ids as $game_id){
-            if($game_id == 1){
-                $singleGameTotalAmount = DB::select("select sum(quantity)*max(mrp) as total_amount from(select max(quantity) as quantity,round(max(mrp)*22) as mrp from play_details
-                inner join number_combinations ON number_combinations.id = play_details.combination_number_id
-                where play_details.play_master_id= ".$play_master_id." and play_details.game_type_id=1
-                group by number_combinations.single_number_id) as table1")[0];
-            }
-            if($game_id == 2){
-                $tripleGameTotalAmount = DB::select("select sum(quantity*mrp) as total_amount from play_details
-                inner join number_combinations ON number_combinations.id = play_details.combination_number_id
-                where play_details.play_master_id= ".$play_master_id." and play_details.game_type_id= 2
-                group by play_details.play_master_id")[0];
-            }
-        }
+//        $total_amount = 0;
+//        foreach ($play_game_ids as $game_id){
+//            if($game_id == 1){
+//                $singleGameTotalAmount = DB::select("select sum(quantity)*max(mrp) as total_amount from(select max(quantity) as quantity,round(max(mrp)*22) as mrp from play_details
+//                inner join number_combinations ON number_combinations.id = play_details.combination_number_id
+//                where play_details.play_master_id= ".$play_master_id." and play_details.game_type_id=1
+//                group by number_combinations.single_number_id) as table1")[0];
+//            }
+//            if($game_id == 2){
+//                $tripleGameTotalAmount = DB::select("select sum(quantity*mrp) as total_amount from play_details
+//                inner join number_combinations ON number_combinations.id = play_details.combination_number_id
+//                where play_details.play_master_id= ".$play_master_id." and play_details.game_type_id= 2
+//                group by play_details.play_master_id")[0];
+//            }
+//        }
+//
+//        if(!empty($singleGameTotalAmount)){
+//            $total_amount+= $singleGameTotalAmount->total_amount;
+//        }
+//        if(!empty($tripleGameTotalAmount)){
+//            $total_amount+= $tripleGameTotalAmount->total_amount;
+//        }
+//        return $total_amount;
 
-        if(!empty($singleGameTotalAmount)){
-            $total_amount+= $singleGameTotalAmount->total_amount;
-        }
-        if(!empty($tripleGameTotalAmount)){
-            $total_amount+= $tripleGameTotalAmount->total_amount;
-        }
-        return $total_amount;
+        $data = (DB::select("select sum(play_details.quantity* game_types.mrp) as total_mrp from play_details
+            inner join game_types on game_types.id = play_details.game_type_id
+            where play_details.play_master_id = ".$play_master_id)[0])->total_mrp;
+
+        return $data;
     }
 
     public function customer_sale_report(){
