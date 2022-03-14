@@ -150,6 +150,9 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
     Route::post('pinCheckValidation',[UserController::class, 'check_pin']);
 
+    Route::get('getTwelveCards',[CardCombinationController::class, 'get_all_twelve_card']);
+    Route::get('getSixteenCards',[CardCombinationController::class, 'get_all_sixteen_card']);
+
 });
 
 

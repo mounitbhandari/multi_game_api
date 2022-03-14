@@ -20,7 +20,7 @@ class DoubleNumberCombinationController extends Controller
         $double = DoubleNumberCombination::get();
 
         // return response()->json(['success'=>1,'data'=> $double], 200);
-        return response()->json(['success'=>1,'data'=> DoubleNumberCombinationResource::collection($double)], 200,[],JSON_NUMERIC_CHECK);
+        return response()->json(['success'=>1,'data'=> DoubleNumberCombinationResource::collection($double)], 200);
 
 
     }
