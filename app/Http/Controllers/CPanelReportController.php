@@ -55,17 +55,19 @@ class CPanelReportController extends Controller
 
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
             ,'draw_masters.visible_time as draw_time',
-            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time'
+            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','games.game_name'
         )
             ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
             ->join('users','users.id','play_masters.user_id')
             ->join('play_details','play_details.play_master_id','play_masters.id')
+            ->join('game_types','game_types.id','play_details.game_type_id')
+            ->join('games','games.id','game_types.game_id')
             ->where('play_masters.is_cancelled',0)
 //            ->where('play_masters.created_at','>=',$start_date)
 //            ->where('play_masters.created_at','<=',$end_date)
             ->whereRaw('date(play_masters.created_at) >= ?', [$start_date])
             ->whereRaw('date(play_masters.created_at) <= ?', [$end_date])
-            ->groupBy('play_masters.id','play_masters.barcode_number','draw_masters.visible_time','users.email','play_masters.created_at')
+            ->groupBy('play_masters.id','play_masters.barcode_number','draw_masters.visible_time','users.email','play_masters.created_at','games.game_name')
             ->orderBy('play_masters.created_at','desc')
             ->get();
 
@@ -121,11 +123,13 @@ class CPanelReportController extends Controller
 
         if(!empty($result_master)){
             $result_number_combination_id = (ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first())->combination_number_id;
+            $result_multiplier = (ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first())->multiplexer;
             if(empty($result_number_combination_id)){
                 $result_number_combination_id = null;
             }
         }else{
             $result_number_combination_id = null;
+            $result_multiplier = 1;
         }
 
 //        return $result_number_combination_id;
@@ -136,7 +140,7 @@ class CPanelReportController extends Controller
                 where play_masters.id = ".$play_master_id." and play_details.game_type_id = ".$game_id." and play_details.combination_number_id = ".$result_number_combination_id);
 
             if($data){
-                $prize_value = $data[0]->price_value + $prize_value;
+                $prize_value = ($data[0]->price_value + $prize_value) * $result_multiplier;
             }else{
                 $prize_value = $prize_value + 0;
             }
