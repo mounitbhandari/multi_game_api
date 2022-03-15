@@ -6,6 +6,7 @@ use App\Models\DrawMaster;
 use App\Models\Game;
 use App\Models\GameType;
 use App\Models\NextGameDraw;
+use App\Models\ResultDetail;
 use App\Models\ResultMaster;
 use App\Models\User;
 use Faker\Core\Number;
@@ -115,39 +116,61 @@ class CPanelReportController extends Controller
 
         $play_date = Carbon::parse($play_master->created_at)->format('Y-m-d');
         $result_master = ResultMaster::where('draw_master_id', $play_master->draw_master_id)->where('game_date',$play_date)->first();
-        $result_number_combination_id = !empty($result_master) ? $result_master->number_combination_id : null;
         $prize_value = 0;
         foreach ($play_game_ids as $game_id){
-            if($game_id == 1){
-                $singleGamePrize = PlayMaster::join('play_details','play_masters.id','play_details.play_master_id')
-                    ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
-                    ->join('game_types','play_details.game_type_id','game_types.id')
-                    ->select(DB::raw("max(play_details.quantity)* max(game_types.winning_price) as prize_value") )
-                    ->where('play_masters.id',$play_master_id)
-                    ->where('play_details.game_type_id',$game_id)
-                    ->where('play_details.combination_number_id',$result_number_combination_id)
-                    ->groupBy('number_combinations.single_number_id')
-                    ->first();
+
+        if(!empty($result_master)){
+            $result_number_combination_id = (ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first())->combination_number_id;
+            if(empty($result_number_combination_id)){
+                $result_number_combination_id = null;
             }
-            if($game_id == 2){
-                $tripleGamePrize = PlayMaster::join('play_details','play_masters.id','play_details.play_master_id')
-                    ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
-                    ->join('game_types','play_details.game_type_id','game_types.id')
-                    ->select(DB::raw("play_details.quantity * game_types.winning_price as prize_value") )
-                    ->where('play_masters.id',$play_master_id)
-                    ->where('play_details.game_type_id',$game_id)
-                    ->where('play_details.combination_number_id',$result_number_combination_id)
-                    ->first();
+        }else{
+            $result_number_combination_id = null;
+        }
+
+//        return $result_number_combination_id;
+
+            $data = DB::select("select (play_details.quantity* game_types.winning_price) as price_value from play_masters
+                inner join play_details on play_details.play_master_id = play_masters.id
+                inner join game_types on game_types.id = play_details.game_type_id
+                where play_masters.id = ".$play_master_id." and play_details.game_type_id = ".$game_id." and play_details.combination_number_id = ".$result_number_combination_id);
+
+            if($data){
+                $prize_value = $data[0]->price_value + $prize_value;
+            }else{
+                $prize_value = $prize_value + 0;
             }
+
+//            if($game_id == 1){
+//                $singleGamePrize = PlayMaster::join('play_details','play_masters.id','play_details.play_master_id')
+//                    ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
+//                    ->join('game_types','play_details.game_type_id','game_types.id')
+//                    ->select(DB::raw("max(play_details.quantity)* max(game_types.winning_price) as prize_value") )
+//                    ->where('play_masters.id',$play_master_id)
+//                    ->where('play_details.game_type_id',$game_id)
+//                    ->where('play_details.combination_number_id',$result_number_combination_id)
+//                    ->groupBy('number_combinations.single_number_id')
+//                    ->first();
+//            }
+//            if($game_id == 2){
+//                $tripleGamePrize = PlayMaster::join('play_details','play_masters.id','play_details.play_master_id')
+//                    ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
+//                    ->join('game_types','play_details.game_type_id','game_types.id')
+//                    ->select(DB::raw("play_details.quantity * game_types.winning_price as prize_value") )
+//                    ->where('play_masters.id',$play_master_id)
+//                    ->where('play_details.game_type_id',$game_id)
+//                    ->where('play_details.combination_number_id',$result_number_combination_id)
+//                    ->first();
+//            }
         }
 //        return ['single' => $singleGamePrize];
 
-        if(!empty($singleGamePrize)){
-            $prize_value+= $singleGamePrize->prize_value;
-        }
-        if(!empty($tripleGamePrize)){
-            $prize_value+= $tripleGamePrize->prize_value;
-        }
+//        if(!empty($singleGamePrize)){
+//            $prize_value+= $singleGamePrize->prize_value;
+//        }
+//        if(!empty($tripleGamePrize)){
+//            $prize_value+= $tripleGamePrize->prize_value;
+//        }
         return $prize_value;
     }
 
