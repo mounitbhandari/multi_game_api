@@ -21,16 +21,18 @@ class TerminalReportController extends Controller
 
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
             ,'draw_masters.visible_time as draw_time','play_masters.is_claimed',
-            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','play_masters.is_cancelled','play_masters.is_cancelable'
+            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','play_masters.is_cancelled','play_masters.is_cancelable','games.game_name'
         )
             ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
             ->join('users','users.id','play_masters.user_id')
             ->join('play_details','play_details.play_master_id','play_masters.id')
+            ->join('game_types','game_types.id','play_details.game_type_id')
+            ->join('games','games.id','game_types.game_id')
             ->whereRaw('date(play_masters.created_at) >= ?', [$start_date])
             ->whereRaw('date(play_masters.created_at) <= ?', [$end_date])
 //            ->where('play_masters.is_cancelled',0)
             ->where('play_masters.user_id',$terminalId)
-            ->groupBy('play_masters.id','play_masters.barcode_number','play_masters.is_claimed','draw_masters.visible_time','users.email','play_masters.created_at','play_masters.is_cancelled','play_masters.is_cancelable')
+            ->groupBy('play_masters.id','play_masters.barcode_number','play_masters.is_claimed','draw_masters.visible_time','users.email','play_masters.created_at','play_masters.is_cancelled','play_masters.is_cancelable','games.game_name')
             ->orderBy('play_masters.created_at','desc')
             ->get();
 
@@ -78,13 +80,13 @@ class TerminalReportController extends Controller
             foreach ($newData as $y){
 //                $tempData = 0;
                 $newPrize += $cPanelRepotControllerObj->get_prize_value_by_barcode($y->id);
-                $tempData = (PlayDetails::select(DB::raw("if(game_type_id = 1,(mrp*22)*quantity-(commission/100),mrp*quantity-(commission/100)) as total"))
-                    ->where('play_master_id',$y->id)->distinct()->get())[0];
-                $tempntp += $tempData->total;
+//                $tempData = (PlayDetails::select(DB::raw("if(game_type_id = 1,(mrp*22)*quantity-(commission/100),mrp*quantity-(commission/100)) as total"))
+//                    ->where('play_master_id',$y->id)->distinct()->get())[0];
+//                $tempntp += $tempData->total;
             }
             $detail = (object)$x;
             $detail->prize_value = $newPrize;
-            $detail->ntp = $tempntp;
+//            $detail->ntp = $tempntp;
         }
 
 
