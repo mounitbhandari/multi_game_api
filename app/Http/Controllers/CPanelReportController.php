@@ -125,12 +125,16 @@ class CPanelReportController extends Controller
             $result_number_combination_id = (ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first())->combination_number_id;
             $result_multiplier = (ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first())->multiplexer;
             if(empty($result_number_combination_id)){
-                $result_number_combination_id = null;
+                $result_number_combination_id = -1;
             }
         }else{
             $result_number_combination_id = null;
             $result_multiplier = 1;
         }
+        if(empty($result_number_combination_id)){
+             $result_number_combination_id = -1;
+        }
+
 
 //        return $result_number_combination_id;
 
@@ -315,26 +319,19 @@ class CPanelReportController extends Controller
         group by user_relation_with_others.stockist_id, play_masters.user_id,users.user_name,play_details.game_type_id,users.email) as table1 group by user_name,user_id,terminal_pin,stockist_id) as table1
         left join users on table1.stockist_id = users.id",[$start_date,$end_date]);
 
-//        $data = DB::select("select max(play_master_id) as play_master_id,terminal_pin,user_name,user_id,
-//        sum(total) as total,round(sum(commission),2) as commission from (
-//        select max(play_masters.id) as play_master_id,users.user_name,users.email as terminal_pin,
-//        round(sum(play_details.quantity * play_details.mrp)) as total,
-//        sum(play_details.quantity * play_details.mrp)* (max(play_details.commission)/100) as commission,
-//        play_masters.user_id
-//        FROM play_masters
-//        inner join play_details on play_details.play_master_id = play_masters.id
-//        inner join game_types ON game_types.id = play_details.game_type_id
-//        inner join users ON users.id = play_masters.user_id
-//        where play_masters.is_cancelled=0 and date(play_masters.created_at) >= ? and date(play_masters.created_at) <= ?
-//        group by play_masters.user_id,users.user_name,play_details.game_type_id,users.email) as table1 group by user_name,user_id,terminal_pin",[$start_date,$end_date]);
-
         foreach($data as $x){
             $newPrize = 0;
             $tempntp = 0;
+            $tempPrize = 0;
             $newData = PlayMaster::where('user_id',$x->user_id)->get();
             foreach($newData as $y) {
                 $tempData = 0;
-                $newPrize += $this->get_prize_value_by_barcode($y->id);
+                $tempPrize += $this->get_prize_value_by_barcode($y->id);
+                if ($tempPrize > 0 && $y->is_claimed == 1) {
+                    $newPrize += $this->get_prize_value_by_barcode($y->id);
+                } else {
+                    $newPrize += 0;
+                }
                 $tempData = (PlayDetails::select(DB::raw("if(game_type_id = 1,(mrp*22)*quantity-(commission/100),mrp*quantity-(commission/100)) as total"))
                     ->where('play_master_id',$y->id)->distinct()->get())[0];
                 $tempntp += $tempData->total;

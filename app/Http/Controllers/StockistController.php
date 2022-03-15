@@ -33,36 +33,54 @@ class StockistController extends Controller
         select max(play_masters.id) as play_master_id,users.user_name,users.email as terminal_pin,
         round(sum(play_details.quantity * play_details.mrp)) as total,
         sum(play_details.quantity * play_details.mrp)* (max(play_details.commission)/100) as commission,
-        play_masters.user_id, stockist_to_terminals.stockist_id
+        play_masters.user_id, user_relation_with_others.stockist_id
         FROM play_masters
         inner join play_details on play_details.play_master_id = play_masters.id
         inner join game_types ON game_types.id = play_details.game_type_id
         inner join users ON users.id = play_masters.user_id
-        left join stockist_to_terminals on play_masters.user_id = stockist_to_terminals.terminal_id
+        left join user_relation_with_others on play_masters.user_id = user_relation_with_others.terminal_id
         where play_masters.is_cancelled=0 and date(play_masters.created_at) >= ? and date(play_masters.created_at) <= ? and stockist_id = ?
-        group by stockist_to_terminals.stockist_id, play_masters.user_id,users.user_name,play_details.game_type_id,users.email) as table1 group by user_name,user_id,terminal_pin,stockist_id) as table1
+        group by user_relation_with_others.stockist_id, play_masters.user_id,users.user_name,play_details.game_type_id,users.email) as table1 group by user_name,user_id,terminal_pin,stockist_id) as table1
         left join users on table1.stockist_id = users.id ",[$start_date,$end_date,$userID]);
 
-        foreach($data as $x) {
+//        $newData = PlayMaster::where('user_id', $data[0]->user_id)->get();
+
+//        foreach($data as $x) {
+//            $newPrize = 0;
+//            $tempntp = 0;
+//            $newData = PlayMaster::where('user_id', $x->user_id)->get();
+//            foreach ($newData as $y) {
+//                $tempData = 0;
+////                $newPrize += $this->get_prize_value_by_barcode($y->id);
+//                $tempPrize = $cPanelRepotControllerObj->get_prize_value_by_barcode($y->id);
+//                if ($tempPrize > 0 && $y->is_claimed == 1) {
+//                    $newPrize += $cPanelRepotControllerObj->get_prize_value_by_barcode($y->id);
+//                } else {
+//                    $newPrize += 0;
+//                }
+//                $detail = (object)$x;
+//                $detail->prize_value = $newPrize;
+//            }
+//        }
+
+        foreach($data as $x){
             $newPrize = 0;
-            $tempntp = 0;
-            $newData = PlayMaster::where('user_id', $x->user_id)->get();
-            foreach ($newData as $y) {
-                $tempData = 0;
-//                $newPrize += $this->get_prize_value_by_barcode($y->id);
-                $tempPrize = $cPanelRepotControllerObj->get_prize_value_by_barcode($y->id);
+            $tempPrize = 0;
+            $newData = PlayMaster::where('user_id',$x->user_id)->get();
+            foreach($newData as $y) {
+                $tempPrize += $cPanelRepotControllerObj->get_prize_value_by_barcode($y->id);
                 if ($tempPrize > 0 && $y->is_claimed == 1) {
                     $newPrize += $cPanelRepotControllerObj->get_prize_value_by_barcode($y->id);
                 } else {
                     $newPrize += 0;
                 }
-
-                $detail = (object)$x;
-                $detail->prize_value = $newPrize;
             }
+            $detail = (object)$x;
+            $detail->prize_value = $newPrize;
         }
 
         return response()->json(['success'=> 1, 'data' => $data], 200);
+//        return response()->json(['success'=> 1, 'data' => $newData], 200);
     }
 
 
@@ -76,17 +94,19 @@ class StockistController extends Controller
 
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
             ,'draw_masters.visible_time as draw_time',
-            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time'
+            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','games.game_name'
         )
             ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
             ->join('users','users.id','play_masters.user_id')
             ->join('play_details','play_details.play_master_id','play_masters.id')
-            ->join('stockist_to_terminals','stockist_to_terminals.terminal_id','play_masters.user_id')
+            ->join('game_types','game_types.id','play_details.game_type_id')
+            ->join('games','games.id','game_types.game_id')
+            ->join('user_relation_with_others','user_relation_with_others.terminal_id','play_masters.user_id')
             ->where('play_masters.is_cancelled',0)
-            ->where('stockist_to_terminals.stockist_id',$userID)
+            ->where('user_relation_with_others.stockist_id',$userID)
             ->whereRaw('date(play_masters.created_at) >= ?', [$start_date])
             ->whereRaw('date(play_masters.created_at) <= ?', [$end_date])
-            ->groupBy('play_masters.id','play_masters.barcode_number','draw_masters.visible_time','users.email','play_masters.created_at')
+            ->groupBy('play_masters.id','play_masters.barcode_number','draw_masters.visible_time','users.email','play_masters.created_at','games.game_name')
             ->orderBy('play_masters.created_at','desc')
             ->get();
 
