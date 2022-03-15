@@ -153,6 +153,9 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::get('getTwelveCards',[CardCombinationController::class, 'get_all_twelve_card']);
     Route::get('getSixteenCards',[CardCombinationController::class, 'get_all_sixteen_card']);
 
+    Route::post('superStockist/customerSaleReports', [SuperStockistController::class, 'customer_sale_reports']);
+    Route::post('superStockist/barcodeReportByDate', [SuperStockistController::class, 'barcode_wise_report_by_date']);
+
 });
 
 
@@ -197,8 +200,10 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::post('cPanel/barcodeReportByDate', [CPanelReportController::class, 'barcode_wise_report_by_date']);
     Route::get('cPanel/loadReport', [CPanelReportController::class, 'load_report']);
      Route::post('stockist/customerSaleReports', [StockistController::class, 'customer_sale_reports']);
+     Route::post('superStockist/customerSaleReports', [SuperStockistController::class, 'customer_sale_reports']);
 
      Route::post('stockist/barcodeReportByDate', [StockistController::class, 'barcode_wise_report_by_date']);
+     Route::post('superStockist/barcodeReportByDate', [SuperStockistController::class, 'barcode_wise_report_by_date']);
 
     // Route::get("users",[UserController::class,'getAllUsers']);
     // Route::patch("users",[UserController::class,'update']);
