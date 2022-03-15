@@ -102,13 +102,46 @@ class ManualResultController extends Controller
 
         $requestedData = $request->json()->all();
 
+
+        $gameTypeSix = [7,8,9];
         foreach ($requestedData as $data){
-            $manualResult = new ManualResult();
-            $manualResult->draw_master_id = $data['drawMasterId'];
-            $manualResult->combination_number_id = $data['combinationNumberId'];
-            $manualResult->game_type_id = $data['gameTypeId'];
-            $manualResult->game_date = Carbon::today();
-            $manualResult->save();
+
+            if($data['gameTypeId'] === 7){
+                $dataSplit = str_split($data['combinationNumberId']);
+                foreach ($gameTypeSix as $newGameType){
+                    if($newGameType === 7){
+                        $manualResult = new ManualResult();
+                        $manualResult->draw_master_id = $data['drawMasterId'];
+                        $manualResult->combination_number_id = $data['combinationNumberId'];
+                        $manualResult->game_type_id = $newGameType;
+                        $manualResult->game_date = Carbon::today();
+                        $manualResult->save();
+                    }
+                    if($newGameType === 8){
+                        $manualResult = new ManualResult();
+                        $manualResult->draw_master_id = $data['drawMasterId'];
+                        $manualResult->combination_number_id = $dataSplit[0];
+                        $manualResult->game_type_id = $newGameType;
+                        $manualResult->game_date = Carbon::today();
+                        $manualResult->save();
+                    }
+                    if($newGameType === 9){
+                        $manualResult = new ManualResult();
+                        $manualResult->draw_master_id = $data['drawMasterId'];
+                        $manualResult->combination_number_id = $dataSplit[1];
+                        $manualResult->game_type_id = $newGameType;
+                        $manualResult->game_date = Carbon::today();
+                        $manualResult->save();
+                    }
+                }
+            }else{
+                $manualResult = new ManualResult();
+                $manualResult->draw_master_id = $data['drawMasterId'];
+                $manualResult->combination_number_id = $data['combinationNumberId'];
+                $manualResult->game_type_id = $data['gameTypeId'];
+                $manualResult->game_date = Carbon::today();
+                $manualResult->save();
+            }
         }
 
         return response()->json(['success'=>1,'data'=> $requestedData], 200,[],JSON_NUMERIC_CHECK);
