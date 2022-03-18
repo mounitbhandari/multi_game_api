@@ -156,6 +156,9 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::post('superStockist/customerSaleReports', [SuperStockistController::class, 'customer_sale_reports']);
     Route::post('superStockist/barcodeReportByDate', [SuperStockistController::class, 'barcode_wise_report_by_date']);
 
+    Route::get('getAndarNumbers',[AndarNumberController::class, 'get_all_andar_number']);
+    Route::get('getBaharNumbers',[BaharNumberController::class, 'get_all_bahar_number']);
+
 });
 
 
