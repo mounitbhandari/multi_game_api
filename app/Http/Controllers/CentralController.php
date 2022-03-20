@@ -238,46 +238,6 @@ class CentralController extends Controller
             if($playMasterSaveCheck['success'] == 0){
                 return response()->json(['success'=>0, 'message' => 'Save error 12 Card'], 401);
             }
-
-
-            $tempDrawMasterLastDraw = DrawMaster::whereId($lastDrawId)->whereGameId($id)->first();
-            $tempDrawMasterLastDraw->active = 0;
-            $tempDrawMasterLastDraw->is_draw_over = 'yes';
-            $tempDrawMasterLastDraw->update();
-
-            $tempDrawMasterNextDraw = DrawMaster::whereId($nextDrawId)->whereGameId($id)->first();
-            $tempDrawMasterNextDraw->active = 1;
-            $tempDrawMasterNextDraw->update();
-
-            $totalDraw = DrawMaster::whereGameId($id)->count();
-            $gameCountLastDraw = DrawMaster::whereGameId($id)->where('id', '<=', $lastDrawId)->count();
-            $gameCountNextDraw = DrawMaster::whereGameId($id)->where('id', '<=', $nextDrawId)->count();
-
-            if($gameCountNextDraw==$totalDraw){
-                $nextDrawId = (DrawMaster::whereGameId($id)->first())->id;
-            }
-            else {
-                $nextDrawId = $nextDrawId + 1;
-            }
-
-            if($gameCountLastDraw==$totalDraw){
-                $lastDrawId = (DrawMaster::whereGameId($id)->first())->id;
-            }
-            else{
-                $lastDrawId = $lastDrawId + 1;
-            }
-
-            $nextGameDrawObj->next_draw_id = $nextDrawId;
-            $nextGameDrawObj->last_draw_id = $lastDrawId;
-            $nextGameDrawObj->save();
-
-            $tempPlayMaster = PlayMaster::select()->where('is_cancelable',1)->whereGameId($id)->get();
-            foreach ($tempPlayMaster as $x){
-                $y = PlayMaster::find($x->id);
-                $y->is_cancelable = 0;
-                $y->update();
-            }
-
         }
 
         if($id == 3){
