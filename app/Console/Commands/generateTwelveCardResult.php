@@ -5,14 +5,14 @@ namespace App\Console\Commands;
 use App\Http\Controllers\CentralController;
 use Illuminate\Console\Command;
 
-class generateShirdiResult extends Command
+class generateTwelveCardResult extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'generateShirdi:result';
+    protected $signature = 'generateTwelveCard:result';
 
     /**
      * The console command description.

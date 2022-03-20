@@ -5,14 +5,14 @@ namespace App\Console\Commands;
 use App\Http\Controllers\CentralController;
 use Illuminate\Console\Command;
 
-class generateKalyanMatkaResult extends Command
+class generateSingleResult extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'generateSingle:result';
 
     /**
      * The console command description.
