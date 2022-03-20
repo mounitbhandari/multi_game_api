@@ -28,6 +28,7 @@ class CreateUsersTable extends Migration
             $table->decimal('payout')->default(0);
             $table->decimal('opening_balance')->default(0);
             $table->decimal('closing_balance')->default(0);
+            $table->integer('auto_claim')->default(0);
             $table ->integer('created_by')->nullable(true);
             $table->tinyInteger('inforce')->default(1);
             $table->timestamps();
