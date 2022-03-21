@@ -199,9 +199,26 @@ class ResultMasterController extends Controller
     public function get_result_today_by_game($id){
         $today= Carbon::today()->format('Y-m-d');
         $return_array = [];
+        $draw_id = [];
         $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->get();
 
-        if(($resultMasters) && $id == 1){
+        if(sizeof($resultMasters)<=0){
+            $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
+            foreach ($drawGameTimes as $drawGameTime) {
+                $temp = [
+                    'draw_id' => $drawGameTime->id,
+                    'draw_time' => $drawGameTime->visible_time,
+                    'multiplexer' => null,
+                    'single_number' => null,
+                    'double_number' => null,
+                    'triple_number' => null
+                ];
+                array_push($return_array, $temp);
+            }
+            return response()->json(['success'=>1, 'data' => $return_array], 200);
+        }
+
+        if($id == 1){
             foreach ($resultMasters as $resultMaster){
                 $temp = [
                     'draw_id' => $resultMaster->draw_master_id,
@@ -234,7 +251,7 @@ class ResultMasterController extends Controller
                 array_push($draw_id,$resultMaster->draw_master_id);
             }
 
-            $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId(1)->whereNotIn('id', $draw_id)->get();
+            $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->whereNotIn('id', $draw_id)->get();
             foreach ($drawGameTimes as $drawGameTime){
                 $temp = [
                     'draw_id' => $drawGameTime->id,
@@ -247,25 +264,63 @@ class ResultMasterController extends Controller
                 array_push($return_array,$temp);
             }
 
-        }else{
-            return response()->json(['success'=>0], 200);
+        }else if($id == 2){
+            $twelveCard = DB::select("select draw_masters.id as draw_id ,draw_masters.visible_time as draw_time ,result_details.multiplexer, card_combinations.rank_name, card_combinations.suit_name, card_combinations.rank_initial from result_masters
+                inner join result_details on result_details.result_master_id = result_masters.id
+                inner join card_combinations on card_combinations.id = result_details.combination_number_id
+                inner join draw_masters on draw_masters.id = result_masters.draw_master_id
+                where result_masters.game_id = 2 and result_masters.game_date = ?",[$today]);
+            $return_array = $twelveCard;
+
+            foreach ($twelveCard as $x){
+                array_push($draw_id,$x->draw_id);
+            }
+
+            $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->whereNotIn('id', $draw_id)->get();
+            foreach ($drawGameTimes as $drawGameTime){
+                $temp = [
+                    'draw_id' => $drawGameTime->id,
+                    'draw_time' => $drawGameTime->visible_time,
+                    'multiplexer' => null,
+                    'single_number' => null,
+                    'double_number' => null,
+                    'triple_number' => null
+                ];
+                array_push($return_array,$temp);
+            }
+
+        }else if($id == 3){
+            $twelveCard = DB::select("select draw_masters.id as draw_id ,draw_masters.visible_time as draw_time ,result_details.multiplexer, card_combinations.rank_name, card_combinations.suit_name, card_combinations.rank_initial from result_masters
+                inner join result_details on result_details.result_master_id = result_masters.id
+                inner join card_combinations on card_combinations.id = result_details.combination_number_id
+                inner join draw_masters on draw_masters.id = result_masters.draw_master_id
+                where result_masters.game_id = 3 and result_masters.game_date = ?",[$today]);
+            $return_array = $twelveCard;
+
+            foreach ($twelveCard as $x){
+                array_push($draw_id,$x->draw_id);
+            }
+
+            $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->whereNotIn('id', $draw_id)->get();
+            foreach ($drawGameTimes as $drawGameTime){
+                $temp = [
+                    'draw_id' => $drawGameTime->id,
+                    'draw_time' => $drawGameTime->visible_time,
+                    'multiplexer' => null,
+                    'single_number' => null,
+                    'double_number' => null,
+                    'triple_number' => null
+                ];
+                array_push($return_array,$temp);
+            }
         }
 
-        return response()->json(['success'=>$return_array], 200);
+        else{
+            return response()->json(['success'=> 0, 'message' => 'Invalid game id'], 200);
+        }
 
+        return response()->json(['success'=>1, 'data' => $return_array], 200);
 
-
-//        if($id === 1){
-//            foreach ($resultMasters as $resultMaster){
-//                $data = DB::select("select * from result_masters
-//                    inner join result_details on result_details.result_master_id = result_masters.id
-//                    inner join single_numbers on single_numbers.id = result_details.combination_number_id
-//                    where result_details.game_type_id = 1 and result_details.result_master_id = ".$resultMaster->id);
-//            }
-//            array_push($return_array, $data);
-//            return response()->json(['success'=>$return_array], 200);
-//        }
-//        return response()->json(['success'=>$return_array], 200);
     }
 
     public function save_auto_result($draw_id, $game_type_id, $combination_number_id)
