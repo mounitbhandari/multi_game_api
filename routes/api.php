@@ -166,6 +166,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
 Route::group(array('prefix' => 'dev'), function() {
 
+    Route::get('getTodayResultByGame/{id}',[ResultMasterController::class, 'get_result_today_by_game']);
+
     //card_api
     Route::get('getTwelveCards',[CardCombinationController::class, 'get_all_twelve_card']);
     Route::get('getSixteenCards',[CardCombinationController::class, 'get_all_sixteen_card']);
