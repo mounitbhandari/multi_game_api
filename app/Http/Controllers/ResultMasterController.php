@@ -231,14 +231,27 @@ class ResultMasterController extends Controller
                     where result_details.game_type_id = 2 and result_details.result_master_id = ".$resultMaster->id))[0]->visible_triple_number
                 ];
                 array_push($return_array,$temp);
+                array_push($draw_id,$resultMaster->draw_master_id);
             }
+
+            $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId(1)->whereNotIn('id', $draw_id)->get();
+            foreach ($drawGameTimes as $drawGameTime){
+                $temp = [
+                    'draw_id' => $drawGameTime->id,
+                    'draw_time' => $drawGameTime->visible_time,
+                    'multiplexer' => null,
+                    'single_number' => null,
+                    'double_number' => null,
+                    'triple_number' => null
+                ];
+                array_push($return_array,$temp);
+            }
+
         }else{
             return response()->json(['success'=>0], 200);
         }
 
-//        $drawGameTime = DrawMaster::select('id', 'visible_time')->whereGameId(1)->whereNotIn('id', $return_array['draw_id'])->get();
-
-        return response()->json(['success'=>$plucked], 200);
+        return response()->json(['success'=>$return_array], 200);
 
 
 
