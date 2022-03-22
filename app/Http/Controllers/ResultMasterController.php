@@ -203,18 +203,61 @@ class ResultMasterController extends Controller
         $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->get();
 
         if(sizeof($resultMasters)<=0){
-            $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
-            foreach ($drawGameTimes as $drawGameTime) {
-                $temp = [
-                    'draw_id' => $drawGameTime->id,
-                    'draw_time' => $drawGameTime->visible_time,
-                    'multiplexer' => null,
-                    'single_number' => null,
-                    'double_number' => null,
-                    'triple_number' => null
-                ];
-                array_push($return_array, $temp);
+            if($id == 1) {
+                $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
+                foreach ($drawGameTimes as $drawGameTime) {
+                    $temp = [
+                        'draw_id' => $drawGameTime->id,
+                        'draw_time' => $drawGameTime->visible_time,
+                        'multiplexer' => null,
+                        'single_number' => null,
+                        'double_number' => null,
+                        'triple_number' => null
+                    ];
+                    array_push($return_array, $temp);
+                }
             }
+            if($id == 2) {
+                $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
+                foreach ($drawGameTimes as $drawGameTime) {
+                    $temp = [
+                        'draw_id' => $drawGameTime->id,
+                        'draw_time' => $drawGameTime->visible_time,
+                        'multiplexer' => null,
+                        'rank_name' => null,
+                        'suit_name' => null,
+                        'rank_initial' => null
+                    ];
+                    array_push($return_array, $temp);
+                }
+            }
+            if($id == 3) {
+                $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
+                foreach ($drawGameTimes as $drawGameTime) {
+                    $temp = [
+                        'draw_id' => $drawGameTime->id,
+                        'draw_time' => $drawGameTime->visible_time,
+                        'multiplexer' => null,
+                        'rank_name' => null,
+                        'suit_name' => null,
+                        'rank_initial' => null
+                    ];
+                    array_push($return_array, $temp);
+                }
+            }
+            if($id == 4) {
+                $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
+                foreach ($drawGameTimes as $drawGameTime) {
+                    $temp = [
+                        'draw_id' => $drawGameTime->id,
+                        'draw_time' => $drawGameTime->visible_time,
+                        'multiplexer' => null,
+                        'single_number' => null
+                    ];
+                    array_push($return_array, $temp);
+                }
+            }
+
             return response()->json(['success'=>1, 'data' => $return_array], 200);
         }
 
@@ -282,9 +325,9 @@ class ResultMasterController extends Controller
                     'draw_id' => $drawGameTime->id,
                     'draw_time' => $drawGameTime->visible_time,
                     'multiplexer' => null,
-                    'single_number' => null,
-                    'double_number' => null,
-                    'triple_number' => null
+                    'rank_name' => null,
+                    'suit_name' => null,
+                    'rank_initial' => null
                 ];
                 array_push($return_array,$temp);
             }
@@ -307,9 +350,9 @@ class ResultMasterController extends Controller
                     'draw_id' => $drawGameTime->id,
                     'draw_time' => $drawGameTime->visible_time,
                     'multiplexer' => null,
-                    'single_number' => null,
-                    'double_number' => null,
-                    'triple_number' => null
+                    'rank_name' => null,
+                    'suit_name' => null,
+                    'rank_initial' => null
                 ];
                 array_push($return_array,$temp);
             }
@@ -333,9 +376,7 @@ class ResultMasterController extends Controller
                     'draw_id' => $drawGameTime->id,
                     'draw_time' => $drawGameTime->visible_time,
                     'multiplexer' => null,
-                    'single_number' => null,
-                    'double_number' => null,
-                    'triple_number' => null
+                    'single_number' => null
                 ];
                 array_push($return_array,$temp);
             }
