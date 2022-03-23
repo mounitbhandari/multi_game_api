@@ -27,27 +27,27 @@ class GameTypeController extends Controller
 
 //        return response()->json(['success'=>$inputPayoutDetails[0], 'data' => ($inputPayoutDetails[0])['gameTypeId']], 200);
 
-        if(($inputPayoutDetails[0])['gameTypeId'] == 1){
-            $idGameType = [1,2,5];
-            for($i=0; $i<3; $i++){
-                $gameType = GameType::find($idGameType[$i]);
-                $gameType->payout = ($inputPayoutDetails[0])['newPayout'];
-                $gameType->multiplexer = ($inputPayoutDetails[0])['multiplexer'];
-                $gameType->save();
-            }
-            $getAllGameType = GameType::get();
-            return response()->json(['success'=>1,'data'=> GameTypeResource::collection($getAllGameType)], 200,[],JSON_NUMERIC_CHECK);
-        }else{
+//        if(($inputPayoutDetails[0])['gameTypeId'] == 1){
+//            $idGameType = [1,2,5];
+//            for($i=0; $i<3; $i++){
+//                $gameType = GameType::find($idGameType[$i]);
+//                $gameType->payout = ($inputPayoutDetails[0])['newPayout'];
+//                $gameType->multiplexer = ($inputPayoutDetails[0])['multiplexer'];
+//                $gameType->save();
+//            }
+//            $getAllGameType = GameType::get();
+//            return response()->json(['success'=>1,'data'=> GameTypeResource::collection($getAllGameType)], 200,[],JSON_NUMERIC_CHECK);
+//        }else{
 //            $detail = (object)$inputPayoutDetails;
-            for($i=0; $i<3; $i++){
+//            for($i=0; $i<3; $i++){
                 $gameType = GameType::find(($inputPayoutDetails[0])['gameTypeId']);
                 $gameType->payout = ($inputPayoutDetails[0])['newPayout'];
                 $gameType->multiplexer = ($inputPayoutDetails[0])['multiplexer'];
                 $gameType->save();
-            }
+//            }
             $getAllGameType = GameType::get();
             return response()->json(['success'=>1,'data'=> GameTypeResource::collection($getAllGameType)], 200,[],JSON_NUMERIC_CHECK);
-        }
+//        }
 
 //        DB::beginTransaction();
 //        try{
@@ -65,8 +65,8 @@ class GameTypeController extends Controller
 //            return response()->json(['success'=>0, 'data' => null, 'error'=>$e->getMessage()], 500);
 //        }
 
-        $getAllGameType = GameType::get();
-        return response()->json(['success'=>1,'data'=> GameTypeResource::collection($getAllGameType)], 200,[],JSON_NUMERIC_CHECK);
+//        $getAllGameType = GameType::get();
+//        return response()->json(['success'=>1,'data'=> GameTypeResource::collection($getAllGameType)], 200,[],JSON_NUMERIC_CHECK);
     }
 
 
