@@ -476,7 +476,7 @@ class ResultMasterController extends Controller
 //
 //        return response()->json(['success'=>1, 'data' => $resultMaster], 200);
 
-        $resultMaster = ResultMaster::whereGameId($game_id)->whereDrawMasterId($draw_id)->first();
+        $resultMaster = ResultMaster::whereGameId($game_id)->whereDrawMasterId($draw_id)->whereGameDate($today)->first();
 
         if($resultMaster){
             $resultDetail = new ResultDetail();
