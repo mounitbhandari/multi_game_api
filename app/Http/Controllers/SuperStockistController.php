@@ -82,6 +82,11 @@ class SuperStockistController extends Controller
             $requestedData = (object)$request->json()->all();
             $beneficiaryUid = $requestedData->beneficiaryUid;
             $amount = $requestedData->amount;
+
+            $beneficiaryObj = User::find($requestedData->rechargeDoneByUid);
+            $beneficiaryObj->closing_balance = $beneficiaryObj->closing_balance - $amount;
+            $beneficiaryObj->save();
+
             $beneficiaryObj = User::find($beneficiaryUid);
             $beneficiaryObj->closing_balance = $beneficiaryObj->closing_balance + $amount;
             $beneficiaryObj->save();
