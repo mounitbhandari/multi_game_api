@@ -97,6 +97,7 @@ class CentralController extends Controller
                         where id not in (select combination_number_id from play_details
                         inner join play_masters on play_details.play_master_id = play_masters.id
                         where game_type_id = 2 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?)
+                        order by RAND()
                         ",[$today, $lastDrawId]);
                 }
 
@@ -143,20 +144,22 @@ class CentralController extends Controller
                     if($totalSale <= $allGameTotalSale){
                         $loopOn = 0;
                         $temp = [
+                            'single x' => $splitNumber[2],
                             'single' => $singleNumberValue,
                             'single quantity' => $singleNumberQuantity,
                             'double' => $doubleNumberValue,
                             'double quantity' => $doubleNumberQuantity,
                             'triple' => $tripleData->combination_number_id,
-                            'tripleNumberData' => $tripleNumberTargetData,
+//                            'tripleNumberData' => $tripleNumberTargetData,
                             'total_sale' => $totalSale,
                             'allGameTotalSale' => $allGameTotalSale,
                             '$tripleData' => $tripleData,
+                            '$splitNumber' => $splitNumber,
                         ];
 
-                        $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,2,$singleNumberValue))->content(),true);
-                        $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,1,$doubleNumberValue))->content(),true);
-                        $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,5,$tripleData->combination_number_id))->content(),true);
+                        $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,1,$singleNumberValue))->content(),true);
+                        $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,2,$tripleData->combination_number_id))->content(),true);
+                        $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,5,$doubleNumberValue))->content(),true);
 
                         array_push($resultToBeSaved, $temp);
                         break;
