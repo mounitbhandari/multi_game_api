@@ -678,7 +678,7 @@ class ResultMasterController extends Controller
         return response()->json(['success'=>1, 'data' => $return_array], 200);
 
 
-        return response()->json(['success'=> 2, 'data' => $data], 200);
+//        return response()->json(['success'=> 2, 'data' => $data], 200);
     }
 
     public function get_result_by_date(Request $request){

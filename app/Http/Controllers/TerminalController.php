@@ -29,7 +29,7 @@ class TerminalController extends Controller
 //        $terminals = User::select()->whereUserTypeId(5)
 //            ->join('user_relation_with_others','users.id','user_relation_with_others.terminal_id')
 //            ->get();
-        $terminals = DB::select("select users.id, users.user_name, users.email,users.pay_out_slab_id ,users.password, users.commission ,users.remember_token, users.mobile1, users.user_type_id, users.opening_balance, users.closing_balance, users.created_by, users.inforce, user_relation_with_others.super_stockist_id, user_relation_with_others.stockist_id, user_relation_with_others.terminal_id, user_relation_with_others.changed_by, user_relation_with_others.active, user_relation_with_others.end_date, user_relation_with_others.changed_for from users
+        $terminals = DB::select("select users.id, users.visible_password , users.user_name, users.email,users.pay_out_slab_id ,users.password, users.commission ,users.remember_token, users.mobile1, users.user_type_id, users.opening_balance, users.closing_balance, users.created_by, users.inforce, user_relation_with_others.super_stockist_id, user_relation_with_others.stockist_id, user_relation_with_others.terminal_id, user_relation_with_others.changed_by, user_relation_with_others.active, user_relation_with_others.end_date, user_relation_with_others.changed_for from users
             inner join user_relation_with_others on users.id = user_relation_with_others.terminal_id
             where user_relation_with_others.active = 1");
         return TerminalResource::collection($terminals);
