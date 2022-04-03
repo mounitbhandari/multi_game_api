@@ -84,8 +84,9 @@ class UserController extends Controller
     }
 
     public function check_pin(Request $request){
-        $requestedData = ($request->json()->all())[0];
-        $userPinValidation = User::whereEmail($requestedData)->first();
+        $requestedData = (object)($request->json()->all());
+//        return response()->json(['success'=>$request, 'test' =>(object)$requestedData], 200);
+        $userPinValidation = User::whereEmail($requestedData->email)->first();
         if($userPinValidation){
             return response()->json(['success'=>0], 200,[],JSON_NUMERIC_CHECK);
         }
