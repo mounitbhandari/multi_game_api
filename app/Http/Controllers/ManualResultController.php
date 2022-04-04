@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ManualResultResource;
+use App\Models\DoubleNumberCombination;
 use App\Models\DrawMaster;
 use App\Models\ManualResult;
+use App\Models\NumberCombination;
 use App\Models\ResultMaster;
+use App\Models\SingleNumber;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -134,7 +137,37 @@ class ManualResultController extends Controller
                         $manualResult->save();
                     }
                 }
-            }else{
+            }else if($data['gameTypeId'] === 2){
+//                $splitNumber = str_split($tripleData->visible_triple_number)
+                $dataCombination = NumberCombination::find($data['combinationNumberId']);
+
+                $splitNumber = str_split($dataCombination->visible_triple_number);
+                $singleNumberValue = (SingleNumber::select()->whereSingleNumber($splitNumber[2])->first())->id;
+                $doubleNumberValue = (DoubleNumberCombination::select()->whereDoubleNumber($splitNumber[1].$splitNumber[2])->first())->id;
+
+                $manualResult = new ManualResult();
+                $manualResult->draw_master_id = $data['drawMasterId'];
+                $manualResult->combination_number_id = $singleNumberValue;
+                $manualResult->game_type_id = 1;
+                $manualResult->game_date = Carbon::today();
+                $manualResult->save();
+
+                $manualResult = new ManualResult();
+                $manualResult->draw_master_id = $data['drawMasterId'];
+                $manualResult->combination_number_id = $data['combinationNumberId'];
+                $manualResult->game_type_id = 2;
+                $manualResult->game_date = Carbon::today();
+                $manualResult->save();
+
+                $manualResult = new ManualResult();
+                $manualResult->draw_master_id = $data['drawMasterId'];
+                $manualResult->combination_number_id = $doubleNumberValue;
+                $manualResult->game_type_id = 5;
+                $manualResult->game_date = Carbon::today();
+                $manualResult->save();
+            }
+
+            else{
                 $manualResult = new ManualResult();
                 $manualResult->draw_master_id = $data['drawMasterId'];
                 $manualResult->combination_number_id = $data['combinationNumberId'];
