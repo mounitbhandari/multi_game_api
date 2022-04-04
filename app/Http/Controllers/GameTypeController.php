@@ -40,13 +40,53 @@ class GameTypeController extends Controller
 //        }else{
 //            $detail = (object)$inputPayoutDetails;
 //            for($i=0; $i<3; $i++){
+
+
+            if(($inputPayoutDetails[0])['gameTypeId'] === 1){
+                $gameType = GameType::find(1);
+                $gameType->payout = ($inputPayoutDetails[0])['newPayout'];
+                $gameType->multiplexer = ($inputPayoutDetails[0])['multiplexer'];
+                $gameType->save();
+
+                $gameType =  GameType::find(2);
+                $gameType->payout = ($inputPayoutDetails[0])['newPayout'];
+                $gameType->multiplexer = ($inputPayoutDetails[0])['multiplexer'];
+                $gameType->save();
+
+                $gameType =  GameType::find(5);
+                $gameType->payout = ($inputPayoutDetails[0])['newPayout'];
+                $gameType->multiplexer = ($inputPayoutDetails[0])['multiplexer'];
+                $gameType->save();
+
+            }else if(($inputPayoutDetails[0])['gameTypeId'] === 7){
+
+                $gameType = GameType::find(7);
+                $gameType->payout = ($inputPayoutDetails[0])['newPayout'];
+                $gameType->multiplexer = ($inputPayoutDetails[0])['multiplexer'];
+                $gameType->save();
+
+                $gameType =  GameType::find(8);
+                $gameType->payout = ($inputPayoutDetails[0])['newPayout'];
+                $gameType->multiplexer = ($inputPayoutDetails[0])['multiplexer'];
+                $gameType->save();
+
+                $gameType =  GameType::find(9);
+                $gameType->payout = ($inputPayoutDetails[0])['newPayout'];
+                $gameType->multiplexer = ($inputPayoutDetails[0])['multiplexer'];
+                $gameType->save();
+
+            }
+            else{
                 $gameType = GameType::find(($inputPayoutDetails[0])['gameTypeId']);
                 $gameType->payout = ($inputPayoutDetails[0])['newPayout'];
                 $gameType->multiplexer = ($inputPayoutDetails[0])['multiplexer'];
                 $gameType->save();
+            }
+
 //            }
             $getAllGameType = GameType::get();
             return response()->json(['success'=>1,'data'=> GameTypeResource::collection($getAllGameType)], 200,[],JSON_NUMERIC_CHECK);
+
 //        }
 
 //        DB::beginTransaction();
