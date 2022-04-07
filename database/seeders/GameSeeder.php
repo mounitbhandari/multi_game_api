@@ -10,8 +10,8 @@ class GameSeeder extends Seeder
     public function run()
     {
         Game::insert([
-//            ['game_name'=> 'SINGLE DOUBLE TRIPLE'],
-            ['game_name'=> 'TRIPLE CHANCE'],
+            ['game_name'=> 'SINGLE DOUBLE TRIPLE'],
+//            ['game_name'=> 'TRIPLE CHANCE'],
             ['game_name'=> '12 CARD'],
             ['game_name'=> '16 CARD',],
             ['game_name'=> 'Single'],
