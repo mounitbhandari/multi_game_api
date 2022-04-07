@@ -119,24 +119,35 @@ class CPanelReportController extends Controller
         $play_date = Carbon::parse($play_master->created_at)->format('Y-m-d');
         $result_master = ResultMaster::where('draw_master_id', $play_master->draw_master_id)->where('game_date',$play_date)->first();
         $prize_value = 0;
+        $result_multiplier = 1;
+        $result_number_combination_id = -1;
         foreach ($play_game_ids as $game_id){
 
-        if(!empty($result_master)){
-            $result_number_combination_id = (ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first())->combination_number_id;
-            $result_multiplier = (ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first())->multiplexer;
+            if(!empty($result_master)){
+                // $result_number_combination_id = (ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first())->combination_number_id;
+                $result_number_combination_id = ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first();
+                // $result_multiplier = (ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first())->multiplexer;
+                $result_multiplier = (ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first());
+
+                // return response()->json(['success'=>$result_master,'data'=> $result_number_combination_id], 200);
+                if(empty($result_number_combination_id)){
+                    continue;
+                }
+                if(!empty($result_number_combination_id)){
+                    $result_number_combination_id = (int)($result_number_combination_id->combination_number_id);
+                    $result_multiplier = $result_multiplier->multiplexer;
+                }
+            }else{
+                $result_number_combination_id = null;
+                $result_multiplier = 1;
+            }
+
+
             if(empty($result_number_combination_id)){
                 $result_number_combination_id = -1;
+                $result_multiplier = 1;
             }
-        }else{
-            $result_number_combination_id = null;
-            $result_multiplier = 1;
-        }
-        if(empty($result_number_combination_id)){
-             $result_number_combination_id = -1;
-        }
 
-
-//        return $result_number_combination_id;
 
             $data = DB::select("select (play_details.quantity* game_types.winning_price) as price_value from play_masters
                 inner join play_details on play_details.play_master_id = play_masters.id
