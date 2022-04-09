@@ -64,7 +64,7 @@ class CPanelReportController extends Controller
 //            ->where('play_masters.created_at','<=',$end_date)
             ->whereRaw('date(play_masters.created_at) >= ?', [$start_date])
             ->whereRaw('date(play_masters.created_at) <= ?', [$end_date])
-            ->groupBy('play_masters.id','play_masters.barcode_number','draw_masters.visible_time','users.email','play_masters.created_at','games.game_name')
+            ->groupBy('play_masters.id','play_masters.barcode_number','draw_masters.visible_time','users.email','play_masters.created_at','games.game_name','play_masters.is_claimed')
             ->orderBy('play_masters.created_at','desc')
             ->get();
 
