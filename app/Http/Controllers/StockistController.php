@@ -94,7 +94,7 @@ class StockistController extends Controller
 
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
             ,'draw_masters.visible_time as draw_time',
-            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','games.game_name'
+            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','games.game_name','play_masters.is_claimed'
         )
             ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
             ->join('users','users.id','play_masters.user_id')
@@ -106,7 +106,7 @@ class StockistController extends Controller
             ->where('user_relation_with_others.stockist_id',$userID)
             ->whereRaw('date(play_masters.created_at) >= ?', [$start_date])
             ->whereRaw('date(play_masters.created_at) <= ?', [$end_date])
-            ->groupBy('play_masters.id','play_masters.barcode_number','draw_masters.visible_time','users.email','play_masters.created_at','games.game_name')
+            ->groupBy('play_masters.id','play_masters.barcode_number','draw_masters.visible_time','users.email','play_masters.created_at','games.game_name','play_masters.is_claimed')
             ->orderBy('play_masters.created_at','desc')
             ->get();
 
