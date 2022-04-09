@@ -220,7 +220,7 @@ class PlayController extends Controller
                 }
 
             }
-            $output_array['game_input'] = $this->get_game_input_details_by_play_master_id($playMaster->id);
+//            $output_array['game_input'] = $this->get_game_input_details_by_play_master_id($playMaster->id);
 
             $amount = $playMaster->play_details->sum(function($t){
                 return $t->quantity * $t->mrp;
