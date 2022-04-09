@@ -46,16 +46,13 @@ class CPanelReportController extends Controller
     public function barcode_wise_report_by_date(Request $request){
         $requestedData = (object)$request->json()->all();
 
-//        return response()->json(['success'=> 1, 'data' => $requestedData], 200);
         $start_date = $requestedData->startDate;
         $end_date = $requestedData->endDate;
 
 
-//        $x = $this->get_total_quantity_by_barcode(1);
-
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
             ,'draw_masters.visible_time as draw_time',
-            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','games.game_name'
+            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','games.game_name','play_masters.is_claimed'
         )
             ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
             ->join('users','users.id','play_masters.user_id')
