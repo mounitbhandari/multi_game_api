@@ -169,9 +169,12 @@ class TerminalController extends Controller
             $beneficiaryUid = $requestedData->beneficiaryUid;
             $amount = $requestedData->amount;
             $stockistId = $requestedData->stockistId;
+
             $beneficiaryObj = User::find($beneficiaryUid);
+            $old_amount = $beneficiaryObj->closing_balance;
             $beneficiaryObj->closing_balance = $beneficiaryObj->closing_balance + $amount;
             $beneficiaryObj->save();
+            $new_amount = $beneficiaryObj->closing_balance;
 
             $stockist = User::findOrFail($stockistId);
             $stockist->closing_balance = $stockist->closing_balance - $amount;
@@ -180,7 +183,9 @@ class TerminalController extends Controller
             $rechargeToUser = new RechargeToUser();
             $rechargeToUser->beneficiary_uid = $requestedData->beneficiaryUid;
             $rechargeToUser->recharge_done_by_uid = $requestedData->rechargeDoneByUid;
+            $rechargeToUser->old_amount = $old_amount;
             $rechargeToUser->amount = $requestedData->amount;
+            $rechargeToUser->new_amount = $new_amount;
             $rechargeToUser->save();
             DB::commit();
 

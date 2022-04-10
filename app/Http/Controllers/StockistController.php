@@ -232,9 +232,12 @@ class StockistController extends Controller
             $requestedData = (object)$request->json()->all();
             $beneficiaryUid = $requestedData->beneficiaryUid;
             $amount = $requestedData->amount;
+
             $beneficiaryObj = User::find($beneficiaryUid);
+            $old_amount = $beneficiaryObj->closing_balance;
             $beneficiaryObj->closing_balance = $beneficiaryObj->closing_balance + $amount;
             $beneficiaryObj->save();
+            $new_amount = $beneficiaryObj->closing_balance;
 
             $user = User::findOrFail($requestedData->rechargeDoneByUid);
             $user->closing_balance = $user->closing_balance - $amount;
@@ -243,7 +246,9 @@ class StockistController extends Controller
             $rechargeToUser = new RechargeToUser();
             $rechargeToUser->beneficiary_uid = $requestedData->beneficiaryUid;
             $rechargeToUser->recharge_done_by_uid = $requestedData->rechargeDoneByUid;
+            $rechargeToUser->old_amount = $old_amount;
             $rechargeToUser->amount = $requestedData->amount;
+            $rechargeToUser->new_amount = $new_amount;
             $rechargeToUser->save();
             DB::commit();
 

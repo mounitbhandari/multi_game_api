@@ -89,13 +89,18 @@ class SuperStockistController extends Controller
             $beneficiaryObj->save();
 
             $beneficiaryObj = User::find($beneficiaryUid);
+            $old_amount = $beneficiaryObj->closing_balance;
             $beneficiaryObj->closing_balance = $beneficiaryObj->closing_balance + $amount;
             $beneficiaryObj->save();
+
+            $new_amount = $beneficiaryObj->closing_balance;
 
             $rechargeToUser = new RechargeToUser();
             $rechargeToUser->beneficiary_uid = $requestedData->beneficiaryUid;
             $rechargeToUser->recharge_done_by_uid = $requestedData->rechargeDoneByUid;
+            $rechargeToUser->old_amount = $old_amount;
             $rechargeToUser->amount = $requestedData->amount;
+            $rechargeToUser->new_amount = $new_amount;
             $rechargeToUser->save();
             DB::commit();
 

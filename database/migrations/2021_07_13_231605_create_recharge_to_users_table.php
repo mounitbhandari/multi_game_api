@@ -17,7 +17,9 @@ class CreateRechargeToUsersTable extends Migration
             $table->id();
             $table->foreignId('beneficiary_uid')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('recharge_done_by_uid')->references('id')->on('users')->onDelete('cascade');
+            $table->decimal('old_amount')->default(0);
             $table->decimal('amount')->default(0);
+            $table->decimal('new_amount')->default(0);
             $table->timestamps();
         });
     }
