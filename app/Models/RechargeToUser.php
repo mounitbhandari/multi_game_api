@@ -23,6 +23,6 @@ class RechargeToUser extends Model
     private $amount;
 
     protected $hidden = [
-        "created_at","updated_at"
+        "updated_at"
     ];
 }

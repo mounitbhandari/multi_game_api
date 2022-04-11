@@ -169,7 +169,7 @@ Route::group(array('prefix' => 'dev'), function() {
 
     Route::get('results/lastResult',[ResultMasterController::class, 'get_last_result']);
 
-    Route::get('getTransaction/{id}',[RechargeToUserController::class, 'getTransactionByUser']);
+    Route::post('getTransaction',[RechargeToUserController::class, 'getTransactionByUser']);
 
     Route::get('getTodayResultByGame/{id}',[ResultMasterController::class, 'get_result_today_by_game']);
 

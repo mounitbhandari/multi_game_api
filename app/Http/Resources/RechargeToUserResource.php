@@ -15,7 +15,8 @@ class RechargeToUserResource extends JsonResource
             'rechargedby' => new UserResource(User::find($this->recharge_done_by_uid)),
             'oldAmount' => $this->old_amount,
             'rechargedAmount' => $this->amount,
-            'newAmount' => $this->new_amount
+            'newAmount' => $this->new_amount,
+            'dateAndTime' => $this->created_at
         ];
     }
 }
