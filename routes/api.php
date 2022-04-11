@@ -27,6 +27,7 @@ use App\Http\Controllers\CardCombinationController;
 use App\Http\Controllers\DoubleNumberCombinationController;
 use App\Http\Controllers\AndarNumberController;
 use App\Http\Controllers\BaharNumberController;
+use App\Http\Controllers\RechargeToUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -167,6 +168,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 Route::group(array('prefix' => 'dev'), function() {
 
     Route::get('results/lastResult',[ResultMasterController::class, 'get_last_result']);
+
+    Route::get('getTransaction/{id}',[RechargeToUserController::class, 'getTransactionByUser']);
 
     Route::get('getTodayResultByGame/{id}',[ResultMasterController::class, 'get_result_today_by_game']);
 
