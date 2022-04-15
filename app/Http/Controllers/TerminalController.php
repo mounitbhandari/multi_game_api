@@ -119,6 +119,14 @@ class TerminalController extends Controller
             $userRelation->active = 0;
             $userRelation->save();
 
+            $checkUser = UserRelationWithOther::whereSuperStockistId($userRelation->super_stockist_id)->whereStockistId($userRelation->stockist_id)->whereActive(1)->first();
+            if(!$checkUser){
+                $userRelationCreate = new UserRelationWithOther();
+                $userRelationCreate->super_stockist_id = $userRelation->super_stockist_id;
+                $userRelationCreate->stockist_id = $userRelation->stockist_id;
+                $userRelationCreate->save();
+            }
+
 //            return response()->json(['success'=>1,'data'=> $userRelation], 200,[],JSON_NUMERIC_CHECK);
 
             $checkValidation = UserRelationWithOther::whereSuperStockistId($userRelation->super_stockist_id)->whereStockistId($stockist_id)->whereTerminalId(null)->first();
@@ -137,6 +145,16 @@ class TerminalController extends Controller
             $userRelationCreate->terminal_id = $terminalId;
             $userRelationCreate->save();
         }
+//
+//        $checkUser = UserRelationWithOther::whereSuperStockistId($super_stockist_id)->whereStockistId($stockist_id)->whereActive(1)->first();
+//
+//        if(!$checkUser){
+//            $userRelationCreate = new UserRelationWithOther();
+//            $userRelationCreate->super_stockist_id = $super_stockist_id;
+//            $userRelationCreate->stockist_id = $stockist_id;
+//            $userRelationCreate->save();
+//        }
+
 
         return response()->json(['success'=>1,'data'=> new TerminalResource($terminal)], 200,[],JSON_NUMERIC_CHECK);
     }

@@ -29,9 +29,9 @@ class TerminalResource extends JsonResource
             'commission' =>$this->commission,
             'stockist' => new StockistResource(User::find((UserRelationWithOther::whereTerminalId($this->id)->first())->stockist_id)),
             'payoutSlabId' => $this->pay_out_slab_id,
-            'stockistId' => (UserRelationWithOther::whereTerminalId($this->id)->first())->stockist_id,
-            'superStockist' => new SuperStockistResource(User::find((UserRelationWithOther::whereTerminalId($this->id)->first())->super_stockist_id)),
-            'superStockistId' => (UserRelationWithOther::whereTerminalId($this->id)->first())->super_stockist_id,
+            'stockistId' => (UserRelationWithOther::whereTerminalId($this->id)->whereActive(1)->first())->stockist_id,
+            'superStockist' => new SuperStockistResource(User::find((UserRelationWithOther::whereTerminalId($this->id)->whereActive(1)->first())->super_stockist_id)),
+            'superStockistId' => (UserRelationWithOther::whereTerminalId($this->id)->whereActive(1)->first())->super_stockist_id,
         ];
     }
 }
