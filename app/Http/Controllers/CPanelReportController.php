@@ -105,6 +105,17 @@ class CPanelReportController extends Controller
             ->orderBy('single_numbers.single_order')
             ->get();
         $data['triple'] = $tripleGameData;
+
+        $doubleGameData = PlayDetails::select('double_number_combinations.visible_double_number','single_numbers.single_number'
+            ,'play_details.quantity')
+            ->join('double_number_combinations','play_details.combination_number_id','double_number_combinations.id')
+            ->join('single_numbers','double_number_combinations.single_number_id','single_numbers.id')
+            ->where('play_details.play_master_id',$play_master_id)
+            ->where('play_details.game_type_id',5)
+            ->orderBy('single_numbers.single_order')
+            ->get();
+        $data['double'] = $doubleGameData;
+
         return response()->json(['success'=> 1, 'data' => $data], 200);
 
     }
@@ -323,7 +334,7 @@ class CPanelReportController extends Controller
         inner join game_types ON game_types.id = play_details.game_type_id
         inner join users ON users.id = play_masters.user_id
         left join user_relation_with_others on play_masters.user_id = user_relation_with_others.terminal_id
-        where play_masters.is_cancelled=0 and date(play_masters.created_at) >= ? and date(play_masters.created_at) <= ?
+        where play_masters.is_cancelled=0 and date(play_masters.created_at) >= ? and date(play_masters.created_at) <= ? and user_relation_with_others.active = 1
         group by user_relation_with_others.stockist_id, play_masters.user_id,users.user_name,play_details.game_type_id,users.email) as table1 group by user_name,user_id,terminal_pin,stockist_id) as table1
         left join users on table1.stockist_id = users.id",[$start_date,$end_date]);
 
