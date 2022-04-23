@@ -207,7 +207,16 @@ class StockistController extends Controller
     }
 
     public function update_balance_to_stockist(Request $request){
-        $requestedData = (object)$request->json()->all();
+//        $requestedData = (object)$request->json()->all();
+//
+//        if(isset($requestedData->superStockiestID)){
+//            $superStockiest = $requestedData->superStockiestID;
+//        }else{
+//            $superStockiest = $requestedData->rechargeDoneByUid;
+//        }
+//
+//        return response()->json(['success'=>1,'data'=> $superStockiest], 200,[],JSON_NUMERIC_CHECK);
+
         $rules = array(
             'beneficiaryUid'=> ['required',
                 function($attribute, $value, $fail){
@@ -233,13 +242,19 @@ class StockistController extends Controller
             $beneficiaryUid = $requestedData->beneficiaryUid;
             $amount = $requestedData->amount;
 
+            if(isset($requestedData->superStockiestID)){
+                $superStockiest = $requestedData->superStockiestID;
+            }else{
+                $superStockiest = $requestedData->rechargeDoneByUid;
+            }
+
             $beneficiaryObj = User::find($beneficiaryUid);
             $old_amount = $beneficiaryObj->closing_balance;
             $beneficiaryObj->closing_balance = $beneficiaryObj->closing_balance + $amount;
             $beneficiaryObj->save();
             $new_amount = $beneficiaryObj->closing_balance;
 
-            $user = User::findOrFail($requestedData->rechargeDoneByUid);
+            $user = User::findOrFail($superStockiest);
             $user->closing_balance = $user->closing_balance - $amount;
             $user->save();
 

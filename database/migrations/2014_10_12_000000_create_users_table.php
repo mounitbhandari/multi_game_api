@@ -31,6 +31,7 @@ class CreateUsersTable extends Migration
             $table->decimal('closing_balance')->default(0);
             $table->integer('auto_claim')->default(0);
             $table ->integer('created_by')->nullable(true);
+            $table->tinyInteger('blocked')->default(0);
             $table->tinyInteger('inforce')->default(1);
             $table->timestamps();
         });

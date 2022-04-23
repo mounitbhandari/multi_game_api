@@ -12,20 +12,25 @@ class RechargeToUserController extends Controller
     public function getTransactionByUser(Request $request){
         $requestedData = (object)$request->json()->all();
 
-        $user = User::find($requestedData->rechargedByID);
+//        $user = User::find($requestedData->rechargedByID);
 
-        if($user->user_type_id === 1){
-            $data = RechargeToUser::select()
-                ->whereBeneficiaryUid($requestedData->rechargedToID)
-                ->orderBy('created_at', 'desc')
-                ->get();
-        }else{
-            $data = RechargeToUser::select()
-                ->whereRechargeDoneByUid($requestedData->rechargedByID)
-                ->whereBeneficiaryUid($requestedData->rechargedToID)
-                ->orderBy('created_at', 'desc')
-                ->get();
-        }
+        $data = RechargeToUser::select()
+            ->whereBeneficiaryUid($requestedData->rechargedToID)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+//        if($user->user_type_id === 1){
+//            $data = RechargeToUser::select()
+//                ->whereBeneficiaryUid($requestedData->rechargedToID)
+//                ->orderBy('created_at', 'desc')
+//                ->get();
+//        }else{
+//            $data = RechargeToUser::select()
+//                ->whereRechargeDoneByUid($requestedData->rechargedByID)
+//                ->whereBeneficiaryUid($requestedData->rechargedToID)
+//                ->orderBy('created_at', 'desc')
+//                ->get();
+//        }
 
 
         return response()->json(['success'=>1,'data'=> RechargeToUserResource::collection($data)], 200);
