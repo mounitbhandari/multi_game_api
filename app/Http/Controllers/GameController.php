@@ -77,17 +77,17 @@ class GameController extends Controller
         $singleNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as single_number from play_details
             inner join game_types on play_details.game_type_id = game_types.id
             where date(play_details.created_at) = ? and play_details.game_type_id = 1
-            group by game_types.mrp",[$today])[0]->single_number;
+            ",[$today])[0]->single_number;
 
         $doubleNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as double_number from play_details
             inner join game_types on play_details.game_type_id = game_types.id
             where date(play_details.created_at) = ? and play_details.game_type_id = 5
-            group by game_types.mrp",[$today])[0]->double_number;
+            ",[$today])[0]->double_number;
 
         $tripleNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as triple_number from play_details
             inner join game_types on play_details.game_type_id = game_types.id
             where date(play_details.created_at) = ? and play_details.game_type_id = 2
-            group by game_types.mrp",[$today])[0]->triple_number;
+            ",[$today])[0]->triple_number;
 
         $totalTripleNumber = $singleNumber + $doubleNumber + $tripleNumber;
 
