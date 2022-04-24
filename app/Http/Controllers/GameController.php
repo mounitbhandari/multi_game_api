@@ -77,17 +77,35 @@ class GameController extends Controller
         $singleNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as single_number from play_details
             inner join game_types on play_details.game_type_id = game_types.id
             where date(play_details.created_at) = ? and play_details.game_type_id = 1
-            ",[$today])[0]->single_number;
+            group by game_types.mrp",[$today]);
+
+        if(!empty($singleNumber)){
+            $singleNumber = $singleNumber[0]->single_number;
+        }else{
+            $singleNumber = 0;
+        }
 
         $doubleNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as double_number from play_details
             inner join game_types on play_details.game_type_id = game_types.id
             where date(play_details.created_at) = ? and play_details.game_type_id = 5
-            ",[$today])[0]->double_number;
+            group by game_types.mrp",[$today]);
+
+        if(!empty($doubleNumber)){
+            $doubleNumber = $doubleNumber[0]->double_number;
+        }else{
+            $doubleNumber = 0;
+        }
 
         $tripleNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as triple_number from play_details
             inner join game_types on play_details.game_type_id = game_types.id
             where date(play_details.created_at) = ? and play_details.game_type_id = 2
-            ",[$today])[0]->triple_number;
+            group by game_types.mrp",[$today]);
+
+        if(!empty($tripleNumber)){
+            $tripleNumber = $tripleNumber[0]->triple_number;
+        }else{
+            $tripleNumber = 0;
+        }
 
         $totalTripleNumber = $singleNumber + $doubleNumber + $tripleNumber;
 
@@ -103,7 +121,13 @@ class GameController extends Controller
         $twelveCard = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as twelve_card from play_details
             inner join game_types on play_details.game_type_id = game_types.id
             where date(play_details.created_at) = ? and play_details.game_type_id = 3
-            group by game_types.mrp",[$today])[0]->twelve_card;
+            group by game_types.mrp",[$today]);
+
+        if(!empty($twelveCard)){
+            $twelveCard = $twelveCard[0]->twelve_card;
+        }else{
+            $twelveCard = 0;
+        }
 
         $x = [
             'game_name' => '12 Card',
@@ -117,7 +141,13 @@ class GameController extends Controller
         $sixteenCard = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as sixteen_card from play_details
             inner join game_types on play_details.game_type_id = game_types.id
             where date(play_details.created_at) = ? and play_details.game_type_id = 4
-            group by game_types.mrp",[$today])[0]->sixteen_card;
+            group by game_types.mrp",[$today]);
+
+        if(!empty($sixteenCard)){
+            $sixteenCard = $sixteenCard[0]->sixteen_card;
+        }else{
+            $sixteenCard = 0;
+        }
 
         $x = [
             'game_name' => '16 Card',
@@ -132,7 +162,13 @@ class GameController extends Controller
         $singleNUmber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as single_number from play_details
             inner join game_types on play_details.game_type_id = game_types.id
             where date(play_details.created_at) = ? and play_details.game_type_id = 6
-            group by game_types.mrp",[$today])[0]->single_number;
+            group by game_types.mrp",[$today]);
+
+        if(!empty($singleNUmber)){
+            $singleNUmber = $singleNUmber[0]->single_number;
+        }else{
+            $singleNUmber = 0;
+        }
 
         $x = [
             'game_name' => 'Single Number',
@@ -146,17 +182,35 @@ class GameController extends Controller
         $doubleNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as double_number from play_details
             inner join game_types on play_details.game_type_id = game_types.id
             where date(play_details.created_at) = ? and play_details.game_type_id = 7
-            group by game_types.mrp",[$today])[0]->double_number;
+            group by game_types.mrp",[$today]);
+
+        if(!empty($doubleNumber)){
+            $doubleNumber = $doubleNumber[0]->double_number;
+        }else{
+            $doubleNumber = 0;
+        }
 
         $andarNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as andar_number from play_details
             inner join game_types on play_details.game_type_id = game_types.id
             where date(play_details.created_at) = ? and play_details.game_type_id = 8
-            group by game_types.mrp",[$today])[0]->andar_number;
+            group by game_types.mrp",[$today]);
+
+        if(!empty($andarNumber)){
+            $andarNumber = $andarNumber[0]->andar_number;
+        }else{
+            $andarNumber = 0;
+        }
 
         $baharNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as bahar_number from play_details
             inner join game_types on play_details.game_type_id = game_types.id
             where date(play_details.created_at) = ? and play_details.game_type_id = 9
-            group by game_types.mrp",[$today])[0]->bahar_number;
+            group by game_types.mrp",[$today]);
+
+        if(!empty($baharNumber)){
+            $baharNumber = $baharNumber[0]->bahar_number;
+        }else{
+            $baharNumber = 0;
+        }
 
         $totalDoubleNumber = $doubleNumber + $andarNumber + $baharNumber;
 
