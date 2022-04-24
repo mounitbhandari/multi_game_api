@@ -130,6 +130,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::post('getResultByDate', [ResultMasterController::class, 'get_result_by_date']);
 
     Route::get('getGame', [GameController::class, 'getGame']);
+    Route::get('gameTotalReportToday', [GameController::class, 'get_game_total_sale_today']);
     Route::get('getSingleNumber', [SingleNumberController::class, 'get_all_single_number']);
 
 
@@ -166,6 +167,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
 
 Route::group(array('prefix' => 'dev'), function() {
+
+    Route::get('gameTotalReportToday', [GameController::class, 'get_game_total_sale_today']);
 
     Route::get('results/lastResult',[ResultMasterController::class, 'get_last_result']);
 
