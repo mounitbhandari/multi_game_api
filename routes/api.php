@@ -164,6 +164,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::get('getAndarNumbers',[AndarNumberController::class, 'get_all_andar_number']);
     Route::get('getBaharNumbers',[BaharNumberController::class, 'get_all_bahar_number']);
 
+    Route::post('updateBlock',[UserController::class, 'update_block']);
+
 });
 
 

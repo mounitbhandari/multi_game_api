@@ -26,6 +26,7 @@ class TerminalResource extends JsonResource
             'pin' => $this->email,
             'password' => $this->visible_password,
             'balance' =>$this->closing_balance,
+            'blocked' =>$this->blocked,
             'commission' =>$this->commission,
             'stockist' => new StockistResource(User::find((UserRelationWithOther::whereTerminalId($this->id)->first())->stockist_id)),
             'payoutSlabId' => $this->pay_out_slab_id,

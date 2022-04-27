@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TerminalResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -98,4 +99,13 @@ class UserController extends Controller
         }
         return response()->json(['success'=>1], 200,[],JSON_NUMERIC_CHECK);
     }
+
+    public function update_block(Request $request){
+        $requestedData = (object)($request->json()->all());
+        $user = User::find($requestedData->id);
+        $user->blocked = ($user->blocked == 1) ? 0 : 1;
+        $user->save();
+        return response()->json(['success' => 1, 'data' => new TerminalResource($user)], 200,[],JSON_NUMERIC_CHECK);
+    }
+
 }
