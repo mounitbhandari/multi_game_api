@@ -23,6 +23,47 @@ class GameTypeController extends Controller
         $requestedData = $request->json()->all();
         $inputPayoutDetails = $requestedData;
 
+        if(count($inputPayoutDetails)>1){
+            foreach ($inputPayoutDetails as $inputPayoutDetail){
+                $gameType = GameType::find($inputPayoutDetail['gameTypeId']);
+                $gameType->payout = $inputPayoutDetail['newPayout'];
+                $gameType->multiplexer = $inputPayoutDetail['multiplexer'];
+                $gameType->save();
+
+                if($inputPayoutDetail['gameTypeId'] == 1){
+                    $gameType = GameType::find(2);
+                    $gameType->payout = $inputPayoutDetail['newPayout'];
+                    $gameType->multiplexer = $inputPayoutDetail['multiplexer'];
+                    $gameType->save();
+
+                    $gameType = GameType::find(5);
+                    $gameType->payout = $inputPayoutDetail['newPayout'];
+                    $gameType->multiplexer = $inputPayoutDetail['multiplexer'];
+                    $gameType->save();
+                }
+
+                if($inputPayoutDetail['gameTypeId'] == 7){
+                    $gameType = GameType::find(8);
+                    $gameType->payout = $inputPayoutDetail['newPayout'];
+                    $gameType->multiplexer = $inputPayoutDetail['multiplexer'];
+                    $gameType->save();
+
+                    $gameType = GameType::find(9);
+                    $gameType->payout = $inputPayoutDetail['newPayout'];
+                    $gameType->multiplexer = $inputPayoutDetail['multiplexer'];
+                    $gameType->save();
+                }
+            }
+
+            $getAllGameType = GameType::get();
+            return response()->json(['success'=>1,'data'=> GameTypeResource::collection($getAllGameType)], 200,[],JSON_NUMERIC_CHECK);
+
+//            return response()->json(['success'=>1,'data'=> count($inputPayoutDetails)], 200,[],JSON_NUMERIC_CHECK);
+        }
+
+
+//        return response()->json(['success'=>1,'data'=> count($inputPayoutDetails)], 200,[],JSON_NUMERIC_CHECK);
+
 //        $idGameType = [1,2,5];
 
 //        return response()->json(['success'=>$inputPayoutDetails[0], 'data' => ($inputPayoutDetails[0])['gameTypeId']], 200);
