@@ -45,7 +45,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post("login",[UserController::class,'login']);
-Route::get("logout",[UserController::class,'logout']);
+//Route::get("logout",[UserController::class,'logout']);
+Route::get("logout/{id}",[UserController::class,'logout']);
 
 
 Route::post("register",[UserController::class,'register']);
@@ -60,7 +61,9 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     });
 
     Route::get("user",[UserController::class,'getCurrentUser']);
-    Route::get("logout",[UserController::class,'logout']);
+//    Route::get("logout",[UserController::class,'logout']);
+
+    Route::get("logout/{id}",[UserController::class,'logout']);
 
     //get all users
     Route::get("users",[UserController::class,'getAllUsers']);

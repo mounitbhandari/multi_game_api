@@ -61,9 +61,15 @@ class UserController extends Controller
     function getAllUsers(Request $request){
         return User::get();
     }
-    function logout(Request $request){
-        $result = $request->user()->currentAccessToken()->delete();
-        return $result;
+
+//    function logout(Request $request){
+//        $result = $request->user()->currentAccessToken()->delete();
+//        return $result;
+//    }
+
+    function logout($id){
+        DB::table('personal_access_tokens')->where('tokenable_id', $id)->delete();
+        return $id;
     }
 
     function  update(Request $request){
