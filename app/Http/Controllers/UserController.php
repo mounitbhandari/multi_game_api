@@ -6,6 +6,7 @@ use App\Http\Resources\TerminalResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -36,20 +37,47 @@ class UserController extends Controller
 
     function login(Request $request)
     {
+
+        if(!($request->devToken)){
+            return response()->json(['success'=>3,'data'=>null, 'message'=>'Dev token not found'], 200,[],JSON_NUMERIC_CHECK);
+        }
+
         $user= User::where('email', $request->email)->first();
-        // print_r($data);
+
+        if($user){
+            if($user->blocked == 1){
+                return response()->json(['success'=>2,'data'=>null, 'message'=>'You are blocked'], 200,[],JSON_NUMERIC_CHECK);
+            }
+        }
+
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['success'=>0,'data'=>null, 'message'=>'Credential does not matched'], 200,[],JSON_NUMERIC_CHECK);
         }
 
-        $token = $user->createToken('my-app-token')->plainTextToken;
+        if($request->devToken == 'webTokenAccess'){
 
-        $response = [
-            'user' => new UserResource($user),
-//            'user' => $user,
-            'token' => $token
-        ];
-        return response()->json(['success'=>1,'data'=>$response, 'message'=>'Welcome'], 200,[],JSON_NUMERIC_CHECK);
+            $token = $user->createToken('my-app-token')->plainTextToken;
+
+            $response = [
+                'user' => new UserResource($user),
+                'token' => $token
+            ];
+            return response()->json(['success'=>1,'data'=>$response, 'message'=>'Welcome'], 200,[],JSON_NUMERIC_CHECK);
+
+        }else if(($request->devToken == 'unityAccessToken') && ($user->user_type_id == 5)){
+
+            $token = $user->createToken('my-app-token')->plainTextToken;
+
+            $response = [
+                'user' => new UserResource($user),
+                'token' => $token
+            ];
+            return response()->json(['success'=>1,'data'=>$response, 'message'=>'Welcome'], 200,[],JSON_NUMERIC_CHECK);
+
+        }else{
+            return response()->json(['success'=>0,'data'=>null, 'message'=>'Data Error'], 200,[],JSON_NUMERIC_CHECK);
+        }
+
     }
 
 
@@ -63,15 +91,15 @@ class UserController extends Controller
         return User::get();
     }
 
-//    function logout(Request $request){
-//        $result = $request->user()->currentAccessToken()->delete();
-//        return $result;
-//    }
-
-    function logout($id){
-        DB::table('personal_access_tokens')->where('tokenable_id', $id)->delete();
-        return $id;
+    function logout(Request $request){
+        $result = $request->user()->currentAccessToken()->delete();
+        return $result;
     }
+
+//    function logout($id){
+//        DB::table('personal_access_tokens')->where('tokenable_id', $id)->delete();
+//        return $id;
+//    }
 
     function  update(Request $request){
 
