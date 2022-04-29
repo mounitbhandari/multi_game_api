@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\TerminalResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Models\UserRelationWithOther;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -131,10 +132,58 @@ class UserController extends Controller
     public function update_block(Request $request){
         $requestedData = (object)($request->json()->all());
         $user = User::find($requestedData->id);
-        $user->blocked = ($user->blocked == 1) ? 0 : 1;
-        $user->save();
-        // return response()->json(['success' => 1, 'data' => new TerminalResource($user)], 200,[],JSON_NUMERIC_CHECK);
-        return response()->json(['success' => 1, 'data' =>$user], 200,[],JSON_NUMERIC_CHECK);
+
+        if($user->user_type_id == 5){
+
+            $checkStockist = (UserRelationWithOther::whereTerminalId($user->id)->whereActive(1)->first())->stockist_id;
+            $user = User::find($checkStockist);
+
+            if($user->blocked == 0){
+                $user = User::find($requestedData->id);
+                $user->blocked = ($user->blocked == 1) ? 0 : 1;
+                $user->save();
+                return response()->json(['success' => 1, 'data' =>$user, 'message' => 'Terminal Updated'], 200,[],JSON_NUMERIC_CHECK);
+            }
+            return response()->json(['success' => 0, 'data' =>$user, 'message' => 'Stockist blocked'], 200,[],JSON_NUMERIC_CHECK);
+
+        }
+
+        if($user->user_type_id == 4){
+
+            $checkSuperStockist = (UserRelationWithOther::whereStockistId($user->id)->whereActive(1)->first())->super_stockist_id;
+            $user = User::find($checkSuperStockist);
+
+            if($user->blocked == 0){
+                $user = User::find($requestedData->id);
+                $user->blocked = ($user->blocked == 1) ? 0 : 1;
+                $user->save();
+
+                if($user->blocked == 1){
+
+                    $allTerminalIds = UserRelationWithOther::whereStockistId($user->id)->whereActive(1)->get();
+                    if( count($allTerminalIds)>0 ){
+                        foreach ($allTerminalIds as $allTerminalId){
+                            $user = User::find($allTerminalId->terminal_id);
+                            if($user->blocked == 0){
+                                $user->blocked = 1;
+                                $user->save();
+                            }
+                        }
+                    }
+
+                }
+
+
+
+
+                return response()->json(['success' => 1, 'data' =>$user, 'message' => 'Stockist Updated'], 200,[],JSON_NUMERIC_CHECK);
+            }
+            return response()->json(['success' => 0, 'data' =>$user, 'message' => 'Super Stockist blocked'], 200,[],JSON_NUMERIC_CHECK);
+
+        }
+
+
+        return response()->json(['success' => 0, 'data' =>null], 200,[],JSON_NUMERIC_CHECK);
     }
 
 }
