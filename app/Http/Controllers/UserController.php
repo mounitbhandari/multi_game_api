@@ -133,7 +133,8 @@ class UserController extends Controller
         $user = User::find($requestedData->id);
         $user->blocked = ($user->blocked == 1) ? 0 : 1;
         $user->save();
-        return response()->json(['success' => 1, 'data' => new TerminalResource($user)], 200,[],JSON_NUMERIC_CHECK);
+        // return response()->json(['success' => 1, 'data' => new TerminalResource($user)], 200,[],JSON_NUMERIC_CHECK);
+        return response()->json(['success' => 1, 'data' =>$user], 200,[],JSON_NUMERIC_CHECK);
     }
 
 }

@@ -18,6 +18,7 @@ class StockistResource extends JsonResource
             'password' => $this->visible_password,
             'userTypeId' => $this->user_type_id,
             'balance' => $this->closing_balance,
+            'blocked' =>$this->blocked,
             'commission' => $this->commission,
             'superStockistId' => is_Null(UserRelationWithOther::whereStockistId($this->id)->whereActive(1)->first())? 'null': (UserRelationWithOther::whereStockistId($this->id)->whereActive(1)->first())->super_stockist_id,
 //            'superStockistId' => is_Null(UserRelationWithOther::whereStockistId($this->id)->whereActive(1)->first())? 'null': (UserRelationWithOther::whereStockistId($this->id)->whereActive(1)->first()),

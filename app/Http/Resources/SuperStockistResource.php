@@ -23,6 +23,7 @@ class SuperStockistResource extends JsonResource
             'password' => $this->visible_password,
             'userTypeId' => $this->user_type_id,
             'balance' => $this->closing_balance,
+            'blocked' =>$this->blocked,
             'commission' => $this->commission
         ];
     }

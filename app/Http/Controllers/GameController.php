@@ -223,7 +223,7 @@ class GameController extends Controller
 
         array_push($returnArray , $x);
 
-        return response()->json(['success'=>$triplePrize,'data'=> $returnArray], 200);
+        return response()->json(['success'=>1,'data'=> $returnArray], 200);
     }
 
     /**
