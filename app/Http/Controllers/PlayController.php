@@ -225,6 +225,14 @@ class PlayController extends Controller
             $amount = $playMaster->play_details->sum(function($t){
                 return $t->quantity * $t->mrp;
             });
+
+            $userClosingBalance = (User::find($inputPlayMaster->terminalId))->closing_balance;
+
+            if($userClosingBalance < $amount){
+                DB::rollBack();
+                return response()->json(['success'=>0,'data'=> null, 'message' => 'Low balance'], 200,[],JSON_NUMERIC_CHECK);
+            }
+
             $output_array['amount'] = round($amount,0);
 
             $terminal = User::findOrFail($inputPlayMaster->terminalId);

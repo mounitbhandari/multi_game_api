@@ -205,7 +205,7 @@ class UserController extends Controller
                 }
 
             }
-            return response()->json(['success' => 1, 'data' =>$user, 'message' => 'Stockist Updated'], 200,[],JSON_NUMERIC_CHECK);
+            return response()->json(['success' => 1, 'data' =>$user, 'message' => 'Super Stockist Updated'], 200,[],JSON_NUMERIC_CHECK);
 
         }
 
