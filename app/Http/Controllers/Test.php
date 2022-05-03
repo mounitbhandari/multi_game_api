@@ -16,4 +16,5 @@ class Test extends Controller
         })->get();
         return response()->json(['success'=>1,'data'=>$result], 200,[],JSON_NUMERIC_CHECK);
     }
+
 }
