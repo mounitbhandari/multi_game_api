@@ -106,7 +106,9 @@ class TerminalController extends Controller
 
         $terminal = User::findOrFail($terminalId);
         $terminal->user_name = $terminalName;
-        $terminal->email = $requestedData->pin;
+        $terminal->email = $requestedData->terminalName;
+        $terminal->password = md5($requestedData->pin);
+        $terminal->visible_password = $requestedData->pin;
         $terminal->pay_out_slab_id = $requestedData->payoutSlabId;
         $terminal->commission = $requestedData->commission;
         $terminal->save();
