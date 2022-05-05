@@ -67,6 +67,14 @@ class UserController extends Controller
 
         }else if(($request->devToken == 'unityAccessToken') && ($user->user_type_id == 5)){
 
+            if(($user->login_activate == 1) || ($user->login_activate == 0)){
+
+                $user->temp_mac_address = $request->mac_address;
+                $user->save();
+
+                return response()->json(['success'=>0,'data'=>null, 'message'=>'Mac Mismatch'], 200,[],JSON_NUMERIC_CHECK);
+            }
+
             $token = $user->createToken('my-app-token')->plainTextToken;
 
             $response = [
@@ -142,7 +150,7 @@ class UserController extends Controller
                 $user = User::find($requestedData->id);
                 $user->blocked = ($user->blocked == 1) ? 0 : 1;
                 $user->save();
-                return response()->json(['success' => 1, 'data' =>$user, 'message' => 'Terminal Updated'], 200,[],JSON_NUMERIC_CHECK);
+                return response()->json(['success' => 1, 'data' =>new TerminalResource($user), 'message' => 'Terminal Updated'], 200,[],JSON_NUMERIC_CHECK);
 //            }
 //            return response()->json(['success' => 0, 'data' =>$user, 'message' => 'Stockist blocked'], 200,[],JSON_NUMERIC_CHECK);
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\GameAllocation;
 use App\Models\PayOutSlab;
 use App\Models\User;
 
@@ -28,11 +29,13 @@ class TerminalResource extends JsonResource
             'balance' =>$this->closing_balance,
             'blocked' =>$this->blocked,
             'commission' =>$this->commission,
+            'loginActivate' =>$this->login_activate,
             'stockist' => new StockistResource(User::find((UserRelationWithOther::whereTerminalId($this->id)->first())->stockist_id)),
             'payoutSlabId' => $this->pay_out_slab_id,
             'stockistId' => (UserRelationWithOther::whereTerminalId($this->id)->whereActive(1)->first())->stockist_id,
             'superStockist' => new SuperStockistResource(User::find((UserRelationWithOther::whereTerminalId($this->id)->whereActive(1)->first())->super_stockist_id)),
             'superStockistId' => (UserRelationWithOther::whereTerminalId($this->id)->whereActive(1)->first())->super_stockist_id,
+            'gamePermission' => GameAllocation::whereUserId($this->id)->first(),
         ];
     }
 }

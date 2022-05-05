@@ -165,6 +165,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::get('getBaharNumbers',[BaharNumberController::class, 'get_all_bahar_number']);
 
     Route::post('updateBlock',[UserController::class, 'update_block']);
+    Route::post('loginApprove',[TerminalController::class, 'approve_login']);
 
 });
 
@@ -188,6 +189,8 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::get('getSixteenCards',[CardCombinationController::class, 'get_all_sixteen_card']);
 
     Route::post('pinCheckValidation',[UserController::class, 'check_pin']);
+
+    Route::post('loginApprove',[TerminalController::class, 'approve_login']);
 
     Route::get('seedingData',[NumberCombinationController::class, 'create_migration']);
 

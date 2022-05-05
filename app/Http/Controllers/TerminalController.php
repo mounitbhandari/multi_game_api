@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\GameAllocation;
 use App\Models\UserRelationWithOther;
 use App\Models\UserType;
 use App\Http\Resources\UserResource;
@@ -29,11 +30,22 @@ class TerminalController extends Controller
 //        $terminals = User::select()->whereUserTypeId(5)
 //            ->join('user_relation_with_others','users.id','user_relation_with_others.terminal_id')
 //            ->get();
-        $terminals = DB::select("select users.id, users.visible_password ,users.blocked, users.user_name, users.email,users.pay_out_slab_id ,users.password, users.commission ,users.remember_token, users.mobile1, users.user_type_id, users.opening_balance, users.closing_balance, users.created_by, users.inforce, user_relation_with_others.super_stockist_id, user_relation_with_others.stockist_id, user_relation_with_others.terminal_id, user_relation_with_others.changed_by, user_relation_with_others.active, user_relation_with_others.end_date, user_relation_with_others.changed_for from users
+        $terminals = DB::select("select users.id, users.login_activate, users.visible_password ,users.blocked, users.user_name, users.email,users.pay_out_slab_id ,users.password, users.commission ,users.remember_token, users.mobile1, users.user_type_id, users.opening_balance, users.closing_balance, users.created_by, users.inforce, user_relation_with_others.super_stockist_id, user_relation_with_others.stockist_id, user_relation_with_others.terminal_id, user_relation_with_others.changed_by, user_relation_with_others.active, user_relation_with_others.end_date, user_relation_with_others.changed_for from users
             inner join user_relation_with_others on users.id = user_relation_with_others.terminal_id
             where user_relation_with_others.active = 1");
         return TerminalResource::collection($terminals);
 //        return $terminals;
+    }
+
+    public function approve_login(Request $request){
+        $requestedData = (object)$request->json()->all();
+
+        $user = User::find($requestedData->id);
+        $user->mac_address = $user->temp_mac_address;
+        $user->login_activate = 2;
+        $user->save();
+
+        return response()->json(['success'=>1,'data'=>new TerminalResource($user)], 200);
     }
 
     // public function get_stockist_by_terminal_id(){
@@ -76,6 +88,10 @@ class TerminalController extends Controller
                 $userRelationNew->terminal_id = $user->id;
                 $userRelationNew->save();
             }
+
+            $gameAllocation = new GameAllocation();
+            $gameAllocation->user_id = $user->id;
+            $gameAllocation->save();
 
             DB::commit();
         }catch(\Exception $e){

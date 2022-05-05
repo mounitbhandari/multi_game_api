@@ -32,7 +32,6 @@ class UserResource extends JsonResource
             'balance' => $this->closing_balance,
             'blocked' => $this->blocked,
             'commission' => $this->commission,
-            // 'stockistId' => $this->stockist_to_terminal,
             'stockistId' => $this->stockist_to_terminal,
         ];
     }
