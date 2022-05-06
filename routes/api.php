@@ -166,6 +166,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
     Route::post('updateBlock',[UserController::class, 'update_block']);
     Route::post('loginApprove',[TerminalController::class, 'approve_login']);
+    Route::post('gamePermission',[TerminalController::class, 'game_permission_update']);
 
 });
 

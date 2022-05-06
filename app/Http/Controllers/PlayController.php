@@ -7,6 +7,7 @@ use App\Http\Resources\PlayDetailsResource;
 use App\Http\Resources\PlayMasterResource;
 use App\Http\Resources\PrintSingleGameInputResource;
 use App\Http\Resources\PrintTripleGameInputResource;
+use App\Models\GameAllocation;
 use App\Models\GameType;
 use App\Models\PayOutSlab;
 use App\Models\PlayDetails;
@@ -24,16 +25,26 @@ class PlayController extends Controller
     public function save_play_details(Request $request)
     {
         $requestedData = $request->json()->all();
-        $validator = Validator::make($requestedData,[
-            'playMaster' => 'required',
-            'playDetails' => 'required'
-        ]);
 
-        if($validator->fails()){
-            return response()->json(['position'=>1,'success'=>0,'data'=>null,'error'=>$validator->messages()], 406,[],JSON_NUMERIC_CHECK);
-        }
+//        return response()->json(['inputPlayDetails' => $requestedData['playDetails']], 200);
+
+//        $validator = Validator::make($requestedData,[
+//            'playMaster' => 'required',
+//            'playDetails' => 'required'
+//        ]);
+//
+//        if($validator->fails()){
+//            return response()->json(['position'=>1,'success'=>0,'data'=>null,'error'=>$validator->messages()], 406,[],JSON_NUMERIC_CHECK);
+//        }
+
         $inputPlayMaster = (object)$requestedData['playMaster'];
         $inputPlayDetails = $requestedData['playDetails'];
+        $gameAllocation = GameAllocation::whereUserId($inputPlayMaster->terminalId)->first();
+        $gameName = ('game'.$inputPlayMaster->gameId);
+
+        if($gameAllocation->$gameName == 0){
+            return response()->json(['success'=>0,'data'=>null, 'message' => 'Game not Allocated'], 406,[],JSON_NUMERIC_CHECK);
+        }
 
         //        Validation for PlayMaster
         $rules = array(

@@ -48,6 +48,20 @@ class TerminalController extends Controller
         return response()->json(['success'=>1,'data'=>new TerminalResource($user)], 200);
     }
 
+    public function game_permission_update(Request $request){
+        $requestedData = (object)$request->json()->all();
+        $gameName = ('game'.$requestedData->gameId);
+
+        $gameAllocation = GameAllocation::whereUserId($requestedData->terminalId)->first();
+        $gameAllocation->$gameName = ($gameAllocation->$gameName == 0) ? 1 : 0;
+        $gameAllocation->save();
+
+        $user = User::find($requestedData->terminalId);
+
+        return response()->json(['success'=>1,'data'=>new TerminalResource($user)], 200);
+    }
+
+
     // public function get_stockist_by_terminal_id(){
     //     $trminals = User::find(StockistToTerminal::whereTerminalId(14)->first()->stockist_id);
     //     return response()->json(['success'=>0, 'data' => $trminals], 500);

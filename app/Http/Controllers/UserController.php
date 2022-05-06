@@ -67,12 +67,24 @@ class UserController extends Controller
 
         }else if(($request->devToken == 'unityAccessToken') && ($user->user_type_id == 5)){
 
-            if(($user->login_activate == 1) || ($user->login_activate == 0)){
+            if(($user->login_activate == 1)){
+                return response()->json(['success'=>0,'data'=>null, 'message'=>'Pending Approval'], 200,[],JSON_NUMERIC_CHECK);
+            }
 
+            if($user->login_activate == 0){
                 $user->temp_mac_address = $request->mac_address;
+                $user->login_activate = 1;
                 $user->save();
 
-                return response()->json(['success'=>0,'data'=>null, 'message'=>'Mac Mismatch'], 200,[],JSON_NUMERIC_CHECK);
+                return response()->json(['success'=>0,'data'=>null, 'message'=>'Needs Approval'], 200,[],JSON_NUMERIC_CHECK);
+            }
+
+            if($user->mac_address != $request->mac_address){
+                $user->temp_mac_address = $request->mac_address;
+                $user->login_activate = 1;
+                $user->save();
+
+                return response()->json(['success'=>0,'data'=>null, 'message'=>'Needs approval mac mismatch'], 200,[],JSON_NUMERIC_CHECK);
             }
 
             $token = $user->createToken('my-app-token')->plainTextToken;
