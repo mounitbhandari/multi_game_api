@@ -416,13 +416,13 @@ class CPanelReportController extends Controller
                 } else {
                     $newPrize += 0;
                 }
-                $tempData = (PlayDetails::select(DB::raw("if(game_type_id = 1,(mrp*22)*quantity-(commission/100),mrp*quantity-(commission/100)) as total"))
-                    ->where('play_master_id',$y->id)->distinct()->get())[0];
-                $tempntp += $tempData->total;
+//                $tempData = (PlayDetails::select(DB::raw("if(game_type_id = 1,(mrp*22)*quantity-(commission/100),mrp*quantity-(commission/100)) as total"))
+//                    ->where('play_master_id',$y->id)->distinct()->get())[0];
+//                $tempntp += $tempData->total;
             }
             $detail = (object)$x;
             $detail->prize_value = $newPrize;
-            $detail->ntp = $tempntp;
+//            $detail->ntp = $tempntp;
         }
         return response()->json(['success'=> 1, 'data' => $data], 200);
 
