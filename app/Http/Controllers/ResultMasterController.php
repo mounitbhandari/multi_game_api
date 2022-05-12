@@ -587,6 +587,7 @@ class ResultMasterController extends Controller
         $ManualGameCheck = ManualResult::whereGameDate($today)->whereGameTypeId($game_type_id)->first();
         if($ManualGameCheck){
             $combination_number_id = $ManualGameCheck->combination_number_id;
+            $game_multiplexer = $ManualGameCheck->combination_number_id;
         }
 
 //        $resultMaster = new ResultMaster();

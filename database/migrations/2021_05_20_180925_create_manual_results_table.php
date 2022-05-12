@@ -20,6 +20,7 @@ class CreateManualResultsTable extends Migration
 //            $table->foreignId('number_combination_id')->references('id')->on('number_combinations')->onDelete('cascade');
             $table ->integer('combination_number_id');
             $table ->foreignId('game_type_id')->references('id')->on('game_types')->onDelete('cascade');
+            $table ->integer('multiplexer');
 
 //            $table ->foreignId('game_id')->references('id')->on('games')->onDelete('cascade');
 

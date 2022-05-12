@@ -526,6 +526,14 @@ class CentralController extends Controller
             $y->update();
         }
 
+        $gameTypes = GameType::whereGameId($id)->get();
+        foreach ($gameTypes as $x){
+            $y = GameType::find($x->id);
+            $y->multiplexer = 1;
+            $y->save();
+        }
+
+
         return response()->json(['success'=>1, 'message' => 'Result added'], 200);
 
 //        return response()->json(['success'=>0, 'message' => 'Error Occurred'], 400);
