@@ -106,8 +106,6 @@ class UserController extends Controller
 
     function getCurrentUser(Request $request){
         return $request->user();
-//        return User::get();
-
     }
 
     function getAllUsers(Request $request){

@@ -37,6 +37,21 @@ class TerminalController extends Controller
 //        return $terminals;
     }
 
+    public function update_auto_claim(Request $request){
+        $user = $request->user();
+
+        if($user->user_type_id != 5){
+            return response()->json(['success'=>0,'data'=>null, 'message' => 'Invalid terminal'], 200);
+        }
+
+        $getUser = User::find($user->id);
+        $getUser->auto_claim = ($getUser->auto_claim == 0)? 1 : 0;
+        $getUser->save();
+
+
+        return response()->json(['success'=>1,'data'=>new TerminalResource($getUser)], 200);
+    }
+
     public function approve_login(Request $request){
         $requestedData = (object)$request->json()->all();
 
