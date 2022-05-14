@@ -8,6 +8,7 @@ use App\Models\GameType;
 use App\Models\PlayDetails;
 use App\Models\PlayMaster;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -137,7 +138,31 @@ class PlayMasterController extends Controller
             $playMaster = new PlayMaster();
             $playMaster = PlayMaster::find($playMasterId);
             $playMaster->is_claimed = 1;
-            $playMaster->is_cancelable = 1;
+//            $playMaster->is_cancelable = 1;
+            $playMaster->update();
+
+            if($playMaster){
+                $user = new User();
+                $user = User::find($playMaster->user_id);
+                $user->closing_balance += $data;
+                $user->update();
+            }
+        }
+        return response()->json(['success' => 1, 'point'=>$user->closing_balance, 'id' =>$playMaster->id], 200);
+    }
+
+    public function claimPrizes($id){
+//        $requestedData = (object)$request->json()->all();
+//        $playMasterId = $requestedData->play_master_id;
+
+        $cPanelReportControllerObj = new CPanelReportController();
+        $data = $cPanelReportControllerObj->get_prize_value_by_barcode($id);
+
+        if($data){
+//            $playMaster = new PlayMaster();
+            $playMaster = PlayMaster::find($id);
+            $playMaster->is_claimed = 1;
+//            $playMaster->is_cancelable = 1;
             $playMaster->update();
 
             if($playMaster){

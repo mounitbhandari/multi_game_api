@@ -187,10 +187,11 @@ class CPanelReportController extends Controller
 
     public function get_prize_value_by_barcode($play_master_id){
         $play_master = PlayMaster::findOrFail($play_master_id);
+        $play_master_game_id = $play_master->game_id;
         $play_game_ids = PlayDetails::where('play_master_id',$play_master_id)->distinct()->pluck('game_type_id');
 
         $play_date = Carbon::parse($play_master->created_at)->format('Y-m-d');
-        $result_master = ResultMaster::where('draw_master_id', $play_master->draw_master_id)->where('game_date',$play_date)->first();
+        $result_master = ResultMaster::where('draw_master_id', $play_master->draw_master_id)->where('game_date',$play_date)->whereGameId($play_master_game_id)->first();
         $prize_value = 0;
         $result_multiplier = 1;
         $result_number_combination_id = -1;

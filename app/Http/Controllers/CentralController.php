@@ -10,6 +10,7 @@ use App\Models\NumberCombination;
 use App\Models\PlayMaster;
 use App\Models\SingleNumber;
 use Carbon\Carbon;
+//use http\Client\Curl\User;
 use Illuminate\Http\Request;
 use App\Models\NextGameDraw;
 use App\Models\DrawMaster;
@@ -17,6 +18,7 @@ use App\Http\Controllers\ManualResultController;
 use App\Http\Controllers\NumberCombinationController;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Scalar\String_;
+use App\Models\User;
 
 class CentralController extends Controller
 {
@@ -519,10 +521,10 @@ class CentralController extends Controller
         $nextGameDrawObj->last_draw_id = $lastDrawId;
         $nextGameDrawObj->save();
 
-        $tempPlayMaster = PlayMaster::select()->where('is_cancelable',1)->whereGameId($id)->get();
+        $tempPlayMaster = PlayMaster::select()->where('is_cancelable',0)->whereGameId($id)->get();
         foreach ($tempPlayMaster as $x){
             $y = PlayMaster::find($x->id);
-            $y->is_cancelable = 0;
+            $y->is_cancelable = 1;
             $y->update();
         }
 
@@ -531,6 +533,15 @@ class CentralController extends Controller
             $y = GameType::find($x->id);
             $y->multiplexer = 1;
             $y->save();
+        }
+
+        $users = User::whereAutoClaim(1)->get();
+        foreach ($users as $x){
+            $y = PlayMaster::whereUserId($x->id)->get();
+            foreach ($y as $z){
+                $playMasterControllerObject = new PlayMasterController();
+                $playMasterControllerObject->claimPrizes($z->id);
+            }
         }
 
 

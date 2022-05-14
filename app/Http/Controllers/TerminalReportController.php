@@ -62,14 +62,14 @@ class TerminalReportController extends Controller
         table1.`date` from (select sum(commission) as commission, sum(total) as total, user_name, terminal_pin, user_id, stockist_id, date(created_at) as date from (select max(play_masters.id) as play_master_id,users.user_name,users.email as terminal_pin,
         round(sum(play_details.quantity * play_details.mrp)) as total,
         sum(play_details.quantity * play_details.mrp)* (max(play_details.commission)/100) as commission,
-        play_masters.user_id, stockist_to_terminals.stockist_id,play_masters.created_at
+        play_masters.user_id, user_relation_with_others.stockist_id,play_masters.created_at
         FROM play_masters
         inner join play_details on play_details.play_master_id = play_masters.id
         inner join game_types ON game_types.id = play_details.game_type_id
         inner join users ON users.id = play_masters.user_id
-        left join stockist_to_terminals on play_masters.user_id = stockist_to_terminals.terminal_id
+        left join user_relation_with_others on play_masters.user_id = user_relation_with_others.terminal_id
         where play_masters.is_cancelled=0 and date(play_masters.created_at) >= ? and date(play_masters.created_at) <= ? and user_id = ?
-        group by stockist_to_terminals.stockist_id, play_masters.user_id,users.user_name,play_details.game_type_id,users.email,play_masters.created_at) as table1
+        group by user_relation_with_others.stockist_id, play_masters.user_id,users.user_name,play_details.game_type_id,users.email,play_masters.created_at) as table1
         group by terminal_pin, date(created_at), user_name, terminal_pin, user_id, stockist_id) as table1
         left join users on table1.stockist_id = users.id",[$start_date,$end_date,$terminalId]);
 
