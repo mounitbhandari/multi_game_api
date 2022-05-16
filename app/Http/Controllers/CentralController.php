@@ -521,10 +521,10 @@ class CentralController extends Controller
         $nextGameDrawObj->last_draw_id = $lastDrawId;
         $nextGameDrawObj->save();
 
-        $tempPlayMaster = PlayMaster::select()->where('is_cancelable',0)->whereGameId($id)->get();
+        $tempPlayMaster = PlayMaster::select()->where('is_cancelable',1)->whereGameId($id)->get();
         foreach ($tempPlayMaster as $x){
             $y = PlayMaster::find($x->id);
-            $y->is_cancelable = 1;
+            $y->is_cancelable = 0;
             $y->update();
         }
 
@@ -535,7 +535,7 @@ class CentralController extends Controller
             $y->save();
         }
 
-        $users = User::whereAutoClaim(1)->get();
+        $users = User::whereAutoClaim(1)->whereIsCancelled(0)->get();
         foreach ($users as $x){
             $y = PlayMaster::whereUserId($x->id)->get();
             foreach ($y as $z){

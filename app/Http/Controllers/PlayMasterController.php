@@ -28,6 +28,7 @@ class PlayMasterController extends Controller
         $playMaster = new PlayMaster();
         $playMaster = PlayMaster::find($playMasterId);
         $playMaster->is_cancelled = 1;
+        $playMaster->is_cancelable = 0;
         $playMaster->update();
 
         $data = DB::select("select round(sum(play_details.quantity * play_details.mrp)) as total from play_details where play_master_id = ?",[$playMasterId])[0]->total;
