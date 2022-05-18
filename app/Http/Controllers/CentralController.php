@@ -535,7 +535,7 @@ class CentralController extends Controller
             $y->save();
         }
 
-        $users = User::whereAutoClaim(1)->whereIsCancelled(0)->get();
+        $users = User::whereAutoClaim(1)->get();
         foreach ($users as $x){
             $y = PlayMaster::whereUserId($x->id)->get();
             foreach ($y as $z){
