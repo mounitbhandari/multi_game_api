@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\GameAllocation;
+use App\Models\PlayMaster;
 use App\Models\UserRelationWithOther;
 use App\Models\UserType;
 use App\Http\Resources\UserResource;
@@ -35,6 +36,36 @@ class TerminalController extends Controller
             where user_relation_with_others.active = 1");
         return TerminalResource::collection($terminals);
 //        return $terminals;
+    }
+
+    public function claimPrizes(){
+        $users = User::select()->whereAutoClaim(1)->whereUserTypeId(5)->get();
+        foreach ($users as $x){
+            $prize_value = 0;
+            $y = PlayMaster::whereUserId($x->id)->get();
+            if($y){
+                foreach ($y as $z){
+
+                    $cPanelReportControllerObj = new CPanelReportController();
+                    $data = $cPanelReportControllerObj->get_prize_value_by_barcode($z->id);
+
+                    if($data != 0){
+                        $playMaster = PlayMaster::find($z->id);
+                        $playMaster->is_claimed = 1;
+                        $playMaster->update();
+
+                        if($playMaster){
+                            $user = User::find($playMaster->user_id);
+                            $user->closing_balance += $data;
+                            $user->update();
+                        }
+                    }
+
+                }
+            }
+
+        }
+        return response()->json(['success'=>1,'data'=>$users], 200);
     }
 
     public function update_auto_claim(Request $request){

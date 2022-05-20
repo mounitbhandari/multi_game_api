@@ -118,16 +118,6 @@ class UserController extends Controller
         return $result;
     }
 
-    function claimPrizes(){
-        $users = User::whereAutoClaim(1)->get();
-        foreach ($users as $x){
-            $y = PlayMaster::whereUserId($x->id)->get();
-            foreach ($y as $z){
-                $playMasterControllerObject = new PlayMasterController();
-                $playMasterControllerObject->claimPrizes($z->id);
-            }
-        }
-    }
 
 //    function logout($id){
 //        DB::table('personal_access_tokens')->where('tokenable_id', $id)->delete();

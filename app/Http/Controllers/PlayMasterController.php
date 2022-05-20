@@ -136,14 +136,14 @@ class PlayMasterController extends Controller
         $data = $cPanelReportControllerObj->get_prize_value_by_barcode($playMasterId);
 
         if($data){
-            $playMaster = new PlayMaster();
+//            $playMaster = new PlayMaster();
             $playMaster = PlayMaster::find($playMasterId);
             $playMaster->is_claimed = 1;
 //            $playMaster->is_cancelable = 1;
             $playMaster->update();
 
             if($playMaster){
-                $user = new User();
+//                $user = new User();
                 $user = User::find($playMaster->user_id);
                 $user->closing_balance += $data;
                 $user->update();
@@ -159,7 +159,7 @@ class PlayMasterController extends Controller
         $cPanelReportControllerObj = new CPanelReportController();
         $data = $cPanelReportControllerObj->get_prize_value_by_barcode($id);
 
-        if($data){
+        if($data != 0){
 //            $playMaster = new PlayMaster();
             $playMaster = PlayMaster::find($id);
             $playMaster->is_claimed = 1;
@@ -167,7 +167,7 @@ class PlayMasterController extends Controller
             $playMaster->update();
 
             if($playMaster){
-                $user = new User();
+//                $user = new User();
                 $user = User::find($playMaster->user_id);
                 $user->closing_balance += $data;
                 $user->update();

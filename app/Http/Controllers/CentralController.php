@@ -535,8 +535,8 @@ class CentralController extends Controller
             $y->save();
         }
 
-//        $userController = new UserController();
-//        $userController->claimPrizes();
+        $terminalController = new TerminalController();
+        $terminalController->claimPrizes();
 
 //        $users = DB::select("select * from users where auto_claim = 1");
 //        foreach ($users as $x){
