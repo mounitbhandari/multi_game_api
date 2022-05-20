@@ -10,7 +10,7 @@ use App\Models\NumberCombination;
 use App\Models\PlayMaster;
 use App\Models\SingleNumber;
 use Carbon\Carbon;
-//use http\Client\Curl\User;
+use http\Client\Curl\User;
 use Illuminate\Http\Request;
 use App\Models\NextGameDraw;
 use App\Models\DrawMaster;
@@ -18,7 +18,7 @@ use App\Http\Controllers\ManualResultController;
 use App\Http\Controllers\NumberCombinationController;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Scalar\String_;
-use App\Models\User;
+//use App\Models\User;
 
 class CentralController extends Controller
 {
@@ -535,7 +535,7 @@ class CentralController extends Controller
             $y->save();
         }
 
-        $users = User::whereAutoClaim(1)->get();
+        $users = \App\Models\User::whereAutoClaim(1)->get();
         foreach ($users as $x){
             $y = PlayMaster::whereUserId($x->id)->get();
             foreach ($y as $z){
