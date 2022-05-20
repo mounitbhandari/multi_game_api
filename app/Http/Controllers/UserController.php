@@ -6,6 +6,7 @@ use App\Http\Resources\StockistResource;
 use App\Http\Resources\SuperStockistResource;
 use App\Http\Resources\TerminalResource;
 use App\Http\Resources\UserResource;
+use App\Models\PlayMaster;
 use App\Models\User;
 use App\Models\UserRelationWithOther;
 use Illuminate\Http\Request;
@@ -115,6 +116,17 @@ class UserController extends Controller
     function logout(Request $request){
         $result = $request->user()->currentAccessToken()->delete();
         return $result;
+    }
+
+    function claimPrizes(){
+        $users = User::whereAutoClaim(1)->get();
+        foreach ($users as $x){
+            $y = PlayMaster::whereUserId($x->id)->get();
+            foreach ($y as $z){
+                $playMasterControllerObject = new PlayMasterController();
+                $playMasterControllerObject->claimPrizes($z->id);
+            }
+        }
     }
 
 //    function logout($id){

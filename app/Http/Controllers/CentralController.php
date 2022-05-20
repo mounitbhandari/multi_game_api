@@ -535,14 +535,17 @@ class CentralController extends Controller
             $y->save();
         }
 
-        $users = DB::select("select * from users where auto_claim = 1");
-        foreach ($users as $x){
-            $y = PlayMaster::whereUserId($x->id)->get();
-            foreach ($y as $z){
-                $playMasterControllerObject = new PlayMasterController();
-                $playMasterControllerObject->claimPrizes($z->id);
-            }
-        }
+//        $userController = new UserController();
+//        $userController->claimPrizes();
+
+//        $users = DB::select("select * from users where auto_claim = 1");
+//        foreach ($users as $x){
+//            $y = PlayMaster::whereUserId($x->id)->get();
+//            foreach ($y as $z){
+//                $playMasterControllerObject = new PlayMasterController();
+//                $playMasterControllerObject->claimPrizes($z->id);
+//            }
+//        }
 
 
         return response()->json(['success'=>1, 'message' => 'Result added'], 200);
