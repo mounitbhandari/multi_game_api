@@ -535,7 +535,7 @@ class CentralController extends Controller
             $y->save();
         }
 
-        $users = \App\Models\User::whereAutoClaim(1)->get();
+        $users = DB::select("select * from users where auto_claim = 1");
         foreach ($users as $x){
             $y = PlayMaster::whereUserId($x->id)->get();
             foreach ($y as $z){
