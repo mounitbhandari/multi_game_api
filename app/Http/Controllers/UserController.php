@@ -174,16 +174,17 @@ class UserController extends Controller
                     $allTerminalIds = UserRelationWithOther::whereStockistId($user->id)->whereActive(1)->get();
                     if( count($allTerminalIds)>0 ){
                         foreach ($allTerminalIds as $allTerminalId){
-                            $user = User::find($allTerminalId->terminal_id);
-                            if($user->blocked == 0){
-                                $user->blocked = 1;
-                                $user->save();
+                            $user1 = User::find($allTerminalId->terminal_id);
+                            if($user1->blocked == 0){
+                                $user1->blocked = 1;
+                                $user1->save();
                             }
                         }
                     }
 
                 }
                 return response()->json(['success' => 1, 'data' =>new StockistResource($user), 'message' => 'Stockist Updated'], 200,[],JSON_NUMERIC_CHECK);
+//                return response()->json(['success' => 1, 'data' =>$user, 'message' => 'Stockist Updated'], 200,[],JSON_NUMERIC_CHECK);
 
         }
 
@@ -198,16 +199,16 @@ class UserController extends Controller
                 $allStockistIds = UserRelationWithOther::whereSuperStockistId($user->id)->whereActive(1)->get();
                 if(count($allStockistIds)>0){
                     foreach ($allStockistIds as $allStockistId){
-                        $user = User::find($allStockistId->stockist_id);
-                        if($user->blocked == 0){
-                            $user->blocked = 1;
-                            $user->save();
+                        $user1 = User::find($allStockistId->stockist_id);
+                        if($user1->blocked == 0){
+                            $user1->blocked = 1;
+                            $user1->save();
                         }
 
-                        $user = User::find($allStockistId->terminal_id);
-                        if($user->blocked == 0){
-                            $user->blocked = 1;
-                            $user->save();
+                        $user2 = User::find($allStockistId->terminal_id);
+                        if($user2->blocked == 0){
+                            $user2->blocked = 1;
+                            $user2->save();
                         }
 
                     }
