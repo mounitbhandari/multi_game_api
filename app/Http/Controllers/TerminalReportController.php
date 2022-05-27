@@ -93,6 +93,60 @@ class TerminalReportController extends Controller
         return response()->json(['success' => 1, 'data' => $data, JSON_NUMERIC_CHECK], 200);
     }
 
+
+
+
+
+    public function terminal_sale_reports_by_gameId(Request $request){
+
+        $requestedData = (object)$request->json()->all();
+        $terminalId = $requestedData->terminalId;
+        $start_date = $requestedData->startDate;
+        $end_date = $requestedData->endDate;
+        $gameId = $requestedData->gameId;
+
+        $cPanelRepotControllerObj = new CPanelReportController();
+
+
+        $data = DB::select("select round(table1.commission,2) as commission, table1.total, table1.user_name, users.user_name as stokiest_name, table1.terminal_pin, table1.user_id, table1.stockist_id,
+        table1.`date` from (select sum(commission) as commission, sum(total) as total, user_name, terminal_pin, user_id, stockist_id, date(created_at) as date from (select max(play_masters.id) as play_master_id,users.user_name,users.email as terminal_pin,
+        round(sum(play_details.quantity * play_details.mrp)) as total,
+        sum(play_details.quantity * play_details.mrp)* (max(play_details.commission)/100) as commission,
+        play_masters.user_id, user_relation_with_others.stockist_id,play_masters.created_at        
+        FROM play_masters
+        inner join play_details on play_details.play_master_id = play_masters.id
+        inner join game_types ON game_types.id = play_details.game_type_id
+        inner join users ON users.id = play_masters.user_id
+        left join user_relation_with_others on play_masters.user_id = user_relation_with_others.terminal_id
+        where play_masters.is_cancelled=0 and date(play_masters.created_at) >= ? and date(play_masters.created_at) <= ? and user_id = ?
+        and play_masters.game_id = ?
+        group by user_relation_with_others.stockist_id, play_masters.user_id,users.user_name,play_details.game_type_id,users.email,play_masters.created_at) as table1
+        group by terminal_pin, date(created_at), user_name, terminal_pin, user_id, stockist_id) as table1
+        left join users on table1.stockist_id = users.id",[$start_date,$end_date,$terminalId, $gameId]);
+
+        foreach($data as $x) {
+            $newPrize = 0;
+            $tempntp = 0;
+            $newData = PlayMaster::whereRaw('date(created_at) >= ?', [$x->date])->where('user_id',$terminalId)->get();
+            foreach ($newData as $y){
+//                $tempData = 0;
+                $newPrize += $cPanelRepotControllerObj->get_prize_value_by_barcode($y->id);
+//                $tempData = (PlayDetails::select(DB::raw("if(game_type_id = 1,(mrp*22)*quantity-(commission/100),mrp*quantity-(commission/100)) as total"))
+//                    ->where('play_master_id',$y->id)->distinct()->get())[0];
+//                $tempntp += $tempData->total;
+            }
+            $detail = (object)$x;
+            $detail->prize_value = $newPrize;
+//            $detail->ntp = $tempntp;
+        }
+
+
+        return response()->json(['success' => 1, 'data' => $data, JSON_NUMERIC_CHECK], 200);
+    }
+
+
+
+
     public function updateCancellation(){
         $data = PlayMaster::select()->where('is_cancelable',1)->get();
         foreach ($data as $x){
