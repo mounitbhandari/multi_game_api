@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 /////// for log
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Sanctum\PersonalAccessToken;
 
 
 class TerminalController extends Controller
@@ -31,7 +32,7 @@ class TerminalController extends Controller
 //        $terminals = User::select()->whereUserTypeId(5)
 //            ->join('user_relation_with_others','users.id','user_relation_with_others.terminal_id')
 //            ->get();
-        $terminals = DB::select("select users.id, users.login_activate, users.visible_password ,users.blocked, users.user_name, users.email,users.pay_out_slab_id ,users.password, users.commission ,users.remember_token, users.mobile1, users.user_type_id, users.opening_balance, users.closing_balance, users.created_by, users.inforce, user_relation_with_others.super_stockist_id, user_relation_with_others.stockist_id, user_relation_with_others.terminal_id, user_relation_with_others.changed_by, user_relation_with_others.active, user_relation_with_others.end_date, user_relation_with_others.changed_for from users
+        $terminals = DB::select("select users.id, users.login_activate,users.platform , users.visible_password ,users.blocked, users.user_name, users.email,users.pay_out_slab_id ,users.password, users.commission ,users.remember_token, users.mobile1, users.user_type_id, users.opening_balance, users.closing_balance, users.created_by, users.inforce, user_relation_with_others.super_stockist_id, user_relation_with_others.stockist_id, user_relation_with_others.terminal_id, user_relation_with_others.changed_by, user_relation_with_others.active, user_relation_with_others.end_date, user_relation_with_others.changed_for from users
             inner join user_relation_with_others on users.id = user_relation_with_others.terminal_id
             where user_relation_with_others.active = 1");
         return TerminalResource::collection($terminals);
@@ -91,7 +92,12 @@ class TerminalController extends Controller
         $user->login_activate = 2;
         $user->save();
 
-        return response()->json(['success'=>1,'data'=>new TerminalResource($user)], 200);
+        $personalAccessToken = PersonalAccessToken::whereTokenableId($requestedData->id)->get();
+        foreach ($personalAccessToken as $x){
+            $x->delete();
+        }
+
+        return response()->json(['success'=>1,'data'=>new TerminalResource($user), 'data1'=>$personalAccessToken], 200);
     }
 
     public function game_permission_update(Request $request){

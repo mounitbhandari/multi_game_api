@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\UserRelationWithOther;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\StockistResource;
+use Laravel\Sanctum\PersonalAccessToken;
 
 /**
  * @property mixed id
@@ -26,10 +27,12 @@ class TerminalResource extends JsonResource
             'terminalName' => $this->user_name,
             'pin' => $this->email,
             'password' => $this->visible_password,
-            'balance' =>$this->closing_balance,
-            'blocked' =>$this->blocked,
-            'commission' =>$this->commission,
-            'loginActivate' =>$this->login_activate,
+            'balance' => $this->closing_balance,
+            'blocked' => $this->blocked,
+            'commission' => $this->commission,
+            'loginActivate' => $this->login_activate,
+            'platform' => $this->platform,
+            'status' => is_null(PersonalAccessToken::whereTokenableId($this->id)->first())? 'Offline': 'Online',
             'stockist' => new StockistResource(User::find((UserRelationWithOther::whereTerminalId($this->id)->first())->stockist_id)),
             'payoutSlabId' => $this->pay_out_slab_id,
             'stockistId' => (UserRelationWithOther::whereTerminalId($this->id)->whereActive(1)->first())->stockist_id,
