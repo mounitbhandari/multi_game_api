@@ -33,6 +33,7 @@ class CreateUsersTable extends Migration
             $table->String('mac_address')->nullable(true);
             $table->String('temp_mac_address')->nullable(true);
             $table->integer('login_activate')->default(0);
+            $table->string('platform')->nullable(true);
 //            $table->integer('auto_claim')->default(0);
             $table ->integer('created_by')->nullable(true);
             $table->tinyInteger('blocked')->default(0);

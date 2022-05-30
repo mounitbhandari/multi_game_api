@@ -70,6 +70,13 @@ class UserController extends Controller
 
         }else if(($request->devToken == 'unityAccessToken') && ($user->user_type_id == 5)){
 
+            $user->platform = $request->platform;
+            $user->save();
+
+            if(!($request->appVer == 1.0)){
+                return response()->json(['success'=>0,'data'=>null, 'message'=>'Update app to login'], 200,[],JSON_NUMERIC_CHECK);
+            }
+
             if(($user->login_activate == 1)){
                 return response()->json(['success'=>0,'data'=>null, 'message'=>'Pending Approval'], 200,[],JSON_NUMERIC_CHECK);
             }
@@ -89,6 +96,8 @@ class UserController extends Controller
 
                 return response()->json(['success'=>0,'data'=>null, 'message'=>'Needs approval mac mismatch'], 200,[],JSON_NUMERIC_CHECK);
             }
+
+
 
             $token = $user->createToken('my-app-token')->plainTextToken;
 
