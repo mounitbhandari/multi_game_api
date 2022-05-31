@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ManualResultResource;
 use App\Models\DoubleNumberCombination;
 use App\Models\DrawMaster;
+use App\Models\GameType;
 use App\Models\ManualResult;
 use App\Models\NumberCombination;
 use App\Models\ResultMaster;
@@ -179,6 +180,23 @@ class ManualResultController extends Controller
 
         return response()->json(['success'=>1,'data'=> $requestedData], 200,[],JSON_NUMERIC_CHECK);
 
+    }
+
+    public function check_total_sale_on_current_draw(Request $request){
+        $requestedData = (object)$request->json()->all();
+
+        $game_id = (GameType::find($requestedData->game_type_id))->game_id;
+
+        $today= Carbon::today()->format('Y-m-d');
+
+        $activeDraw = (DrawMaster::whereGameId($game_id)->whereActive(1)->first())->id;
+
+        $data = DB::select("select sum(quantity) as quantity, max(play_details.mrp) as mrp from play_details
+            inner join play_masters on play_masters.id = play_details.play_master_id
+            where play_details.combination_number_id = ".$requestedData->combination_id." and play_masters.game_id = ".$game_id." and date(play_masters.created_at) = ? and play_masters.draw_master_id = ".$activeDraw,[$today]);
+
+
+        return response()->json(['success'=>1,'data'=> $data], 200,[],JSON_NUMERIC_CHECK);
     }
 
     /**

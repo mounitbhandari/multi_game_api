@@ -88,6 +88,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     //manual_result
 
     Route::post('manualResult',[ManualResultController::class, 'save_manual_result']);
+    Route::post('totalSaleOnCurrentDraw',[ManualResultController::class, 'check_total_sale_on_current_draw']);
 
     //play_masters
     Route::post('buyTicket',[PlayController::class,'save_play_details']);
@@ -182,6 +183,8 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::get('results/lastResult',[ResultMasterController::class, 'get_last_result']);
 
     Route::get('claimPrizes',[TerminalController::class, 'claimPrizes']);
+
+    Route::post('totalSaleOnCurrentDraw',[ManualResultController::class, 'check_total_sale_on_current_draw']);
 
 
 
