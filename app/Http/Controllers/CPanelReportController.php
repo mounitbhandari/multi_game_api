@@ -103,7 +103,7 @@ class CPanelReportController extends Controller
             ->join('single_numbers','number_combinations.single_number_id','single_numbers.id')
             ->where('play_details.play_master_id',$play_master_id)
             ->where('play_details.game_type_id',2)
-            ->orderBy('single_numbers.single_order')
+            ->orderBy('number_combinations.visible_triple_number')
             ->get();
         $data['triple'] = $tripleGameData;
 
@@ -113,7 +113,7 @@ class CPanelReportController extends Controller
             ->join('single_numbers','double_number_combinations.single_number_id','single_numbers.id')
             ->where('play_details.play_master_id',$play_master_id)
             ->where('play_details.game_type_id',5)
-            ->orderBy('single_numbers.single_order')
+            ->orderBy('double_number_combinations.visible_double_number')
             ->get();
         $data['double'] = $doubleGameData;
 
