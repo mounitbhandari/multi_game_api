@@ -32,6 +32,7 @@ class TerminalResource extends JsonResource
             'commission' => $this->commission,
             'loginActivate' => $this->login_activate,
             'platform' => $this->platform,
+            'autoClaim' => $this->auto_claim,
             'status' => is_null(PersonalAccessToken::whereTokenableId($this->id)->first())? 'Offline': 'Online',
             'stockist' => new StockistResource(User::find((UserRelationWithOther::whereTerminalId($this->id)->first())->stockist_id)),
             'payoutSlabId' => $this->pay_out_slab_id,
