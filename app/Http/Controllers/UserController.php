@@ -14,6 +14,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class UserController extends Controller
 {
@@ -60,6 +61,22 @@ class UserController extends Controller
 
         if($request->devToken == 'webTokenAccess'){
 
+//            $token = $user->createToken('my-app-token')->plainTextToken;
+
+//            $personalAccessToken = PersonalAccessToken::whereTokenableId($user->id)->first();
+
+
+
+//            if($personalAccessToken){
+//                $token = $personalAccessToken->token;
+//            }else{
+//                $token = $user->createToken('my-app-token')->plainTextToken;
+//            }
+
+            $personalAccessToken = PersonalAccessToken::whereTokenableId($user->id)->get();
+            foreach ($personalAccessToken as $x){
+                $x->delete();
+            }
             $token = $user->createToken('my-app-token')->plainTextToken;
 
             $response = [
@@ -97,7 +114,18 @@ class UserController extends Controller
                 return response()->json(['success'=>0,'data'=>null, 'message'=>'Needs approval mac mismatch'], 200,[],JSON_NUMERIC_CHECK);
             }
 
+//            $personalAccessToken = PersonalAccessToken::whereTokenableId($user->id)->first();
+//
+//            if(!empty($personalAccessToken)){
+//                $token = $personalAccessToken->token;
+//            }else{
+//                $token = $user->createToken('my-app-token')->plainTextToken;
+//            }
 
+            $personalAccessToken = PersonalAccessToken::whereTokenableId($user->id)->get();
+            foreach ($personalAccessToken as $x){
+                $x->delete();
+            }
 
             $token = $user->createToken('my-app-token')->plainTextToken;
 
@@ -105,6 +133,7 @@ class UserController extends Controller
                 'user' => new UserResource($user),
                 'token' => $token
             ];
+
             return response()->json(['success'=>1,'data'=>$response, 'message'=>'Welcome'], 200,[],JSON_NUMERIC_CHECK);
 
         }else{
