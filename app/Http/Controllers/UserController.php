@@ -73,10 +73,11 @@ class UserController extends Controller
 //                $token = $user->createToken('my-app-token')->plainTextToken;
 //            }
 
-            $personalAccessToken = PersonalAccessToken::whereTokenableId($user->id)->get();
-            foreach ($personalAccessToken as $x){
-                $x->delete();
-            }
+//            $personalAccessToken = PersonalAccessToken::whereTokenableId($user->id)->get();
+//            foreach ($personalAccessToken as $x){
+//                $x->delete();
+//            }
+
             $token = $user->createToken('my-app-token')->plainTextToken;
 
             $response = [
@@ -122,10 +123,10 @@ class UserController extends Controller
 //                $token = $user->createToken('my-app-token')->plainTextToken;
 //            }
 
-            $personalAccessToken = PersonalAccessToken::whereTokenableId($user->id)->get();
-            foreach ($personalAccessToken as $x){
-                $x->delete();
-            }
+//            $personalAccessToken = PersonalAccessToken::whereTokenableId($user->id)->get();
+//            foreach ($personalAccessToken as $x){
+//                $x->delete();
+//            }
 
             $token = $user->createToken('my-app-token')->plainTextToken;
 
