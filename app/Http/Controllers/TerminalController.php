@@ -105,6 +105,29 @@ class TerminalController extends Controller
         return response()->json(['success'=>1,'data'=>$data], 200);
     }
 
+//    public function draw_wise_report(Request $request){
+////        $requestedData = (object)$request->json()->all();
+////        $gameId = $requestedData->game_id;
+//        $today= Carbon::today()->format('Y-m-d');
+//        $test = 0;
+//        $total_prize = 0;
+//        $total_quantity = 0;
+//
+//        $data = DB::select("select play_masters.id, play_masters.barcode_number, play_masters.draw_master_id, play_masters.user_id, play_masters.game_id,
+//       play_masters.user_relation_id, play_masters.is_claimed, play_masters.is_cancelled, play_masters.is_cancelable, play_masters.created_at, play_masters.updated_at,
+//       draw_masters.draw_name, draw_masters.visible_time from play_masters
+//             inner join draw_masters ON draw_masters.id = play_masters.draw_master_id
+//             where date(play_masters.created_at) = ? and play_masters.game_id = 1",[$today]);
+//
+//        $cpanelReportController =  new CPanelReportController();
+//        foreach ($data as $x){
+//            $total_prize = $total_prize + (int)$cpanelReportController->get_prize_value_by_barcode($x->id);
+//            $total_quantity = $total_quantity + $cpanelReportController->get_total_quantity_by_barcode($x->id);
+//        }
+//
+//        return response()->json(['success'=> $total_prize, 'data' => $total_quantity], 200);
+//    }
+
     public function approve_login(Request $request){
         $requestedData = (object)$request->json()->all();
 
