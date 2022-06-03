@@ -68,6 +68,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     //get all users
     Route::get("users",[UserController::class,'getAllUsers']);
 
+    Route::post("prizeValueByTerminalId",[TerminalController::class,'prize_value_by_terminal_id']);
+
     //single_numbers
     Route::get("singleNumbers",[SingleNumberController::class,'index']);
 

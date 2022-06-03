@@ -88,6 +88,23 @@ class TerminalController extends Controller
         return response()->json(['success'=>1,'data'=>new TerminalResource($getUser)], 200);
     }
 
+    public function prize_value_by_terminal_id(Request $request){
+        $user = $request->user();
+        $requestedData = (object)$request->json()->all();
+        $data = 0;
+
+        $today= Carbon::today()->format('Y-m-d');
+
+        $playMasters =  DB::select("select * from play_masters where date(created_at) = ? and draw_master_id = ? and user_id = ".$user->id,[$today, $requestedData->draw_master_id]);
+
+        foreach ($playMasters as $x){
+            $cpanelReportController =  new CPanelReportController();
+            $data = $data + $cpanelReportController->get_prize_value_by_barcode($x->id);
+        }
+
+        return response()->json(['success'=>1,'data'=>$data], 200);
+    }
+
     public function approve_login(Request $request){
         $requestedData = (object)$request->json()->all();
 
