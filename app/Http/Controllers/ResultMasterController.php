@@ -321,10 +321,12 @@ class ResultMasterController extends Controller
         $today= Carbon::today()->format('Y-m-d');
         $return_array = [];
         $draw_id = [];
-//        $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->orderBy('draw_master_id','desc')->get();
+        $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->get();
 
-        $resultMasters = DB::select("select * from result_masters where game_date = ".$today." and game_id = ".$id."
-            order by draw_master_id desc");
+//        $resultMasters = DB::select("select * from result_masters where game_date = ".$today." and game_id = ".$id."
+//            order by draw_master_id desc");
+
+//        return response()->json(['success'=>1, 'data' => $resultMasters], 200);
 
 //        if(sizeof($resultMasters)<=0){
 //            if($id == 1) {
@@ -572,7 +574,7 @@ class ResultMasterController extends Controller
             return response()->json(['success'=> 0, 'message' => 'Invalid game id'], 200);
         }
 
-//        $return_array->orderBy('desc');
+        $return_array = collect($return_array)->sortBy('draw_id')->reverse()->toArray();
 
         return response()->json(['success'=>1, 'data' => $return_array], 200);
 
