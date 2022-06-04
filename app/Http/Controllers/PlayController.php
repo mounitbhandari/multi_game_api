@@ -86,6 +86,7 @@ class PlayController extends Controller
 
         $userRelationId = UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first();
         $payoutSlabValue = (PayOutSlab::find((User::find($inputPlayMaster->terminalId))->pay_out_slab_id))->slab_value;
+        $user = User::find($inputPlayMaster->terminalId);
 
         $output_array = array();
 
@@ -113,7 +114,7 @@ class PlayController extends Controller
                     $playDetails->combination_number_id = $detail->numberCombinationId;
                     $playDetails->quantity = $detail->quantity;
                     $playDetails->mrp = $gameType->mrp;
-                    $playDetails->commission = $gameType->commission;
+                    $playDetails->commission = $user->commission;
                     $playDetails->global_payout = $gameType->payout;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                     $playDetails->terminal_payout = $payoutSlabValue;
@@ -131,7 +132,7 @@ class PlayController extends Controller
                         $playDetails->quantity = $detail->quantity;
 //                        $playDetails->mrp = round($detail->mrp/22,4);
                         $playDetails->mrp = $gameType->mrp;
-                        $playDetails->commission = $gameType->commission;
+                        $playDetails->commission = $user->commission;
                         $playDetails->global_payout = $gameType->payout;
                         $playDetails->terminal_payout = $payoutSlabValue;
 //                        $playDetails->multiplexer = $gameType->multiplexer;
@@ -147,7 +148,7 @@ class PlayController extends Controller
                     $playDetails->combination_number_id = $detail->cardCombinationId;
                     $playDetails->quantity = $detail->quantity;
                     $playDetails->mrp = $gameType->mrp;
-                    $playDetails->commission = $gameType->commission;
+                    $playDetails->commission = $user->commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
@@ -162,7 +163,7 @@ class PlayController extends Controller
                     $playDetails->combination_number_id = $detail->doubleCombinationId;
                     $playDetails->quantity = $detail->quantity;
                     $playDetails->mrp = $gameType->mrp;
-                    $playDetails->commission = $gameType->commission;
+                    $playDetails->commission = $user->commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
@@ -177,7 +178,7 @@ class PlayController extends Controller
                     $playDetails->combination_number_id = $detail->singleNumberId;
                     $playDetails->quantity = $detail->quantity;
                     $playDetails->mrp = $gameType->mrp;
-                    $playDetails->commission = $gameType->commission;
+                    $playDetails->commission = $user->commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
@@ -192,7 +193,7 @@ class PlayController extends Controller
                     $playDetails->combination_number_id = $detail->doubleCombinationId;
                     $playDetails->quantity = $detail->quantity;
                     $playDetails->mrp = $gameType->mrp;
-                    $playDetails->commission = $gameType->commission;
+                    $playDetails->commission = $user->commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
@@ -207,7 +208,7 @@ class PlayController extends Controller
                     $playDetails->combination_number_id = $detail->amdarCombinationId;
                     $playDetails->quantity = $detail->quantity;
                     $playDetails->mrp = $gameType->mrp;
-                    $playDetails->commission = $gameType->commission;
+                    $playDetails->commission = $user->commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
@@ -222,7 +223,7 @@ class PlayController extends Controller
                     $playDetails->combination_number_id = $detail->baharCombinationId;
                     $playDetails->quantity = $detail->quantity;
                     $playDetails->mrp = $gameType->mrp;
-                    $playDetails->commission = $gameType->commission;
+                    $playDetails->commission = $user->commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
