@@ -183,7 +183,7 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::get('gameTotalReportToday', [GameController::class, 'get_game_total_sale_today']);
 
 
-    Route::post('drawWiseReportToday', [TerminalController::class, 'draw_wise_report']);
+    Route::post('drawWiseReportToday', [CPanelReportController::class, 'draw_wise_report']);
 
 
     Route::get('results/lastResult',[ResultMasterController::class, 'get_last_result']);

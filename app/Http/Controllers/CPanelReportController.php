@@ -185,27 +185,79 @@ class CPanelReportController extends Controller
 
     }
 
+    public function total_sale_by_play_master_id($id){
+
+        $totalSale = 0;
+
+        $playDetails = PlayDetails::wherePlayMasterId($id)->get();
+
+        foreach ($playDetails as $playDetail){
+            $gameType = GameType::find($playDetail->game_type_id);
+            $totalSale = $totalSale + ($gameType->mrp * $playDetail->quantity);
+        }
+
+        return $totalSale;
+    }
+
     public function draw_wise_report(Request $request){
-//        $requestedData = (object)$request->json()->all();
-//        $gameId = $requestedData->game_id;
+        $requestedData = (object)$request->json()->all();
+        $gameId = $requestedData->game_id;
         $today= Carbon::today()->format('Y-m-d');
         $test = 0;
         $total_prize = 0;
+        $total_sale = 0;
         $total_quantity = 0;
+        $total_commission = 0;
+        $return_array = [];
 
-        $data = DB::select("select play_masters.id, play_masters.barcode_number, play_masters.draw_master_id, play_masters.user_id, play_masters.game_id,
-       play_masters.user_relation_id, play_masters.is_claimed, play_masters.is_cancelled, play_masters.is_cancelable, play_masters.created_at, play_masters.updated_at,
-       draw_masters.draw_name, draw_masters.visible_time from play_masters
-             inner join draw_masters ON draw_masters.id = play_masters.draw_master_id
-             where date(play_masters.created_at) = ? and play_masters.game_id = 1",[$today]);
+        $draw_times = DB::select("select draw_master_id from play_masters where date(created_at) = ?",[$today]);
 
-//        $cpanelReportController =  new CPanelReportController();
-        foreach ($data as $x){
-            $total_prize = $total_prize + (int)$this->get_prize_value_by_barcode($x->id);
-            $total_quantity = $total_quantity + $this->get_total_quantity_by_barcode($x->id);
+        foreach ($draw_times as $draw_time){
+            $data = DB::select("select play_masters.id, play_masters.barcode_number, play_masters.draw_master_id, play_masters.user_id, play_masters.game_id,
+               play_masters.user_relation_id, play_masters.is_claimed, play_masters.is_cancelled, play_masters.is_cancelable, play_masters.created_at, play_masters.updated_at,
+               draw_masters.draw_name, draw_masters.visible_time from play_masters
+               inner join draw_masters ON draw_masters.id = play_masters.draw_master_id
+               where date(play_masters.created_at) = ? and play_masters.game_id = ".$gameId." and play_masters.draw_master_id =".$draw_time->draw_master_id,[$today]);
+
+            foreach ($data as $x){
+                $total_prize = $total_prize + (int)$this->get_prize_value_by_barcode($x->id);
+                $total_quantity = $total_quantity + $this->get_total_quantity_by_barcode($x->id);
+                $total_sale = $total_sale + $this->total_sale_by_play_master_id($x->id);
+                $total_commission = $total_commission + (DB::select("select sum(commission) as commission from play_details where play_master_id = ".$x->id))[0]->commission;
+            }
+
+            $temp_arr = [
+                'draw_id' => $draw_time->draw_master_id,
+                'draw_time' => DrawMaster::find($draw_time->draw_master_id)->visible_time,
+                'total_sale' => $total_sale,
+                'total_prize' => $total_prize,
+                'total_quantity' =>$total_quantity,
+                'total_commission' =>$total_commission
+            ];
+
+            array_push($return_array, $temp_arr);
+
         }
 
-        return response()->json(['success'=> $total_prize, 'data' => $total_quantity], 200);
+
+//        $data = DB::select("select play_masters.id, play_masters.barcode_number, play_masters.draw_master_id, play_masters.user_id, play_masters.game_id,
+//       play_masters.user_relation_id, play_masters.is_claimed, play_masters.is_cancelled, play_masters.is_cancelable, play_masters.created_at, play_masters.updated_at,
+//       draw_masters.draw_name, draw_masters.visible_time from play_masters
+//             inner join draw_masters ON draw_masters.id = play_masters.draw_master_id
+//             where date(play_masters.created_at) = ? and play_masters.game_id = ".$gameId,[$today]);
+//
+////        $cpanelReportController =  new CPanelReportController();
+//        foreach ($data as $x){
+//            $total_prize = $total_prize + (int)$this->get_prize_value_by_barcode($x->id);
+//            $total_quantity = $total_quantity + $this->get_total_quantity_by_barcode($x->id);
+//        }
+
+//        $return_array = [
+//            'total_prize' => $total_prize,
+//            'total_quantity' =>$total_quantity
+//        ];
+
+        return response()->json(['success'=> $draw_times, 'data' => $return_array], 200);
     }
 
     public function get_prize_value_by_barcode($play_master_id){
