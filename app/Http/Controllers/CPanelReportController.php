@@ -257,7 +257,8 @@ class CPanelReportController extends Controller
 //            'total_quantity' =>$total_quantity
 //        ];
 
-        return response()->json(['success'=> $draw_times, 'data' => $return_array], 200);
+        return response()->json(['success'=> 1, 'data' => $return_array], 200);
+        // return response()->json(['success'=> $draw_times, 'data' => $return_array], 200);
     }
 
     public function get_prize_value_by_barcode($play_master_id){
