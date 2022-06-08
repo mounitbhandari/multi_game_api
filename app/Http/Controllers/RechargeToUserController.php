@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class RechargeToUserController extends Controller
 {
-    public function getTransactionByUser(Request $request){
+    public function getTransactionByUserForAdmin(Request $request){
         $requestedData = (object)$request->json()->all();
 
 //        $user = User::find($requestedData->rechargedByID);
@@ -31,6 +31,19 @@ class RechargeToUserController extends Controller
 //                ->orderBy('created_at', 'desc')
 //                ->get();
 //        }
+
+
+        return response()->json(['success'=>1,'data'=> RechargeToUserResource::collection($data)], 200);
+    }
+
+    public function getTransactionByUser(Request $request){
+        $requestedData = (object)$request->json()->all();
+
+        $data = RechargeToUser::select()
+            ->whereBeneficiaryUid($requestedData->rechargedToID)
+            ->whereRechargeDoneByUid($requestedData->rechargedByID)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
 
         return response()->json(['success'=>1,'data'=> RechargeToUserResource::collection($data)], 200);
