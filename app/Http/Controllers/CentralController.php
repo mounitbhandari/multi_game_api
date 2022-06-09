@@ -87,11 +87,18 @@ class CentralController extends Controller
 
             while(true){
 
+//                $tripleNumberTargetData = DB::select("select * from play_details
+//                inner join number_combinations on number_combinations.id = play_details.combination_number_id
+//                inner join play_masters on play_details.play_master_id = play_masters.id
+//                where quantity <= ? and game_type_id = 2 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+//                order by quantity desc
+//                ",[$tripleValue, $today, $lastDrawId]);
+
                 $tripleNumberTargetData = DB::select("select * from play_details
                 inner join number_combinations on number_combinations.id = play_details.combination_number_id
                 inner join play_masters on play_details.play_master_id = play_masters.id
                 where quantity <= ? and game_type_id = 2 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
-                order by quantity desc
+                order by RAND()
                 ",[$tripleValue, $today, $lastDrawId]);
 
                 if(empty($tripleNumberTargetData)) {
