@@ -309,7 +309,8 @@ class CPanelReportController extends Controller
                 inner join game_types on game_types.id = play_details.game_type_id
                 where play_details.play_master_id = ".$play_master_id."  and date(play_details.created_at) = ?
                 and play_masters.draw_master_id = ".$play_master->draw_master_id."
-                and play_details.combination_number_id = ".$result_number_combination_id." and game_type_id = ".$game_id,[$play_date]);
+                and play_details.combination_number_id = ".$result_number_combination_id." and game_type_id = ".$game_id."
+                group by winning_price",[$play_date]);
 
 //            select (sum(quantity) * game_types.winning_price) as price_value from play_details
 //inner join play_masters on play_details.play_master_id = play_masters.id
