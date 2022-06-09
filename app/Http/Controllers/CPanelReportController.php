@@ -299,10 +299,22 @@ class CPanelReportController extends Controller
             }
 
 
-            $data = DB::select("select (play_details.quantity* game_types.winning_price) as price_value from play_masters
-                inner join play_details on play_details.play_master_id = play_masters.id
+//            $data = DB::select("select (play_details.quantity* game_types.winning_price) as price_value from play_masters
+//                inner join play_details on play_details.play_master_id = play_masters.id
+//                inner join game_types on game_types.id = play_details.game_type_id
+//                where play_masters.id = ".$play_master_id." and play_details.game_type_id = ".$game_id." and play_details.combination_number_id = ".$result_number_combination_id);
+
+            $data = DB::select("select (sum(quantity) * game_types.winning_price) as price_value from play_details
+                inner join play_masters on play_details.play_master_id = play_masters.id
                 inner join game_types on game_types.id = play_details.game_type_id
-                where play_masters.id = ".$play_master_id." and play_details.game_type_id = ".$game_id." and play_details.combination_number_id = ".$result_number_combination_id);
+                where play_details.play_master_id = ".$play_master_id."  and date(play_details.created_at) = ?
+                and play_masters.draw_master_id = ".$play_master->draw_master_id."
+                and play_details.combination_number_id = ".$result_number_combination_id." and game_type_id = ".$game_id,[$play_date]);
+
+//            select (sum(quantity) * game_types.winning_price) as price_value from play_details
+//inner join play_masters on play_details.play_master_id = play_masters.id
+//inner join game_types on game_types.id = play_details.game_type_id
+//where play_details.play_master_id = 864 and date(play_details.created_at) = '2022-06-09' and play_masters.draw_master_id = 448 and play_details.combination_number_id = 100 and game_type_id = 2
 
             if($data){
                 $prize_value = ($data[0]->price_value + $prize_value) * $result_multiplier;
