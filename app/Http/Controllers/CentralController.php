@@ -98,7 +98,7 @@ class CentralController extends Controller
                 inner join number_combinations on number_combinations.id = play_details.combination_number_id
                 inner join play_masters on play_details.play_master_id = play_masters.id
                 where quantity <= ? and game_type_id = 2 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
-                order by RAND()
+                order by RAND(), quantity desc
                 ",[$tripleValue, $today, $lastDrawId]);
 
                 if(empty($tripleNumberTargetData)) {
