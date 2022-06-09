@@ -122,7 +122,7 @@ class PlayController extends Controller
                     $output_play_details[] = $playDetails;
                 }
                 if($detail->gameTypeId == 1){
-                    $numberCombinationIds = SingleNumber::find($detail->singleNumberId)->number_combinations->pluck('id');
+//                    $numberCombinationIds = SingleNumber::find($detail->singleNumberId)->number_combinations->pluck('id');
 //                    foreach ($numberCombinationIds as $numberCombinationId){
                         $playDetails = new PlayDetails();
                         $playDetails->play_master_id = $playMaster->id;
