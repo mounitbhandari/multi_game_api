@@ -306,9 +306,10 @@ class CPanelReportController extends Controller
 
             if($data){
                 $prize_value = ($data[0]->price_value + $prize_value) * $result_multiplier;
-            }else{
-                $prize_value = $prize_value + 0;
             }
+//            else{
+//                $prize_value = $prize_value + 0;
+//            }
 
 //            if($game_id == 1){
 //                $singleGamePrize = PlayMaster::join('play_details','play_masters.id','play_details.play_master_id')
