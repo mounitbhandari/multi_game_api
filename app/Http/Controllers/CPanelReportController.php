@@ -87,8 +87,8 @@ class CPanelReportController extends Controller
 
         $singleGameData = PlayDetails::select(DB::raw('max(single_numbers.single_number) as single_number')
             ,DB::raw('max(play_details.quantity) as quantity'))
-            ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
-            ->join('single_numbers','number_combinations.single_number_id','single_numbers.id')
+//            ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
+            ->join('single_numbers','play_details.combination_number_id','single_numbers.id')
             ->where('play_details.play_master_id',$play_master_id)
             ->where('play_details.game_type_id',1)
             ->groupBy('single_numbers.id')
