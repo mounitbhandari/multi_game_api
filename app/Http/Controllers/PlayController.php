@@ -108,6 +108,11 @@ class PlayController extends Controller
                 $gameType = GameType::find($detail->gameTypeId);
                 //insert value for triple
                 if($detail->gameTypeId == 2){
+
+                    if($detail->numberCombinationId == 0){
+                        continue;
+                    }
+
                     $playDetails = new PlayDetails();
                     $playDetails->play_master_id = $playMaster->id;
                     $playDetails->game_type_id = $detail->gameTypeId;
@@ -122,6 +127,11 @@ class PlayController extends Controller
                     $output_play_details[] = $playDetails;
                 }
                 if($detail->gameTypeId == 1){
+
+                    if($detail->numberCombinationId == 0){
+                        continue;
+                    }
+
 //                    $numberCombinationIds = SingleNumber::find($detail->singleNumberId)->number_combinations->pluck('id');
 //                    foreach ($numberCombinationIds as $numberCombinationId){
                         $playDetails = new PlayDetails();
@@ -142,6 +152,11 @@ class PlayController extends Controller
 //                    }
                 }
                 if(($detail->gameTypeId == 3) or ($detail->gameTypeId == 4)){
+
+                    if($detail->numberCombinationId == 0){
+                        continue;
+                    }
+
                     $playDetails = new PlayDetails();
                     $playDetails->play_master_id = $playMaster->id;
                     $playDetails->game_type_id = $detail->gameTypeId;
@@ -157,6 +172,11 @@ class PlayController extends Controller
                 }
 
                 if($detail->gameTypeId == 5){
+
+                    if($detail->numberCombinationId == 0){
+                        continue;
+                    }
+
                     $playDetails = new PlayDetails();
                     $playDetails->play_master_id = $playMaster->id;
                     $playDetails->game_type_id = $detail->gameTypeId;
@@ -172,6 +192,11 @@ class PlayController extends Controller
                 }
 
                 if($detail->gameTypeId == 6){
+
+                    if($detail->numberCombinationId == 0){
+                        continue;
+                    }
+
                     $playDetails = new PlayDetails();
                     $playDetails->play_master_id = $playMaster->id;
                     $playDetails->game_type_id = $detail->gameTypeId;
@@ -187,6 +212,11 @@ class PlayController extends Controller
                 }
 
                 if($detail->gameTypeId == 7){
+
+                    if($detail->numberCombinationId == 0){
+                        continue;
+                    }
+
                     $playDetails = new PlayDetails();
                     $playDetails->play_master_id = $playMaster->id;
                     $playDetails->game_type_id = $detail->gameTypeId;
@@ -202,6 +232,11 @@ class PlayController extends Controller
                 }
 
                 if($detail->gameTypeId == 8){
+
+                    if($detail->numberCombinationId == 0){
+                        continue;
+                    }
+
                     $playDetails = new PlayDetails();
                     $playDetails->play_master_id = $playMaster->id;
                     $playDetails->game_type_id = $detail->gameTypeId;
@@ -217,6 +252,11 @@ class PlayController extends Controller
                 }
 
                 if($detail->gameTypeId == 9){
+
+                    if($detail->numberCombinationId == 0){
+                        continue;
+                    }
+
                     $playDetails = new PlayDetails();
                     $playDetails->play_master_id = $playMaster->id;
                     $playDetails->game_type_id = $detail->gameTypeId;
