@@ -288,6 +288,8 @@ class CPanelReportController extends Controller
             if($checkPlayMaster != null){
                 $gameType = GameType::find($game_type_id);
                 $prize_value = ($prize_value + ($gameType->winning_price * $checkPlayMaster -> quantity)) * $result_details->multiplexer;
+            }else{
+                $prize_value = $prize_value + 0;
             }
         }
 
