@@ -128,7 +128,7 @@ class PlayController extends Controller
                 }
                 if($detail->gameTypeId == 1){
 
-                    if($detail->numberCombinationId == 0){
+                    if($detail->singleNumberId == 0){
                         continue;
                     }
 
@@ -153,7 +153,7 @@ class PlayController extends Controller
                 }
                 if(($detail->gameTypeId == 3) or ($detail->gameTypeId == 4)){
 
-                    if($detail->numberCombinationId == 0){
+                    if($detail->cardCombinationId == 0){
                         continue;
                     }
 
@@ -173,7 +173,7 @@ class PlayController extends Controller
 
                 if($detail->gameTypeId == 5){
 
-                    if($detail->numberCombinationId == 0){
+                    if($detail->doubleCombinationId == 0){
                         continue;
                     }
 
@@ -193,7 +193,7 @@ class PlayController extends Controller
 
                 if($detail->gameTypeId == 6){
 
-                    if($detail->numberCombinationId == 0){
+                    if($detail->singleNumberId == 0){
                         continue;
                     }
 
@@ -213,7 +213,7 @@ class PlayController extends Controller
 
                 if($detail->gameTypeId == 7){
 
-                    if($detail->numberCombinationId == 0){
+                    if($detail->doubleCombinationId == 0){
                         continue;
                     }
 
@@ -233,7 +233,7 @@ class PlayController extends Controller
 
                 if($detail->gameTypeId == 8){
 
-                    if($detail->numberCombinationId == 0){
+                    if($detail->amdarCombinationId == 0){
                         continue;
                     }
 
@@ -253,7 +253,7 @@ class PlayController extends Controller
 
                 if($detail->gameTypeId == 9){
 
-                    if($detail->numberCombinationId == 0){
+                    if($detail->baharCombinationId == 0){
                         continue;
                     }
 
