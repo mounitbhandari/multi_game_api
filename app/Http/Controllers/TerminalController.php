@@ -73,8 +73,8 @@ class TerminalController extends Controller
         return response()->json(['success'=>1,'data'=>$users], 200);
     }
 
-    public function update_auto_claim(Request $request){
-        $user = $request->user();
+    public function update_auto_claim($id){
+        $user = User::find($id);
 
         if($user->user_type_id != 5){
             return response()->json(['success'=>0,'data'=>null, 'message' => 'Invalid terminal'], 200);
