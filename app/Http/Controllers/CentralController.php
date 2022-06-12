@@ -7,7 +7,10 @@ use App\Models\DoubleNumberCombination;
 use App\Models\Game;
 use App\Models\GameType;
 use App\Models\NumberCombination;
+use App\Models\PlayDetails;
 use App\Models\PlayMaster;
+use App\Models\ResultDetail;
+use App\Models\ResultMaster;
 use App\Models\SingleNumber;
 use Carbon\Carbon;
 use http\Client\Curl\User;
@@ -719,6 +722,38 @@ class CentralController extends Controller
             $y->update();
         }
         return response()->json(['success'=>1, 'message' => $data], 200);
+    }
+
+    public function delete_data_except_seven_days(){
+        $today = Carbon::now()->subDays(8)->format('Y-m-d');
+
+        $playMasters = DB::select("select * from play_masters where date(created_at) <= ?",[$today]);
+
+        foreach ($playMasters as $playMaster){
+            $playDetails = PlayDetails::wherePlayMasterId($playMaster->id)->get();
+            foreach ($playDetails as $playDetail){
+                $playDetail->delete();
+            }
+            $playMaster1 = PlayMaster::find($playMaster->id);
+
+            $playMaster1->delete();
+        }
+
+        $resultMasters = DB::select("select * from result_masters where date(created_at) <= ?",[$today]);
+
+        foreach ($resultMasters as $resultMaster){
+
+            $resultDetails = ResultDetail::whereResultMasterId($resultMaster->id)->get();
+            foreach ($resultDetails as $resultDetail){
+                $resultDetail->delete();
+            }
+
+            $resultMaster1 = ResultMaster::find($resultMaster->id);
+            $resultMaster1->delete();
+
+        }
+
+        return response()->json(['success'=>1, 'message' => $today], 200);
     }
 
 
