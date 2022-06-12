@@ -74,7 +74,7 @@ class CPanelReportController extends Controller
             $detail->prize_value = $this->get_prize_value_by_barcode($detail->play_master_id);
             $detail->amount = $this->get_total_amount_by_barcode($detail->play_master_id);
         }
-        return response()->json(['success'=> 1, 'data' => $data], 200);
+        return response()->json(['success'=> 1, 'data' => $data], 200,[],JSON_NUMERIC_CHECK);
 
     }
 
