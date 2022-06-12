@@ -91,7 +91,7 @@ class UserController extends Controller
             $user->platform = $request->platform;
             $user->save();
 
-            if(!($request->appVer == 1.0)){
+            if(!($request->appVer == 2.0)){
                 return response()->json(['success'=>0,'data'=>null, 'message'=>'Update app to login'], 200,[],JSON_NUMERIC_CHECK);
             }
 
