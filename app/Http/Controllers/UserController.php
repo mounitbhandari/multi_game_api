@@ -143,6 +143,13 @@ class UserController extends Controller
 
     }
 
+    public function delete_personal_access_tokens(){
+        $personalAccessToken = PersonalAccessToken::get();
+        foreach ($personalAccessToken as $x){
+            $x->delete();
+        }
+    }
+
 
     function getCurrentUser(Request $request){
         return $request->user();

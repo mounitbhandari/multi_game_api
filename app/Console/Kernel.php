@@ -44,7 +44,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('generateSingle:result')->cron('*/3 * * * *')->timezone('Asia/Kolkata');
         $schedule->command('generateDouble:result')->cron('*/3 * * * *')->timezone('Asia/Kolkata');
 
-        $schedule->command('sanctum:prune-expired --hours=24')->daily();
+        $schedule->command('drawOver:update')->dailyAt('00:00')->timezone('Asia/Kolkata');
+        $schedule->command('clear:tokens')->dailyAt('00:00')->timezone('Asia/Kolkata');
+
+//        $schedule->command('sanctum:prune-expired --hours=24')->daily();
 
     }
 
