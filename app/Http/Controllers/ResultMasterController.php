@@ -200,8 +200,11 @@ class ResultMasterController extends Controller
         $today= Carbon::today()->format('Y-m-d');
         $return_array = [];
         $draw_id = [];
-//        $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->orderBy('id','DESC')->limit(7)->get();
-        $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->limit(7)->get();
+        $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->orderBy('id','DESC')->limit(7)->get();
+//        $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->limit(7)->get();
+
+
+//        return response()->json(['success'=>1, 'data' => $resultMasters], 200);
 //        $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->orderBy('draw_master_id','DESC')->limit(7)->get();
 
         if($id == 1){
@@ -242,7 +245,7 @@ class ResultMasterController extends Controller
                 inner join result_details on result_details.result_master_id = result_masters.id
                 inner join card_combinations on card_combinations.id = result_details.combination_number_id
                 inner join draw_masters on draw_masters.id = result_masters.draw_master_id
-                where result_masters.game_id = 2 and result_masters.game_date = ?",[$today]);
+                where result_masters.game_id = 2 and result_masters.game_date = ? order by result_masters.id desc limit 7",[$today]);
             $return_array = $twelveCard;
 
             foreach ($twelveCard as $x){
@@ -255,7 +258,7 @@ class ResultMasterController extends Controller
                 inner join result_details on result_details.result_master_id = result_masters.id
                 inner join card_combinations on card_combinations.id = result_details.combination_number_id
                 inner join draw_masters on draw_masters.id = result_masters.draw_master_id
-                where result_masters.game_id = 3 and result_masters.game_date = ?",[$today]);
+                where result_masters.game_id = 3 and result_masters.game_date = ? order by result_masters.id desc limit 7",[$today]);
             $return_array = $sixteenCard;
 
             foreach ($sixteenCard as $x){
@@ -267,7 +270,7 @@ class ResultMasterController extends Controller
                 inner join result_details on result_details.result_master_id = result_masters.id
                 inner join single_numbers on single_numbers.id = result_details.combination_number_id
                 inner join draw_masters on draw_masters.id = result_masters.draw_master_id
-                where result_masters.game_id = 4 and result_masters.game_date = ?",[$today]);
+                where result_masters.game_id = 4 and result_masters.game_date = ? order by result_masters.id desc limit 7",[$today]);
 
             $return_array = $singleNumber;
 
