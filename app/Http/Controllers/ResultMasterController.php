@@ -200,7 +200,7 @@ class ResultMasterController extends Controller
         $today= Carbon::today()->format('Y-m-d');
         $return_array = [];
         $draw_id = [];
-        $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->orderBy('id','DESC')->limit(7)->get();
+        $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->orderBy('id','DESC')->orderBy('draw_master_id','DESC')->limit(7)->get();
 
         if($id == 1){
             foreach ($resultMasters as $resultMaster){
