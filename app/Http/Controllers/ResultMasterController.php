@@ -315,7 +315,7 @@ class ResultMasterController extends Controller
             return response()->json(['success'=> 0, 'message' => 'Invalid game id'], 200);
         }
 
-        $return_array = collect($return_array)->sortBy('draw_time')->reverse()->toArray();
+//        $return_array = collect($return_array)->sortBy('draw_time')->reverse()->toArray();
 
         return response()->json(['success'=>1, 'data' => $return_array], 200);
 
