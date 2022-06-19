@@ -27,8 +27,8 @@ class CreateUsersTable extends Migration
             $table->foreignId('pay_out_slab_id')->references('id')->on('pay_out_slabs')->onDelete('cascade');
             $table->decimal('commission')->default(0);
             $table->decimal('payout')->default(0);
-            $table->decimal('opening_balance')->default(0);
-            $table->decimal('closing_balance')->default(0);
+            $table->decimal('opening_balance',50,2)->default(0);
+            $table->decimal('closing_balance',50,2)->default(0);
             $table->integer('auto_claim')->default(0);
             $table->String('mac_address')->nullable(true);
             $table->String('temp_mac_address')->nullable(true);
