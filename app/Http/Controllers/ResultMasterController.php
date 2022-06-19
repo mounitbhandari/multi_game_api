@@ -316,6 +316,7 @@ class ResultMasterController extends Controller
         }
 
 //        $return_array = collect($return_array)->sortBy('draw_time')->reverse()->toArray();
+        $return_array = collect($return_array)->sortBy('draw_time')->toArray();
 
         return response()->json(['success'=>1, 'data' => $return_array], 200);
 
