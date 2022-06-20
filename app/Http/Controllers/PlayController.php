@@ -13,6 +13,7 @@ use App\Models\PayOutSlab;
 use App\Models\PlayDetails;
 use App\Models\PlayMaster;
 use App\Models\SingleNumber;
+use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserRelationWithOther;
 use Illuminate\Database\Eloquent\Model;
@@ -288,8 +289,17 @@ class PlayController extends Controller
             $output_array['amount'] = round($amount,0);
 
             $terminal = User::findOrFail($inputPlayMaster->terminalId);
+            $old_amount = $terminal->closing_balance;
             $terminal->closing_balance-= $amount;
             $terminal->save();
+
+            $transaction = new Transaction();
+            $transaction->terminal_id = $inputPlayMaster->terminalId;
+            $transaction->play_master_id = $playMaster->id;
+            $transaction->old_amount = $old_amount;
+            $transaction->played_amount = $amount;
+            $transaction->new_amount = $terminal->closing_balance;
+            $transaction->save();
 
             DB::commit();
         }catch (\Exception $e){

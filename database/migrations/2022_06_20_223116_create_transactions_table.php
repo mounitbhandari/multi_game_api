@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRechargeToUsersTable extends Migration
+class CreateTransactionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateRechargeToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('recharge_to_users', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('beneficiary_uid')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('recharge_done_by_uid')->references('id')->on('users')->onDelete('cascade');
+            $table->foreignId('terminal_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('play_master_id')->default(0);
             $table->decimal('old_amount',50,2)->default(0);
-            $table->decimal('amount',50,2)->default(0);
+            $table->decimal('recharged_amount',50,2)->default(0);
+            $table->decimal('played_amount',50,2)->default(0);
+            $table->decimal('prize_amount',50,2)->default(0);
             $table->decimal('new_amount',50,2)->default(0);
             $table->timestamps();
         });
@@ -31,6 +33,6 @@ class CreateRechargeToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('recharge_to_users');
+        Schema::dropIfExists('transactions');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\GameAllocation;
 use App\Models\PlayMaster;
+use App\Models\Transaction;
 use App\Models\UserRelationWithOther;
 use App\Models\UserType;
 use App\Http\Resources\UserResource;
@@ -61,8 +62,17 @@ class TerminalController extends Controller
 
                         if($playMaster){
                             $user = User::find($playMaster->user_id);
+                            $old_amount = $user->closing_balance;
                             $user->closing_balance += $data;
                             $user->update();
+
+                            $transaction = new Transaction();
+                            $transaction->terminal_id = $playMaster->user_id;
+                            $transaction->play_master_id = $playMaster->id;
+                            $transaction->old_amount = $old_amount;
+                            $transaction->prize_amount = $data;
+                            $transaction->new_amount = $user->closing_balance;
+                            $transaction->save();
                         }
                     }
 
@@ -333,6 +343,14 @@ class TerminalController extends Controller
             $rechargeToUser->amount = $requestedData->amount;
             $rechargeToUser->new_amount = $new_amount;
             $rechargeToUser->save();
+
+            $transaction = new Transaction();
+            $transaction->terminal_id = $requestedData->beneficiaryUid;
+            $transaction->old_amount = $old_amount;
+            $transaction->recharged_amount = $requestedData->amount;
+            $transaction->new_amount = $new_amount;
+            $transaction->save();
+
             DB::commit();
 
         }catch(\Exception $e){

@@ -7,6 +7,7 @@ use App\Http\Resources\PlayDetailsResource;
 use App\Models\GameType;
 use App\Models\PlayDetails;
 use App\Models\PlayMaster;
+use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -145,8 +146,17 @@ class PlayMasterController extends Controller
             if($playMaster){
 //                $user = new User();
                 $user = User::find($playMaster->user_id);
+                $old_amount = $user->closing_balance;
                 $user->closing_balance += $data;
                 $user->update();
+
+                $transaction = new Transaction();
+                $transaction->terminal_id = $playMaster->user_id;
+                $transaction->play_master_id = $playMaster->id;
+                $transaction->old_amount = $old_amount;
+                $transaction->prize_amount = $data;
+                $transaction->new_amount = $user->closing_balance;
+                $transaction->save();
             }
         }
         return response()->json(['success' => 1, 'point'=>$user->closing_balance, 'id' =>$playMaster->id], 200);
@@ -169,8 +179,17 @@ class PlayMasterController extends Controller
             if($playMaster){
 //                $user = new User();
                 $user = User::find($playMaster->user_id);
+                $old_amount = $user->closing_balance;
                 $user->closing_balance += $data;
                 $user->update();
+
+                $transaction = new Transaction();
+                $transaction->terminal_id = $playMaster->user_id;
+                $transaction->play_master_id = $playMaster->id;
+                $transaction->old_amount = $old_amount;
+                $transaction->prize_amount = $data;
+                $transaction->new_amount = $user->closing_balance;
+                $transaction->save();
             }
         }
         return response()->json(['success' => 1, 'point'=>$user->closing_balance, 'id' =>$playMaster->id], 200);

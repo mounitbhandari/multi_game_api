@@ -8,8 +8,10 @@ use App\Models\GameType;
 use App\Models\NextGameDraw;
 use App\Models\ResultDetail;
 use App\Models\ResultMaster;
+use App\Models\Transaction;
 use App\Models\User;
 use Faker\Core\Number;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Models\PlayMaster;
 use App\Models\PlayDetails;
@@ -356,6 +358,8 @@ class CPanelReportController extends Controller
             if($data){
                 $prize_value = ($data[0]->price_value + $prize_value) * $result_multiplier;
             }
+
+
 //            else{
 //                $prize_value = $prize_value + 0;
 //            }
@@ -382,6 +386,7 @@ class CPanelReportController extends Controller
 //                    ->first();
 //            }
         }
+
 //        return ['single' => $singleGamePrize];
 
 //        if(!empty($singleGamePrize)){
