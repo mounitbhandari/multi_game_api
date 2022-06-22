@@ -46,7 +46,6 @@ class TerminalController extends Controller
 
     public function claimPrizes(){
         $users = User::select()->whereAutoClaim(1)->whereUserTypeId(5)->get();
-        $temp = [];
 
         // return response()->json(['success'=>1,'data'=>$users], 200);
         foreach ($users as $x){
@@ -59,16 +58,12 @@ class TerminalController extends Controller
 
                     if($z !== []){
 
-                        // array_push($temp, $z);
-
                         $cPanelReportControllerObj = new CPanelReportController();
                         $data = $cPanelReportControllerObj->get_prize_value_by_barcode($z->id);
                         $temp1 = [
                             'z' => $z,
                             'data' => $data,
                         ];
-
-                        array_push($temp, $temp1);
 
                         if($data != 0){
                             $playMaster = PlayMaster::find($z->id);
@@ -104,7 +99,6 @@ class TerminalController extends Controller
             }
 
         }
-        // return response()->json(['success'=>1,'data'=>$temp], 200);
         return response()->json(['success'=>1,'data'=>$users], 200);
     }
 
