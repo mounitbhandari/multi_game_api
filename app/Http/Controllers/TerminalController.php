@@ -62,11 +62,10 @@ class TerminalController extends Controller
 
                         if($playMaster){
                             $user = User::find($playMaster->user_id);
-                            $old_amount = $user->closing_balance;
                             $user->closing_balance += $data;
                             $user->update();
 
-                            $transaction = Transaction::wherePlayMasterId($playMaster->id)->first();
+                            $transaction = Transaction::wherePlayMasterId($z->id)->first();
                             $transaction->prize_amount = $data;
                             $transaction->new_amount = $user->closing_balance;
                             $transaction->save();
