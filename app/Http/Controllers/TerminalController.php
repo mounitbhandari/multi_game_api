@@ -46,36 +46,65 @@ class TerminalController extends Controller
 
     public function claimPrizes(){
         $users = User::select()->whereAutoClaim(1)->whereUserTypeId(5)->get();
+        $temp = [];
+
+        // return response()->json(['success'=>1,'data'=>$users], 200);
         foreach ($users as $x){
             $prize_value = 0;
-            $y = PlayMaster::whereUserId($x->id)->get();
+            $y = PlayMaster::whereUserId($x->id)->whereIsClaimed(0)->get();
+
+
             if($y){
                 foreach ($y as $z){
 
-                    $cPanelReportControllerObj = new CPanelReportController();
-                    $data = $cPanelReportControllerObj->get_prize_value_by_barcode($z->id);
+                    if($z !== []){
 
-                    if($data != 0){
-                        $playMaster = PlayMaster::find($z->id);
-                        $playMaster->is_claimed = 1;
-                        $playMaster->update();
+                        // array_push($temp, $z);
 
-                        if($playMaster){
-                            $user = User::find($playMaster->user_id);
-                            $user->closing_balance += $data;
-                            $user->update();
+                        $cPanelReportControllerObj = new CPanelReportController();
+                        $data = $cPanelReportControllerObj->get_prize_value_by_barcode($z->id);
+                        $temp1 = [
+                            'z' => $z,
+                            'data' => $data,
+                        ];
 
-                            $transaction = Transaction::wherePlayMasterId($z->id)->first();
-                            $transaction->prize_amount = $data;
-                            $transaction->new_amount = $user->closing_balance;
-                            $transaction->save();
+                        array_push($temp, $temp1);
+
+                        if($data != 0){
+                            $playMaster = PlayMaster::find($z->id);
+                            $playMaster->is_claimed = 1;
+                            $playMaster->update();
+
+                            if($playMaster){
+                                $user = User::find($playMaster->user_id);
+                                $old_amount = $user->closing_balance;
+                                $user->closing_balance += $data;
+                                $user->update();
+
+                                $transaction = Transaction::wherePlayMasterId($z->id)->first();
+                                if($transaction){
+                                    $transaction->prize_amount = $data;
+                                    $transaction->new_amount = $user->closing_balance;
+                                    $transaction->save();
+                                }else{
+                                    $transaction = new Transaction();
+                                    $transaction->terminal_id = $playMaster->user_id;
+                                    $transaction->play_master_id = $playMaster->id;
+                                    $transaction->old_amount = $old_amount;
+                                    $transaction->prize_amount = $data;
+                                    $transaction->new_amount = $user->closing_balance;
+                                    $transaction->save();
+                                }
+
+                            }
                         }
-                    }
 
+                    }
                 }
             }
 
         }
+        // return response()->json(['success'=>1,'data'=>$temp], 200);
         return response()->json(['success'=>1,'data'=>$users], 200);
     }
 
