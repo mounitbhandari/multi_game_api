@@ -535,11 +535,13 @@ class CPanelReportController extends Controller
         group by user_relation_with_others.stockist_id, play_masters.user_id,users.user_name,play_details.game_type_id,users.email) as table1 group by user_name,user_id,terminal_pin,stockist_id) as table1
         left join users on table1.stockist_id = users.id",[$start_date,$end_date]);
 
+//        return response()->json(['success'=> 1, 'data' => $data], 200);
+
         foreach($data as $x){
             $newPrize = 0;
             $tempntp = 0;
             $tempPrize = 0;
-            $newData = PlayMaster::where('user_id',$x->user_id)->get();
+            $newData = PlayMaster::where('user_id',$x->user_id)->whereRaw('date(created_at) >= ?', [$start_date])->whereRaw('date(created_at) <= ?', [$end_date])->get();
             foreach($newData as $y) {
                 $tempData = 0;
                 $tempPrize += $this->get_prize_value_by_barcode($y->id);
