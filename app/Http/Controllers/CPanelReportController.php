@@ -210,11 +210,19 @@ class CPanelReportController extends Controller
         $total_sale = 0;
         $total_quantity = 0;
         $total_commission = 0;
+        $commission_percentage = 0;
         $return_array = [];
 
         $draw_times = DB::select("select draw_master_id from play_masters where date(created_at) = ?",[$today]);
 
         foreach ($draw_times as $draw_time){
+
+            $total_prize = 0;
+            $total_sale = 0;
+            $total_quantity = 0;
+            $total_commission = 0;
+            $commission_percentage = 0;
+
             $data = DB::select("select play_masters.id, play_masters.barcode_number, play_masters.draw_master_id, play_masters.user_id, play_masters.game_id,
                play_masters.user_relation_id, play_masters.is_claimed, play_masters.is_cancelled, play_masters.is_cancelable, play_masters.created_at, play_masters.updated_at,
                draw_masters.draw_name, draw_masters.visible_time from play_masters
@@ -225,7 +233,8 @@ class CPanelReportController extends Controller
                 $total_prize = $total_prize + (int)$this->get_prize_value_by_barcode($x->id);
                 $total_quantity = $total_quantity + $this->get_total_quantity_by_barcode($x->id);
                 $total_sale = $total_sale + $this->total_sale_by_play_master_id($x->id);
-                $total_commission = $total_commission + (DB::select("select sum(commission) as commission from play_details where play_master_id = ".$x->id))[0]->commission;
+                $total_commission = (DB::select("select ((max(commission)/100)*".$total_sale.") as commission from play_details where play_master_id = ".$x->id))[0]->commission;
+                $commission_percentage = (DB::select("select (max(commission)/100) as commission from play_details where play_master_id = ".$x->id))[0]->commission;
             }
 
             $temp_arr = [
@@ -234,7 +243,8 @@ class CPanelReportController extends Controller
                 'total_sale' => $total_sale,
                 'total_prize' => $total_prize,
                 'total_quantity' =>$total_quantity,
-                'total_commission' =>$total_commission
+                'total_commission' =>$total_commission,
+                'commission_percentage' =>$commission_percentage
             ];
 
             array_push($return_array, $temp_arr);
