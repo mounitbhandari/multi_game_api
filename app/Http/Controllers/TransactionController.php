@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\TerminalResource;
+use App\Http\Resources\TransactionResource;
 use App\Models\Transaction;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
 
 class TransactionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function getTransaction($id)
     {
-        //
+        $transaction = Transaction::whereTerminalId($id)->get();
+        return response()->json(['success'=>1,'data'=>TransactionResource::collection($transaction)], 200);
+//        return response()->json(['success'=>$id,'data'=>$transaction], 200);
     }
 
     /**
