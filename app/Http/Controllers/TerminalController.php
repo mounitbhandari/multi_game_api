@@ -44,6 +44,10 @@ class TerminalController extends Controller
 //        return $terminals;
     }
 
+    public function get_terminal_by_auth(Request $request){
+        return TerminalResource::collection($request->user());
+    }
+
     public function claimPrizes(){
         $users = User::select()->whereAutoClaim(1)->whereUserTypeId(5)->get();
 
@@ -389,5 +393,7 @@ class TerminalController extends Controller
         $terminal->save();
         return response()->json(['success'=>1,'data'=>$terminal], 200,[],JSON_NUMERIC_CHECK);
     }
+
+
 
 }
