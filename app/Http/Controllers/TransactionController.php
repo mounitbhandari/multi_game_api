@@ -13,7 +13,7 @@ class TransactionController extends Controller
 
     public function getTransaction($id)
     {
-        $transaction = Transaction::whereTerminalId($id)->get();
+        $transaction = Transaction::whereTerminalId($id)->orderBy('created_at', 'desc')->get();
         return response()->json(['success'=>1,'data'=>TransactionResource::collection($transaction)], 200);
 //        return response()->json(['success'=>$id,'data'=>$transaction], 200);
     }

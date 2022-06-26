@@ -16,7 +16,8 @@ class RechargeToUserResource extends JsonResource
             'oldAmount' => $this->old_amount,
             'rechargedAmount' => $this->amount,
             'newAmount' => $this->new_amount,
-            'dateAndTime' => $this->created_at
+            'date' =>  $this->created_at->format('Y-m-d'),
+            'time' =>  $this->created_at->hour > 12 ? ($this->created_at->format('H') - 12).':'.$this->created_at->format('i').':'.$this->created_at->format('s').' PM' : $this->created_at->format('H:i:s').' AM'
         ];
     }
 }

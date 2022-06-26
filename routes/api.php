@@ -176,6 +176,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
 
     Route::get('getTransaction/{id}', [TransactionController::class, 'getTransaction']);
+    Route::post('getRechargeDetails',[RechargeToUserController::class, 'getTransactionByUserForAdmin']);
 
 });
 
@@ -200,7 +201,7 @@ Route::group(array('prefix' => 'dev'), function() {
 
 
 
-    Route::post('getTransaction',[RechargeToUserController::class, 'getTransactionByUserForAdmin']);
+    Route::post('getRechargeDetails',[RechargeToUserController::class, 'getTransactionByUserForAdmin']);
     Route::post('getTransactionByUser',[RechargeToUserController::class, 'getTransactionByUser']);
 
     Route::get('getTodayResultByGame/{id}',[ResultMasterController::class, 'get_result_today_by_game']);

@@ -26,7 +26,9 @@ class TransactionResource extends JsonResource
             'recharged_amount' => $this->recharged_amount,
             'played_amount' => $this->played_amount,
             'prize_amount' => $this->prize_amount,
-            'new_amount' => $this->new_amount
+            'new_amount' => $this->new_amount,
+            'date' =>  $this->created_at->format('Y-m-d'),
+            'time' =>  $this->created_at->hour > 12 ? ($this->created_at->format('H') - 12).':'.$this->created_at->format('i').':'.$this->created_at->format('s').' PM' : $this->created_at->format('H:i:s').' AM'
         ];
     }
 }
