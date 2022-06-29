@@ -121,6 +121,10 @@ class PlayController extends Controller
                     $playDetails->quantity = $detail->quantity;
                     $playDetails->mrp = $gameType->mrp;
                     $playDetails->commission = $user->commission;
+                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                     $playDetails->global_payout = $gameType->payout;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                     $playDetails->terminal_payout = $payoutSlabValue;
@@ -144,6 +148,10 @@ class PlayController extends Controller
 //                        $playDetails->mrp = round($detail->mrp/22,4);
                         $playDetails->mrp = $gameType->mrp;
                         $playDetails->commission = $user->commission;
+                        $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+                        $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+                        $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+                        $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                         $playDetails->global_payout = $gameType->payout;
                         $playDetails->terminal_payout = $payoutSlabValue;
 //                        $playDetails->multiplexer = $gameType->multiplexer;
@@ -165,6 +173,10 @@ class PlayController extends Controller
                     $playDetails->quantity = $detail->quantity;
                     $playDetails->mrp = $gameType->mrp;
                     $playDetails->commission = $user->commission;
+                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
@@ -185,6 +197,10 @@ class PlayController extends Controller
                     $playDetails->quantity = $detail->quantity;
                     $playDetails->mrp = $gameType->mrp;
                     $playDetails->commission = $user->commission;
+                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
@@ -205,6 +221,10 @@ class PlayController extends Controller
                     $playDetails->quantity = $detail->quantity;
                     $playDetails->mrp = $gameType->mrp;
                     $playDetails->commission = $user->commission;
+                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
@@ -225,6 +245,10 @@ class PlayController extends Controller
                     $playDetails->quantity = $detail->quantity;
                     $playDetails->mrp = $gameType->mrp;
                     $playDetails->commission = $user->commission;
+                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
@@ -245,6 +269,10 @@ class PlayController extends Controller
                     $playDetails->quantity = $detail->quantity;
                     $playDetails->mrp = $gameType->mrp;
                     $playDetails->commission = $user->commission;
+                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
@@ -265,6 +293,10 @@ class PlayController extends Controller
                     $playDetails->quantity = $detail->quantity;
                     $playDetails->mrp = $gameType->mrp;
                     $playDetails->commission = $user->commission;
+                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                     $playDetails->global_payout = $gameType->payout;
                     $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;

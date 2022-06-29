@@ -178,6 +178,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::get('getTransaction/{id}', [TransactionController::class, 'getTransaction']);
     Route::post('getRechargeDetails',[RechargeToUserController::class, 'getTransactionByUserForAdmin']);
 
+    Route::post('drawWiseReportToday', [CPanelReportController::class, 'draw_wise_report']);
+
 });
 
 

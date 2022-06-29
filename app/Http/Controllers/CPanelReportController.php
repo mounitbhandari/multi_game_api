@@ -530,11 +530,28 @@ class CPanelReportController extends Controller
 //        group by stockist_to_terminals.stockist_id, play_masters.user_id,users.user_name,play_details.game_type_id,users.email) as table1 group by user_name,user_id,terminal_pin,stockist_id) as table1
 //        left join users on table1.stockist_id = users.id ",[$start_date,$end_date]);
 
-        $data = DB::select("select table1.play_master_id, table1.terminal_pin, table1.user_name, table1.user_id, table1.stockist_id, table1.total, table1.commission, table1.user_name as stockist_name from (select max(play_master_id) as play_master_id,terminal_pin,user_name,user_id,stockist_id,
-        sum(total) as total,round(sum(commission),2) as commission from (
+//        $data = DB::select("select table1.play_master_id, table1.terminal_pin, table1.user_name, table1.user_id, table1.stockist_id, table1.total, table1.commission, table1.user_name as stockist_name from (select max(play_master_id) as play_master_id,terminal_pin,user_name,user_id,stockist_id,
+//        sum(total) as total,round(sum(commission),2) as commission from (
+//        select max(play_masters.id) as play_master_id,users.user_name,users.email as terminal_pin,
+//        round(sum(play_details.quantity * play_details.mrp)) as total,
+//        sum(play_details.quantity * play_details.mrp)* (max(play_details.commission)/100) as commission,
+//        play_masters.user_id, user_relation_with_others.stockist_id
+//        FROM play_masters
+//        inner join play_details on play_details.play_master_id = play_masters.id
+//        inner join game_types ON game_types.id = play_details.game_type_id
+//        inner join users ON users.id = play_masters.user_id
+//        left join user_relation_with_others on play_masters.user_id = user_relation_with_others.terminal_id
+//        where play_masters.is_cancelled=0 and date(play_masters.created_at) >= ? and date(play_masters.created_at) <= ? and user_relation_with_others.active = 1
+//        group by user_relation_with_others.stockist_id, play_masters.user_id,users.user_name,play_details.game_type_id,users.email) as table1 group by user_name,user_id,terminal_pin,stockist_id) as table1
+//        left join users on table1.stockist_id = users.id",[$start_date,$end_date]);
+
+        $data = DB::select("select table1.play_master_id, table1.terminal_pin, table1.user_name, table1.user_id, table1.stockist_id, table1.total, table1.commission,stockist_commission,super_stockist_commission, table1.user_name as stockist_name from (select max(play_master_id) as play_master_id,terminal_pin,user_name,user_id,stockist_id,
+        sum(total) as total,round(sum(commission),2) as commission,round(sum(stockist_commission),2) as stockist_commission,round(sum(super_stockist_commission),2) as super_stockist_commission from (
         select max(play_masters.id) as play_master_id,users.user_name,users.email as terminal_pin,
         round(sum(play_details.quantity * play_details.mrp)) as total,
         sum(play_details.quantity * play_details.mrp)* (max(play_details.commission)/100) as commission,
+        sum(play_details.quantity * play_details.mrp)* (max(play_details.stockist_commission)/100) as stockist_commission,
+        sum(play_details.quantity * play_details.mrp)* (max(play_details.super_stockist_commission)/100) as super_stockist_commission,
         play_masters.user_id, user_relation_with_others.stockist_id
         FROM play_masters
         inner join play_details on play_details.play_master_id = play_masters.id
