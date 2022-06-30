@@ -44,6 +44,17 @@ class TerminalController extends Controller
 //        return $terminals;
     }
 
+    public function get_logged_in_terminal($id){
+        $user = User::find($id);
+
+        if($user->user_type_id != 5){
+            return response()->json(['success'=>0,'data'=>null, 'message' => 'Invalid terminal'], 200);
+        }
+
+        return response()->json(['success'=>1,'data'=>new TerminalResource($user)], 200);
+    }
+
+
     public function get_terminal_by_auth(Request $request){
         return TerminalResource::collection($request->user());
     }

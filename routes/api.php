@@ -110,6 +110,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
     Route::get('terminals',[TerminalController::class, 'get_all_terminals']);
     Route::post('terminals',[TerminalController::class, 'create_terminal']);
+    Route::get('terminal/{id}',[TerminalController::class, 'get_logged_in_terminal']);
     Route::put('terminals',[TerminalController::class, 'update_terminal']);
     Route::get('terminalLoggedId',[TerminalController::class, 'get_terminal_by_auth']);
     Route::get('updateAutoClaim/{id}',[TerminalController::class, 'update_auto_claim']);
@@ -186,6 +187,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
 
 Route::group(array('prefix' => 'dev'), function() {
+
+    Route::get('terminal/{id}',[TerminalController::class, 'get_logged_in_terminal']);
 
     Route::get('gameTotalReportToday', [GameController::class, 'get_game_total_sale_today']);
     Route::get('deleteDataExceptSevenDays', [CentralController::class, 'delete_data_except_seven_days']);
