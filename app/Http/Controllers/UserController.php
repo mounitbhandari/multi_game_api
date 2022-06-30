@@ -61,23 +61,6 @@ class UserController extends Controller
 
         if($request->devToken == 'webTokenAccess'){
 
-//            $token = $user->createToken('my-app-token')->plainTextToken;
-
-//            $personalAccessToken = PersonalAccessToken::whereTokenableId($user->id)->first();
-
-
-
-//            if($personalAccessToken){
-//                $token = $personalAccessToken->token;
-//            }else{
-//                $token = $user->createToken('my-app-token')->plainTextToken;
-//            }
-
-//            $personalAccessToken = PersonalAccessToken::whereTokenableId($user->id)->get();
-//            foreach ($personalAccessToken as $x){
-//                $x->delete();
-//            }
-
             $token = $user->createToken('my-app-token')->plainTextToken;
 
             $response = [
@@ -89,6 +72,9 @@ class UserController extends Controller
         }else if(($request->devToken == 'unityAccessToken') && ($user->user_type_id == 5)){
 
             $user->platform = $request->platform;
+            if($request->ver = 'NP'){
+                $user->auto_claim = 1;
+            }
             $user->save();
 
             if(!($request->appVer == 2.0)){
@@ -114,14 +100,6 @@ class UserController extends Controller
 
                 return response()->json(['success'=>0,'data'=>null, 'message'=>'Needs approval mac mismatch'], 200,[],JSON_NUMERIC_CHECK);
             }
-
-//            $personalAccessToken = PersonalAccessToken::whereTokenableId($user->id)->first();
-//
-//            if(!empty($personalAccessToken)){
-//                $token = $personalAccessToken->token;
-//            }else{
-//                $token = $user->createToken('my-app-token')->plainTextToken;
-//            }
 
             $personalAccessToken = PersonalAccessToken::whereTokenableId($user->id)->get();
             foreach ($personalAccessToken as $x){
