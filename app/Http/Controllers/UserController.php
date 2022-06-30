@@ -71,6 +71,10 @@ class UserController extends Controller
 
         }else if(($request->devToken == 'unityAccessToken') && ($user->user_type_id == 5)){
 
+            if(!($request->ver)){
+                return response()->json(['success'=>0,'data'=>null, 'message'=>'Ver not found'], 200,[],JSON_NUMERIC_CHECK);
+            }
+
             $user->platform = $request->platform;
             if($request->ver = 'NP'){
                 $user->auto_claim = 1;
