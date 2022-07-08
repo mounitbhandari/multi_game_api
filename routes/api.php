@@ -113,7 +113,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::get('terminal/{id}',[TerminalController::class, 'get_logged_in_terminal']);
     Route::put('terminals',[TerminalController::class, 'update_terminal']);
 //    Route::get('terminalLoggedId',[TerminalController::class, 'get_terminal_by_auth']);
-    Route::get('updateAutoClaim/{id}',[TerminalController::class, 'update_auto_claim']);
+//    Route::get('updateAutoClaim/{id}',[TerminalController::class, 'update_auto_claim']);
     Route::put('terminals/balance',[TerminalController::class, 'update_balance_to_terminal']);
 
     Route::get('cPanel/barcodeReport', [CPanelReportController::class, 'barcode_wise_report']);
