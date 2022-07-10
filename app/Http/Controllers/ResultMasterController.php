@@ -827,12 +827,13 @@ class ResultMasterController extends Controller
 
     }
 
-    public function save_auto_result($draw_id, $game_type_id, $combination_number_id)
+    public function save_auto_result($draw_id, $game_type_id, $combination_number_id, $multiplexer)
     {
         $today= Carbon::today()->format('Y-m-d');
         $game_id = (DrawMaster::whereId($draw_id)->first())->game_id;
         $game_gen = (Game::whereId($game_id)->first())->auto_generate;
-        $game_multiplexer = (GameType::find($game_type_id))->multiplexer;
+//        $game_multiplexer = (GameType::find($game_type_id))->multiplexer;
+        $game_multiplexer = $multiplexer;
 
         if($game_gen == "no"){
             return response()->json(['success'=>1, 'data' => 'Auto generate is deactivated'], 200);

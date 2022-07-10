@@ -300,8 +300,8 @@ Route::group(array('prefix' => 'dev'), function() {
     // Route::post('manualResult',[ManualResultController::class, 'save_manual_result']);
 
 
-    //test
-    // Route::get('test',[Test::class, 'index']);
+//    test
+     Route::get('test',[Test::class, 'testNew']);
 
 
      Route::get('stockists',[StockistController::class, 'get_all_stockists']);
