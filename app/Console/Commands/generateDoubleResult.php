@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Http\Controllers\CentralController;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class generateDoubleResult extends Command
 {
@@ -38,6 +40,7 @@ class generateDoubleResult extends Command
      */
     public function handle()
     {
+        LOG::info('Double chance: '.Carbon::today());
         $centralControllerObj = new CentralController();
         $centralControllerObj->createResult(5);
     }

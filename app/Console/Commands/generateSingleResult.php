@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Http\Controllers\CentralController;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class generateSingleResult extends Command
 {
@@ -38,6 +40,7 @@ class generateSingleResult extends Command
      */
     public function handle()
     {
+        LOG::info('Single Number: '.Carbon::today());
         $centralControllerObj = new CentralController();
         $centralControllerObj->createResult(4);
     }

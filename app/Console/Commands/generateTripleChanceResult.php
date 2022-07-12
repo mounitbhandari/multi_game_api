@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Http\Controllers\CentralController;
 use Illuminate\Console\Command;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class generateTripleChanceResult extends Command
 {
@@ -38,6 +40,7 @@ class generateTripleChanceResult extends Command
      */
     public function handle()
     {
+        LOG::info('Triple chance: '.Carbon::today());
         $centralControllerObj = new CentralController();
         $centralControllerObj->createResult(1);
     }
