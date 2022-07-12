@@ -326,6 +326,7 @@ class PlayController extends Controller
             $terminal->save();
 
             $transaction = new Transaction();
+            $transaction->description = 'Purchased';
             $transaction->terminal_id = $inputPlayMaster->terminalId;
             $transaction->play_master_id = $playMaster->id;
             $transaction->old_amount = $old_amount;

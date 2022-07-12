@@ -17,6 +17,7 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->foreignId('terminal_id')->references('id')->on('users')->onDelete('cascade');
             $table->integer('play_master_id')->default(0);
+            $table->string('description')->nullable(true);
             $table->decimal('old_amount',50,2)->default(0);
             $table->decimal('recharged_amount',50,2)->default(0);
             $table->decimal('played_amount',50,2)->default(0);

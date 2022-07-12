@@ -379,6 +379,7 @@ class TerminalController extends Controller
             $rechargeToUser->save();
 
             $transaction = new Transaction();
+            $transaction->description = 'Recharged';
             $transaction->terminal_id = $requestedData->beneficiaryUid;
             $transaction->old_amount = $old_amount;
             $transaction->recharged_amount = $requestedData->amount;

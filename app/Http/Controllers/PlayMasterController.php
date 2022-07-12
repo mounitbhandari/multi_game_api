@@ -36,8 +36,17 @@ class PlayMasterController extends Controller
 //
         $user = new User();
         $user = User::find($playMaster->user_id);
+        $old_amount = $user->closing_balance;
         $user->closing_balance += $data;
         $user->update();
+
+        $transaction = new Transaction();
+        $transaction->description = 'Cancelled Ticket';
+        $transaction->terminal_id = $playMaster->user_id;
+        $transaction->old_amount = $old_amount;
+        $transaction->played_amount = $data;
+        $transaction->new_amount = $user->closing_balance;
+        $transaction->save();
 
         return response()->json(['success' => 1, 'data' => $playMaster, 'id'=>$playMaster->id, 'point'=>$user->closing_balance], 200);
     }
