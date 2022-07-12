@@ -37,7 +37,7 @@ class ResultMasterController extends Controller
                     $join->on('draw_masters.id','=','result_masters.draw_master_id')
                         ->where('result_masters.game_date','=', $result_date);
                 })
-                ->leftJoin('number_combinations','result_masters.combination_number_id','number_combinations.id')
+                ->leftJoin('number_combinations','result_details.combination_number_id','number_combinations.id')
                 ->leftJoin('single_numbers','number_combinations.single_number_id','single_numbers.id')
                 ->leftJoin('games','result_masters.game_id','games.id')
                 // ->where('games.id','=',$gameId)
@@ -47,7 +47,7 @@ class ResultMasterController extends Controller
             /* This is another way to use sub query */
 //            $result_query =get_sql_with_bindings(ResultMaster::where('game_date',$result_date));
 //            $data1 = DrawMaster::leftJoin(DB::raw("($result_query) as result_masters"),'draw_masters.id','=','result_masters.draw_master_id')
-//                ->leftJoin('number_combinations','result_masters.combination_number_id','number_combinations.id')
+//                ->leftJoin('number_combinations','result_details.combination_number_id','number_combinations.id')
 //                ->leftJoin('single_numbers','number_combinations.single_number_id','single_numbers.id')
 //                ->select('result_masters.game_date','draw_masters.end_time','number_combinations.triple_number','number_combinations.visible_triple_number','single_numbers.single_number')
 //                ->get();
@@ -80,7 +80,7 @@ class ResultMasterController extends Controller
                     $join->on('draw_masters.id','=','result_masters.draw_master_id')
                         ->where('result_masters.game_date','=', $result_date);
                 })
-                ->leftJoin('number_combinations','result_masters.combination_number_id','number_combinations.id')
+                ->leftJoin('number_combinations','result_details.combination_number_id','number_combinations.id')
                 ->leftJoin('single_numbers','number_combinations.single_number_id','single_numbers.id')
                 ->leftJoin('games','result_masters.game_id','games.id')
                 ->where('games.id','=',$gameId)
@@ -90,7 +90,7 @@ class ResultMasterController extends Controller
             /* This is another way to use sub query */
 //            $result_query =get_sql_with_bindings(ResultMaster::where('game_date',$result_date));
 //            $data1 = DrawMaster::leftJoin(DB::raw("($result_query) as result_masters"),'draw_masters.id','=','result_masters.draw_master_id')
-//                ->leftJoin('number_combinations','result_masters.combination_number_id','number_combinations.id')
+//                ->leftJoin('number_combinations','result_details.combination_number_id','number_combinations.id')
 //                ->leftJoin('single_numbers','number_combinations.single_number_id','single_numbers.id')
 //                ->select('result_masters.game_date','draw_masters.end_time','number_combinations.triple_number','number_combinations.visible_triple_number','single_numbers.single_number')
 //                ->get();
@@ -125,7 +125,7 @@ class ResultMasterController extends Controller
                         ->where('result_masters.game_date','=', $result_date)
                         ->where('result_masters.game_id','=', $id);
                 })
-                ->leftJoin('number_combinations','result_masters.combination_number_id','number_combinations.id')
+                ->leftJoin('number_combinations','result_details.combination_number_id','number_combinations.id')
                 ->leftJoin('single_numbers','number_combinations.single_number_id','single_numbers.id')
                ->where('draw_masters.game_id','=', $id)
                 ->get();
@@ -134,7 +134,7 @@ class ResultMasterController extends Controller
             /* This is another way to use sub query */
 //            $result_query =get_sql_with_bindings(ResultMaster::where('game_date',$result_date));
 //            $data1 = DrawMaster::leftJoin(DB::raw("($result_query) as result_masters"),'draw_masters.id','=','result_masters.draw_master_id')
-//                ->leftJoin('number_combinations','result_masters.combination_number_id','number_combinations.id')
+//                ->leftJoin('number_combinations','result_details.combination_number_id','number_combinations.id')
 //                ->leftJoin('single_numbers','number_combinations.single_number_id','single_numbers.id')
 //                ->select('result_masters.game_date','draw_masters.end_time','number_combinations.triple_number','number_combinations.visible_triple_number','single_numbers.single_number')
 //                ->get();
@@ -160,7 +160,7 @@ class ResultMasterController extends Controller
                         ->where('result_masters.game_date','=', $result_date)
                         ->where('result_masters.game_id','=', $id);
                 })
-                ->leftJoin('number_combinations','result_masters.combination_number_id','number_combinations.id')
+                ->leftJoin('number_combinations','result_details.combination_number_id','number_combinations.id')
                 ->leftJoin('single_numbers','number_combinations.single_number_id','single_numbers.id')
                ->where('draw_masters.game_id','=', $id)
                 ->get();
@@ -183,7 +183,7 @@ class ResultMasterController extends Controller
 
         // $result_query =get_sql_with_bindings(ResultMaster::where('game_date', Carbon::today()));
         // $data = DrawMaster::leftJoin(DB::raw("($result_query) as result_masters"),'draw_masters.id','=','result_masters.draw_master_id')
-        //     ->leftJoin('number_combinations','result_masters.combination_number_id','number_combinations.id')
+        //     ->leftJoin('number_combinations','result_details.combination_number_id','number_combinations.id')
         //     ->leftJoin('single_numbers','number_combinations.single_number_id','single_numbers.id')
         //     ->select('result_masters.game_date','draw_masters.end_time','number_combinations.triple_number','number_combinations.visible_triple_number','single_numbers.single_number')
         //     ->get();
@@ -928,7 +928,7 @@ class ResultMasterController extends Controller
 //
 //        $result_query =get_sql_with_bindings(ResultMaster::where('game_date', Carbon::today()));
 //        $data = DrawMaster::leftJoin(DB::raw("($result_query) as result_masters"),'draw_masters.id','=','result_masters.draw_master_id')
-//            ->leftJoin('number_combinations','result_masters.combination_number_id','number_combinations.id')
+//            ->leftJoin('number_combinations','result_details.combination_number_id','number_combinations.id')
 //            ->leftJoin('single_numbers','number_combinations.single_number_id','single_numbers.id')
 //            ->select('result_masters.game_date','draw_masters.end_time','number_combinations.triple_number','number_combinations.visible_triple_number','single_numbers.single_number')
 //            ->orderBy('result_masters.draw_master_id','desc')
@@ -1069,7 +1069,7 @@ class ResultMasterController extends Controller
 
         $result_query =get_sql_with_bindings(ResultMaster::where('game_date', $request['date']));
         $data = DrawMaster::leftJoin(DB::raw("($result_query) as result_masters"),'draw_masters.id','=','result_masters.draw_master_id')
-            ->leftJoin('number_combinations','result_masters.combination_number_id','number_combinations.id')
+            ->leftJoin('number_combinations','result_details.combination_number_id','number_combinations.id')
             ->leftJoin('single_numbers','number_combinations.single_number_id','single_numbers.id')
             ->select('result_masters.game_date','draw_masters.end_time','number_combinations.triple_number','number_combinations.visible_triple_number','single_numbers.single_number')
             ->get();
