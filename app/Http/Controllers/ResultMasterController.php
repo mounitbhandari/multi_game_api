@@ -829,6 +829,8 @@ class ResultMasterController extends Controller
 
     public function save_auto_result($draw_id, $game_type_id, $combination_number_id, $multiplexer)
     {
+
+
         $today= Carbon::today()->format('Y-m-d');
         $game_id = (DrawMaster::whereId($draw_id)->first())->game_id;
         $game_gen = (Game::whereId($game_id)->first())->auto_generate;

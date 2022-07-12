@@ -520,6 +520,16 @@ class CentralController extends Controller
             }
         }
 
+
+        $resultMaster = ResultMaster::whereGameDate($today)->whereDrawMasterId($lastDrawId)->first();
+        if($resultMaster === null){
+            $nPlay = PlayMaster::whereDrawMasterId($lastDrawId)->whereDate('created_at',$today)->get();
+            foreach ($nPlay as $x){
+                $playMasterControllerObj->cancelPlayBYPlayMaster($x->id);
+            }
+        }
+
+
         $tempDrawMasterLastDraw = DrawMaster::whereId($lastDrawId)->whereGameId($id)->first();
         $tempDrawMasterLastDraw->active = 0;
         $tempDrawMasterLastDraw->is_draw_over = 'yes';
