@@ -532,7 +532,7 @@ class CentralController extends Controller
             }
             $nPlay = PlayMaster::whereDrawMasterId($lastDrawId)->whereDate('created_at',$today)->get();
             foreach ($nPlay as $x){
-                $playMasterControllerObj->cancelPlayBYPlayMaster($x->id);
+                $playMasterControllerObj->refundPlay($x->id);
             }
         }
 

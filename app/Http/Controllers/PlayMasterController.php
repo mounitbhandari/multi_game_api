@@ -86,6 +86,41 @@ class PlayMasterController extends Controller
         return response()->json(['success' => 1, 'data' => $playMaster, 'id'=>$playMaster->id, 'point'=>$user->closing_balance], 200);
     }
 
+    public function refundPlay($playMasterId)
+    {
+//        $requestedData = (object)$request->json()->all();
+//        $playMasterId = $requestedData->play_master_id;
+
+        $checkValidation = PlayMaster::whereId($playMasterId)->whereIsCancelable(0)->first();
+        if($checkValidation){
+            return response()->json(['success' => 0, 'data' => $checkValidation, 'id'=>$checkValidation->id, 'point'=>0], 200);
+        }
+
+        $playMaster = new PlayMaster();
+        $playMaster = PlayMaster::find($playMasterId);
+        $playMaster->is_cancelled = 1;
+        $playMaster->is_cancelable = 0;
+        $playMaster->update();
+
+        $data = DB::select("select round(sum(play_details.quantity * play_details.mrp)) as total from play_details where play_master_id = ?",[$playMasterId])[0]->total;
+//
+        $user = new User();
+        $user = User::find($playMaster->user_id);
+        $old_amount = $user->closing_balance;
+        $user->closing_balance += $data;
+        $user->update();
+
+        $transaction = new Transaction();
+        $transaction->description = 'Refund';
+        $transaction->terminal_id = $playMaster->user_id;
+        $transaction->old_amount = $old_amount;
+        $transaction->played_amount = $data;
+        $transaction->new_amount = $user->closing_balance;
+        $transaction->save();
+
+        return response()->json(['success' => 1, 'data' => $playMaster, 'id'=>$playMaster->id, 'point'=>$user->closing_balance], 200);
+    }
+
     public function get_total_quantity($today, $draw_id)
     {
 
