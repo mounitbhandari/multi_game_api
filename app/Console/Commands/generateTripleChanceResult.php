@@ -42,6 +42,6 @@ class generateTripleChanceResult extends Command
     {
         LOG::info('Triple chance: '.Carbon::today());
         $centralControllerObj = new CentralController();
-        $centralControllerObj->createResult(1);
+        $centralControllerObj->createResult(1,1);
     }
 }

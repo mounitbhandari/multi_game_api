@@ -246,7 +246,8 @@ Route::group(array('prefix' => 'dev'), function() {
     // Route::post('terminal/updateCancellation/{id}', [TerminalReportController::class, 'updateCancellationGameWise']);
     // Route::post('updateDrawOver', [CentralController::class, 'update_is_draw_over']);
 
-    Route::post('createAutoResult/{id}', [CentralController::class, 'createResult']);
+//    Route::post('createAutoResult/{id}', [CentralController::class, 'createResult']);
+    Route::post('createAutoResult/{id}', [CentralController::class, 'createAutoResult']);
 
     Route::get('getGame', [GameController::class, 'getGame']);
 

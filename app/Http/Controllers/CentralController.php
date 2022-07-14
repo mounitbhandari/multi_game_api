@@ -27,7 +27,11 @@ use PhpParser\Node\Scalar\String_;
 class CentralController extends Controller
 {
 
-    public function createResult($id){
+    public function createAutoResult($id){
+        $this->createResult($id, 1);
+    }
+
+    public function createResult($id, $count){
 
         $game = Game::find($id);
         if(!$game){
@@ -523,6 +527,9 @@ class CentralController extends Controller
 
         $resultMaster = ResultMaster::whereGameDate($today)->whereDrawMasterId($lastDrawId)->first();
         if($resultMaster === null){
+            if($count < 2){
+                $this->createResult($id, 2);
+            }
             $nPlay = PlayMaster::whereDrawMasterId($lastDrawId)->whereDate('created_at',$today)->get();
             foreach ($nPlay as $x){
                 $playMasterControllerObj->cancelPlayBYPlayMaster($x->id);
