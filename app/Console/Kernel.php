@@ -38,11 +38,11 @@ class Kernel extends ConsoleKernel
 //        $schedule->command('generateShirdi:result')->cron('00 12,15,21 * * * ')->timezone('Asia/Kolkata');
 //        $schedule->command('drawOver:update')->dailyAt('00:00')->timezone('Asia/Kolkata');
 
-        $schedule->command('generateTripleChance:result')->cron('*/3 * * * *')->timezone('Asia/Kolkata');
-        $schedule->command('generateTwelveCard:result')->cron('*/3 * * * *')->timezone('Asia/Kolkata');
-        $schedule->command('generateSixteenCard:result')->cron('*/3 * * * *')->timezone('Asia/Kolkata');
-        $schedule->command('generateSingle:result')->cron('*/3 * * * *')->timezone('Asia/Kolkata');
-        $schedule->command('generateDouble:result')->cron('*/3 * * * *')->timezone('Asia/Kolkata');
+        $schedule->command('generateTripleChance:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
+        $schedule->command('generateTwelveCard:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
+        $schedule->command('generateSixteenCard:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
+        $schedule->command('generateSingle:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
+        $schedule->command('generateDouble:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
 
         $schedule->command('drawOver:update')->dailyAt('00:00')->timezone('Asia/Kolkata');
         $schedule->command('clear:tokens')->dailyAt('00:00')->timezone('Asia/Kolkata');
