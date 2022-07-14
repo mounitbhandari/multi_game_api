@@ -295,8 +295,12 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::get('results',[ResultMasterController::class, 'get_results']);
     Route::get('results/{id}',[ResultMasterController::class, 'get_result']);
     Route::post('getResultSheetByCurrentDateAndGameId',[ResultMasterController::class, 'get_result_sheet_by_current_date_and_game_id']);
-    Route::get('results/currentDate/{id}',[ResultMasterController::class, 'get_results_by_current_date']);
-    Route::get('results/lastResult',[ResultMasterController::class, 'get_last_result']);
+
+    //May be in use may not be in use
+//    Route::get('results/currentDate/{id}',[ResultMasterController::class, 'get_results_by_current_date']);
+
+        Route::get('results/lastResult',[ResultMasterController::class, 'get_last_result']);
+
 
     //manual_result
 

@@ -148,31 +148,31 @@ class ResultMasterController extends Controller
 
     public function get_results_by_current_date($id){
 
-        $result_date= Carbon::today();
-
-        $result_array = array();
-        // $result_array['date'] = Carbon::today();
-
-            $data = DrawMaster::select('result_masters.game_date','draw_masters.end_time','number_combinations.triple_number', 'result_masters.game_id',
-                'number_combinations.visible_triple_number','single_numbers.single_number')
-                ->leftJoin('result_masters', function ($join) use ($id, $result_date) {
-                    $join->on('draw_masters.id','=','result_masters.draw_master_id')
-                        ->where('result_masters.game_date','=', $result_date)
-                        ->where('result_masters.game_id','=', $id);
-                })
-                ->leftJoin('number_combinations','result_details.combination_number_id','number_combinations.id')
-                ->leftJoin('single_numbers','number_combinations.single_number_id','single_numbers.id')
-               ->where('draw_masters.game_id','=', $id)
-                ->get();
-
-
-            $temp_array[] = $data;
-            $result_array['result'] = $temp_array;
-            // $result_array['result'] = $data;
-
-
-
-        return response()->json(['success'=>1,'data'=>$result_array], 200,[],JSON_NUMERIC_CHECK);
+//        $result_date= Carbon::today();
+//
+//        $result_array = array();
+//        // $result_array['date'] = Carbon::today();
+//
+//            $data = DrawMaster::select('result_masters.game_date','draw_masters.end_time','number_combinations.triple_number', 'result_masters.game_id',
+//                'number_combinations.visible_triple_number','single_numbers.single_number')
+//                ->leftJoin('result_masters', function ($join) use ($id, $result_date) {
+//                    $join->on('draw_masters.id','=','result_masters.draw_master_id')
+//                        ->where('result_masters.game_date','=', $result_date)
+//                        ->where('result_masters.game_id','=', $id);
+//                })
+//                ->leftJoin('number_combinations','result_details.combination_number_id','number_combinations.id')
+//                ->leftJoin('single_numbers','number_combinations.single_number_id','single_numbers.id')
+//               ->where('draw_masters.game_id','=', $id)
+//                ->get();
+//
+//
+//            $temp_array[] = $data;
+//            $result_array['result'] = $temp_array;
+//            // $result_array['result'] = $data;
+//
+//
+//
+//        return response()->json(['success'=>1,'data'=>$result_array], 200,[],JSON_NUMERIC_CHECK);
 
 
 
