@@ -28,7 +28,7 @@ class CentralController extends Controller
 {
 
     public function createAutoResult($id){
-        $this->createResult($id, 1);
+        return $this->createResult($id, 1);
     }
 
     public function createResult($id, $count){
