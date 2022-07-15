@@ -48,7 +48,8 @@ class CentralController extends Controller
         $game_multiplexer = (GameType::whereGameId($id)->first())->multiplexer;
 
         if($game_multiplexer == 1){
-            $tempM= [1,2,3];
+//            $tempM= [1,2,3];
+            $tempM= [1];
             $game_multiplexer = $tempM[array_rand($tempM)];
         }
 
