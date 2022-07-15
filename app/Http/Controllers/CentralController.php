@@ -48,8 +48,8 @@ class CentralController extends Controller
         $game_multiplexer = (GameType::whereGameId($id)->first())->multiplexer;
 
         if($game_multiplexer == 1){
-//            $tempM= [1,2,3];
-            $tempM= [1];
+            $tempM= [1,2,3];
+//            $tempM= [1];
             $game_multiplexer = $tempM[array_rand($tempM)];
         }
 
@@ -369,6 +369,10 @@ class CentralController extends Controller
                     order by rand() limit 1"));
             }
 
+            if(($result[0]->quantity) > $targetValue){
+                $game_multiplexer = 1;
+            }
+
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,3,$result[0]->card_combination_id,$game_multiplexer))->content(),true);
 
             if($playMasterSaveCheck['success'] == 0){
@@ -420,6 +424,10 @@ class CentralController extends Controller
                     order by rand() limit 1"));
             }
 
+            if(($result[0]->quantity) > $targetValue){
+                $game_multiplexer = 1;
+            }
+
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,4,$result[0]->card_combination_id,$game_multiplexer))->content(),true);
 
             if($playMasterSaveCheck['success'] == 0){
@@ -462,6 +470,10 @@ class CentralController extends Controller
                     where quantity > ? and game_type_id = 1 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
                     order by quantity
                     limit 1",[$singleValue, $today, $lastDrawId]);
+            }
+
+            if(($singleNumberTargetData[0]->quantity) > $singleValue){
+                $game_multiplexer = 1;
             }
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,6,$singleNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
