@@ -42,6 +42,7 @@ class generateSingleResult extends Command
     {
         LOG::info('Single Number: '.Carbon::today());
         $centralControllerObj = new CentralController();
-        $centralControllerObj->createResult(4,1);
+        $ret = $centralControllerObj->createResult(4,1);
+        LOG::info('Single Number: '.$ret);
     }
 }

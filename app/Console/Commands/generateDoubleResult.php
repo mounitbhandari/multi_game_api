@@ -42,6 +42,7 @@ class generateDoubleResult extends Command
     {
         LOG::info('Double chance: '.Carbon::today());
         $centralControllerObj = new CentralController();
-        $centralControllerObj->createResult(5,1);
+        $ret = $centralControllerObj->createResult(5,1);
+        LOG::info('Double chance: '.$ret);
     }
 }

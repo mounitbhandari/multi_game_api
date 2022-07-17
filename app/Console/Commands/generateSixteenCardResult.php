@@ -42,6 +42,7 @@ class generateSixteenCardResult extends Command
     {
         LOG::info('Sixteen card: '.Carbon::today());
         $centralControllerObj = new CentralController();
-        $centralControllerObj->createResult(3,1);
+        $ret = $centralControllerObj->createResult(3,1);
+        LOG::info('Sixteen card: '.$ret);
     }
 }
