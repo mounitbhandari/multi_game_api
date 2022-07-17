@@ -348,7 +348,7 @@ class CentralController extends Controller
 
             if (empty($result)) {
                 // empty value
-                $result = DB::select(DB::raw("SELECT card_combinations.id as card_combination_id
+                $result = DB::select(DB::raw("SELECT card_combinations.id as card_combination_id, 0 as total_quantity
                     FROM card_combinations
                     WHERE card_combination_type_id = 1 and card_combinations.id NOT IN(SELECT DISTINCT
                     play_details.combination_number_id FROM play_details
@@ -369,7 +369,7 @@ class CentralController extends Controller
                     order by rand() limit 1"));
             }
 
-            if(($result[0]->quantity) > $targetValue){
+            if(($result[0]->total_quantity) > $targetValue){
                 $game_multiplexer = 1;
             }
 
@@ -403,7 +403,7 @@ class CentralController extends Controller
 
             if (empty($result)) {
                 // empty value
-                $result = DB::select(DB::raw("SELECT card_combinations.id as card_combination_id
+                $result = DB::select(DB::raw("SELECT card_combinations.id as card_combination_id, 0 as total_quantity
                     FROM card_combinations
                     WHERE card_combination_type_id = 2 and card_combinations.id NOT IN(SELECT DISTINCT
                     play_details.combination_number_id FROM play_details
@@ -424,7 +424,7 @@ class CentralController extends Controller
                     order by rand() limit 1"));
             }
 
-            if(($result[0]->quantity) > $targetValue){
+            if(($result[0]->total_quantity) > $targetValue){
                 $game_multiplexer = 1;
             }
 
