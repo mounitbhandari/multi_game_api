@@ -19,6 +19,7 @@ class TransactionResource extends JsonResource
         return [
             'id' => $this->id,
             'terminal_id' => $this->terminal_id,
+            'description' => $this->description,
             'terminal_name' => User::find($this->terminal_id)->user_name,
             'play_master_id' => $this->play_master_id? $this->play_master_id : '--',
             'barcode_number' => ($this->play_master_id)?(PlayMaster::select(DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number'))->whereId($this->play_master_id)->first())->barcode_number : '--',
