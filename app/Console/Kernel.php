@@ -5,6 +5,7 @@ namespace App\Console;
 use App\Console\Commands\GenerateResult;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -37,6 +38,12 @@ class Kernel extends ConsoleKernel
 //        $schedule->command('generateShirdi:result')->cron('30 10,13,16,18,19 * * * ')->timezone('Asia/Kolkata');
 //        $schedule->command('generateShirdi:result')->cron('00 12,15,21 * * * ')->timezone('Asia/Kolkata');
 //        $schedule->command('drawOver:update')->dailyAt('00:00')->timezone('Asia/Kolkata');
+        LOG::info(' ');
+        LOG::info(' ');
+        LOG::info(' ');
+        LOG::info(' ');
+        LOG::info(' ');
+        LOG::info('-------------------------------------------------------------------------------------------------------------------------');
 
         $schedule->command('generateTripleChance:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
         $schedule->command('generateTwelveCard:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
@@ -46,6 +53,15 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('drawOver:update')->dailyAt('00:00')->timezone('Asia/Kolkata');
         $schedule->command('clear:tokens')->dailyAt('00:00')->timezone('Asia/Kolkata');
+
+        LOG::info('-------------------------------------------------------------------------------------------------------------------------');
+        LOG::info(' ');
+        LOG::info(' ');
+        LOG::info(' ');
+        LOG::info(' ');
+        LOG::info(' ');
+
+
 //        $schedule->command('clear:data')->dailyAt('00:00')->timezone('Asia/Kolkata');
 
 //        $schedule->command('sanctum:prune-expired --hours=24')->daily();
