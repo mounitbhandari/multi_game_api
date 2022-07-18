@@ -21,6 +21,7 @@ use App\Models\DrawMaster;
 use App\Http\Controllers\ManualResultController;
 use App\Http\Controllers\NumberCombinationController;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Scalar\String_;
 //use App\Models\User;
 
@@ -187,6 +188,10 @@ class CentralController extends Controller
                             '$tripleData' => $tripleData,
                             '$splitNumber' => $splitNumber,
                         ];
+
+                        Log::info('$singleNumberValue: '.$singleNumberValue);
+                        Log::info('$tripleData: '.$tripleData->combination_number_id);
+                        Log::info('$doubleNumberValue: '.$doubleNumberValue);
 
                         $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,1,$singleNumberValue,$game_multiplexer))->content(),true);
                         $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,2,$tripleData->combination_number_id,$game_multiplexer))->content(),true);
