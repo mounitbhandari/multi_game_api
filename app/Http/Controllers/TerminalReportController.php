@@ -20,33 +20,60 @@ class TerminalReportController extends Controller
         $data = $requestedData;
 
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
-            ,'draw_masters.visible_time as draw_time','play_masters.is_claimed',
-            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','play_masters.is_cancelled','play_masters.is_cancelable','games.game_name',
-            DB::raw('games.id as game_id')
+            ,'draw_masters.visible_time as draw_time',
+            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','games.game_name','play_masters.is_claimed', 'games.id as game_id'
         )
             ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
             ->join('users','users.id','play_masters.user_id')
             ->join('play_details','play_details.play_master_id','play_masters.id')
             ->join('game_types','game_types.id','play_details.game_type_id')
             ->join('games','games.id','game_types.game_id')
+            ->where('play_masters.is_cancelled',0)
+//            ->where('play_masters.created_at','>=',$start_date)
+//            ->where('play_masters.created_at','<=',$end_date)
             ->whereRaw('date(play_masters.created_at) >= ?', [$start_date])
             ->whereRaw('date(play_masters.created_at) <= ?', [$end_date])
-//            ->where('play_masters.is_cancelled',0)
             ->where('play_masters.user_id',$terminalId)
-            ->groupBy('play_masters.id','play_masters.barcode_number','play_masters.is_claimed','draw_masters.visible_time','users.email','play_masters.created_at'
-                ,'play_masters.is_cancelled','play_masters.is_cancelable','games.game_name','games.id'
-            )
+            ->groupBy('play_masters.id','play_masters.barcode_number','draw_masters.visible_time','users.email','play_masters.created_at','games.game_name','play_masters.is_claimed', 'games.id')
             ->orderBy('play_masters.created_at','desc')
             ->get();
 
         $cPanelRepotControllerObj = new CPanelReportController();
-
         foreach($data as $x){
             $detail = (object)$x;
             $detail->total_quantity = $cPanelRepotControllerObj->get_total_quantity_by_barcode($detail->play_master_id);
             $detail->prize_value = $cPanelRepotControllerObj->get_prize_value_by_barcode($detail->play_master_id);
             $detail->amount = $cPanelRepotControllerObj->get_total_amount_by_barcode($detail->play_master_id);
         }
+
+//        $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
+//            ,'draw_masters.visible_time as draw_time','play_masters.is_claimed',
+//            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','play_masters.is_cancelled','play_masters.is_cancelable','games.game_name',
+//            DB::raw('games.id as game_id')
+//        )
+//            ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
+//            ->join('users','users.id','play_masters.user_id')
+//            ->join('play_details','play_details.play_master_id','play_masters.id')
+//            ->join('game_types','game_types.id','play_details.game_type_id')
+//            ->join('games','games.id','game_types.game_id')
+//            ->whereRaw('date(play_masters.created_at) >= ?', [$start_date])
+//            ->whereRaw('date(play_masters.created_at) <= ?', [$end_date])
+////            ->where('play_masters.is_cancelled',0)
+//            ->where('play_masters.user_id',$terminalId)
+//            ->groupBy('play_masters.id','play_masters.barcode_number','play_masters.is_claimed','draw_masters.visible_time','users.email','play_masters.created_at'
+//                ,'play_masters.is_cancelled','play_masters.is_cancelable','games.game_name','games.id'
+//            )
+//            ->orderBy('play_masters.created_at','desc')
+//            ->get();
+//
+//        $cPanelRepotControllerObj = new CPanelReportController();
+//
+//        foreach($data as $x){
+//            $detail = (object)$x;
+//            $detail->total_quantity = $cPanelRepotControllerObj->get_total_quantity_by_barcode($detail->play_master_id);
+//            $detail->prize_value = $cPanelRepotControllerObj->get_prize_value_by_barcode($detail->play_master_id);
+//            $detail->amount = $cPanelRepotControllerObj->get_total_amount_by_barcode($detail->play_master_id);
+//        }
 
         return response()->json(['success' => 1, 'data' => $data], 200);
     }
@@ -115,7 +142,7 @@ class TerminalReportController extends Controller
         table1.`date` from (select sum(commission) as commission, sum(total) as total, user_name, terminal_pin, user_id, stockist_id, date(created_at) as date from (select max(play_masters.id) as play_master_id,users.user_name,users.email as terminal_pin,
         round(sum(play_details.quantity * play_details.mrp)) as total,
         sum(play_details.quantity * play_details.mrp)* (max(play_details.commission)/100) as commission,
-        play_masters.user_id, user_relation_with_others.stockist_id,play_masters.created_at        
+        play_masters.user_id, user_relation_with_others.stockist_id,play_masters.created_at
         FROM play_masters
         inner join play_details on play_details.play_master_id = play_masters.id
         inner join game_types ON game_types.id = play_details.game_type_id
