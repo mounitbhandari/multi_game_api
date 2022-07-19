@@ -77,7 +77,7 @@ class CentralController extends Controller
 
 //        $allGameTotalSale = 1200;
 //            $allGameTotalSale = (($singleNumberTotalSale*($singleNumber->payout))/100) + (($doubleNumberTotalSale*($doubleNumber->payout))/100) + (($tripleNumberTotalSale*($tripleNumber->payout))/100);
-            $allGameTotalSale = ((($singleNumberTotalSale*($singleNumber->payout))/100) + (($doubleNumberTotalSale*($doubleNumber->payout))/100) + (($tripleNumberTotalSale*($tripleNumber->payout))/100)));
+            $allGameTotalSale = ((($singleNumberTotalSale*($singleNumber->payout))/100) + (($doubleNumberTotalSale*($doubleNumber->payout))/100) + (($tripleNumberTotalSale*($tripleNumber->payout))/100));
 
             //triple number
             $tripleValue = (int)($allGameTotalSale/($tripleNumber->winning_price))/($game_multiplexer);
