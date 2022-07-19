@@ -77,10 +77,10 @@ class CentralController extends Controller
 
 //        $allGameTotalSale = 1200;
 //            $allGameTotalSale = (($singleNumberTotalSale*($singleNumber->payout))/100) + (($doubleNumberTotalSale*($doubleNumber->payout))/100) + (($tripleNumberTotalSale*($tripleNumber->payout))/100);
-            $allGameTotalSale = ((($singleNumberTotalSale*($singleNumber->payout))/100) + (($doubleNumberTotalSale*($doubleNumber->payout))/100) + (($tripleNumberTotalSale*($tripleNumber->payout))/100))/($game_multiplexer);
+            $allGameTotalSale = ((($singleNumberTotalSale*($singleNumber->payout))/100) + (($doubleNumberTotalSale*($doubleNumber->payout))/100) + (($tripleNumberTotalSale*($tripleNumber->payout))/100)));
 
             //triple number
-            $tripleValue = (int)($allGameTotalSale/($tripleNumber->winning_price));
+            $tripleValue = (int)($allGameTotalSale/($tripleNumber->winning_price))/($game_multiplexer);
             $loopOn = 1;
 
 //            $tripleNumberTargetData = DB::select("select * from play_details
@@ -192,6 +192,8 @@ class CentralController extends Controller
                         Log::info('$singleNumberValue: '.$singleNumberValue);
                         Log::info('$tripleData: '.$tripleData->combination_number_id);
                         Log::info('$doubleNumberValue: '.$doubleNumberValue);
+
+//                        return $temp;
 
                         $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,1,$singleNumberValue,$game_multiplexer))->content(),true);
                         $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,2,$tripleData->combination_number_id,$game_multiplexer))->content(),true);
