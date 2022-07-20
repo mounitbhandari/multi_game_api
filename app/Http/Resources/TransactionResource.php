@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Game;
 use App\Models\PlayMaster;
 use App\Models\User;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -22,6 +23,7 @@ class TransactionResource extends JsonResource
             'description' => $this->description,
             'terminal_name' => User::find($this->terminal_id)->user_name,
             'play_master_id' => $this->play_master_id? $this->play_master_id : '--',
+            'game_name' => $this->play_master_id? Game::find(PlayMaster::find($this->play_master_id)->game_id)->game_name : '--',
             'barcode_number' => ($this->play_master_id)?(PlayMaster::select(DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number'))->whereId($this->play_master_id)->first())->barcode_number : '--',
             'old_amount' => $this->old_amount,
             'recharged_amount' => $this->recharged_amount,
