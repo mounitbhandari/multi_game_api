@@ -7,7 +7,9 @@ use App\Http\Resources\TransactionResource;
 use App\Models\Transaction;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class TransactionController extends Controller
@@ -20,14 +22,19 @@ class TransactionController extends Controller
 //        return response()->json(['success'=>$id,'data'=>$transaction], 200);
     }
 
-    public function mailTransactionOneMonth($id)
+    public function mailTransactionOneMonth(Request $request)
     {
-        $date = Carbon::today()->subDays(30)->format('Y-m-d');
-        $transaction = json_decode(json_encode(TransactionResource::collection(Transaction::whereTerminalId($id)->whereRaw('date(created_at) >= ?', [$date])->orderBy('created_at', 'desc')->get())));
+        $requestedData = (object)$request->json()->all();
 
-        $to_email = "priyamghosh19@gmail.com";
+        $user = User::find($requestedData->sentBy);
+        $sentBy = $user->user_type_id === 1? 'Admin' : $user->user_name;
+
+        $date = Carbon::today()->subDays(30)->format('Y-m-d');
+        $transaction = json_decode(json_encode(TransactionResource::collection(Transaction::whereTerminalId($requestedData->terminalId)->whereRaw('date(created_at) >= ?', [$date])->orderBy('created_at', 'desc')->get())));
+
+        $to_email = $requestedData->email;
 //        $data = array('name'=>"Test Mail" ,"transactions" => $transaction);
-        $data = array('barcodeNumber'=>$transaction[0]->barcode_number ,"transactions" => $transaction);
+        $data = array('sentBy'=>$sentBy ,"transactions" => $transaction);
         $mail_title="Transaction report one month";
         Mail::send('emails.transaction_email', $data, function($message) use ($to_email,$mail_title) {
             $message->to($to_email)->subject($mail_title);
@@ -35,7 +42,7 @@ class TransactionController extends Controller
             $message->from('no-reply@rkng.xyz',"Royal King");
         });
 
-        return $transaction;
+        return response()->json(['success'=>1], 200);
     }
 
     /**

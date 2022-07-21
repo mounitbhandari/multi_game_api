@@ -1,5 +1,13 @@
+<br>
+<h1 style="align-content: center; text-align: center">30 DAYS STATEMENT</h1>
+<br>
 
-Terminal Name: {{$transactions[0]->terminal_name}}
+<h3>
+    <b>Terminal: {{$transactions[0]->terminal_name}}</b><br>
+    <b>From: {{$sentBy}}</b>
+</h3>
+
+<br><br>
 
 <table class="table table-bordered">
     <thead>
@@ -21,7 +29,7 @@ Terminal Name: {{$transactions[0]->terminal_name}}
         <tr>
             <td style="text-align: center;">{{$loop->iteration}}</td>
             <td style="text-align: center;">{{$data->description}}</td>
-            <td style="text-align: center;">{{$data->date}}</td>
+            <td style="text-align: center;">{{$data->date}} ({{$data->time}})</td>
             <td style="text-align: center;">{{$data->game_name}}</td>
             <td style="text-align: center;">{{$data->barcode_number}}</td>
             <td style="text-align: center;">{{$data->old_amount}}</td>
