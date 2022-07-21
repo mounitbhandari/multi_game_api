@@ -7,6 +7,8 @@ use App\Http\Resources\TransactionResource;
 use App\Models\Transaction;
 use App\Http\Requests\StoreTransactionRequest;
 use App\Http\Requests\UpdateTransactionRequest;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Mail;
 
 class TransactionController extends Controller
 {
@@ -18,14 +20,22 @@ class TransactionController extends Controller
 //        return response()->json(['success'=>$id,'data'=>$transaction], 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function mailTransactionOneMonth($id)
     {
-        //
+        $date = Carbon::today()->subDays(30)->format('Y-m-d');
+        $transaction = json_decode(json_encode(TransactionResource::collection(Transaction::whereTerminalId($id)->whereRaw('date(created_at) >= ?', [$date])->orderBy('created_at', 'desc')->get())));
+
+        $to_email = "priyamghosh19@gmail.com";
+//        $data = array('name'=>"Test Mail" ,"transactions" => $transaction);
+        $data = array('barcodeNumber'=>$transaction[0]->barcode_number ,"transactions" => $transaction);
+        $mail_title="Transaction report one month";
+        Mail::send('emails.transaction_email', $data, function($message) use ($to_email,$mail_title) {
+            $message->to($to_email)->subject($mail_title);
+            $message->bcc("ginfotech197@gmail.com");
+            $message->from('no-reply@rkng.xyz',"Royal King");
+        });
+
+        return $transaction;
     }
 
     /**

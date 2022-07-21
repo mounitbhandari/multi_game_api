@@ -195,6 +195,7 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::get('gameTotalReportToday', [GameController::class, 'get_game_total_sale_today']);
     Route::get('deleteDataExceptSevenDays', [CentralController::class, 'delete_data_except_seven_days']);
     Route::get('getTransaction/{id}', [TransactionController::class, 'getTransaction']);
+    Route::get('mailTransaction/{id}', [TransactionController::class, 'mailTransactionOneMonth']);
 
 
     Route::post('drawWiseReportToday', [CPanelReportController::class, 'draw_wise_report']);
