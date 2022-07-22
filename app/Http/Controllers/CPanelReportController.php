@@ -565,24 +565,29 @@ class CPanelReportController extends Controller
 //        return response()->json(['success'=> 1, 'data' => $data], 200);
 
         foreach($data as $x){
-            $newPrize = 0;
+            $newPrizeClaimed = 0;
+            $newPrizeUnClaimed = 0;
             $tempntp = 0;
             $tempPrize = 0;
             $newData = PlayMaster::where('user_id',$x->user_id)->whereRaw('date(created_at) >= ?', [$start_date])->whereRaw('date(created_at) <= ?', [$end_date])->get();
             foreach($newData as $y) {
                 $tempData = 0;
                 $tempPrize += $this->get_prize_value_by_barcode($y->id);
-                if ($tempPrize > 0 && $y->is_claimed == 1) {
-                    $newPrize += $this->get_prize_value_by_barcode($y->id);
+//                if ($tempPrize > 0 && $y->is_claimed == 1) {
+                if ($tempPrize > 0) {
+                    $newPrizeClaimed += $y->is_claimed == 1? $this->get_prize_value_by_barcode($y->id) : 0;
+                    $newPrizeUnClaimed += $y->is_claimed == 0? $this->get_prize_value_by_barcode($y->id) : 0;
                 } else {
-                    $newPrize += 0;
+                    $newPrizeClaimed += 0;
+                    $newPrizeUnClaimed += 0;
                 }
 //                $tempData = (PlayDetails::select(DB::raw("if(game_type_id = 1,(mrp*22)*quantity-(commission/100),mrp*quantity-(commission/100)) as total"))
 //                    ->where('play_master_id',$y->id)->distinct()->get())[0];
 //                $tempntp += $tempData->total;
             }
             $detail = (object)$x;
-            $detail->prize_value = $newPrize;
+            $detail->claimed_prize_value = $newPrizeClaimed;
+            $detail->unclaimed_prize_value = $newPrizeUnClaimed;
 //            $detail->ntp = $tempntp;
         }
         return response()->json(['success'=> 1, 'data' => $data], 200);
