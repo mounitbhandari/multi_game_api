@@ -296,12 +296,14 @@ class CentralController extends Controller
                 }
 
                 if(empty($tripleNumberTargetData)){
-                    $tripleNumberTargetData = DB::select("select * from play_details
-                        inner join number_combinations on number_combinations.id = play_details.combination_number_id
-                        inner join play_masters on play_details.play_master_id = play_masters.id
-                        where quantity > ? and game_type_id = 2 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
-                        order by quantity
-                        limit 1",[$tripleValue, $today, $lastDrawId]);
+//                    $tripleNumberTargetData = DB::select("select * from play_details
+//                        inner join number_combinations on number_combinations.id = play_details.combination_number_id
+//                        inner join play_masters on play_details.play_master_id = play_masters.id
+//                        where quantity > ? and game_type_id = 2 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+//                        order by quantity
+//                        limit 1",[$tripleValue, $today, $lastDrawId]);
+
+                    $tripleNumberTargetData = $this->checkSmallerTotalSale($lastDrawId);
 
                     $splitNumber = str_split($tripleNumberTargetData[0]->visible_triple_number);
                     $singleNumberValue = (SingleNumber::select()->whereSingleNumber($splitNumber[2])->first())->id;
@@ -807,6 +809,66 @@ class CentralController extends Controller
 
     }
 
+    public function checkSmallerTotalSale($last_draw_master_id){
+
+        $today = Carbon::today();
+
+        $result = [];
+        $calc = 0;
+
+        $single_winning = GameType::find(1)->winning_price;
+        $double_winning = GameType::find(5)->winning_price;
+        $triple_winning = GameType::find(2)->winning_price;
+
+        $tripleChances = DB::select("select number_combinations.id as combination_number_id,number_combinations.visible_triple_number , ifnull(table1.quantity,0) as quantity from
+            (select combination_number_id, sum(play_details.quantity) as quantity from play_details
+            inner join play_masters on play_details.play_master_id = play_masters.id
+            where play_details.game_type_id = 2 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+            group by combination_number_id) as table1
+            right outer join number_combinations on table1.combination_number_id = number_combinations.id
+            ",[$today,$last_draw_master_id]);
+
+        foreach ($tripleChances as $tripleChance){
+            $splitNumber = str_split($tripleChance->visible_triple_number);
+            $singleNumberValue = (SingleNumber::select()->whereSingleNumber($splitNumber[2])->first())->id;
+            $doubleNumberValue = (DoubleNumberCombination::select()->whereDoubleNumber($splitNumber[1].$splitNumber[2])->first())->id;
+
+            $single_value = DB::select("Select single_numbers.id as combination_number_id, ifnull(quantity,0) as quantity from
+                (select combination_number_id, sum(quantity) as quantity from play_details
+                inner join play_masters on play_details.play_master_id = play_masters.id
+                where play_details.game_type_id = 1 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+                group by combination_number_id) as tabel1
+                right outer join single_numbers on tabel1.combination_number_id = single_numbers.id
+                where single_numbers.id = ?",[$today,$last_draw_master_id,$singleNumberValue])[0];
+
+            $double_value = DB::select("Select double_number_combinations.id as combination_number_id, ifnull(quantity,0) as quantity from
+                (select combination_number_id, sum(quantity) as quantity from play_details
+                inner join play_masters on play_details.play_master_id = play_masters.id
+                where play_details.game_type_id = 5 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+                group by combination_number_id) as tabel1
+                right outer join double_number_combinations on tabel1.combination_number_id = double_number_combinations.id
+                where double_number_combinations.id = ?",[$today,$last_draw_master_id,$doubleNumberValue])[0];
+
+            $calc = ($tripleChance->quantity * $triple_winning) + ($single_value->quantity * $single_winning) + ($double_value->quantity * $double_winning);
+//            $tripleChance->single_number = (object)$single_value;
+//            $tripleChance->double_number = (object)$double_value;
+            $tripleChance->calc = $calc;
+
+            if(count($result) == 0){
+                array_push($result, $tripleChance);
+            }else{
+                if($calc < $result[0]->calc){
+                    $result[0] = $tripleChance;
+                }
+            }
+
+        }
+
+        return $result;
+//        return response()->json(['success'=>1, 'data' => $result], 401);
+    }
+
+
 //    public function createResult($id){
 //
 //        $game = Game::whereId($id)->first();
@@ -874,6 +936,8 @@ class CentralController extends Controller
 //        }
 //
 //    }
+
+
 
     public function update_is_draw_over(){
         $data = DrawMaster::whereIsDrawOver('yes')->get();

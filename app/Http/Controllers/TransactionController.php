@@ -27,7 +27,7 @@ class TransactionController extends Controller
         $requestedData = (object)$request->json()->all();
 
         $user = User::find($requestedData->sentBy);
-        $sentBy = $user->user_type_id === 1? 'Admin' : $user->user_name;
+        $sentBy = $user->user_type_id == 1? 'Admin' : $user->user_name;
 
         $date = Carbon::today()->subDays(30)->format('Y-m-d');
         $transaction = json_decode(json_encode(TransactionResource::collection(Transaction::whereTerminalId($requestedData->terminalId)->whereRaw('date(created_at) >= ?', [$date])->orderBy('created_at', 'desc')->get())));
