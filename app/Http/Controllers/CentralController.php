@@ -826,6 +826,7 @@ class CentralController extends Controller
             where play_details.game_type_id = 2 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
             group by combination_number_id) as table1
             right outer join number_combinations on table1.combination_number_id = number_combinations.id
+            order by rand()
             ",[$today,$last_draw_master_id]);
 
         foreach ($tripleChances as $tripleChance){

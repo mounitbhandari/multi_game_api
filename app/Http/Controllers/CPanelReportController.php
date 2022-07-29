@@ -145,7 +145,7 @@ class CPanelReportController extends Controller
             ->where('card_combinations.card_combination_type_id',2)
             ->get();
         $data['sixteenCard'] = $sixteenCard;
-
+//
         $singleGameData = PlayDetails::select(DB::raw('max(single_numbers.single_number) as single_number')
             ,DB::raw('max(play_details.quantity) as quantity'))
             ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
@@ -156,7 +156,7 @@ class CPanelReportController extends Controller
             ->orderBy('single_numbers.single_order')
             ->get();
         $data['singleIndividual'] = $singleGameData;
-
+//
         $doubleGameData = PlayDetails::select('double_number_combinations.visible_double_number','single_numbers.single_number'
             ,'play_details.quantity')
             ->join('double_number_combinations','play_details.combination_number_id','double_number_combinations.id')
@@ -166,7 +166,7 @@ class CPanelReportController extends Controller
             ->orderBy('single_numbers.single_order')
             ->get();
         $data['doubleIndividual'] = $doubleGameData;
-
+//
         $andarNumber = PlayDetails::select('andar_numbers.andar_number'
             ,'play_details.quantity')
             ->join('andar_numbers','play_details.combination_number_id','andar_numbers.id')
@@ -174,7 +174,7 @@ class CPanelReportController extends Controller
             ->where('play_details.game_type_id',8)
             ->get();
         $data['andarNumber'] = $andarNumber;
-
+//
         $baharNumber = PlayDetails::select('bahar_numbers.bahar_number'
             ,'play_details.quantity')
             ->join('bahar_numbers','play_details.combination_number_id','bahar_numbers.id')
