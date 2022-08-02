@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\UserRelationWithOther;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -126,6 +127,7 @@ class UserController extends Controller
     }
 
     public function delete_personal_access_tokens(){
+        Artisan::call('optimize:clear');
         $personalAccessToken = PersonalAccessToken::get();
         foreach ($personalAccessToken as $x){
             $x->delete();
