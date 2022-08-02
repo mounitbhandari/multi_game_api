@@ -51,6 +51,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('drawOver:update')->dailyAt('00:00')->timezone('Asia/Kolkata');
         $schedule->command('clear:tokens')->dailyAt('00:00')->timezone('Asia/Kolkata');
 
+        //cache files
+        $schedule->command('config:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');
+        $schedule->command('route:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');
+
         LOG::info('-------------------------------------------------------------------------------------------------------------------------');
 
 

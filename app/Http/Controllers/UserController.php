@@ -127,7 +127,7 @@ class UserController extends Controller
     }
 
     public function delete_personal_access_tokens(){
-        Artisan::call('optimize:clear');
+        // Artisan::call('optimize:clear');
         $personalAccessToken = PersonalAccessToken::get();
         foreach ($personalAccessToken as $x){
             $x->delete();
