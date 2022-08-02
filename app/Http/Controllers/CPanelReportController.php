@@ -212,11 +212,12 @@ class CPanelReportController extends Controller
         $total_commission = 0;
         $commission_percentage = 0;
         $return_array = [];
+        $data = null;
 
         $draw_times = DB::select("select draw_master_id from play_masters where date(created_at) = ?",[$today]);
 
         foreach ($draw_times as $draw_time){
-
+            $data = null;
             $total_prize = 0;
             $total_sale = 0;
             $total_quantity = 0;
