@@ -223,11 +223,19 @@ class CPanelReportController extends Controller
             $total_commission = 0;
             $commission_percentage = 0;
 
-            $data = DB::select("select play_masters.id, play_masters.barcode_number, play_masters.draw_master_id, play_masters.user_id, play_masters.game_id,
-               play_masters.user_relation_id, play_masters.is_claimed, play_masters.is_cancelled, play_masters.is_cancelable, play_masters.created_at, play_masters.updated_at,
-               draw_masters.draw_name, draw_masters.visible_time from play_masters
-               inner join draw_masters ON draw_masters.id = play_masters.draw_master_id
-               where date(play_masters.created_at) = ? and play_masters.game_id = ".$gameId." and play_masters.draw_master_id =".$draw_time->draw_master_id,[$today]);
+            if($gameId == 0){
+                $data = DB::select("select play_masters.id, play_masters.barcode_number, play_masters.draw_master_id, play_masters.user_id, play_masters.game_id,
+                   play_masters.user_relation_id, play_masters.is_claimed, play_masters.is_cancelled, play_masters.is_cancelable, play_masters.created_at, play_masters.updated_at,
+                   draw_masters.draw_name, draw_masters.visible_time from play_masters
+                   inner join draw_masters ON draw_masters.id = play_masters.draw_master_id
+                   where date(play_masters.created_at) = ? and play_masters.draw_master_id =".$draw_time->draw_master_id,[$today]);
+            }else{
+                $data = DB::select("select play_masters.id, play_masters.barcode_number, play_masters.draw_master_id, play_masters.user_id, play_masters.game_id,
+                   play_masters.user_relation_id, play_masters.is_claimed, play_masters.is_cancelled, play_masters.is_cancelable, play_masters.created_at, play_masters.updated_at,
+                   draw_masters.draw_name, draw_masters.visible_time from play_masters
+                   inner join draw_masters ON draw_masters.id = play_masters.draw_master_id
+                   where date(play_masters.created_at) = ? and play_masters.game_id = ".$gameId." and play_masters.draw_master_id =".$draw_time->draw_master_id,[$today]);
+            }
 
             foreach ($data as $x){
                 $total_prize = $total_prize + (int)$this->get_prize_value_by_barcode($x->id);
