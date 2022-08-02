@@ -212,7 +212,6 @@ Route::group(array('prefix' => 'dev'), function() {
 
 
     Route::post('getRechargeDetails',[RechargeToUserController::class, 'getTransactionByUserForAdmin']);
-    Route::get('delete_personal_access_tokens',[UserController::class, 'delete_personal_access_tokens']);
     Route::post('getTransactionByUser',[RechargeToUserController::class, 'getTransactionByUser']);
 
     Route::get('getTodayResultByGame/{id}',[ResultMasterController::class, 'get_result_today_by_game']);
