@@ -28,4 +28,8 @@ class Test extends Controller
         return response()->json(['success'=>1, 'test1' => $nPlay], 200,[],JSON_NUMERIC_CHECK);
     }
 
+    public function testHost(Request $request){
+        return $request->getHost();
+    }
+
 }
