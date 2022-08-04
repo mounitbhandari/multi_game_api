@@ -190,7 +190,6 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 Route::group(array('prefix' => 'dev'), function() {
 
     Route::post('cancelTicket',[PlayMasterController::class,'cancelPlay']);
-    Route::get('testHost',[Test::class,'testHost']);
 
     Route::get('terminal/{id}',[TerminalController::class, 'get_logged_in_terminal']);
 
