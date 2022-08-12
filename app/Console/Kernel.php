@@ -52,11 +52,11 @@ class Kernel extends ConsoleKernel
         $schedule->command('clear:tokens')->dailyAt('00:00')->timezone('Asia/Kolkata');
 
         //cache files
-//        $schedule->command('config:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');
-//        $schedule->command('route:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');
+       $schedule->command('config:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');
+       $schedule->command('route:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');
 
-        $schedule->command('config:cache')->everyThreeHours()->timezone('Asia/Kolkata');
-        $schedule->command('route:cache')->everyThreeHours()->timezone('Asia/Kolkata');
+        // $schedule->command('config:cache')->everyThreeHours()->timezone('Asia/Kolkata');
+        // $schedule->command('route:cache')->everyThreeHours()->timezone('Asia/Kolkata');
 
         LOG::info('-------------------------------------------------------------------------------------------------------------------------');
 
