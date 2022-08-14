@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DrawMaster;
 use App\Models\Game;
 use App\Http\Controllers\Controller;
 use App\Models\PlayMaster;
@@ -16,6 +17,31 @@ class GameController extends Controller
         $game= Game::get();
 
         return response()->json(['success'=>1,'data'=> $game], 200,[],JSON_NUMERIC_CHECK);
+    }
+
+    public function getGameWithTime()
+    {
+        $games = Game::get();
+        $commonFunctionController = new CommonFunctionController();
+        $serverTime = $commonFunctionController->getServerTime();
+        $x = [];
+        $temp_arr = [
+//            'current_time' => $serverTime
+        ];
+
+        foreach ($games as $game){
+            $x = [
+              'game_id' =>   $game->id,
+              'game_name' =>   $game->game_name,
+              'draw_id' =>   DrawMaster::whereGameId($game->id)->first()->id,
+              'draw_time' =>   DrawMaster::whereGameId($game->id)->first()->visible_time,
+            ];
+            array_push($temp_arr, $x);
+        }
+
+
+
+        return response()->json(['success'=>1,'data'=> $temp_arr, 'current_time' => $serverTime], 200,[],JSON_NUMERIC_CHECK);
     }
 
     public function update_auto_generate($id)

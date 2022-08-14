@@ -182,6 +182,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::post('drawWiseReportToday', [CPanelReportController::class, 'draw_wise_report']);
     Route::post('mailTransaction', [TransactionController::class, 'mailTransactionOneMonth']);
 
+    Route::get('getGameWithTime', [GameController::class, 'getGameWithTime']);
+
 });
 
 
@@ -245,6 +247,7 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::get('payoutSlabs',[PayOutSlabController::class, 'get_all_payout_slabs']);
 
     Route::get('activateGame/{id}', [GameController::class, 'activate_game']);
+    Route::get('getGameWithTime', [GameController::class, 'getGameWithTime']);
 
     // Route::post('terminal/updateCancellation/{id}', [TerminalReportController::class, 'updateCancellationGameWise']);
     // Route::post('updateDrawOver', [CentralController::class, 'update_is_draw_over']);
