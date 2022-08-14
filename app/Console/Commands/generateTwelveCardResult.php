@@ -40,9 +40,9 @@ class generateTwelveCardResult extends Command
      */
     public function handle()
     {
-        LOG::info('Twelve card: '.Carbon::today());
+        // LOG::info('Twelve card: '.Carbon::today());
         $centralControllerObj = new CentralController();
         $ret = $centralControllerObj->createResult(2,1);
-        LOG::info('Twelve card: '.$ret);
+        // LOG::info('Twelve card: '.$ret);
     }
 }

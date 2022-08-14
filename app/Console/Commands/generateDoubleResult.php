@@ -40,9 +40,9 @@ class generateDoubleResult extends Command
      */
     public function handle()
     {
-        LOG::info('Double chance: '.Carbon::today());
+        // LOG::info('Double chance: '.Carbon::today());
         $centralControllerObj = new CentralController();
         $ret = $centralControllerObj->createResult(5,1);
-        LOG::info('Double chance: '.$ret);
+        // LOG::info('Double chance: '.$ret);
     }
 }
