@@ -33,8 +33,8 @@ class GameController extends Controller
             $x = [
               'game_id' =>   $game->id,
               'game_name' =>   $game->game_name,
-              'draw_id' =>   DrawMaster::whereGameId($game->id)->first()->id,
-              'draw_time' =>   DrawMaster::whereGameId($game->id)->first()->visible_time,
+              'draw_id' =>   DrawMaster::whereGameId($game->id)->whereActive(1)->first()->id,
+              'draw_time' =>   DrawMaster::whereGameId($game->id)->whereActive(1)->first()->visible_time,
             ];
             array_push($temp_arr, $x);
         }
