@@ -11,6 +11,10 @@ use Illuminate\Support\Str;
 class CommonFunctionController extends Controller
 {
     public function getServerTime(){
+
+//        return request()->headers->get('referer');
+//        $current_time = Carbon::now();
+
         $current_time = Carbon::now();
         return array('hour' => $current_time->hour, 'minute' => $current_time->minute,
             'second' => $current_time->second, 'meridiem' => $current_time->meridiem);
@@ -24,5 +28,5 @@ class CommonFunctionController extends Controller
         $replaced = Str::replaceLast('\\r\\n', '\r\n', $replaced);
         return response()->json(['success'=>1, 'data' => $replaced], 200);
     }
-    
+
 }

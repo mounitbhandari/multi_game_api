@@ -40,25 +40,29 @@ class Kernel extends ConsoleKernel
 //        $schedule->command('drawOver:update')->dailyAt('00:00')->timezone('Asia/Kolkata');
 
 
-        LOG::info('-------------------------------------------------------------------------------------------------------------------------');
+//        LOG::info('-------------------------------------------------------------------------------------------------------------------------');
 
         $schedule->command('generateTripleChance:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
-        $schedule->command('generateTwelveCard:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
-        $schedule->command('generateSixteenCard:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
-        $schedule->command('generateSingle:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
+
         $schedule->command('generateDouble:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
+
+        //sleep(54);
+        $schedule->command('generateTwelveCard:result')->cron('* * * * *')->timezone('Asia/Kolkata');
+        $schedule->command('generateSixteenCard:result')->cron('* * * * *')->timezone('Asia/Kolkata');
+        $schedule->command('generateSingle:result')->cron('* * * * *')->timezone('Asia/Kolkata');
+
 
         $schedule->command('drawOver:update')->dailyAt('00:00')->timezone('Asia/Kolkata');
         $schedule->command('clear:tokens')->dailyAt('00:00')->timezone('Asia/Kolkata');
 
         //cache files
-       $schedule->command('config:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');
-       $schedule->command('route:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');
+//       $schedule->command('config:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');
+//       $schedule->command('route:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');
 
         // $schedule->command('config:cache')->everyThreeHours()->timezone('Asia/Kolkata');
         // $schedule->command('route:cache')->everyThreeHours()->timezone('Asia/Kolkata');
 
-        LOG::info('-------------------------------------------------------------------------------------------------------------------------');
+//        LOG::info('-------------------------------------------------------------------------------------------------------------------------');
 
 
 //        $schedule->command('clear:data')->dailyAt('00:00')->timezone('Asia/Kolkata');
