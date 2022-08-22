@@ -42,18 +42,18 @@ class Kernel extends ConsoleKernel
 
 //        LOG::info('-------------------------------------------------------------------------------------------------------------------------');
 
+        $schedule->command('drawOver:update')->dailyAt('00:00')->timezone('Asia/Kolkata');
+        $schedule->command('clear:tokens')->dailyAt('00:00')->timezone('Asia/Kolkata');
+
         $schedule->command('generateTripleChance:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
 
+        //sleep(0)
         $schedule->command('generateDouble:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
 
         //sleep(54);
         $schedule->command('generateTwelveCard:result')->cron('* * * * *')->timezone('Asia/Kolkata');
         $schedule->command('generateSixteenCard:result')->cron('* * * * *')->timezone('Asia/Kolkata');
         $schedule->command('generateSingle:result')->cron('* * * * *')->timezone('Asia/Kolkata');
-
-
-        $schedule->command('drawOver:update')->dailyAt('00:00')->timezone('Asia/Kolkata');
-        $schedule->command('clear:tokens')->dailyAt('00:00')->timezone('Asia/Kolkata');
 
         //cache files
 //       $schedule->command('config:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');
