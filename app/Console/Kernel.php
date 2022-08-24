@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\GenerateResult;
+use App\Http\Controllers\CommonFunctionController;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
@@ -54,6 +55,12 @@ class Kernel extends ConsoleKernel
         $schedule->command('generateTwelveCard:result')->cron('1-59/2 * * * *')->timezone('Asia/Kolkata');
         $schedule->command('generateSingle:result')->cron('1-59/2 * * * *')->timezone('Asia/Kolkata');
         $schedule->command('generateSixteenCard:result')->cron('1-59/2 * * * *')->timezone('Asia/Kolkata');
+
+        //database Backup
+        $schedule->call(function () {
+            $commonFunctionController = new CommonFunctionController();
+            $commonFunctionController->backup_database();
+        })->weekly()->mondays()->at('02:00');
 
         //cache files
 //       $schedule->command('config:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');

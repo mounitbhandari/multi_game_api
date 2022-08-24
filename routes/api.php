@@ -57,6 +57,10 @@ Route::get("backupDatabase",[CommonFunctionController::class,'backup_database'])
 Route::group(['middleware' => 'auth:sanctum'], function(){
     //All secure URL's
 
+    Route::get('/me', function(Request $request) {
+        return auth()->user();
+    });
+
     //caching group
     Route::group(['middleware' => 'lscache:max-age=86300;public'], function(){
         Route::get('getDoubleNumber', [DoubleNumberCombinationController::class, 'get_all_double_number']);
@@ -79,10 +83,6 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
         Route::get('getAndarNumbers',[AndarNumberController::class, 'get_all_andar_number']);
         Route::get('getBaharNumbers',[BaharNumberController::class, 'get_all_bahar_number']);
-    });
-
-    Route::get('/me', function(Request $request) {
-        return auth()->user();
     });
 
     Route::get("user",[UserController::class,'getCurrentUser']);
@@ -227,8 +227,8 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::get('getTodayLastResultByGame/{id}',[ResultMasterController::class, 'get_result_today_last_by_game']);
 
     //card_api
-    Route::get('getTwelveCards',[CardCombinationController::class, 'get_all_twelve_card']);
-    Route::get('getSixteenCards',[CardCombinationController::class, 'get_all_sixteen_card']);
+//    Route::get('getTwelveCards',[CardCombinationController::class, 'get_all_twelve_card']);
+//    Route::get('getSixteenCards',[CardCombinationController::class, 'get_all_sixteen_card']);
 
     Route::post('pinCheckValidation',[UserController::class, 'check_pin']);
 
@@ -236,8 +236,8 @@ Route::group(array('prefix' => 'dev'), function() {
 
     Route::get('seedingData',[NumberCombinationController::class, 'create_migration']);
 
-    Route::get('getAndarNumbers',[AndarNumberController::class, 'get_all_andar_number']);
-    Route::get('getBaharNumbers',[BaharNumberController::class, 'get_all_bahar_number']);
+//    Route::get('getAndarNumbers',[AndarNumberController::class, 'get_all_andar_number']);
+//    Route::get('getBaharNumbers',[BaharNumberController::class, 'get_all_bahar_number']);
 
     Route::get('terminals',[TerminalController::class, 'get_all_terminals']);
 
