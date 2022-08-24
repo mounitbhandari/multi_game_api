@@ -51,11 +51,35 @@ Route::post("login",[UserController::class,'login']);
 
 
 Route::post("register",[UserController::class,'register']);
-Route::get("serverTime",[CommonFunctionController::class,'getServerTime']);
+Route::get("serverTime",[CommonFunctionController::class,'getServerTime'])->middleware('lscache:max-age=30;public,esi=on');
 Route::get("backupDatabase",[CommonFunctionController::class,'backup_database']);
 
 Route::group(['middleware' => 'auth:sanctum'], function(){
     //All secure URL's
+
+    //caching group
+    Route::group(['middleware' => 'lscache:max-age=86300;public'], function(){
+        Route::get('getDoubleNumber', [DoubleNumberCombinationController::class, 'get_all_double_number']);
+        Route::get("singleNumbers",[SingleNumberController::class,'index']);
+        Route::get('getSingleNumber', [SingleNumberController::class, 'get_all_single_number']);
+
+        //number_combinations
+        Route::get("numberCombinations",[NumberCombinationController::class,'index']);
+        Route::get("numberCombinations/number/{id}",[NumberCombinationController::class,'getNumbersBySingleNumber']);
+        Route::get("numberCombinations/matrix",[NumberCombinationController::class,'getAllInMatrix']);
+
+        //game_types
+        Route::get('gameTypes',[GameTypeController::class,'index']);
+
+        //game
+        Route::get('getGame', [GameController::class, 'getGame']);
+
+        Route::get('getTwelveCards',[CardCombinationController::class, 'get_all_twelve_card']);
+        Route::get('getSixteenCards',[CardCombinationController::class, 'get_all_sixteen_card']);
+
+        Route::get('getAndarNumbers',[AndarNumberController::class, 'get_all_andar_number']);
+        Route::get('getBaharNumbers',[BaharNumberController::class, 'get_all_bahar_number']);
+    });
 
     Route::get('/me', function(Request $request) {
         return auth()->user();
@@ -71,22 +95,11 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
     Route::post("prizeValueByTerminalId",[TerminalController::class,'prize_value_by_terminal_id']);
 
-    //single_numbers
-    Route::get("singleNumbers",[SingleNumberController::class,'index'])->middleware('lscache:max-age=86300;public');
-
-    //number_combinations
-    Route::get("numberCombinations",[NumberCombinationController::class,'index'])->middleware('lscache:max-age=86300;public');
-    Route::get("numberCombinations/number/{id}",[NumberCombinationController::class,'getNumbersBySingleNumber']);
-    Route::get("numberCombinations/matrix",[NumberCombinationController::class,'getAllInMatrix'])->middleware('lscache:max-age=86300;public');
-
     //draw_masters
     Route::get('drawTimes',[DrawMasterController::class,'index']);
     Route::get('drawTimes/{id}',[DrawMasterController::class,'get_draw_time_by_game_id']);
 
     Route::get('drawTimes/dates/{date}',[DrawMasterController::class,'get_incomplete_games_by_date']);
-
-    //game_types
-    Route::get('gameTypes',[GameTypeController::class,'index'])->middleware('lscache:max-age=86300;public');
 
     //manual_result
 
@@ -139,9 +152,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::put('cPanel/game/payout',[GameTypeController::class, 'update_payout']);
     Route::post('getResultByDate', [ResultMasterController::class, 'get_result_by_date']);
 
-    Route::get('getGame', [GameController::class, 'getGame'])->middleware('lscache:max-age=86300;public');
     Route::get('gameTotalReportToday', [GameController::class, 'get_game_total_sale_today']);
-    Route::get('getSingleNumber', [SingleNumberController::class, 'get_all_single_number'])->middleware('lscache:max-age=86300;public');
 
 
     Route::get('updateAutoGenerate/{id}', [GameController::class, 'update_auto_generate']);
@@ -158,18 +169,12 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
     Route::post('cPanel/loadReport', [CPanelReportController::class, 'load_report']);
 
-    Route::get('getDoubleNumber', [DoubleNumberCombinationController::class, 'get_all_double_number'])->middleware('lscache:max-age=86300;public');
 
     Route::post('pinCheckValidation',[UserController::class, 'check_pin']);
-
-    Route::get('getTwelveCards',[CardCombinationController::class, 'get_all_twelve_card'])->middleware('lscache:max-age=86300;public');
-    Route::get('getSixteenCards',[CardCombinationController::class, 'get_all_sixteen_card'])->middleware('lscache:max-age=86300;public');
 
     Route::post('superStockist/customerSaleReports', [SuperStockistController::class, 'customer_sale_reports']);
     Route::post('superStockist/barcodeReportByDate', [SuperStockistController::class, 'barcode_wise_report_by_date']);
 
-    Route::get('getAndarNumbers',[AndarNumberController::class, 'get_all_andar_number'])->middleware('lscache:max-age=86300;public');
-    Route::get('getBaharNumbers',[BaharNumberController::class, 'get_all_bahar_number'])->middleware('lscache:max-age=86300;public');
 
     Route::post('updateBlock',[UserController::class, 'update_block']);
     Route::post('loginApprove',[TerminalController::class, 'approve_login']);
@@ -273,7 +278,7 @@ Route::group(array('prefix' => 'dev'), function() {
     //single_numbers
 //    Route::get("singleNumbers",[SingleNumberController::class,'index'])->middleware('lscache:max-age=86300;public');
 //    Route::get('getSingleNumber', [SingleNumberController::class, 'get_all_single_number'])->middleware('lscache:max-age=86300;public');
-    Route::get('getDoubleNumber', [DoubleNumberCombinationController::class, 'get_all_double_number'])->middleware('lscache:max-age=86300;private');
+    Route::get('getDoubleNumber', [DoubleNumberCombinationController::class, 'get_all_double_number'])->middleware('lscache:max-age=86300;public,esi=on');
 //    Route::get('getDoubleNumber', [DoubleNumberCombinationController::class, 'get_all_double_number'])->middleware('cache.headers:public;max_age=3600');
 
 
@@ -290,7 +295,7 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::get('drawTimes/dates/{id}',[DrawMasterController::class,'get_incomplete_games_by_date']);
 
     //game_types
-    Route::get('gameTypes',[GameTypeController::class,'index'])->middleware('lscache:max-age=86300;public');
+//    Route::get('gameTypes',[GameTypeController::class,'index'])->middleware('lscache:max-age=86300;public');
 
     //play_masters
      Route::post('buyTicket',[PlayController::class,'save_play_details']);
