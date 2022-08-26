@@ -62,7 +62,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     });
 
     //caching group
-    Route::group(['middleware' => 'lscache:max-age=86300;public,esi=on'], function(){
+    Route::group(['middleware' => 'lscache:max-age=86300;private,esi=on,shared'], function(){
         Route::get('getDoubleNumber', [DoubleNumberCombinationController::class, 'get_all_double_number']);
         Route::get("singleNumbers",[SingleNumberController::class,'index']);
         Route::get('getSingleNumber', [SingleNumberController::class, 'get_all_single_number']);
@@ -85,10 +85,24 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
         Route::get('getBaharNumbers',[BaharNumberController::class, 'get_all_bahar_number']);
     });
 
+    Route::group(['middleware' => 'lscache:max-age=5;private,esi=on'], function(){
+
+        Route::get('stockists',[StockistController::class, 'get_all_stockists']);
+        Route::get('stockists/{id}',[StockistController::class, 'get_stockist']);
+
+        Route::get('terminals',[TerminalController::class, 'get_all_terminals']);
+
+        Route::get('getTransaction/{id}', [TransactionController::class, 'getTransaction']);
+
+        Route::get('drawTimes/{id}',[DrawMasterController::class,'get_draw_time_by_game_id']);
+
+        //    PAYOUT SLABS
+        Route::get('payoutSlabs',[PayOutSlabController::class, 'get_all_payout_slabs']);
+    });
+
     Route::get("user",[UserController::class,'getCurrentUser']);
     Route::get("logout",[UserController::class,'logout']);
 
-//    Route::get("logout/{id}",[UserController::class,'logout']);
 
     //get all users
     Route::get("users",[UserController::class,'getAllUsers']);
@@ -97,7 +111,6 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
     //draw_masters
     Route::get('drawTimes',[DrawMasterController::class,'index']);
-    Route::get('drawTimes/{id}',[DrawMasterController::class,'get_draw_time_by_game_id']);
 
     Route::get('drawTimes/dates/{date}',[DrawMasterController::class,'get_incomplete_games_by_date']);
 
@@ -114,14 +127,10 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::get('results/currentDate/{id}',[ResultMasterController::class, 'get_results_by_current_date']);
     Route::get('results/lastResult',[ResultMasterController::class, 'get_last_result']);
 
-
-    Route::get('stockists',[StockistController::class, 'get_all_stockists']);
-    Route::get('stockists/{id}',[StockistController::class, 'get_stockist']);
     Route::post('stockists',[StockistController::class, 'create_stockist']);
     Route::put('stockists',[StockistController::class, 'update_stockist']);
     Route::put('stockists/balance',[StockistController::class, 'update_balance_to_stockist']);
 
-    Route::get('terminals',[TerminalController::class, 'get_all_terminals']);
     Route::post('terminals',[TerminalController::class, 'create_terminal']);
     Route::get('terminal/{id}',[TerminalController::class, 'get_logged_in_terminal']);
     Route::put('terminals',[TerminalController::class, 'update_terminal']);
@@ -154,7 +163,6 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
     Route::get('gameTotalReportToday', [GameController::class, 'get_game_total_sale_today']);
 
-
     Route::get('updateAutoGenerate/{id}', [GameController::class, 'update_auto_generate']);
     Route::get('activateGame/{id}', [GameController::class, 'activate_game']);
 
@@ -164,8 +172,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::get('getStockistBySuperStockistId/{id}',[SuperStockistController::class, 'getStockistBySuperStockistId']);
     Route::put('superStockists/balance',[SuperStockistController::class, 'update_balance_to_super_stockist']);
 
-//    PAYOUT SLABS
-    Route::get('payoutSlabs',[PayOutSlabController::class, 'get_all_payout_slabs']);
+
 
     Route::post('cPanel/loadReport', [CPanelReportController::class, 'load_report']);
 
@@ -181,7 +188,6 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::post('gamePermission',[TerminalController::class, 'game_permission_update']);
 
 
-    Route::get('getTransaction/{id}', [TransactionController::class, 'getTransaction']);
     Route::post('getRechargeDetails',[RechargeToUserController::class, 'getTransactionByUserForAdmin']);
 
     Route::post('drawWiseReportToday', [CPanelReportController::class, 'draw_wise_report']);
