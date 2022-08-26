@@ -3,6 +3,10 @@
         Options -MultiViews -Indexes
     </IfModule>
 
+    <IfModule LiteSpeed>
+       CacheLookup on
+    </IfModule>
+
     RewriteEngine On
 
     # Handle Authorization Header
