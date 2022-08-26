@@ -90,8 +90,6 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
         Route::get('stockists',[StockistController::class, 'get_all_stockists']);
         Route::get('stockists/{id}',[StockistController::class, 'get_stockist']);
 
-        Route::get('terminals',[TerminalController::class, 'get_all_terminals']);
-
         Route::get('getTransaction/{id}', [TransactionController::class, 'getTransaction']);
 
         Route::get('drawTimes/{id}',[DrawMasterController::class,'get_draw_time_by_game_id']);
@@ -99,6 +97,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
         //    PAYOUT SLABS
         Route::get('payoutSlabs',[PayOutSlabController::class, 'get_all_payout_slabs']);
     });
+
+    Route::get('terminals',[TerminalController::class, 'get_all_terminals']);
 
     Route::get("user",[UserController::class,'getCurrentUser']);
     Route::get("logout",[UserController::class,'logout']);
