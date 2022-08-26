@@ -85,7 +85,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
         Route::get('getBaharNumbers',[BaharNumberController::class, 'get_all_bahar_number']);
     });
 
-    Route::group(['middleware' => 'lscache:max-age=8;private,esi=on'], function(){
+    Route::group(['middleware' => 'lscache:max-age=10;private,esi=on'], function(){
 
         Route::get('stockists',[StockistController::class, 'get_all_stockists']);
         Route::get('stockists/{id}',[StockistController::class, 'get_stockist']);
@@ -94,11 +94,11 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
         Route::get('drawTimes/{id}',[DrawMasterController::class,'get_draw_time_by_game_id']);
 
+        Route::get('terminals',[TerminalController::class, 'get_all_terminals']);
+
         //    PAYOUT SLABS
         Route::get('payoutSlabs',[PayOutSlabController::class, 'get_all_payout_slabs']);
     });
-
-    Route::get('terminals',[TerminalController::class, 'get_all_terminals']);
 
     Route::get("user",[UserController::class,'getCurrentUser']);
     Route::get("logout",[UserController::class,'logout']);
