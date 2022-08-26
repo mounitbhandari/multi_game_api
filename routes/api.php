@@ -92,6 +92,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
         Route::get('getTransaction/{id}', [TransactionController::class, 'getTransaction']);
 
+        //draw_masters
+        Route::get('drawTimes',[DrawMasterController::class,'index']);
         Route::get('drawTimes/{id}',[DrawMasterController::class,'get_draw_time_by_game_id']);
 
         Route::get('terminals',[TerminalController::class, 'get_all_terminals']);
@@ -108,9 +110,6 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::get("users",[UserController::class,'getAllUsers']);
 
     Route::post("prizeValueByTerminalId",[TerminalController::class,'prize_value_by_terminal_id']);
-
-    //draw_masters
-    Route::get('drawTimes',[DrawMasterController::class,'index']);
 
     Route::get('drawTimes/dates/{date}',[DrawMasterController::class,'get_incomplete_games_by_date']);
 
