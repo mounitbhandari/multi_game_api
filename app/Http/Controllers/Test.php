@@ -9,6 +9,7 @@ use App\Models\PlayMaster;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Litespeed\LSCache\LSCache;
 
 class Test extends Controller
 {
@@ -21,11 +22,12 @@ class Test extends Controller
     }
 
     public function testNew(){
-        $today= Carbon::today()->format('Y-m-d');
-        $nPlay = PlayMaster::whereDrawMasterId(6)
-            ->whereDate('created_at',$today)
-            ->get();
-        return response()->json(['success'=>1, 'test1' => $nPlay], 200,[],JSON_NUMERIC_CHECK);
+//        $today= Carbon::today()->format('Y-m-d');
+//        $nPlay = PlayMaster::whereDrawMasterId(6)
+//            ->whereDate('created_at',$today)
+//            ->get();
+//        return response()->json(['success'=>1, 'test1' => $nPlay], 200,[],JSON_NUMERIC_CHECK);
+        LSCache::purgeAll();
     }
 
 }

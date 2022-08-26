@@ -62,7 +62,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     });
 
     //caching group
-    Route::group(['middleware' => 'lscache:max-age=3000000;private,esi=on,shared'], function(){
+    Route::group(['middleware' => 'lscache:max-age=3000000;public,esi=on,shared'], function(){
         Route::get('getDoubleNumber', [DoubleNumberCombinationController::class, 'get_all_double_number']);
         Route::get("singleNumbers",[SingleNumberController::class,'index']);
         Route::get('getSingleNumber', [SingleNumberController::class, 'get_all_single_number']);
