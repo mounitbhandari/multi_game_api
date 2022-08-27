@@ -21,6 +21,8 @@ class GameController extends Controller
 
     public function getGameWithTime()
     {
+        $today = Carbon::today()->format('Y-m-d');
+
         $games = Game::get();
         $commonFunctionController = new CommonFunctionController();
         $serverTime = $commonFunctionController->getServerTime();
@@ -41,7 +43,7 @@ class GameController extends Controller
 
 
 
-        return response()->json(['success'=>1,'data'=> $temp_arr, 'current_time' => $serverTime], 200,[],JSON_NUMERIC_CHECK);
+        return response()->json(['success'=>1,'data'=> $temp_arr, 'current_time' => $serverTime, 'today_date' => $today], 200,[],JSON_NUMERIC_CHECK);
     }
 
     public function update_auto_generate($id)
