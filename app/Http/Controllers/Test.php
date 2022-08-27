@@ -32,12 +32,12 @@ class Test extends Controller
 //        LSCache::purgeAll();
 
         //get referer
-//        return request()->headers->get('referer');
+        return request()->headers->get('referer');
 //        $current_time = Carbon::now();
 
         //get server ip address
-        $localIp = gethostbyname(gethostname());
-        return request()->server('SERVER_ADDR');
+//        $localIp = gethostbyname(gethostname());
+//        return request()->server('SERVER_ADDR');
     }
 
 }
