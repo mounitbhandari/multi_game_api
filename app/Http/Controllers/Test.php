@@ -27,7 +27,13 @@ class Test extends Controller
 //            ->whereDate('created_at',$today)
 //            ->get();
 //        return response()->json(['success'=>1, 'test1' => $nPlay], 200,[],JSON_NUMERIC_CHECK);
-        LSCache::purgeAll();
+
+        //clear cache
+//        LSCache::purgeAll();
+
+        //get server ip address
+        $localIp = gethostbyname(gethostname());
+        return request()->server('SERVER_ADDR');
     }
 
 }

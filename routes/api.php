@@ -100,6 +100,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
         //    PAYOUT SLABS
         Route::get('payoutSlabs',[PayOutSlabController::class, 'get_all_payout_slabs']);
+
+        Route::get('getGameWithTime', [GameController::class, 'getGameWithTime']);
     });
 
     Route::get("user",[UserController::class,'getCurrentUser']);
@@ -191,8 +193,6 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
     Route::post('drawWiseReportToday', [CPanelReportController::class, 'draw_wise_report']);
     Route::post('mailTransaction', [TransactionController::class, 'mailTransactionOneMonth']);
-
-    Route::get('getGameWithTime', [GameController::class, 'getGameWithTime']);
 
 });
 
