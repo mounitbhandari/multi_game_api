@@ -72,8 +72,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
         Route::get("numberCombinations/number/{id}",[NumberCombinationController::class,'getNumbersBySingleNumber']);
         Route::get("numberCombinations/matrix",[NumberCombinationController::class,'getAllInMatrix']);
 
-        //game_types
-        Route::get('gameTypes',[GameTypeController::class,'index']);
+
 
         //game
         Route::get('getGame', [GameController::class, 'getGame']);
@@ -83,6 +82,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
         Route::get('getAndarNumbers',[AndarNumberController::class, 'get_all_andar_number']);
         Route::get('getBaharNumbers',[BaharNumberController::class, 'get_all_bahar_number']);
+
+        Route::get('cPanel/barcodeReport/particulars/{id}', [CPanelReportController::class, 'get_barcode_report_particulars']);
     });
 
     Route::group(['middleware' => 'lscache:max-age=10;private,esi=on'], function(){
@@ -92,6 +93,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
         Route::get('getTransaction/{id}', [TransactionController::class, 'getTransaction']);
 
+
         //draw_masters
         Route::get('drawTimes',[DrawMasterController::class,'index']);
         Route::get('drawTimes/{id}',[DrawMasterController::class,'get_draw_time_by_game_id']);
@@ -100,6 +102,9 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
         //    PAYOUT SLABS
         Route::get('payoutSlabs',[PayOutSlabController::class, 'get_all_payout_slabs']);
+
+        //game_types
+        Route::get('gameTypes',[GameTypeController::class,'index']);
 
         Route::get('getGameWithTime', [GameController::class, 'getGameWithTime']);
     });
@@ -141,7 +146,6 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
     Route::get('cPanel/barcodeReport', [CPanelReportController::class, 'barcode_wise_report']);
     Route::post('cPanel/barcodeReportByDate', [CPanelReportController::class, 'barcode_wise_report_by_date']);
-    Route::get('cPanel/barcodeReport/particulars/{id}', [CPanelReportController::class, 'get_barcode_report_particulars']);
     Route::get('cPanel/barcodeReport/prizeValue/{id}', [CPanelReportController::class, 'get_prize_value_by_barcode']);
     Route::get('cPanel/customerSaleReport', [CPanelReportController::class, 'customer_sale_report']);
     Route::post('cPanel/customerSaleReports', [CPanelReportController::class, 'customer_sale_reports']);
