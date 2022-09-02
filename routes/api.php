@@ -86,7 +86,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
         Route::get('cPanel/barcodeReport/particulars/{id}', [CPanelReportController::class, 'get_barcode_report_particulars']);
     });
 
-    Route::group(['middleware' => 'lscache:max-age=10;private,esi=on'], function(){
+    Route::group(['middleware' => 'lscache:max-age=10;public,esi=on'], function(){
 
         Route::get('stockists',[StockistController::class, 'get_all_stockists']);
         Route::get('stockists/{id}',[StockistController::class, 'get_stockist']);
@@ -107,6 +107,9 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
         Route::get('gameTypes',[GameTypeController::class,'index']);
 
         Route::get('getGameWithTime', [GameController::class, 'getGameWithTime']);
+
+        Route::get('superStockists',[SuperStockistController::class, 'get_super_stockist']);
+        Route::get('getStockistBySuperStockistId/{id}',[SuperStockistController::class, 'getStockistBySuperStockistId']);
     });
 
     Route::get("user",[UserController::class,'getCurrentUser']);
@@ -173,8 +176,6 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
     Route::post('superStockists',[SuperStockistController::class, 'create_super_stockist']);
     Route::put('superStockists',[SuperStockistController::class, 'update_super_stockist']);
-    Route::get('superStockists',[SuperStockistController::class, 'get_super_stockist']);
-    Route::get('getStockistBySuperStockistId/{id}',[SuperStockistController::class, 'getStockistBySuperStockistId']);
     Route::put('superStockists/balance',[SuperStockistController::class, 'update_balance_to_super_stockist']);
 
 
