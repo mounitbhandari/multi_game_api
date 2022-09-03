@@ -860,7 +860,7 @@ class ResultMasterController extends Controller
         $resultMaster = ResultMaster::whereGameId($game_id)->whereDrawMasterId($draw_id)->whereGameDate($today)->first();
 
         if($resultMaster){
-            $set_game_date->addDays(1)->format('Y-m-d');
+            $set_game_date = Carbon::today()->addDays(1)->format('Y-m-d');
 //            $resultDetail = new ResultDetail();
 //            $resultDetail->result_master_id = $resultMaster->id;
 //            $resultDetail->game_type_id = $game_type_id;
