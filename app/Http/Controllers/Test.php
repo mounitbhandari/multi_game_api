@@ -22,6 +22,10 @@ class Test extends Controller
     }
 
     public function testNew(){
+        $set_game_date = Carbon::today();
+        $set_game_date->addDays(1)->format('Y-m-d');
+        return $set_game_date;
+
 //        $today= Carbon::today()->format('Y-m-d');
 //        $nPlay = PlayMaster::whereDrawMasterId(6)
 //            ->whereDate('created_at',$today)

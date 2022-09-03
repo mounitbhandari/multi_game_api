@@ -120,7 +120,7 @@ class TerminalReportController extends Controller
         }
 
 
-        return response()->json(['success' => 1, 'data' => $data, JSON_NUMERIC_CHECK], 200);
+        return response()->json(['success' => 1, 'data' => $data], 200,[],JSON_NUMERIC_CHECK);
     }
 
 
