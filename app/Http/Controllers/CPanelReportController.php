@@ -118,16 +118,20 @@ class CPanelReportController extends Controller
                return  $this->get_total_quantity_by_barcode($detail->play_master_id);
             });
 
-//            $detail->prize_value = Cache::remember(((String)$detail->play_master_id).'prize_value', 3000000, function () use ($detail) {
-//               return $this->get_prize_value_by_barcode($detail->play_master_id);
-//            });
+            if($detail->is_claimed == 1){
+                $detail->prize_value = Cache::remember(((String)$detail->play_master_id).'prize_value', 3000000, function () use ($detail) {
+                    return $this->get_prize_value_by_barcode($detail->play_master_id);
+                });
+            }else{
+                $detail->prize_value = $this->get_prize_value_by_barcode($detail->play_master_id);
+            }
 
             $detail->amount = Cache::remember(((String)$detail->play_master_id).'amount', 3000000, function () use ($detail) {
                 return $this->get_total_amount_by_barcode($detail->play_master_id);
             });
 
 //            $detail->total_quantity = $this->get_total_quantity_by_barcode($detail->play_master_id);
-            $detail->prize_value = $this->get_prize_value_by_barcode($detail->play_master_id);
+//            $detail->prize_value = $this->get_prize_value_by_barcode($detail->play_master_id);
 //            $detail->amount = $this->get_total_amount_by_barcode($detail->play_master_id);
         }
 
