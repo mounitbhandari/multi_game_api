@@ -59,7 +59,7 @@ class CPanelReportController extends Controller
 
 
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
-            ,'draw_masters.visible_time as draw_time',
+            ,'draw_masters.visible_time as draw_time','draw_masters.id as draw_master_id','play_masters.id as created_at','games.id as game_id',
             'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','games.game_name','play_masters.is_claimed', 'games.id as game_id'
         )
             ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
@@ -78,6 +78,33 @@ class CPanelReportController extends Controller
 
         foreach($data as $x){
             $detail = (object)$x;
+
+            $result = ResultMaster::whereDrawMasterId($detail->draw_master_id)->whereGameDate($detail->created_at->format('Y-m-d'))->whereGameId($detail->game_id)->first();
+            if($result){
+                if($detail->game_id == 1){
+                    $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(2)->first();
+                    $showNumber = (NumberCombination::find($resultDetails->combination_number_id))->visible_triple_number;
+                }else if($detail->game_id == 2){
+                    $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(3)->first();
+                    $x = CardCombination::find($resultDetails->combination_number_id);
+                    $showNumber = $x->rank_name. ' ' .$x->suit_name;
+                }else if($detail->game_id == 3){
+                    $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(4)->first();
+                    $x = CardCombination::find($resultDetails->combination_number_id);
+                    $showNumber = $x->rank_name. ' ' .$x->suit_name;
+                }else if($detail->game_id == 4){
+                    $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(6)->first();
+                    $showNumber = (SingleNumber::find($resultDetails->combination_number_id))->single_number;
+                }else if($detail->game_id == 5){
+                    $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(7)->first();
+                    $showNumber = (DoubleNumberCombination::find($resultDetails->combination_number_id))->visible_double_number;
+                }
+            }else{
+                $showNumber = "---";
+            }
+
+            $detail->result = $showNumber;
+
             $detail->total_quantity = Cache::remember(((String)$detail->play_master_id).'total_quantity', 3000000, function () use ($detail) {
                return  $this->get_total_quantity_by_barcode($detail->play_master_id);
             });
@@ -105,32 +132,6 @@ class CPanelReportController extends Controller
         $data = array();
         $playMaster = PlayMaster::findOrFail($play_master_id);
         $data['barcode'] = Str::substr($playMaster->barcode_number,0,8);
-
-        $result = ResultMaster::whereDrawMasterId($playMaster->draw_master_id)->whereGameDate($playMaster->created_at->format('Y-m-d'))->whereGameId($playMaster->game_id)->first();
-        if($result){
-            if($playMaster->game_id == 1){
-                $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(2)->first();
-                $showNumber = (NumberCombination::find($resultDetails->combination_number_id))->visible_triple_number;
-            }else if($playMaster->game_id == 2){
-                $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(3)->first();
-                $x = CardCombination::find($resultDetails->combination_number_id);
-                $showNumber = $x->rank_name. ' ' .$x->suit_name;
-            }else if($playMaster->game_id == 3){
-                $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(4)->first();
-                $x = CardCombination::find($resultDetails->combination_number_id);
-                $showNumber = $x->rank_name. ' ' .$x->suit_name;
-            }else if($playMaster->game_id == 4){
-                $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(6)->first();
-                $showNumber = (SingleNumber::find($resultDetails->combination_number_id))->single_number;
-            }else if($playMaster->game_id == 5){
-                $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(7)->first();
-                $showNumber = (DoubleNumberCombination::find($resultDetails->combination_number_id))->visible_double_number;
-            }
-        }else{
-            $showNumber = "---";
-        }
-        $data['result'] = $showNumber;
-//        return $showNumber;
 
         $singleGameData = PlayDetails::select(DB::raw('max(single_numbers.single_number) as single_number')
             ,DB::raw('max(play_details.quantity) as quantity'))
