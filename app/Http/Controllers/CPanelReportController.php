@@ -59,7 +59,7 @@ class CPanelReportController extends Controller
 
 
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
-            ,'draw_masters.visible_time as draw_time','draw_masters.id as draw_master_id','play_masters.created_at','games.id as game_id',
+            ,'draw_masters.visible_time as draw_time','draw_masters.id as draw_master_id','play_masters.created_at',
             'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','games.game_name','play_masters.is_claimed', 'games.id as game_id'
         )
             ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
@@ -82,7 +82,7 @@ class CPanelReportController extends Controller
             $detail = (object)$x;
 
             if((Cache::has((String)$detail->play_master_id).'result') == 1){
-                $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 3000000, function (){
+                $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 7776000, function (){
                 });
             }else{
                 $result = ResultMaster::whereDrawMasterId($detail->draw_master_id)->whereGameDate($detail->created_at->format('Y-m-d'))->whereGameId($detail->game_id)->first();
@@ -105,7 +105,7 @@ class CPanelReportController extends Controller
                         $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(7)->first();
                         $showNumber = (DoubleNumberCombination::find($resultDetails->combination_number_id))->visible_double_number;
                     }
-                    $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 3000000, function () use ($showNumber) {
+                    $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 7776000, function () use ($showNumber) {
                         return $showNumber;
                     });
                 }else{
@@ -114,19 +114,19 @@ class CPanelReportController extends Controller
                 }
             }
 
-            $detail->total_quantity = Cache::remember(((String)$detail->play_master_id).'total_quantity', 3000000, function () use ($detail) {
+            $detail->total_quantity = Cache::remember(((String)$detail->play_master_id).'total_quantity', 7776000, function () use ($detail) {
                return  $this->get_total_quantity_by_barcode($detail->play_master_id);
             });
 
             if($detail->is_claimed == 1){
-                $detail->prize_value = Cache::remember(((String)$detail->play_master_id).'prize_value', 3000000, function () use ($detail) {
+                $detail->prize_value = Cache::remember(((String)$detail->play_master_id).'prize_value', 7776000, function () use ($detail) {
                     return $this->get_prize_value_by_barcode($detail->play_master_id);
                 });
             }else{
                 $detail->prize_value = $this->get_prize_value_by_barcode($detail->play_master_id);
             }
 
-            $detail->amount = Cache::remember(((String)$detail->play_master_id).'amount', 3000000, function () use ($detail) {
+            $detail->amount = Cache::remember(((String)$detail->play_master_id).'amount', 7776000, function () use ($detail) {
                 return $this->get_total_amount_by_barcode($detail->play_master_id);
             });
 
