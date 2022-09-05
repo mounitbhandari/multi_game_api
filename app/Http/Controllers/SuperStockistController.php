@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\SuperStockistResource;
+use App\Models\CardCombination;
 use App\Models\CustomVoucher;
+use App\Models\DoubleNumberCombination;
+use App\Models\NumberCombination;
 use App\Models\PlayMaster;
 use App\Models\RechargeToUser;
+use App\Models\ResultDetail;
+use App\Models\ResultMaster;
+use App\Models\SingleNumber;
 use App\Models\SuperStockist;
 use App\Http\Requests\StoreSuperStockistRequest;
 use App\Http\Requests\UpdateSuperStockistRequest;
@@ -15,6 +21,7 @@ use App\Models\UserType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -191,7 +198,7 @@ class SuperStockistController extends Controller
         $cPanelRepotControllerObj = new CPanelReportController();
 
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
-            ,'draw_masters.visible_time as draw_time',
+            ,'draw_masters.visible_time as draw_time','draw_masters.id as draw_master_id','play_masters.created_at','games.id as game_id',
             'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','games.game_name','play_masters.is_claimed', 'games.id as game_id'
         )
             ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
@@ -204,15 +211,67 @@ class SuperStockistController extends Controller
             ->where('user_relation_with_others.super_stockist_id',$userID)
             ->whereRaw('date(play_masters.created_at) >= ?', [$start_date])
             ->whereRaw('date(play_masters.created_at) <= ?', [$end_date])
-            ->groupBy('play_masters.id','play_masters.barcode_number','draw_masters.visible_time','users.email','play_masters.created_at','games.game_name','play_masters.is_claimed', 'games.id')
+            ->groupBy('play_masters.id','play_masters.barcode_number',
+                'draw_masters.visible_time','users.email','play_masters.created_at',
+                'games.game_name','play_masters.is_claimed', 'games.id','draw_masters.id')
             ->orderBy('play_masters.created_at','desc')
             ->get();
 
         foreach($data as $x){
             $detail = (object)$x;
-            $detail->total_quantity = $cPanelRepotControllerObj->get_total_quantity_by_barcode($detail->play_master_id);
-            $detail->prize_value = $cPanelRepotControllerObj->get_prize_value_by_barcode($detail->play_master_id);
-            $detail->amount = $cPanelRepotControllerObj->get_total_amount_by_barcode($detail->play_master_id);
+
+            if((Cache::has((String)$detail->play_master_id).'result') == 1){
+                $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 3000000, function (){
+                });
+            }else{
+                $result = ResultMaster::whereDrawMasterId($detail->draw_master_id)->whereGameDate($detail->created_at->format('Y-m-d'))->whereGameId($detail->game_id)->first();
+                if($result){
+                    if($detail->game_id == 1){
+                        $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(2)->first();
+                        $showNumber = (NumberCombination::find($resultDetails->combination_number_id))->visible_triple_number;
+                    }else if($detail->game_id == 2){
+                        $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(3)->first();
+                        $x = CardCombination::find($resultDetails->combination_number_id);
+                        $showNumber = $x->rank_name. ' ' .$x->suit_name;
+                    }else if($detail->game_id == 3){
+                        $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(4)->first();
+                        $x = CardCombination::find($resultDetails->combination_number_id);
+                        $showNumber = $x->rank_name. ' ' .$x->suit_name;
+                    }else if($detail->game_id == 4){
+                        $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(6)->first();
+                        $showNumber = (SingleNumber::find($resultDetails->combination_number_id))->single_number;
+                    }else if($detail->game_id == 5){
+                        $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(7)->first();
+                        $showNumber = (DoubleNumberCombination::find($resultDetails->combination_number_id))->visible_double_number;
+                    }
+                    $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 3000000, function () use ($showNumber) {
+                        return $showNumber;
+                    });
+                }else{
+                    $showNumber = "---";
+                    $detail->result = $showNumber;
+                }
+            }
+
+            $detail->total_quantity = Cache::remember(((String)$detail->play_master_id).'total_quantity', 3000000, function () use ($cPanelRepotControllerObj, $detail) {
+                return  $cPanelRepotControllerObj->get_total_quantity_by_barcode($detail->play_master_id);
+            });
+
+            if($detail->is_claimed == 1){
+                $detail->prize_value = Cache::remember(((String)$detail->play_master_id).'prize_value', 3000000, function () use ($cPanelRepotControllerObj, $detail) {
+                    return $cPanelRepotControllerObj->get_prize_value_by_barcode($detail->play_master_id);
+                });
+            }else{
+                $detail->prize_value = $cPanelRepotControllerObj->get_prize_value_by_barcode($detail->play_master_id);
+            }
+
+            $detail->amount = Cache::remember(((String)$detail->play_master_id).'amount', 3000000, function () use ($cPanelRepotControllerObj, $detail) {
+                return $cPanelRepotControllerObj->get_total_amount_by_barcode($detail->play_master_id);
+            });
+
+//            $detail->total_quantity = $cPanelRepotControllerObj->get_total_quantity_by_barcode($detail->play_master_id);
+//            $detail->prize_value = $cPanelRepotControllerObj->get_prize_value_by_barcode($detail->play_master_id);
+//            $detail->amount = $cPanelRepotControllerObj->get_total_amount_by_barcode($detail->play_master_id);
         }
 
         return response()->json(['success'=> 1, 'data' => $data], 200);
