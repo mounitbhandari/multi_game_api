@@ -109,7 +109,7 @@ class CPanelReportController extends Controller
 //                return $showNumber;
 //            });
 
-            if(Cache::has((String)$detail->play_master_id).'result'){
+            if((Cache::has((String)$detail->play_master_id).'result') == 1){
                 $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 3000000, function (){
                 });
             }else{
