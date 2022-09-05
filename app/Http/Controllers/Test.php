@@ -9,6 +9,7 @@ use App\Models\PlayMaster;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 use Litespeed\LSCache\LSCache;
 
 class Test extends Controller
@@ -22,13 +23,20 @@ class Test extends Controller
     }
 
     public function testNew(){
-        $set_game_date = Carbon::today()->addDays(1)->format('Y-m-d');
-         if((Carbon::today()->format('Y-m-d')) === Carbon::today()->addDays(1)->format('Y-m-d')){
-             $test = true;
-        }else{
-             $test = false;
-         }
-        return $test;
+
+        $value = Cache::remember('users', 5, function () {
+            return 5;
+        });
+
+        return Cache::get('users');
+
+//        $set_game_date = Carbon::today()->addDays(1)->format('Y-m-d');
+//         if((Carbon::today()->format('Y-m-d')) === Carbon::today()->addDays(1)->format('Y-m-d')){
+//             $test = true;
+//        }else{
+//             $test = false;
+//         }
+//        return $test;
 
 //        $today= Carbon::today()->format('Y-m-d');
 //        $nPlay = PlayMaster::whereDrawMasterId(6)
@@ -40,7 +48,7 @@ class Test extends Controller
 //        LSCache::purgeAll();
 
         //get referer
-        return request()->headers->get('referer');
+//        return request()->headers->get('referer');
 //        $current_time = Carbon::now();
 
         //get server ip address

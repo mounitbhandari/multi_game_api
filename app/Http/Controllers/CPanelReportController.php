@@ -16,12 +16,14 @@ use App\Models\Transaction;
 use App\Models\User;
 use Faker\Core\Number;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Models\PlayMaster;
 use App\Models\PlayDetails;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Litespeed\LSCache\LSCache;
 
 class CPanelReportController extends Controller
 {
@@ -76,10 +78,23 @@ class CPanelReportController extends Controller
 
         foreach($data as $x){
             $detail = (object)$x;
-            $detail->total_quantity = $this->get_total_quantity_by_barcode($detail->play_master_id);
-            $detail->prize_value = $this->get_prize_value_by_barcode($detail->play_master_id);
-            $detail->amount = $this->get_total_amount_by_barcode($detail->play_master_id);
+            $detail->total_quantity = Cache::remember(((String)$detail->play_master_id).'total_quantity', 3000000, function () use ($detail) {
+                $this->get_total_quantity_by_barcode($detail->play_master_id);
+            });
+
+            $detail->prize_value = Cache::remember(((String)$detail->play_master_id).'prize_value', 3000000, function () use ($detail) {
+                $this->get_prize_value_by_barcode($detail->play_master_id);
+            });
+
+            $detail->amount = Cache::remember(((String)$detail->play_master_id).'amount', 3000000, function () use ($detail) {
+                $this->get_total_amount_by_barcode($detail->play_master_id);
+            });
+
+//            $detail->total_quantity = $this->get_total_quantity_by_barcode($detail->play_master_id);
+//            $detail->prize_value = $this->get_prize_value_by_barcode($detail->play_master_id);
+//            $detail->amount = $this->get_total_amount_by_barcode($detail->play_master_id);
         }
+
         return response()->json(['success'=> 1, 'data' => $data], 200,[],JSON_NUMERIC_CHECK);
 
     }
