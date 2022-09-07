@@ -379,7 +379,7 @@ class CPanelReportController extends Controller
 //        return response()->json(['success'=> $prize_value, 'data' => $test], 200);
 
 
-        $prize_value = Cache::remember('prize_value_by_play_master_id'.$play_master_id, 3000000, function () {
+        $prize_value = Cache::remember('prize_value_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
             $play_master = PlayMaster::findOrFail($play_master_id);
             $play_master_game_id = $play_master->game_id;
             $play_game_ids = PlayDetails::where('play_master_id',$play_master_id)->distinct()->pluck('game_type_id');
