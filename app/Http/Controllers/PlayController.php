@@ -43,7 +43,7 @@ class PlayController extends Controller
         $gameAllocation = GameAllocation::whereUserId($inputPlayMaster->terminalId)->first();
         $gameName = ('game'.$inputPlayMaster->gameId);
 
-        if($gameAllocation->$gameName == 0){
+        if($gameAllocation->gameName == 0){
             return response()->json(['success'=>0,'data'=>null, 'message' => 'Game not Allocated'], 406,[],JSON_NUMERIC_CHECK);
         }
 

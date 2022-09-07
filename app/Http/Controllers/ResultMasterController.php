@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Query\Builder;
@@ -577,6 +578,16 @@ class ResultMasterController extends Controller
         $draw_id = [];
         $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->get();
 
+        $sizeOfResultMaster = Cache::remember('sizeOfResultMaster'.$id, 3000000, function () use ($resultMasters) {
+            return sizeof($resultMasters);
+        });
+
+        if($sizeOfResultMaster === sizeof($resultMasters)){
+            $data = Cache::get('returnArray'.$id);
+
+            return response()->json(['success'=>1, 'data' => $data], 200);
+        }
+
         if(sizeof($resultMasters)<=0){
             if($id == 1) {
                 $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
@@ -652,6 +663,7 @@ class ResultMasterController extends Controller
         }
 
         if($id == 1){
+
             foreach ($resultMasters as $resultMaster){
                 $temp = [
                     'draw_id' => $resultMaster->draw_master_id,
@@ -822,6 +834,15 @@ class ResultMasterController extends Controller
         else{
             return response()->json(['success'=> 0, 'message' => 'Invalid game id'], 200);
         }
+
+        Cache::forget('returnArray'.$id);
+        Cache::forget('sizeOfResultMaster'.$id);
+        Cache::remember('returnArray'.$id, 3000000, function () use ($return_array) {
+            return $return_array;
+        });
+        Cache::remember('sizeOfResultMaster'.$id, 3000000, function () use ($resultMasters) {
+            return sizeof($resultMasters);
+        });
 
         return response()->json(['success'=>1, 'data' => $return_array], 200);
 

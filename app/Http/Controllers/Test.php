@@ -29,6 +29,8 @@ class Test extends Controller
 
     public function testNew(){
 
+//        Cache::get();
+
 //        $value = Cache::remember('users', 100, function () {
 //            return DB::select("select * from play_details where date(play_details.created_at) ='2022-07-15'");
 //        });

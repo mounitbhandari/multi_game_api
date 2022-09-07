@@ -13,6 +13,7 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
         'http://rkng.xyz/multi_game_api/public/api/*',
-        'https://rkng.xyz/multi_game_api/public/api/*'
+        'https://rkng.xyz/multi_game_api/public/api/*',
+        '*'
     ];
 }

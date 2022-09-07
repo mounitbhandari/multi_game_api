@@ -655,6 +655,7 @@ class CentralController extends Controller
         if($resultMaster === null){
             if($count < 2){
                 $this->createResult($id, 2);
+                return 0;
             }
             $nPlay = PlayMaster::whereDrawMasterId($lastDrawId)->whereDate('created_at',$today)->get();
             foreach ($nPlay as $x){
