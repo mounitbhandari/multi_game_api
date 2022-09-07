@@ -5,12 +5,17 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DrawMasterResource;
 use App\Models\DrawMaster;
+use App\Models\PlayDetails;
 use App\Models\PlayMaster;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Litespeed\LSCache\LSCache;
+use Litespeed\LSCache\LSCacheMiddleware;
+use PhpParser\Node\Expr\Cast\Object_;
+use Psy\Util\Json;
 
 class Test extends Controller
 {
@@ -24,11 +29,18 @@ class Test extends Controller
 
     public function testNew(){
 
-        $value = Cache::remember('users', 5, function () {
-            return 5;
-        });
+//        $value = Cache::remember('users', 100, function () {
+//            return DB::select("select * from play_details where date(play_details.created_at) ='2022-07-15'");
+//        });
 
-        return Cache::get('users');
+//        $newa = DB::select("select game_type_id from ?",[collect($value)->all()]);
+
+
+//        return collect($value)->where('game_type_id', 1)->all();
+//        return Object.entries(obj) collect($value)->where('game_type_id', 1)->all();
+//        return json_decode(json_encode(collect($value)->where('game_type_id', 1)->all()), true)->to;
+
+//        return $newa;
 
 //        $set_game_date = Carbon::today()->addDays(1)->format('Y-m-d');
 //         if((Carbon::today()->format('Y-m-d')) === Carbon::today()->addDays(1)->format('Y-m-d')){

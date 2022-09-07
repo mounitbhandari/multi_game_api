@@ -3,11 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="5eca29a0-ed15-4037-b786-6b351566af54" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CPanelReportController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CPanelReportController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ResultMasterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ResultMasterController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/StockistController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/StockistController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SuperStockistController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SuperStockistController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/TerminalReportController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/TerminalReportController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Test.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Test.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -203,6 +200,8 @@
       <workItem from="1662360929201" duration="5762000" />
       <workItem from="1662370558638" duration="4203000" />
       <workItem from="1662516893008" duration="584000" />
+      <workItem from="1662537809398" duration="2802000" />
+      <workItem from="1662546994843" duration="332000" />
     </task>
     <servers />
   </component>

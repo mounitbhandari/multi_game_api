@@ -51,7 +51,7 @@ Route::post("login",[UserController::class,'login']);
 
 
 Route::post("register",[UserController::class,'register']);
-Route::get("serverTime",[CommonFunctionController::class,'getServerTime'])->middleware('lscache:max-age=30;public,esi=on');
+Route::get("serverTime",[CommonFunctionController::class,'getServerTime']);
 Route::get("backupDatabase",[CommonFunctionController::class,'backup_database']);
 
 Route::group(['middleware' => 'auth:sanctum'], function(){
