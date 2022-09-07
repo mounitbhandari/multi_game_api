@@ -79,7 +79,7 @@ class TerminalReportController extends Controller
             $detail = (object)$x;
 
             if((Cache::has((String)$detail->play_master_id).'result') == 1){
-                $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 7776000, function (){
+                $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 3000000, function (){
                 });
             }else{
                 $result = ResultMaster::whereDrawMasterId($detail->draw_master_id)->whereGameDate($detail->created_at->format('Y-m-d'))->whereGameId($detail->game_id)->first();
@@ -102,7 +102,7 @@ class TerminalReportController extends Controller
                         $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(7)->first();
                         $showNumber = (DoubleNumberCombination::find($resultDetails->combination_number_id))->visible_double_number;
                     }
-                    $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 7776000, function () use ($showNumber) {
+                    $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 3000000, function () use ($showNumber) {
                         return $showNumber;
                     });
                 }else{
@@ -111,19 +111,19 @@ class TerminalReportController extends Controller
                 }
             }
 
-            $detail->total_quantity = Cache::remember(((String)$detail->play_master_id).'total_quantity', 7776000, function () use ($cPanelRepotControllerObj, $detail) {
+            $detail->total_quantity = Cache::remember(((String)$detail->play_master_id).'total_quantity', 3000000, function () use ($cPanelRepotControllerObj, $detail) {
                 return  $cPanelRepotControllerObj->get_total_quantity_by_barcode($detail->play_master_id);
             });
 
             if($detail->is_claimed == 1){
-                $detail->prize_value = Cache::remember(((String)$detail->play_master_id).'prize_value', 7776000, function () use ($cPanelRepotControllerObj, $detail) {
+                $detail->prize_value = Cache::remember(((String)$detail->play_master_id).'prize_value', 3000000, function () use ($cPanelRepotControllerObj, $detail) {
                     return $cPanelRepotControllerObj->get_prize_value_by_barcode($detail->play_master_id);
                 });
             }else{
                 $detail->prize_value = $cPanelRepotControllerObj->get_prize_value_by_barcode($detail->play_master_id);
             }
 
-            $detail->amount = Cache::remember(((String)$detail->play_master_id).'amount', 7776000, function () use ($cPanelRepotControllerObj, $detail) {
+            $detail->amount = Cache::remember(((String)$detail->play_master_id).'amount', 3000000, function () use ($cPanelRepotControllerObj, $detail) {
                 return $cPanelRepotControllerObj->get_total_amount_by_barcode($detail->play_master_id);
             });
 

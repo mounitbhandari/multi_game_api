@@ -871,8 +871,8 @@ class ResultMasterController extends Controller
             }else{
                 $resultMaster = new ResultMaster();
                 $resultMaster->draw_master_id = $draw_id;
-                $resultMaster->game_id = Carbon::today()->addDays(1)->format('Y-m-d');
-                $resultMaster->game_date = $set_game_date;
+                $resultMaster->game_id = $game_id;
+                $resultMaster->game_date = Carbon::today()->addDays(1)->format('Y-m-d');
                 $resultMaster-> save();
 
                 $resultDetail = new ResultDetail();
