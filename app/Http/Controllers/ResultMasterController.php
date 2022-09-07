@@ -582,15 +582,17 @@ class ResultMasterController extends Controller
             return sizeof($resultMasters);
         });
 
-        if($sizeOfResultMaster === sizeof($resultMasters)){
+        if(($sizeOfResultMaster === sizeof($resultMasters)) && (Cache::has('returnArray'.$id) == 1)){
             $data = Cache::get('returnArray'.$id);
-
-            return response()->json(['success'=>1, 'data' => $data], 200);
+            return response()->json(['success'=>0, 'data' => $data], 200);
         }
 
         if(sizeof($resultMasters)<=0){
             if($id == 1) {
-                $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
+//                $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
+                $drawGameTimes = Cache::remember('drawGameTimesResult'.$id, 3000000, function () use ($id) {
+                    return DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
+                });
                 foreach ($drawGameTimes as $drawGameTime) {
                     $temp = [
                         'draw_id' => $drawGameTime->id,
@@ -604,7 +606,10 @@ class ResultMasterController extends Controller
                 }
             }
             if($id == 2) {
-                $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
+//                $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
+                $drawGameTimes = Cache::remember('drawGameTimesResult'.$id, 3000000, function () use ($id) {
+                    return DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
+                });
                 foreach ($drawGameTimes as $drawGameTime) {
                     $temp = [
                         'draw_id' => $drawGameTime->id,
@@ -618,7 +623,9 @@ class ResultMasterController extends Controller
                 }
             }
             if($id == 3) {
-                $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
+                $drawGameTimes = Cache::remember('drawGameTimesResult'.$id, 3000000, function () use ($id) {
+                    return DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
+                });
                 foreach ($drawGameTimes as $drawGameTime) {
                     $temp = [
                         'draw_id' => $drawGameTime->id,
@@ -632,7 +639,9 @@ class ResultMasterController extends Controller
                 }
             }
             if($id == 4) {
-                $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
+                $drawGameTimes = Cache::remember('drawGameTimesResult'.$id, 3000000, function () use ($id) {
+                    return DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
+                });
                 foreach ($drawGameTimes as $drawGameTime) {
                     $temp = [
                         'draw_id' => $drawGameTime->id,
@@ -645,7 +654,9 @@ class ResultMasterController extends Controller
             }
 
             if($id == 5){
-                $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->whereNotIn('id', $draw_id)->get();
+                $drawGameTimes = Cache::remember('drawGameTimesResult'.$id, 3000000, function () use ($id) {
+                    return DrawMaster::select('id', 'visible_time')->whereGameId($id)->get();
+                });
                 foreach ($drawGameTimes as $drawGameTime){
                     $temp = [
                         'draw_id' => $drawGameTime->id,
