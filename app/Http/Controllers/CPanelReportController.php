@@ -61,9 +61,9 @@ class CPanelReportController extends Controller
             return Game::get();
         });
 
-        $terminals = Cache::remember('allTerminal', 3000000, function () {
-            return User::whereGameTypeId(5)->get();
-        });
+//        $terminals = Cache::remember('allTerminal', 3000000, function () {
+//            return User::whereGameTypeId(5)->get();
+//        });
 
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
             ,'draw_masters.visible_time as draw_time','draw_masters.id as draw_master_id','play_masters.created_at',
