@@ -13,6 +13,7 @@ use App\Models\RechargeToUser;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Models\CustomVoucher;
 
@@ -246,6 +247,13 @@ class TerminalController extends Controller
             $gameAllocation = new GameAllocation();
             $gameAllocation->user_id = $user->id;
             $gameAllocation->save();
+
+            $this->dispatch(function (){
+                Cache::forget('allTerminal');
+                Cache::remember('allTerminal', 3000000, function () {
+                    return User::whereUserTypeId(5)->get();
+                });
+            })->afterResponse()->onQueue('high');
 
             DB::commit();
         }catch(\Exception $e){
