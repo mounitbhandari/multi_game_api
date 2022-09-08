@@ -323,11 +323,6 @@ class CPanelReportController extends Controller
 
             foreach ($data as $x){
                 $total_quantity = $total_quantity + $this->get_total_quantity_by_barcode($x->id);
-
-                if((int)$total_quantity <= 0){
-                    continue;
-                }
-
                 $total_prize = $total_prize + (int)$this->get_prize_value_by_barcode($x->id);
                 $total_sale = $total_sale + $this->total_sale_by_play_master_id($x->id);
 
@@ -342,6 +337,10 @@ class CPanelReportController extends Controller
 //                $total_commission = (DB::select("select ((max(commission)/100)*".$total_sale.") as commission from play_details where play_master_id = ".$x->id))[0]->commission;
 
 //                $commission_percentage = (DB::select("select (max(commission)/100) as commission from play_details where play_master_id = ".$x->id))[0]->commission;
+            }
+
+            if($total_quantity <= 0){
+                continue;
             }
 
             $temp_arr = [
