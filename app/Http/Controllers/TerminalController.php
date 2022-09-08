@@ -248,12 +248,10 @@ class TerminalController extends Controller
             $gameAllocation->user_id = $user->id;
             $gameAllocation->save();
 
-            $this->dispatch(function (){
-                Cache::forget('allTerminal');
-                Cache::remember('allTerminal', 3000000, function () {
-                    return User::whereUserTypeId(5)->get();
-                });
-            })->afterResponse()->onQueue('high');
+            Cache::forget('allTerminal');
+            Cache::remember('allTerminal', 3000000, function () {
+                return User::whereUserTypeId(5)->get();
+            });
 
             DB::commit();
         }catch(\Exception $e){

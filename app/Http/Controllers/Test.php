@@ -30,7 +30,7 @@ class Test extends Controller
 
     public function testNew(){
 
-//        Cache::get();
+//        Cache::get('allTerminal');
 
         $value = Cache::remember('users', 100, function () {
             return Game::get();
