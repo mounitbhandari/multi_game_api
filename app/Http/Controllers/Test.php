@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DrawMasterResource;
 use App\Models\DrawMaster;
+use App\Models\Game;
 use App\Models\PlayDetails;
 use App\Models\PlayMaster;
 use Carbon\Carbon;
@@ -31,14 +32,14 @@ class Test extends Controller
 
 //        Cache::get();
 
-//        $value = Cache::remember('users', 100, function () {
-//            return DB::select("select * from play_details where date(play_details.created_at) ='2022-07-15'");
-//        });
+        $value = Cache::remember('users', 100, function () {
+            return Game::get();
+    });
 
 //        $newa = DB::select("select game_type_id from ?",[collect($value)->all()]);
 
 
-//        return collect($value)->where('game_type_id', 1)->all();
+        return collect($value)->where('game_type_id', 1)->all();
 //        return Object.entries(obj) collect($value)->where('game_type_id', 1)->all();
 //        return json_decode(json_encode(collect($value)->where('game_type_id', 1)->all()), true)->to;
 
