@@ -250,15 +250,27 @@ class CPanelReportController extends Controller
     public function total_sale_by_play_master_id($id){
 
         $totalSale = 0;
+        $totalSaleReturn = Cache::remember('get_total_sale_by_play_master_id'.$id, 3000000, function () use ($id, $totalSale) {
 
-        $playDetails = PlayDetails::wherePlayMasterId($id)->get();
+            $playDetails = PlayDetails::wherePlayMasterId($id)->get();
 
-        foreach ($playDetails as $playDetail){
-            $gameType = GameType::find($playDetail->game_type_id);
-            $totalSale = $totalSale + ($gameType->mrp * $playDetail->quantity);
-        }
+            foreach ($playDetails as $playDetail){
+                $gameType = GameType::find($playDetail->game_type_id);
+                $totalSale = $totalSale + ($gameType->mrp * $playDetail->quantity);
+            }
 
-        return $totalSale;
+            return $totalSale;
+
+        });
+
+//        $playDetails = PlayDetails::wherePlayMasterId($id)->get();
+//
+//        foreach ($playDetails as $playDetail){
+//            $gameType = GameType::find($playDetail->game_type_id);
+//            $totalSale = $totalSale + ($gameType->mrp * $playDetail->quantity);
+//        }
+
+        return $totalSaleReturn;
     }
 
     public function draw_wise_report(Request $request){
@@ -302,8 +314,18 @@ class CPanelReportController extends Controller
                 $total_prize = $total_prize + (int)$this->get_prize_value_by_barcode($x->id);
                 $total_quantity = $total_quantity + $this->get_total_quantity_by_barcode($x->id);
                 $total_sale = $total_sale + $this->total_sale_by_play_master_id($x->id);
-                $total_commission = (DB::select("select ((max(commission)/100)*".$total_sale.") as commission from play_details where play_master_id = ".$x->id))[0]->commission;
-                $commission_percentage = (DB::select("select (max(commission)/100) as commission from play_details where play_master_id = ".$x->id))[0]->commission;
+
+                $total_commission = Cache::remember('draw_wise_report_total_commission_single_play_master'.$x->id, 3000000, function () use ($x, $total_sale) {
+                    return ((DB::select("select ((max(commission)/100)*".$total_sale.") as commission from play_details where play_master_id = ".$x->id))[0]->commission);
+                });
+
+                $commission_percentage = Cache::remember('draw_wise_report_total_commission_percentage_single_play_master'.$x->id, 3000000, function () use ($x, $total_sale) {
+                    return ((DB::select("select (max(commission)/100) as commission from play_details where play_master_id = ".$x->id))[0]->commission);
+                });
+
+//                $total_commission = (DB::select("select ((max(commission)/100)*".$total_sale.") as commission from play_details where play_master_id = ".$x->id))[0]->commission;
+
+//                $commission_percentage = (DB::select("select (max(commission)/100) as commission from play_details where play_master_id = ".$x->id))[0]->commission;
             }
 
             $temp_arr = [
@@ -484,8 +506,8 @@ class CPanelReportController extends Controller
     }
 
     public function get_total_quantity_by_barcode($play_master_id){
-        $play_master = PlayMaster::findOrFail($play_master_id);
-        $play_game_ids = PlayDetails::where('play_master_id',$play_master_id)->distinct()->pluck('game_type_id');
+//        $play_master = PlayMaster::findOrFail($play_master_id);
+//        $play_game_ids = PlayDetails::where('play_master_id',$play_master_id)->distinct()->pluck('game_type_id');
 //        $total_quantity = 0;
 //        foreach ($play_game_ids as $game_id){
 //            if($game_id == 1){
@@ -512,13 +534,17 @@ class CPanelReportController extends Controller
 //        }
 //        return $total_quantity;
 
-        $data = (DB::select("select sum(play_details.quantity) as total_quantity from play_details where play_master_id = ".$play_master_id)[0])->total_quantity;
+        $data = Cache::remember('get_total_quantity_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
+            return (DB::select("select sum(play_details.quantity) as total_quantity from play_details where play_master_id = ".$play_master_id)[0])->total_quantity;
+        });
+
+//        $data = (DB::select("select sum(play_details.quantity) as total_quantity from play_details where play_master_id = ".$play_master_id)[0])->total_quantity;
 
         return (int)$data;
     }
 
     public function get_total_amount_by_barcode($play_master_id){
-        $play_game_ids = PlayDetails::where('play_master_id',$play_master_id)->distinct()->pluck('game_type_id');
+//        $play_game_ids = PlayDetails::where('play_master_id',$play_master_id)->distinct()->pluck('game_type_id');
 //        $total_amount = 0;
 //        foreach ($play_game_ids as $game_id){
 //            if($game_id == 1){
@@ -543,9 +569,15 @@ class CPanelReportController extends Controller
 //        }
 //        return $total_amount;
 
-        $data = (DB::select("select sum(play_details.quantity* game_types.mrp) as total_mrp from play_details
-            inner join game_types on game_types.id = play_details.game_type_id
-            where play_details.play_master_id = ".$play_master_id)[0])->total_mrp;
+        $data = Cache::remember('get_total_amount_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
+            return ((DB::select("select sum(play_details.quantity* game_types.mrp) as total_mrp from play_details
+                    inner join game_types on game_types.id = play_details.game_type_id
+                    where play_details.play_master_id = ".$play_master_id)[0])->total_mrp);
+        });
+
+//        $data = (DB::select("select sum(play_details.quantity* game_types.mrp) as total_mrp from play_details
+//            inner join game_types on game_types.id = play_details.game_type_id
+//            where play_details.play_master_id = ".$play_master_id)[0])->total_mrp;
 
         return $data;
     }
