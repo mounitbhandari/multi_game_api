@@ -61,12 +61,8 @@ class CPanelReportController extends Controller
             return Game::get();
         });
 
-        $drawTimes =  Cache::remember('allDrawTimes', 3000000, function () {
-            return DrawMaster::select('id', 'visible_time')->get();
-        });
-
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
-            ,'draw_masters.id as draw_master_id','play_masters.created_at',
+            ,'draw_masters.visible_time as draw_time','draw_masters.id as draw_master_id','play_masters.created_at',
             'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','play_masters.is_claimed', 'games.id as game_id'
         )
             ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
@@ -80,7 +76,7 @@ class CPanelReportController extends Controller
             ->whereRaw('date(play_masters.created_at) >= ?', [$start_date])
             ->whereRaw('date(play_masters.created_at) <= ?', [$end_date])
             ->groupBy('play_masters.id','play_masters.barcode_number',
-                'users.email','play_masters.created_at',
+                'draw_masters.visible_time','users.email','play_masters.created_at',
                 'play_masters.is_claimed', 'games.id','draw_masters.id')
             ->orderBy('play_masters.created_at','desc')
             ->get();
@@ -89,7 +85,6 @@ class CPanelReportController extends Controller
             $detail = (object)$x;
 
             $detail->game_name = (collect($allGame)->where('id', $detail->game_id)->first())->game_name;
-            $detail->draw_time = (collect($drawTimes)->where('id', $detail->draw_master_id)->first())->visible_time;
 
             if((Cache::has((String)$detail->play_master_id).'result') == 1){
                 $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 3000000, function (){
