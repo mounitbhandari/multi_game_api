@@ -322,8 +322,13 @@ class CPanelReportController extends Controller
             }
 
             foreach ($data as $x){
-                $total_prize = $total_prize + (int)$this->get_prize_value_by_barcode($x->id);
                 $total_quantity = $total_quantity + $this->get_total_quantity_by_barcode($x->id);
+
+                if($total_quantity <= 0){
+                    continue;
+                }
+
+                $total_prize = $total_prize + (int)$this->get_prize_value_by_barcode($x->id);
                 $total_sale = $total_sale + $this->total_sale_by_play_master_id($x->id);
 
                 $total_commission = Cache::remember('draw_wise_report_total_commission_single_play_master'.$x->id, 3000000, function () use ($x, $total_sale) {
@@ -722,15 +727,11 @@ class CPanelReportController extends Controller
                     $newPrizeClaimed += 0;
                     $newPrizeUnClaimed += 0;
                 }
-//                $tempData = (PlayDetails::select(DB::raw("if(game_type_id = 1,(mrp*22)*quantity-(commission/100),mrp*quantity-(commission/100)) as total"))
-//                    ->where('play_master_id',$y->id)->distinct()->get())[0];
-//                $tempntp += $tempData->total;
             }
             $detail = (object)$x;
             $detail->claimed_prize_value = $newPrizeClaimed;
             $detail->unclaimed_prize_value = $newPrizeUnClaimed;
             $detail->terminal_pin = (collect($terminals)->where('id', $detail->user_id)->first())->email;
-//            $detail->ntp = $tempntp;
         }
         return response()->json(['success'=> 1, 'data' => $data], 200);
 
