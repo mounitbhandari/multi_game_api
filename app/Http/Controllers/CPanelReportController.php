@@ -61,15 +61,19 @@ class CPanelReportController extends Controller
             return Game::get();
         });
 
+        $terminals = Cache::remember('allTerminal', 3000000, function () {
+            return User::whereGameTypeId(5)->get();
+        });
+
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
             ,'draw_masters.visible_time as draw_time','draw_masters.id as draw_master_id','play_masters.created_at',
-            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','play_masters.is_claimed', 'games.id as game_id'
+            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','play_masters.is_claimed', 'game_types.game_id'
         )
             ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
             ->join('users','users.id','play_masters.user_id')
             ->join('play_details','play_details.play_master_id','play_masters.id')
             ->join('game_types','game_types.id','play_details.game_type_id')
-            ->join('games','games.id','game_types.game_id')
+//            ->join('games','games.id','game_types.game_id')
             ->where('play_masters.is_cancelled',0)
 //            ->where('play_masters.created_at','>=',$start_date)
 //            ->where('play_masters.created_at','<=',$end_date)
@@ -77,7 +81,7 @@ class CPanelReportController extends Controller
             ->whereRaw('date(play_masters.created_at) <= ?', [$end_date])
             ->groupBy('play_masters.id','play_masters.barcode_number',
                 'draw_masters.visible_time','users.email','play_masters.created_at',
-                'play_masters.is_claimed', 'games.id','draw_masters.id')
+                'play_masters.is_claimed', 'game_types.game_id','draw_masters.id')
             ->orderBy('play_masters.created_at','desc')
             ->get();
 
