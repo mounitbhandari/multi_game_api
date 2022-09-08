@@ -48,41 +48,41 @@ class PlayController extends Controller
         }
 
         //        Validation for PlayMaster
-        $rules = array(
-            'drawMasterId'=>'required|exists:draw_masters,id',
-            'terminalId'=> ['required',
-                function($attribute, $value, $fail){
-                    $terminal=User::where('id', $value)->where('user_type_id','=',5)->first();
-                    if(!$terminal){
-                        return $fail($value.' is not a valid terminal id');
-                    }
-                }],
-        );
-        $messages = array(
-            'drawMasterId.required'=>'Draw time is required',
-            'terminalId.required'=>'Terminal Id is required',
-        );
-
-        $validator = Validator::make($requestedData['playMaster'],$rules,$messages );
-
-        if ($validator->fails()) {
-            return response()->json(['position'=>2,'success'=>0,'data'=>null,'error'=>$validator->messages()], 406,[],JSON_NUMERIC_CHECK);
-        }
+//        $rules = array(
+//            'drawMasterId'=>'required|exists:draw_masters,id',
+//            'terminalId'=> ['required',
+//                function($attribute, $value, $fail){
+//                    $terminal=User::where('id', $value)->where('user_type_id','=',5)->first();
+//                    if(!$terminal){
+//                        return $fail($value.' is not a valid terminal id');
+//                    }
+//                }],
+//        );
+//        $messages = array(
+//            'drawMasterId.required'=>'Draw time is required',
+//            'terminalId.required'=>'Terminal Id is required',
+//        );
+//
+//        $validator = Validator::make($requestedData['playMaster'],$rules,$messages );
+//
+//        if ($validator->fails()) {
+//            return response()->json(['position'=>2,'success'=>0,'data'=>null,'error'=>$validator->messages()], 406,[],JSON_NUMERIC_CHECK);
+//        }
         //        Validation for PlayMaster complete
 
 
         //validation for playDetails
-        $rules = array(
-            "*.gameTypeId"=>'required|exists:game_types,id',
-            '*.singleNumberId' => 'required_if:*.gameTypeId,==,1',
-            '*.numberCombinationId' => 'required_if:*.gameTypeId,==,2',
-            '*.quantity' => 'bail|required|integer|min:1',
-//            '*.mrp' => 'bail|required|integer|min:1'
-        );
-        $validator = Validator::make($requestedData['playDetails'],$rules );
-        if ($validator->fails()) {
-            return response()->json(['position'=>3,'success'=>0,'data'=>null,'error'=>$validator->messages()], 406,[],JSON_NUMERIC_CHECK);
-        }
+//        $rules = array(
+//            "*.gameTypeId"=>'required|exists:game_types,id',
+//            '*.singleNumberId' => 'required_if:*.gameTypeId,==,1',
+//            '*.numberCombinationId' => 'required_if:*.gameTypeId,==,2',
+//            '*.quantity' => 'bail|required|integer|min:1',
+////            '*.mrp' => 'bail|required|integer|min:1'
+//        );
+//        $validator = Validator::make($requestedData['playDetails'],$rules );
+//        if ($validator->fails()) {
+//            return response()->json(['position'=>3,'success'=>0,'data'=>null,'error'=>$validator->messages()], 406,[],JSON_NUMERIC_CHECK);
+//        }
         //end of validation for playDetails
 
         $userRelationId = UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first();

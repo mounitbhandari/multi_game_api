@@ -28,8 +28,8 @@ class PlayMasterResource extends JsonResource
     {
         return [
             'barcodeNumber' => Str::substr($this->barcode_number,0,8),
-            'drawTime' => new DrawMasterResource($this->draw_time),
-            'terminal' => new TerminalResource($this->terminal),
+//            'drawTime' => new DrawMasterResource($this->draw_time),
+//            'terminal' => new TerminalResource($this->terminal),
             'ticketTakenTime' => $this->created_at
         ];
     }
