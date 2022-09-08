@@ -62,7 +62,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     });
 
     //caching group
-    Route::group(['middleware' => 'lscache:max-age=3000000;public,esi=on,shared'], function(){
+//    Route::group(['middleware' => 'lscache:max-age=3000000;public,esi=on,shared'], function(){
+    Route::group(['middleware' => 'cache.headers:public;max_age=3000000'], function(){
         Route::get('getDoubleNumber', [DoubleNumberCombinationController::class, 'get_all_double_number']);
         Route::get("singleNumbers",[SingleNumberController::class,'index']);
         Route::get('getSingleNumber', [SingleNumberController::class, 'get_all_single_number']);
@@ -86,7 +87,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
         Route::get('cPanel/barcodeReport/particulars/{id}', [CPanelReportController::class, 'get_barcode_report_particulars']);
     });
 
-    Route::group(['middleware' => 'lscache:max-age=10;public,esi=on'], function(){
+//    Route::group(['middleware' => 'lscache:max-age=10;public,esi=on'], function(){
+    Route::group(['middleware' => 'cache.headers:public;max_age=3000000'], function(){
 
         Route::get('stockists',[StockistController::class, 'get_all_stockists']);
         Route::get('stockists/{id}',[StockistController::class, 'get_stockist']);
