@@ -324,7 +324,7 @@ class CPanelReportController extends Controller
             foreach ($data as $x){
                 $total_quantity = $total_quantity + $this->get_total_quantity_by_barcode($x->id);
 
-                if($total_quantity <= 0){
+                if((int)$total_quantity <= 0){
                     continue;
                 }
 
