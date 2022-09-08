@@ -88,7 +88,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     });
 
 //    Route::group(['middleware' => 'lscache:max-age=10;public,esi=on'], function(){
-    Route::group(['middleware' => 'cache.headers:public;max_age=3000000'], function(){
+    Route::group(['middleware' => 'cache.headers:public;max_age=10'], function(){
 
         Route::get('stockists',[StockistController::class, 'get_all_stockists']);
         Route::get('stockists/{id}',[StockistController::class, 'get_stockist']);
