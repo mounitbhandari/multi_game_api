@@ -75,21 +75,13 @@ class GameController extends Controller
         $doubleNumberPrize = 0;
 
         $CPanelReportController = new CPanelReportController();
+        
 
-        $tempPlayMaster = PlayMaster::where(DB::raw("date(created_at)"),$today)->get();
-
-        $tripleAllPlayMasters = collect($tempPlayMaster)->where('game_id', 1)->all();
-        $twelveCardAllPlayMasters = collect($tempPlayMaster)->where('game_id', 2)->all();
-        $sixteenCardAllPlayMasters = collect($tempPlayMaster)->where('game_id', 3)->all();
-        $singleNumberAllPlayMasters = collect($tempPlayMaster)->where('game_id', 4)->all();
-        $doubleNumberAllPlayMasters = collect($tempPlayMaster)->where('game_id', 5)->all();
-
-
-//        $tripleAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(1)->get();
-//        $twelveCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(2)->get();
-//        $sixteenCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(3)->get();
-//        $singleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(4)->get();
-//        $doubleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(5)->get();
+        $tripleAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(1)->get();
+        $twelveCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(2)->get();
+        $sixteenCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(3)->get();
+        $singleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(4)->get();
+        $doubleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(5)->get();
 
 
         foreach ($tripleAllPlayMasters as $tripleAllPlayMaster){
