@@ -54,10 +54,11 @@ class CentralController extends Controller
             $game_multiplexer = $tempM[array_rand($tempM)];
         }
 
-        $ManualGameCheck = ManualResult::whereGameDate($today)->whereGameTypeId((GameType::whereGameId($id)->first())->id)->first();
-        if($ManualGameCheck){
-            $game_multiplexer = $ManualGameCheck->multiplexer;
-        }
+//        enable when concept of multiplexer comes
+//        $ManualGameCheck = ManualResult::whereGameDate($today)->whereGameTypeId((GameType::whereGameId($id)->first())->id)->first();
+//        if($ManualGameCheck){
+//            $game_multiplexer = $ManualGameCheck->multiplexer;
+//        }
 
         if($id == 1){
 
