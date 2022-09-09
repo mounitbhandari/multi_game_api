@@ -162,19 +162,19 @@ class CentralController extends Controller
                         if($totalSale <= $allGameTotalSale){
                             $loopOn = 0;
                             $gen = 1;
-                            $temp = [
-                                'single x' => $splitNumber[2],
-                                'single' => $singleNumberValue,
-                                'single quantity' => $singleNumberQuantity,
-                                'double' => $doubleNumberValue,
-                                'double quantity' => $doubleNumberQuantity,
-                                'triple' => $tripleData->combination_number_id,
-//                            'tripleNumberData' => $tripleNumberTargetData,
-                                'total_sale' => $totalSale,
-                                'allGameTotalSale' => $allGameTotalSale,
-                                '$tripleData' => $tripleData,
-                                '$splitNumber' => $splitNumber,
-                            ];
+//                            $temp = [
+//                                'single x' => $splitNumber[2],
+//                                'single' => $singleNumberValue,
+//                                'single quantity' => $singleNumberQuantity,
+//                                'double' => $doubleNumberValue,
+//                                'double quantity' => $doubleNumberQuantity,
+//                                'triple' => $tripleData->combination_number_id,
+////                            'tripleNumberData' => $tripleNumberTargetData,
+//                                'total_sale' => $totalSale,
+//                                'allGameTotalSale' => $allGameTotalSale,
+//                                '$tripleData' => $tripleData,
+//                                '$splitNumber' => $splitNumber,
+//                            ];
 
 //                        Log::info('$singleNumberValue: '.$singleNumberValue);
 //                        Log::info('$tripleData: '.$tripleData->combination_number_id);
@@ -186,7 +186,7 @@ class CentralController extends Controller
                             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,2,$tripleData->combination_number_id,1))->content(),true);
                             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,5,$doubleNumberValue,1))->content(),true);
 
-                            array_push($resultToBeSaved, $temp);
+//                            array_push($resultToBeSaved, $temp);
                             break;
                         }
                     }
