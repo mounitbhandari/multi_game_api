@@ -893,14 +893,14 @@ class ResultMasterController extends Controller
 
         if($resultMaster){
 //            $set_game_date = Carbon::today()->addDays(1)->format('Y-m-d');
-            if($game_id === 1 || $game_id === 5){
+            if($game_id == 1 || $game_id == 5){
                 $resultDetail = new ResultDetail();
                 $resultDetail->result_master_id = $resultMaster->id;
                 $resultDetail->game_type_id = $game_type_id;
                 $resultDetail->combination_number_id = $combination_number_id;
                 $resultDetail->multiplexer = $game_multiplexer;
                 $resultDetail->save();
-            }else{
+            }else if($game_id == 2 || $game_id == 3 || $game_id == 4){
                 $resultMaster = new ResultMaster();
                 $resultMaster->draw_master_id = $draw_id;
                 $resultMaster->game_id = $game_id;
