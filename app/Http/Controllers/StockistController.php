@@ -122,7 +122,7 @@ class StockistController extends Controller
         foreach($data as $x){
             $detail = (object)$x;
 
-            if((Cache::has((String)$detail->play_master_id).'result') == 1){
+            if((Cache::has(((String)$detail->play_master_id).'result')) == 1){
                 $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 3000000, function (){
                 });
             }else{

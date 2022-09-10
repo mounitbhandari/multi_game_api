@@ -92,7 +92,7 @@ class CPanelReportController extends Controller
             $detail->terminal_pin = (collect($terminals)->where('id', $detail->user_id)->first())->email;
 
 
-            if((Cache::has((String)$detail->play_master_id).'result') == 1){
+            if((Cache::has(((String)$detail->play_master_id).'result')) == 1){
                 $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 3000000, function (){
                 });
             }else{
@@ -380,78 +380,45 @@ class CPanelReportController extends Controller
     }
 
     public function get_prize_value_by_barcode($play_master_id){
+        if((Cache::has('prize_value_by_play_master_id'.$play_master_id)) == 1){
+            return Cache::get('prize_value_by_play_master_id'.$play_master_id);
+        }
 
-//         $play_master = PlayMaster::findOrFail($play_master_id);
-//         $play_master_game_id = $play_master->game_id;
-//         $play_game_ids = PlayDetails::where('play_master_id',$play_master_id)->distinct()->pluck('game_type_id');
+        $play_master = PlayMaster::findOrFail($play_master_id);
+        $play_master_game_id = $play_master->game_id;
+        $play_game_ids = PlayDetails::where('play_master_id',$play_master_id)->distinct()->pluck('game_type_id');
 
-//         $test = [];
-//         $test1 = [];
+        $play_date = Carbon::parse($play_master->created_at)->format('Y-m-d');
+        $result_master = ResultMaster::where('draw_master_id', $play_master->draw_master_id)->where('game_date',$play_date)->whereGameId($play_master_game_id)->first();
+        $prize_value = 0;
+        $result_multiplier = 1;
+        $result_number_combination_id = -1;
+        foreach ($play_game_ids as $game_id){
 
-//         $prize_value = 0;
+            if(!empty($result_master)){
+                // $result_number_combination_id = (ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first())->combination_number_id;
+                $result_number_combination_id = ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first();
+                // $result_multiplier = (ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first())->multiplexer;
+                $result_multiplier = (ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first());
 
-//         $play_date = Carbon::parse($play_master->created_at)->format('Y-m-d');
-//         $result_master = ResultMaster::where('draw_master_id', $play_master->draw_master_id)->where('game_date',$play_date)->whereGameId($play_master_game_id)->first();
-
-//         foreach ($play_game_ids as $game_type_id){
-//             $result_details = ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_type_id)->first();
-
-// //            if($result_details != null){
-// //                $prize_value = $prize_value + 0;
-// //                continue;
-// //            }
-
-//             $checkPlayMaster = PlayDetails::wherePlayMasterId($play_master_id)->whereGameTypeId($game_type_id)->whereCombinationNumberId($result_details->combination_number_id)->first();
-
-//             if($checkPlayMaster != null){
-//                 $gameType = GameType::find($game_type_id);
-//                 $prize_value = ($prize_value + ($gameType->winning_price * $checkPlayMaster -> quantity)) * $result_details->multiplexer;
-//             }else{
-//                 $prize_value = $prize_value + 0;
-//             }
-//         }
-
-//         return $prize_value;
-
-//        return response()->json(['success'=> $prize_value, 'data' => $test], 200);
-
-
-        $prize_value = Cache::remember('prize_value_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
-            $play_master = PlayMaster::findOrFail($play_master_id);
-            $play_master_game_id = $play_master->game_id;
-            $play_game_ids = PlayDetails::where('play_master_id',$play_master_id)->distinct()->pluck('game_type_id');
-
-            $play_date = Carbon::parse($play_master->created_at)->format('Y-m-d');
-            $result_master = ResultMaster::where('draw_master_id', $play_master->draw_master_id)->where('game_date',$play_date)->whereGameId($play_master_game_id)->first();
-            $prize_value = 0;
-            $result_multiplier = 1;
-            $result_number_combination_id = -1;
-            foreach ($play_game_ids as $game_id){
-
-                if(!empty($result_master)){
-                    // $result_number_combination_id = (ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first())->combination_number_id;
-                    $result_number_combination_id = ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first();
-                    // $result_multiplier = (ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first())->multiplexer;
-                    $result_multiplier = (ResultDetail::whereResultMasterId($result_master->id)->whereGameTypeId($game_id)->first());
-
-                    // return response()->json(['success'=>$result_master,'data'=> $result_number_combination_id], 200);
-                    if(empty($result_number_combination_id)){
-                        continue;
-                    }
-                    if(!empty($result_number_combination_id)){
-                        $result_number_combination_id = (int)($result_number_combination_id->combination_number_id);
-                        $result_multiplier = $result_multiplier->multiplexer;
-                    }
-                }else{
-                    $result_number_combination_id = null;
-                    $result_multiplier = 1;
-                }
-
-
+                // return response()->json(['success'=>$result_master,'data'=> $result_number_combination_id], 200);
                 if(empty($result_number_combination_id)){
-                    $result_number_combination_id = -1;
-                    $result_multiplier = 1;
+                    continue;
                 }
+                if(!empty($result_number_combination_id)){
+                    $result_number_combination_id = (int)($result_number_combination_id->combination_number_id);
+                    $result_multiplier = $result_multiplier->multiplexer;
+                }
+            }else{
+                $result_number_combination_id = null;
+                $result_multiplier = 1;
+            }
+
+
+            if(empty($result_number_combination_id)){
+                $result_number_combination_id = -1;
+                $result_multiplier = 1;
+            }
 
 
 //            $data = DB::select("select (play_details.quantity* game_types.winning_price) as price_value from play_masters
@@ -459,7 +426,7 @@ class CPanelReportController extends Controller
 //                inner join game_types on game_types.id = play_details.game_type_id
 //                where play_masters.id = ".$play_master_id." and play_details.game_type_id = ".$game_id." and play_details.combination_number_id = ".$result_number_combination_id);
 
-                $data = DB::select("select (sum(quantity) * game_types.winning_price) as price_value from play_details
+            $data = DB::select("select (sum(quantity) * game_types.winning_price) as price_value from play_details
                 inner join play_masters on play_details.play_master_id = play_masters.id
                 inner join game_types on game_types.id = play_details.game_type_id
                 where play_details.play_master_id = ".$play_master_id."  and date(play_details.created_at) = ?
@@ -472,40 +439,16 @@ class CPanelReportController extends Controller
 //inner join game_types on game_types.id = play_details.game_type_id
 //where play_details.play_master_id = 864 and date(play_details.created_at) = '2022-06-09' and play_masters.draw_master_id = 448 and play_details.combination_number_id = 100 and game_type_id = 2
 
-                if($data){
-                    $prize_value = ($data[0]->price_value + $prize_value) * $result_multiplier;
-                }
-
-
-//            else{
-//                $prize_value = $prize_value + 0;
-//            }
-
-//            if($game_id == 1){
-//                $singleGamePrize = PlayMaster::join('play_details','play_masters.id','play_details.play_master_id')
-//                    ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
-//                    ->join('game_types','play_details.game_type_id','game_types.id')
-//                    ->select(DB::raw("max(play_details.quantity)* max(game_types.winning_price) as prize_value") )
-//                    ->where('play_masters.id',$play_master_id)
-//                    ->where('play_details.game_type_id',$game_id)
-//                    ->where('play_details.combination_number_id',$result_number_combination_id)
-//                    ->groupBy('number_combinations.single_number_id')
-//                    ->first();
-//            }
-//            if($game_id == 2){
-//                $tripleGamePrize = PlayMaster::join('play_details','play_masters.id','play_details.play_master_id')
-//                    ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
-//                    ->join('game_types','play_details.game_type_id','game_types.id')
-//                    ->select(DB::raw("play_details.quantity * game_types.winning_price as prize_value") )
-//                    ->where('play_masters.id',$play_master_id)
-//                    ->where('play_details.game_type_id',$game_id)
-//                    ->where('play_details.combination_number_id',$result_number_combination_id)
-//                    ->first();
-//            }
+            if($data){
+                $prize_value = ($data[0]->price_value + $prize_value) * $result_multiplier;
             }
+        }
 
-            return $prize_value;
-        });
+        if($prize_value > 0){
+            $prize_value = Cache::remember('prize_value_by_play_master_id'.$play_master_id, 3000000, function () use ($prize_value) {
+                return $prize_value;
+            });
+        }
 
 
 
