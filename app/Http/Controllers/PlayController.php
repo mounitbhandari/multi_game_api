@@ -106,9 +106,7 @@ class PlayController extends Controller
             $output_play_details = array();
 
             $tempItems = collect($inputPlayDetails);
-            $items = ($tempItems->chunk(100)->toArray());
-
-//            return response()->json(['success'=>0,'data'=> $items], 200,[],JSON_NUMERIC_CHECK);
+            $items = ($tempItems->chunk(300)->toArray());
 
             foreach ($items as $item){
                 foreach($item as $inputPlayDetail){
