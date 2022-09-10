@@ -135,8 +135,7 @@ class PlayController extends Controller
                         $playDetails->terminal_payout = $payoutSlabValue;
                         $playDetails->save();
                         $output_play_details[] = $playDetails;
-                    }
-                    if($detail->gameTypeId == 1){
+                    }else if($detail->gameTypeId == 1){
 
                         if($detail->singleNumberId == 0){
                             continue;
@@ -164,8 +163,7 @@ class PlayController extends Controller
                         $output_play_details[] = $playDetails;
 
 //                    }
-                    }
-                    if(($detail->gameTypeId == 3) or ($detail->gameTypeId == 4)){
+                    }else if(($detail->gameTypeId == 3) or ($detail->gameTypeId == 4)){
 
                         if($detail->cardCombinationId == 0){
                             continue;
@@ -187,9 +185,7 @@ class PlayController extends Controller
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
                         $output_play_details[] = $playDetails;
-                    }
-
-                    if($detail->gameTypeId == 5){
+                    }else if($detail->gameTypeId == 5){
 
                         if($detail->doubleCombinationId == 0){
                             continue;
@@ -211,9 +207,7 @@ class PlayController extends Controller
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
                         $output_play_details[] = $playDetails;
-                    }
-
-                    if($detail->gameTypeId == 6){
+                    }else if($detail->gameTypeId == 6){
 
                         if($detail->singleNumberId == 0){
                             continue;
@@ -235,9 +229,7 @@ class PlayController extends Controller
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
                         $output_play_details[] = $playDetails;
-                    }
-
-                    if($detail->gameTypeId == 7){
+                    }else if($detail->gameTypeId == 7){
 
                         if($detail->doubleCombinationId == 0){
                             continue;
@@ -259,9 +251,7 @@ class PlayController extends Controller
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
                         $output_play_details[] = $playDetails;
-                    }
-
-                    if($detail->gameTypeId == 8){
+                    }else if($detail->gameTypeId == 8){
 
                         if($detail->amdarCombinationId == 0){
                             continue;
@@ -283,9 +273,7 @@ class PlayController extends Controller
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
                         $output_play_details[] = $playDetails;
-                    }
-
-                    if($detail->gameTypeId == 9){
+                    }else if($detail->gameTypeId == 9){
 
                         if($detail->baharCombinationId == 0){
                             continue;
