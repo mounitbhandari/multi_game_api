@@ -85,7 +85,7 @@ class CPanelReportController extends Controller
             ->orderBy('play_masters.created_at','desc')
             ->get();
 
-        $tempData = array_chunk($data, 100);
+        $tempData = $data->chunk(100);
         foreach($tempData as $x){
             $detail = (object)$x;
 
