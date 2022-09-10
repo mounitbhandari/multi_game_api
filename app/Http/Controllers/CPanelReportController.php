@@ -83,10 +83,10 @@ class CPanelReportController extends Controller
                 'draw_masters.visible_time','play_masters.created_at',
                 'play_masters.is_claimed', 'game_types.game_id','draw_masters.id','play_masters.user_id')
             ->orderBy('play_masters.created_at','desc')
-            ->chunk(50)
             ->get();
 
-        foreach($data as $x){
+        $tempData = array_chunk($data, 100);
+        foreach($tempData as $x){
             $detail = (object)$x;
 
             $detail->game_name = (collect($allGame)->where('id', $detail->game_id)->first())->game_name;
