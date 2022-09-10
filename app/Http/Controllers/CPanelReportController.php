@@ -40,7 +40,7 @@ class CPanelReportController extends Controller
             ->where('play_masters.is_cancelled',0)
             ->groupBy('play_masters.id','play_masters.barcode_number','draw_masters.visible_time','users.email','play_masters.created_at')
             ->orderBy('play_masters.created_at','desc')
-            ->chunkById(50)
+            ->chunkById(2)
             ->get();
 
         foreach($data as $x){
