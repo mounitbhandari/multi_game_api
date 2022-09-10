@@ -104,38 +104,45 @@ class PlayController extends Controller
             $output_array['play_master'] = new PlayMasterResource($playMaster);
 
             $output_play_details = array();
-            foreach($inputPlayDetails as $inputPlayDetail){
-                $detail = (object)$inputPlayDetail;
-                $gameType = GameType::find($detail->gameTypeId);
-                //insert value for triple
-                if($detail->gameTypeId == 2){
 
-                    if($detail->numberCombinationId == 0){
-                        continue;
-                    }
+            $tempItems = collect($inputPlayDetails);
+            $items = ($tempItems->chunk(100)->toArray());
 
-                    $playDetails = new PlayDetails();
-                    $playDetails->play_master_id = $playMaster->id;
-                    $playDetails->game_type_id = $detail->gameTypeId;
-                    $playDetails->combination_number_id = $detail->numberCombinationId;
-                    $playDetails->quantity = $detail->quantity;
-                    $playDetails->mrp = $gameType->mrp;
-                    $playDetails->commission = $user->commission;
-                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
-                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
-                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
-                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
-                    $playDetails->global_payout = $gameType->payout;
+//            return response()->json(['success'=>0,'data'=> $items], 200,[],JSON_NUMERIC_CHECK);
+
+            foreach ($items as $item){
+                foreach($item as $inputPlayDetail){
+                    $detail = (object)$inputPlayDetail;
+                    $gameType = GameType::find($detail->gameTypeId);
+                    //insert value for triple
+                    if($detail->gameTypeId == 2){
+
+                        if($detail->numberCombinationId == 0){
+                            continue;
+                        }
+
+                        $playDetails = new PlayDetails();
+                        $playDetails->play_master_id = $playMaster->id;
+                        $playDetails->game_type_id = $detail->gameTypeId;
+                        $playDetails->combination_number_id = $detail->numberCombinationId;
+                        $playDetails->quantity = $detail->quantity;
+                        $playDetails->mrp = $gameType->mrp;
+                        $playDetails->commission = $user->commission;
+                        $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+                        $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+                        $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+                        $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
+                        $playDetails->global_payout = $gameType->payout;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
-                    $playDetails->terminal_payout = $payoutSlabValue;
-                    $playDetails->save();
-                    $output_play_details[] = $playDetails;
-                }
-                if($detail->gameTypeId == 1){
-
-                    if($detail->singleNumberId == 0){
-                        continue;
+                        $playDetails->terminal_payout = $payoutSlabValue;
+                        $playDetails->save();
+                        $output_play_details[] = $playDetails;
                     }
+                    if($detail->gameTypeId == 1){
+
+                        if($detail->singleNumberId == 0){
+                            continue;
+                        }
 
 //                    $numberCombinationIds = SingleNumber::find($detail->singleNumberId)->number_combinations->pluck('id');
 //                    foreach ($numberCombinationIds as $numberCombinationId){
@@ -159,152 +166,355 @@ class PlayController extends Controller
                         $output_play_details[] = $playDetails;
 
 //                    }
-                }
-                if(($detail->gameTypeId == 3) or ($detail->gameTypeId == 4)){
+                    }
+                    if(($detail->gameTypeId == 3) or ($detail->gameTypeId == 4)){
 
-                    if($detail->cardCombinationId == 0){
-                        continue;
+                        if($detail->cardCombinationId == 0){
+                            continue;
+                        }
+
+                        $playDetails = new PlayDetails();
+                        $playDetails->play_master_id = $playMaster->id;
+                        $playDetails->game_type_id = $detail->gameTypeId;
+                        $playDetails->combination_number_id = $detail->cardCombinationId;
+                        $playDetails->quantity = $detail->quantity;
+                        $playDetails->mrp = $gameType->mrp;
+                        $playDetails->commission = $user->commission;
+                        $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+                        $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+                        $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+                        $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
+                        $playDetails->global_payout = $gameType->payout;
+                        $playDetails->terminal_payout = $payoutSlabValue;
+//                    $playDetails->multiplexer = $gameType->multiplexer;
+                        $playDetails->save();
+                        $output_play_details[] = $playDetails;
                     }
 
-                    $playDetails = new PlayDetails();
-                    $playDetails->play_master_id = $playMaster->id;
-                    $playDetails->game_type_id = $detail->gameTypeId;
-                    $playDetails->combination_number_id = $detail->cardCombinationId;
-                    $playDetails->quantity = $detail->quantity;
-                    $playDetails->mrp = $gameType->mrp;
-                    $playDetails->commission = $user->commission;
-                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
-                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
-                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
-                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
-                    $playDetails->global_payout = $gameType->payout;
-                    $playDetails->terminal_payout = $payoutSlabValue;
+                    if($detail->gameTypeId == 5){
+
+                        if($detail->doubleCombinationId == 0){
+                            continue;
+                        }
+
+                        $playDetails = new PlayDetails();
+                        $playDetails->play_master_id = $playMaster->id;
+                        $playDetails->game_type_id = $detail->gameTypeId;
+                        $playDetails->combination_number_id = $detail->doubleCombinationId;
+                        $playDetails->quantity = $detail->quantity;
+                        $playDetails->mrp = $gameType->mrp;
+                        $playDetails->commission = $user->commission;
+                        $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+                        $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+                        $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+                        $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
+                        $playDetails->global_payout = $gameType->payout;
+                        $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
-                    $playDetails->save();
-                    $output_play_details[] = $playDetails;
-                }
-
-                if($detail->gameTypeId == 5){
-
-                    if($detail->doubleCombinationId == 0){
-                        continue;
+                        $playDetails->save();
+                        $output_play_details[] = $playDetails;
                     }
 
-                    $playDetails = new PlayDetails();
-                    $playDetails->play_master_id = $playMaster->id;
-                    $playDetails->game_type_id = $detail->gameTypeId;
-                    $playDetails->combination_number_id = $detail->doubleCombinationId;
-                    $playDetails->quantity = $detail->quantity;
-                    $playDetails->mrp = $gameType->mrp;
-                    $playDetails->commission = $user->commission;
-                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
-                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
-                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
-                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
-                    $playDetails->global_payout = $gameType->payout;
-                    $playDetails->terminal_payout = $payoutSlabValue;
+                    if($detail->gameTypeId == 6){
+
+                        if($detail->singleNumberId == 0){
+                            continue;
+                        }
+
+                        $playDetails = new PlayDetails();
+                        $playDetails->play_master_id = $playMaster->id;
+                        $playDetails->game_type_id = $detail->gameTypeId;
+                        $playDetails->combination_number_id = $detail->singleNumberId;
+                        $playDetails->quantity = $detail->quantity;
+                        $playDetails->mrp = $gameType->mrp;
+                        $playDetails->commission = $user->commission;
+                        $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+                        $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+                        $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+                        $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
+                        $playDetails->global_payout = $gameType->payout;
+                        $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
-                    $playDetails->save();
-                    $output_play_details[] = $playDetails;
-                }
-
-                if($detail->gameTypeId == 6){
-
-                    if($detail->singleNumberId == 0){
-                        continue;
+                        $playDetails->save();
+                        $output_play_details[] = $playDetails;
                     }
 
-                    $playDetails = new PlayDetails();
-                    $playDetails->play_master_id = $playMaster->id;
-                    $playDetails->game_type_id = $detail->gameTypeId;
-                    $playDetails->combination_number_id = $detail->singleNumberId;
-                    $playDetails->quantity = $detail->quantity;
-                    $playDetails->mrp = $gameType->mrp;
-                    $playDetails->commission = $user->commission;
-                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
-                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
-                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
-                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
-                    $playDetails->global_payout = $gameType->payout;
-                    $playDetails->terminal_payout = $payoutSlabValue;
+                    if($detail->gameTypeId == 7){
+
+                        if($detail->doubleCombinationId == 0){
+                            continue;
+                        }
+
+                        $playDetails = new PlayDetails();
+                        $playDetails->play_master_id = $playMaster->id;
+                        $playDetails->game_type_id = $detail->gameTypeId;
+                        $playDetails->combination_number_id = $detail->doubleCombinationId;
+                        $playDetails->quantity = $detail->quantity;
+                        $playDetails->mrp = $gameType->mrp;
+                        $playDetails->commission = $user->commission;
+                        $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+                        $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+                        $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+                        $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
+                        $playDetails->global_payout = $gameType->payout;
+                        $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
-                    $playDetails->save();
-                    $output_play_details[] = $playDetails;
-                }
-
-                if($detail->gameTypeId == 7){
-
-                    if($detail->doubleCombinationId == 0){
-                        continue;
+                        $playDetails->save();
+                        $output_play_details[] = $playDetails;
                     }
 
-                    $playDetails = new PlayDetails();
-                    $playDetails->play_master_id = $playMaster->id;
-                    $playDetails->game_type_id = $detail->gameTypeId;
-                    $playDetails->combination_number_id = $detail->doubleCombinationId;
-                    $playDetails->quantity = $detail->quantity;
-                    $playDetails->mrp = $gameType->mrp;
-                    $playDetails->commission = $user->commission;
-                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
-                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
-                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
-                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
-                    $playDetails->global_payout = $gameType->payout;
-                    $playDetails->terminal_payout = $payoutSlabValue;
+                    if($detail->gameTypeId == 8){
+
+                        if($detail->amdarCombinationId == 0){
+                            continue;
+                        }
+
+                        $playDetails = new PlayDetails();
+                        $playDetails->play_master_id = $playMaster->id;
+                        $playDetails->game_type_id = $detail->gameTypeId;
+                        $playDetails->combination_number_id = $detail->amdarCombinationId;
+                        $playDetails->quantity = $detail->quantity;
+                        $playDetails->mrp = $gameType->mrp;
+                        $playDetails->commission = $user->commission;
+                        $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+                        $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+                        $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+                        $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
+                        $playDetails->global_payout = $gameType->payout;
+                        $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
-                    $playDetails->save();
-                    $output_play_details[] = $playDetails;
-                }
-
-                if($detail->gameTypeId == 8){
-
-                    if($detail->amdarCombinationId == 0){
-                        continue;
+                        $playDetails->save();
+                        $output_play_details[] = $playDetails;
                     }
 
-                    $playDetails = new PlayDetails();
-                    $playDetails->play_master_id = $playMaster->id;
-                    $playDetails->game_type_id = $detail->gameTypeId;
-                    $playDetails->combination_number_id = $detail->amdarCombinationId;
-                    $playDetails->quantity = $detail->quantity;
-                    $playDetails->mrp = $gameType->mrp;
-                    $playDetails->commission = $user->commission;
-                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
-                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
-                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
-                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
-                    $playDetails->global_payout = $gameType->payout;
-                    $playDetails->terminal_payout = $payoutSlabValue;
+                    if($detail->gameTypeId == 9){
+
+                        if($detail->baharCombinationId == 0){
+                            continue;
+                        }
+
+                        $playDetails = new PlayDetails();
+                        $playDetails->play_master_id = $playMaster->id;
+                        $playDetails->game_type_id = $detail->gameTypeId;
+                        $playDetails->combination_number_id = $detail->baharCombinationId;
+                        $playDetails->quantity = $detail->quantity;
+                        $playDetails->mrp = $gameType->mrp;
+                        $playDetails->commission = $user->commission;
+                        $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+                        $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+                        $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+                        $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
+                        $playDetails->global_payout = $gameType->payout;
+                        $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
-                    $playDetails->save();
-                    $output_play_details[] = $playDetails;
-                }
-
-                if($detail->gameTypeId == 9){
-
-                    if($detail->baharCombinationId == 0){
-                        continue;
+                        $playDetails->save();
+                        $output_play_details[] = $playDetails;
                     }
 
-                    $playDetails = new PlayDetails();
-                    $playDetails->play_master_id = $playMaster->id;
-                    $playDetails->game_type_id = $detail->gameTypeId;
-                    $playDetails->combination_number_id = $detail->baharCombinationId;
-                    $playDetails->quantity = $detail->quantity;
-                    $playDetails->mrp = $gameType->mrp;
-                    $playDetails->commission = $user->commission;
-                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
-                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
-                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
-                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
-                    $playDetails->global_payout = $gameType->payout;
-                    $playDetails->terminal_payout = $payoutSlabValue;
-//                    $playDetails->multiplexer = $gameType->multiplexer;
-                    $playDetails->save();
-                    $output_play_details[] = $playDetails;
                 }
-
             }
+
+//            foreach($item as $inputPlayDetail){
+//                $detail = (object)$inputPlayDetail;
+//                $gameType = GameType::find($detail->gameTypeId);
+//                //insert value for triple
+//                if($detail->gameTypeId == 2){
+//
+//                    if($detail->numberCombinationId == 0){
+//                        continue;
+//                    }
+//
+//                    $playDetails = new PlayDetails();
+//                    $playDetails->play_master_id = $playMaster->id;
+//                    $playDetails->game_type_id = $detail->gameTypeId;
+//                    $playDetails->combination_number_id = $detail->numberCombinationId;
+//                    $playDetails->quantity = $detail->quantity;
+//                    $playDetails->mrp = $gameType->mrp;
+//                    $playDetails->commission = $user->commission;
+//                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+//                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+//                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+//                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
+//                    $playDetails->global_payout = $gameType->payout;
+////                    $playDetails->multiplexer = $gameType->multiplexer;
+//                    $playDetails->terminal_payout = $payoutSlabValue;
+//                    $playDetails->save();
+//                    $output_play_details[] = $playDetails;
+//                }
+//                if($detail->gameTypeId == 1){
+//
+//                    if($detail->singleNumberId == 0){
+//                        continue;
+//                    }
+//
+////                    $numberCombinationIds = SingleNumber::find($detail->singleNumberId)->number_combinations->pluck('id');
+////                    foreach ($numberCombinationIds as $numberCombinationId){
+//                        $playDetails = new PlayDetails();
+//                        $playDetails->play_master_id = $playMaster->id;
+//                        $playDetails->game_type_id = $detail->gameTypeId;
+////                        $playDetails->combination_number_id = $numberCombinationId;
+//                        $playDetails->combination_number_id = $detail->singleNumberId;
+//                        $playDetails->quantity = $detail->quantity;
+////                        $playDetails->mrp = round($detail->mrp/22,4);
+//                        $playDetails->mrp = $gameType->mrp;
+//                        $playDetails->commission = $user->commission;
+//                        $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+//                        $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+//                        $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+//                        $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
+//                        $playDetails->global_payout = $gameType->payout;
+//                        $playDetails->terminal_payout = $payoutSlabValue;
+////                        $playDetails->multiplexer = $gameType->multiplexer;
+//                        $playDetails->save();
+//                        $output_play_details[] = $playDetails;
+//
+////                    }
+//                }
+//                if(($detail->gameTypeId == 3) or ($detail->gameTypeId == 4)){
+//
+//                    if($detail->cardCombinationId == 0){
+//                        continue;
+//                    }
+//
+//                    $playDetails = new PlayDetails();
+//                    $playDetails->play_master_id = $playMaster->id;
+//                    $playDetails->game_type_id = $detail->gameTypeId;
+//                    $playDetails->combination_number_id = $detail->cardCombinationId;
+//                    $playDetails->quantity = $detail->quantity;
+//                    $playDetails->mrp = $gameType->mrp;
+//                    $playDetails->commission = $user->commission;
+//                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+//                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+//                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+//                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
+//                    $playDetails->global_payout = $gameType->payout;
+//                    $playDetails->terminal_payout = $payoutSlabValue;
+////                    $playDetails->multiplexer = $gameType->multiplexer;
+//                    $playDetails->save();
+//                    $output_play_details[] = $playDetails;
+//                }
+//
+//                if($detail->gameTypeId == 5){
+//
+//                    if($detail->doubleCombinationId == 0){
+//                        continue;
+//                    }
+//
+//                    $playDetails = new PlayDetails();
+//                    $playDetails->play_master_id = $playMaster->id;
+//                    $playDetails->game_type_id = $detail->gameTypeId;
+//                    $playDetails->combination_number_id = $detail->doubleCombinationId;
+//                    $playDetails->quantity = $detail->quantity;
+//                    $playDetails->mrp = $gameType->mrp;
+//                    $playDetails->commission = $user->commission;
+//                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+//                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+//                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+//                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
+//                    $playDetails->global_payout = $gameType->payout;
+//                    $playDetails->terminal_payout = $payoutSlabValue;
+////                    $playDetails->multiplexer = $gameType->multiplexer;
+//                    $playDetails->save();
+//                    $output_play_details[] = $playDetails;
+//                }
+//
+//                if($detail->gameTypeId == 6){
+//
+//                    if($detail->singleNumberId == 0){
+//                        continue;
+//                    }
+//
+//                    $playDetails = new PlayDetails();
+//                    $playDetails->play_master_id = $playMaster->id;
+//                    $playDetails->game_type_id = $detail->gameTypeId;
+//                    $playDetails->combination_number_id = $detail->singleNumberId;
+//                    $playDetails->quantity = $detail->quantity;
+//                    $playDetails->mrp = $gameType->mrp;
+//                    $playDetails->commission = $user->commission;
+//                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+//                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+//                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+//                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
+//                    $playDetails->global_payout = $gameType->payout;
+//                    $playDetails->terminal_payout = $payoutSlabValue;
+////                    $playDetails->multiplexer = $gameType->multiplexer;
+//                    $playDetails->save();
+//                    $output_play_details[] = $playDetails;
+//                }
+//
+//                if($detail->gameTypeId == 7){
+//
+//                    if($detail->doubleCombinationId == 0){
+//                        continue;
+//                    }
+//
+//                    $playDetails = new PlayDetails();
+//                    $playDetails->play_master_id = $playMaster->id;
+//                    $playDetails->game_type_id = $detail->gameTypeId;
+//                    $playDetails->combination_number_id = $detail->doubleCombinationId;
+//                    $playDetails->quantity = $detail->quantity;
+//                    $playDetails->mrp = $gameType->mrp;
+//                    $playDetails->commission = $user->commission;
+//                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+//                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+//                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+//                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
+//                    $playDetails->global_payout = $gameType->payout;
+//                    $playDetails->terminal_payout = $payoutSlabValue;
+////                    $playDetails->multiplexer = $gameType->multiplexer;
+//                    $playDetails->save();
+//                    $output_play_details[] = $playDetails;
+//                }
+//
+//                if($detail->gameTypeId == 8){
+//
+//                    if($detail->amdarCombinationId == 0){
+//                        continue;
+//                    }
+//
+//                    $playDetails = new PlayDetails();
+//                    $playDetails->play_master_id = $playMaster->id;
+//                    $playDetails->game_type_id = $detail->gameTypeId;
+//                    $playDetails->combination_number_id = $detail->amdarCombinationId;
+//                    $playDetails->quantity = $detail->quantity;
+//                    $playDetails->mrp = $gameType->mrp;
+//                    $playDetails->commission = $user->commission;
+//                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+//                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+//                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+//                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
+//                    $playDetails->global_payout = $gameType->payout;
+//                    $playDetails->terminal_payout = $payoutSlabValue;
+////                    $playDetails->multiplexer = $gameType->multiplexer;
+//                    $playDetails->save();
+//                    $output_play_details[] = $playDetails;
+//                }
+//
+//                if($detail->gameTypeId == 9){
+//
+//                    if($detail->baharCombinationId == 0){
+//                        continue;
+//                    }
+//
+//                    $playDetails = new PlayDetails();
+//                    $playDetails->play_master_id = $playMaster->id;
+//                    $playDetails->game_type_id = $detail->gameTypeId;
+//                    $playDetails->combination_number_id = $detail->baharCombinationId;
+//                    $playDetails->quantity = $detail->quantity;
+//                    $playDetails->mrp = $gameType->mrp;
+//                    $playDetails->commission = $user->commission;
+//                    $playDetails->ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
+//                    $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+//                    $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
+//                    $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
+//                    $playDetails->global_payout = $gameType->payout;
+//                    $playDetails->terminal_payout = $payoutSlabValue;
+////                    $playDetails->multiplexer = $gameType->multiplexer;
+//                    $playDetails->save();
+//                    $output_play_details[] = $playDetails;
+//                }
+//
+//            }
 //            $output_array['game_input'] = $this->get_game_input_details_by_play_master_id($playMaster->id);
 
             $amount = $playMaster->play_details->sum(function($t){
