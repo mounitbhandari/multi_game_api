@@ -40,7 +40,6 @@ class CPanelReportController extends Controller
             ->where('play_masters.is_cancelled',0)
             ->groupBy('play_masters.id','play_masters.barcode_number','draw_masters.visible_time','users.email','play_masters.created_at')
             ->orderBy('play_masters.created_at','desc')
-            ->chunkById(2)
             ->get();
 
         foreach($data as $x){
@@ -84,6 +83,7 @@ class CPanelReportController extends Controller
                 'draw_masters.visible_time','play_masters.created_at',
                 'play_masters.is_claimed', 'game_types.game_id','draw_masters.id','play_masters.user_id')
             ->orderBy('play_masters.created_at','desc')
+            ->chunkById(50)
             ->get();
 
         foreach($data as $x){
