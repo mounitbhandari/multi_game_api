@@ -66,7 +66,7 @@ class TerminalController extends Controller
         // return response()->json(['success'=>1,'data'=>$users], 200);
         foreach ($users as $x){
             $prize_value = 0;
-            $y = PlayMaster::whereUserId($x->id)->whereIsClaimed(0)->get();
+            $y = PlayMaster::whereUserId($x->id)->whereIsClaimed(0)->whereIsCancelled(0)->get();
 
 
             if($y){

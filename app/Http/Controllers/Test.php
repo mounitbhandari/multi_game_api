@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DrawMasterResource;
 use App\Models\DrawMaster;
 use App\Models\Game;
+use App\Models\NumberCombination;
 use App\Models\PlayDetails;
 use App\Models\PlayMaster;
 use Carbon\Carbon;
@@ -30,11 +31,13 @@ class Test extends Controller
 
     public function testNew(){
 
+        return NumberCombination::lazy();
+
 //        Cache::get('allTerminal');
 
-        $value = Cache::remember('users', 100, function () {
-            return Game::get();
-    });
+//        $value = Cache::remember('users', 100, function () {
+//            return Game::get();
+//    });
 
 //        $newa = DB::select("select game_type_id from ?",[collect($value)->all()]);
 

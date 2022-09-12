@@ -696,19 +696,27 @@ class CentralController extends Controller
         $nextGameDrawObj->last_draw_id = $lastDrawId;
         $nextGameDrawObj->save();
 
-        $tempPlayMaster = PlayMaster::select()->where('is_cancelable',1)->whereGameId($id)->get();
-        foreach ($tempPlayMaster as $x){
-            $y = PlayMaster::find($x->id);
-            $y->is_cancelable = 0;
-            $y->update();
-        }
+//        $tempPlayMaster = PlayMaster::select()->where('is_cancelable',1)->whereGameId($id)->get();
+//        $chunks = collect($tempPlayMaster)->chunk(100);
+//        foreach ($chunks as $chunk){
+//            foreach ($chunk as $x){
+//                $y = PlayMaster::find($x->id);
+//                $y->is_cancelable = 0;
+//                $y->update();
+//            }
+//        }
 
-        $gameTypes = GameType::whereGameId($id)->get();
-        foreach ($gameTypes as $x){
-            $y = GameType::find($x->id);
-            $y->multiplexer = 1;
-            $y->save();
-        }
+        DB::select("update play_masters set is_cancelable = 0 where game_id = ".$id);
+
+        DB::select("update game_types set multiplexer = 1 where game_id =  ".$id);
+
+
+//        $gameTypes = GameType::whereGameId($id)->get();
+//        foreach ($gameTypes as $x){
+//            $y = GameType::find($x->id);
+//            $y->multiplexer = 1;
+//            $y->save();
+//        }
 
         $terminalController = new TerminalController();
         $terminalController->claimPrizes();

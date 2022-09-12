@@ -100,13 +100,16 @@ class PlayController extends Controller
             $playMaster->game_id = $inputPlayMaster->gameId;
 //            $playMaster->user_relation_id = $inputPlayMaster->userRelationId;
             $playMaster->user_relation_id = $userRelationId->id;
-            $playMaster->save();
+//            $playMaster->save();
             $output_array['play_master'] = new PlayMasterResource($playMaster);
 
             $output_play_details = array();
 
             $tempItems = collect($inputPlayDetails);
             $items = ($tempItems->chunk(300)->toArray());
+
+
+//            return response()->json(['success'=>0,'data'=>$items], 406,[],JSON_NUMERIC_CHECK);
 
             foreach ($items as $item){
                 foreach($item as $inputPlayDetail){
