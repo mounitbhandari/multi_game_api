@@ -584,7 +584,7 @@ class ResultMasterController extends Controller
 
         if(($sizeOfResultMaster === sizeof($resultMasters)) && (Cache::has('returnArray'.$id) == 1)){
             $data = Cache::get('returnArray'.$id);
-            return response()->json(['success'=>0, 'data' => $data], 200);
+            return response()->json(['success'=>1, 'data' => $data], 200);
         }
 
         if(sizeof($resultMasters)<=0){
