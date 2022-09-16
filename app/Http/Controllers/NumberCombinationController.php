@@ -10,6 +10,7 @@ use App\Models\NumberCombination;
 use App\Models\SingleNumber;
 use Illuminate\Http\Request;
 use App\Http\Resources\NumberCombinationsResource;
+use Illuminate\Support\Facades\Cache;
 
 class NumberCombinationController extends Controller
 {
@@ -24,6 +25,7 @@ class NumberCombinationController extends Controller
         return response()->json(['success'=>1,'data'=> NumberCombinationsResource::collection($result)], 200,[],JSON_NUMERIC_CHECK);
     }
     public function getAllInMatrix(){
+
         $singleNumbers = NumberCombination::get();
 
         return response()->json(['success'=>1,'data'=> NumberCombinationsResource::collection($singleNumbers)], 200);

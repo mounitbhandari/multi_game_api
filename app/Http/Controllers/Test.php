@@ -31,7 +31,17 @@ class Test extends Controller
 
     public function testNew(){
 
-        return NumberCombination::lazy();
+        $test = DB::select("select * from play_masters
+            where date(created_at) = '2022-09-14'
+            order by id desc
+            limit 1")[0];
+
+        $date = Carbon::parse($test->created_at)->format('Y-m-d');
+        $datework = Carbon::createFromDate($date);
+        $now = Carbon::now();
+        $testdate = $datework->diffInDays($now);
+
+        return $testdate;
 
 //        Cache::get('allTerminal');
 
