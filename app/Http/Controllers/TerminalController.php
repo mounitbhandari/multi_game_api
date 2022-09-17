@@ -66,12 +66,16 @@ class TerminalController extends Controller
 
 //        return response()->json(['success'=>10,'data'=>$users], 200);
 
-        $users = User::select('id')->whereAutoClaim(1)->whereUserTypeId(5)->chunk(200, function ($users){
+        $users = Cache::remember('allTerminal', 3000000, function () {
+            return User::whereUserTypeId(5)->get();
+        });
+
+        User::select('id')->whereAutoClaim(1)->whereUserTypeId(5)->chunk(200, function ($users){
 
             foreach ($users as $x){
                 $prize_value = 0;
 //                $y = PlayMaster::whereUserId($x->id)->whereIsClaimed(0)->whereIsCancelled(0)->get();
-                $y = PlayMaster::select('id')->whereUserId($x->id)->whereIsClaimed(0)->whereIsCancelled(0)->chunk(100, function ($y) {
+                PlayMaster::select('id')->whereUserId($x->id)->whereIsClaimed(0)->whereIsCancelled(0)->chunk(100, function ($y) {
 
                     if ($y) {
                         foreach ($y as $z) {
@@ -170,7 +174,7 @@ class TerminalController extends Controller
 //            }
 //
 //        }
-        return response()->json(['success'=>15,'data'=>$users], 200);
+        return response()->json(['success'=>1], 200);
     }
 
     public function update_auto_claim($id){

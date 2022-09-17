@@ -9,7 +9,9 @@ use App\Models\Game;
 use App\Models\NumberCombination;
 use App\Models\PlayDetails;
 use App\Models\PlayMaster;
+use App\Models\Transaction;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
@@ -31,17 +33,41 @@ class Test extends Controller
 
     public function testNew(){
 
-        $test = DB::select("select * from play_masters
-            where date(created_at) = '2022-09-14'
-            order by id desc
-            limit 1")[0];
+//        $transaction = new Transaction();
+//        $transaction->terminal_id = 12;
+//        $transaction->play_master_id = 4;
+//        $transaction->old_amount = 200;
+//        $transaction->prize_amount = 10;
+//        $transaction->new_amount = 500;
+//        $transaction->save();
 
-        $date = Carbon::parse($test->created_at)->format('Y-m-d');
-        $datework = Carbon::createFromDate($date);
-        $now = Carbon::now();
-        $testdate = $datework->diffInDays($now);
+        $transaction = DB::insert("insert into transactions (
+              terminal_id
+              ,play_master_id
+              ,old_amount
+              ,prize_amount
+              ,new_amount
+            ) VALUES (
+              ? -- terminal_id - IN bigint unsigned
+              ,? -- play_master_id - IN int
+              ,? -- old_amount - IN decimal(50,2)
+              ,? -- prize_amount - IN decimal(50,2)
+              ,? -- new_amount - IN decimal(50,2)
+            )", array(12,4,200,10,500));
 
-        return $testdate;
+        return response()->json(['success'=>1,'data'=>$transaction], 200,[],JSON_NUMERIC_CHECK);
+
+//        $test = DB::select("select * from play_masters
+//            where date(created_at) = '2022-09-14'
+//            order by id desc
+//            limit 1")[0];
+//
+//        $date = Carbon::parse($test->created_at)->format('Y-m-d');
+//        $datework = Carbon::createFromDate($date);
+//        $now = Carbon::now();
+//        $testdate = $datework->diffInDays($now);
+//
+//        return $testdate;
 
 //        Cache::get('allTerminal');
 
