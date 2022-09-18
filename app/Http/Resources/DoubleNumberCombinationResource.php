@@ -23,10 +23,10 @@ class DoubleNumberCombinationResource extends JsonResource
             'singleNumber' => new SingleNumberSimpleResource(SingleNumber::find( $this->single_number_id)),
             'doubleNumber' => $this->double_number,
             'visibleDoubleNumber' => $this->visible_double_number,
-            'andarNumber' => Cache::remember('DoubleNumberCombinationResource'.$this->andar_number_id, 3000000, function () {
+            'andarNumber' => Cache::remember('DoubleNumberCombinationResource_andarNumber'.$this->andar_number_id, 3000000, function () {
                 return new AndarResource(AndarNumber::find($this->andar_number_id));
             }),
-            'baharNumber' => Cache::remember('DoubleNumberCombinationResource'.$this->bahar_number_id, 3000000, function () {
+            'baharNumber' => Cache::remember('DoubleNumberCombinationResource_baharNumber'.$this->bahar_number_id, 3000000, function () {
                 return new BaharResource(BaharNumber::find($this->bahar_number_id));
             }),
 //            'andarNumber' => new AndarResource(AndarNumber::find($this->andar_number_id)),

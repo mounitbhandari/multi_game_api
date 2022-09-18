@@ -3,12 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="5eca29a0-ed15-4037-b786-6b351566af54" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CardCombinationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CardCombinationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/DoubleNumberCombinationController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/DoubleNumberCombinationController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/ResultMasterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/ResultMasterController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/SingleNumberController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/SingleNumberController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Resources/DoubleNumberCombinationResource.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/DoubleNumberCombinationResource.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Resources/NumberCombinationsResource.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/NumberCombinationsResource.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -222,7 +216,7 @@
       <workItem from="1663216640644" duration="331000" />
       <workItem from="1663304309021" duration="2858000" />
       <workItem from="1663340845236" duration="2451000" />
-      <workItem from="1663474306602" duration="1742000" />
+      <workItem from="1663474306602" duration="2688000" />
     </task>
     <servers />
   </component>
