@@ -10,11 +10,6 @@ use PhpParser\Node\Expr\Cast\Double;
 
 class DoubleNumberCombinationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function get_all_double_number()
     {
         $double = DoubleNumberCombination::get();

@@ -8,25 +8,15 @@ use App\Http\Resources\SingleNumbers;
 
 class SingleNumberController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $result =  SingleNumber::orderBy('single_order')->get();
         return response()->json(['success'=>1,'data'=>SingleNumbers::collection($result)], 200,[],JSON_NUMERIC_CHECK);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function get_all_single_number()
     {
-        $result = SingleNumber::get();
+        $result = SingleNumber::select('id','single_number')->get();
         return response()->json(['success'=>1,'data'=>SingleNumbers::collection($result)], 200);
 
     }

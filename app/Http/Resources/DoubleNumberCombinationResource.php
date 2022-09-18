@@ -6,6 +6,7 @@ use App\Models\AndarNumber;
 use App\Models\BaharNumber;
 use App\Models\SingleNumber;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Cache;
 
 class DoubleNumberCombinationResource extends JsonResource
 {
@@ -19,11 +20,18 @@ class DoubleNumberCombinationResource extends JsonResource
     {
         return [
             'doubleNumberCombinationId' => $this->id,
-            'singleNumber' => new SingleNumberSimpleResource(SingleNumber::find( $this->single_number_id,)),
+            'singleNumber' => new SingleNumberSimpleResource(SingleNumber::find( $this->single_number_id)),
             'doubleNumber' => $this->double_number,
             'visibleDoubleNumber' => $this->visible_double_number,
-            'andarNumber' => new AndarResource(AndarNumber::find($this->andar_number_id)),
-            'baharNumber' => new BaharResource(BaharNumber::find($this->bahar_number_id)),
+            'andarNumber' => Cache::remember('DoubleNumberCombinationResource'.$this->andar_number_id, 3000000, function () {
+                return new AndarResource(AndarNumber::find($this->andar_number_id));
+            }),
+            'baharNumber' => Cache::remember('DoubleNumberCombinationResource'.$this->bahar_number_id, 3000000, function () {
+                return new BaharResource(BaharNumber::find($this->bahar_number_id));
+            }),
+//            'andarNumber' => new AndarResource(AndarNumber::find($this->andar_number_id)),
+//            'baharNumber' => new BaharResource(BaharNumber::find($this->bahar_number_id)),
+//            'baharNumber' => new BaharResource(BaharNumber::find($this->bahar_number_id)),
         ];
     }
 }
