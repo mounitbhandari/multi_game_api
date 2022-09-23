@@ -20,7 +20,7 @@ class DoubleNumberCombinationResource extends JsonResource
     {
         return [
             'doubleNumberCombinationId' => $this->id,
-            'singleNumber' => new SingleNumberSimpleResource(SingleNumber::find( $this->single_number_id)),
+//            'singleNumber' => new SingleNumberSimpleResource(SingleNumber::find( $this->single_number_id)),
             'doubleNumber' => $this->double_number,
             'visibleDoubleNumber' => $this->visible_double_number,
             'andarNumber' => Cache::remember('DoubleNumberCombinationResource_andarNumber'.$this->andar_number_id, 3000000, function () {
