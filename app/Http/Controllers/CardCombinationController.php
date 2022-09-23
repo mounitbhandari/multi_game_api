@@ -11,7 +11,7 @@ class CardCombinationController extends Controller
 
     public function get_all_twelve_card()
     {
-        $data = CardCombination::select('id','rank_name','suit_name','rank_initial')->hereCardCombinationTypeId(1)->get();
+        $data = CardCombination::select('id','rank_name','suit_name','rank_initial')->whereCardCombinationTypeId(1)->get();
         return response()->json(['success'=>1,'data'=> $data], 200,[],JSON_NUMERIC_CHECK);
     }
 
