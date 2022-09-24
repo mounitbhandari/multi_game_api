@@ -108,7 +108,7 @@ class PlayController extends Controller
 //            $output_play_details = array();
 
             $tempItems = collect($inputPlayDetails);
-            $items = ($tempItems->chunk(700)->toArray());
+            $items = ($tempItems->chunk(650)->toArray());
 
             $ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
             $pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
@@ -120,7 +120,7 @@ class PlayController extends Controller
                     $detail = (object)$inputPlayDetail;
 //                    $gameType = GameType::find($detail->gameTypeId);
                     $gameTypes = Cache::remember('buyTicketGameTypes', 40, function () {
-                        return GameType::get();
+                        return GameType::select('id','mrp','payout','multiplexer')->get();
                     });
                     $gameType = collect($gameTypes)->where('id', $detail->gameTypeId)->first();
 
