@@ -18,6 +18,7 @@ use App\Models\User;
 use App\Models\UserRelationWithOther;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Litespeed\LSCache\LSCache;
@@ -117,7 +118,12 @@ class PlayController extends Controller
             foreach ($items as $item){
                 foreach($item as $inputPlayDetail){
                     $detail = (object)$inputPlayDetail;
-                    $gameType = GameType::find($detail->gameTypeId);
+//                    $gameType = GameType::find($detail->gameTypeId);
+                    $gameTypes = Cache::remember('buyTicketGameTypes', 40, function () {
+                        return GameType::get();
+                    });
+                    $gameType = collect($gameTypes)->where('id', $detail->gameTypeId)->first();
+
                     //insert value for triple
                     if($detail->gameTypeId == 2){
 

@@ -41,21 +41,21 @@ class Test extends Controller
 //        $transaction->new_amount = 500;
 //        $transaction->save();
 
-        $transaction = DB::insert("insert into transactions (
-              terminal_id
-              ,play_master_id
-              ,old_amount
-              ,prize_amount
-              ,new_amount
-            ) VALUES (
-              ? -- terminal_id - IN bigint unsigned
-              ,? -- play_master_id - IN int
-              ,? -- old_amount - IN decimal(50,2)
-              ,? -- prize_amount - IN decimal(50,2)
-              ,? -- new_amount - IN decimal(50,2)
-            )", array(12,4,200,10,500));
-
-        return response()->json(['success'=>1,'data'=>$transaction], 200,[],JSON_NUMERIC_CHECK);
+//        $transaction = DB::insert("insert into transactions (
+//              terminal_id
+//              ,play_master_id
+//              ,old_amount
+//              ,prize_amount
+//              ,new_amount
+//            ) VALUES (
+//              ? -- terminal_id - IN bigint unsigned
+//              ,? -- play_master_id - IN int
+//              ,? -- old_amount - IN decimal(50,2)
+//              ,? -- prize_amount - IN decimal(50,2)
+//              ,? -- new_amount - IN decimal(50,2)
+//            )", array(12,4,200,10,500));
+//
+//        return response()->json(['success'=>1,'data'=>$transaction], 200,[],JSON_NUMERIC_CHECK);
 
 //        $test = DB::select("select * from play_masters
 //            where date(created_at) = '2022-09-14'
@@ -71,9 +71,9 @@ class Test extends Controller
 
 //        Cache::get('allTerminal');
 
-//        $value = Cache::remember('users', 100, function () {
-//            return Game::get();
-//    });
+        $value = Cache::remember('users', 100, function () {
+            return Game::get();
+    });
 
 //        $newa = DB::select("select game_type_id from ?",[collect($value)->all()]);
 

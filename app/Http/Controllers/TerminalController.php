@@ -70,12 +70,12 @@ class TerminalController extends Controller
             return User::whereUserTypeId(5)->get();
         });
 
-        User::select('id')->whereAutoClaim(1)->whereUserTypeId(5)->chunk(200, function ($users){
+        User::select('id')->whereAutoClaim(1)->whereUserTypeId(5)->chunk(300, function ($users){
 
             foreach ($users as $x){
                 $prize_value = 0;
 //                $y = PlayMaster::whereUserId($x->id)->whereIsClaimed(0)->whereIsCancelled(0)->get();
-                PlayMaster::select('id')->whereUserId($x->id)->whereIsClaimed(0)->whereIsCancelled(0)->chunk(100, function ($y) {
+                PlayMaster::select('id')->whereUserId($x->id)->whereIsClaimed(0)->whereIsCancelled(0)->chunk(300, function ($y) {
 
                     if ($y) {
                         foreach ($y as $z) {
