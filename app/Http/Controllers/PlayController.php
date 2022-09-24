@@ -108,7 +108,7 @@ class PlayController extends Controller
 //            $output_play_details = array();
 
             $tempItems = collect($inputPlayDetails);
-            $items = ($tempItems->chunk(300)->toArray());
+            $items = ($tempItems->chunk(700)->toArray());
 
             $ps_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->stockist_id)->commission;
             $pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;
@@ -316,7 +316,8 @@ class PlayController extends Controller
                 return $t->quantity * $t->mrp;
             });
 
-            $userClosingBalance = (User::find($inputPlayMaster->terminalId))->closing_balance;
+//            $userClosingBalance = (User::find($inputPlayMaster->terminalId))->closing_balance;
+            $userClosingBalance = $user->closing_balance;
 
             if($userClosingBalance < $amount){
                 DB::rollBack();
@@ -325,10 +326,15 @@ class PlayController extends Controller
 
             $output_array['amount'] = round($amount,0);
 
-            $terminal = User::findOrFail($inputPlayMaster->terminalId);
-            $old_amount = $terminal->closing_balance;
-            $terminal->closing_balance-= $amount;
-            $terminal->save();
+//            $terminal = User::findOrFail($inputPlayMaster->terminalId);
+//            $old_amount = $terminal->closing_balance;
+//            $terminal->closing_balance-= $amount;
+//            $terminal->save();
+
+//            $terminal = User::findOrFail($inputPlayMaster->terminalId);
+            $old_amount = $user->closing_balance;
+            $user->closing_balance-= $amount;
+            $user->save();
 
             $transaction = new Transaction();
             $transaction->description = 'Purchased';
@@ -336,7 +342,7 @@ class PlayController extends Controller
             $transaction->play_master_id = $playMaster->id;
             $transaction->old_amount = $old_amount;
             $transaction->played_amount = $amount;
-            $transaction->new_amount = $terminal->closing_balance;
+            $transaction->new_amount = $user->closing_balance;
             $transaction->save();
 
             DB::commit();
