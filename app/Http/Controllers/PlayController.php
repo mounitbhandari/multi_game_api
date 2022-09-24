@@ -104,7 +104,7 @@ class PlayController extends Controller
             $playMaster->save();
             $output_array['play_master'] = new PlayMasterResource($playMaster);
 
-            $output_play_details = array();
+//            $output_play_details = array();
 
             $tempItems = collect($inputPlayDetails);
             $items = ($tempItems->chunk(300)->toArray());
@@ -140,7 +140,7 @@ class PlayController extends Controller
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->terminal_payout = $payoutSlabValue;
                         $playDetails->save();
-                        $output_play_details[] = $playDetails;
+//                        $output_play_details[] = $playDetails;
                     }else if($detail->gameTypeId == 1){
 
                         if($detail->singleNumberId == 0){
@@ -166,7 +166,7 @@ class PlayController extends Controller
                         $playDetails->terminal_payout = $payoutSlabValue;
 //                        $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
-                        $output_play_details[] = $playDetails;
+//                        $output_play_details[] = $playDetails;
 
 //                    }
                     }else if(($detail->gameTypeId == 3) or ($detail->gameTypeId == 4)){
@@ -190,7 +190,7 @@ class PlayController extends Controller
                         $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
-                        $output_play_details[] = $playDetails;
+//                        $output_play_details[] = $playDetails;
                     }else if($detail->gameTypeId == 5){
 
                         if($detail->doubleCombinationId == 0){
@@ -212,7 +212,7 @@ class PlayController extends Controller
                         $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
-                        $output_play_details[] = $playDetails;
+//                        $output_play_details[] = $playDetails;
                     }else if($detail->gameTypeId == 6){
 
                         if($detail->singleNumberId == 0){
@@ -234,7 +234,7 @@ class PlayController extends Controller
                         $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
-                        $output_play_details[] = $playDetails;
+//                        $output_play_details[] = $playDetails;
                     }else if($detail->gameTypeId == 7){
 
                         if($detail->doubleCombinationId == 0){
@@ -256,7 +256,7 @@ class PlayController extends Controller
                         $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
-                        $output_play_details[] = $playDetails;
+//                        $output_play_details[] = $playDetails;
                     }else if($detail->gameTypeId == 8){
 
                         if($detail->andarCombinationId == 0){
@@ -278,7 +278,7 @@ class PlayController extends Controller
                         $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
-                        $output_play_details[] = $playDetails;
+//                        $output_play_details[] = $playDetails;
                     }else if($detail->gameTypeId == 9){
 
                         if($detail->baharCombinationId == 0){
@@ -300,7 +300,7 @@ class PlayController extends Controller
                         $playDetails->terminal_payout = $payoutSlabValue;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
-                        $output_play_details[] = $playDetails;
+//                        $output_play_details[] = $playDetails;
                     }
 
                 }
