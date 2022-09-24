@@ -257,14 +257,14 @@ class PlayController extends Controller
                         $output_play_details[] = $playDetails;
                     }else if($detail->gameTypeId == 8){
 
-                        if($detail->amdarCombinationId == 0){
+                        if($detail->andarCombinationId == 0){
                             continue;
                         }
 
                         $playDetails = new PlayDetails();
                         $playDetails->play_master_id = $playMaster->id;
                         $playDetails->game_type_id = $detail->gameTypeId;
-                        $playDetails->combination_number_id = $detail->amdarCombinationId;
+                        $playDetails->combination_number_id = $detail->andarCombinationId;
                         $playDetails->quantity = $detail->quantity;
                         $playDetails->mrp = $gameType->mrp;
                         $playDetails->commission = $user->commission;
