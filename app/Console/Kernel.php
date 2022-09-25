@@ -46,7 +46,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('drawOver:update')->dailyAt('00:00')->timezone('Asia/Kolkata');
         $schedule->command('clear:tokens')->dailyAt('00:00')->timezone('Asia/Kolkata');
 
-        $schedule->command('generateTripleChance:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
+//        $schedule->command('generateTripleChance:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
 
         //sleep(0)
         $schedule->command('generateDouble:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
@@ -55,6 +55,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('generateTwelveCard:result')->cron('1-59/2 * * * *')->timezone('Asia/Kolkata');
         $schedule->command('generateSingle:result')->cron('1-59/2 * * * *')->timezone('Asia/Kolkata');
         $schedule->command('generateSixteenCard:result')->cron('1-59/2 * * * *')->timezone('Asia/Kolkata');
+
+        $schedule->command('generateTripleChance:result')->cron('1-59/2 * * * *')->timezone('Asia/Kolkata');
 
         //database Backup
         $schedule->call(function () {
