@@ -2,7 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5eca29a0-ed15-4037-b786-6b351566af54" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Console/Commands/generateTripleChanceResult.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Console/Commands/generateTripleChanceResult.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Console/Commands/generateTwelveCardResult.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Console/Commands/generateTwelveCardResult.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -223,7 +225,7 @@
       <workItem from="1663908013190" duration="9000" />
       <workItem from="1663908172757" duration="967000" />
       <workItem from="1664025393019" duration="7114000" />
-      <workItem from="1664071577389" duration="9473000" />
+      <workItem from="1664071577389" duration="10358000" />
     </task>
     <servers />
   </component>

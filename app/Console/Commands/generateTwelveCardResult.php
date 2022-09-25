@@ -41,7 +41,7 @@ class generateTwelveCardResult extends Command
     public function handle()
     {
         // LOG::info('Twelve card: '.Carbon::today());
-        Sleep(55);
+        Sleep(54);
         $centralControllerObj = new CentralController();
         $ret = $centralControllerObj->createResult(2,1);
         // LOG::info('Twelve card: '.$ret);
