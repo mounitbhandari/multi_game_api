@@ -420,9 +420,9 @@ class ResultMasterController extends Controller
                     inner join draw_masters ON draw_masters.id = result_masters.draw_master_id
                     where result_masters.id = ".$resultMaster->id))[0]->visible_time,
 
-                    'multiplexer' => (DB::select("select single_numbers.single_number, result_masters.draw_master_id, result_masters.game_id, result_details.multiplexer, result_details.result_master_id from result_masters
+                    'multiplexer' => (DB::select("select double_number_combinations.visible_double_number, result_masters.draw_master_id, result_masters.game_id, result_details.multiplexer, result_details.result_master_id from result_masters
                     inner join result_details on result_details.result_master_id = result_masters.id
-                    inner join single_numbers on single_numbers.id = result_details.combination_number_id
+                    inner join double_number_combinations on double_number_combinations.id = result_details.combination_number_id
                     where result_details.game_type_id = 7 and result_details.result_master_id = ".$resultMaster->id))[0]->multiplexer,
 
                     'double_number' => (DB::select("select double_number_combinations.visible_double_number, result_masters.draw_master_id, result_masters.game_id, result_details.multiplexer, result_details.result_master_id from result_masters
