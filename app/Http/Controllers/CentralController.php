@@ -578,9 +578,8 @@ class CentralController extends Controller
 
                         if($totalSale <= $totalDoubleNumberSale){
                             $gen = 1;
-
-                            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,8,$data->andar_number_id,1))->content(),true);
                             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,7,$data->combination_number_id,1))->content(),true);
+                            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,8,$data->andar_number_id,1))->content(),true);
                             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,9,$data->bahar_number_id,1))->content(),true);
 //                            return response()->json(['success'=>$data, 'success1' => $totalSale, 'success2'=>$totalDoubleNumberSale], 200);
                             break;
@@ -605,8 +604,8 @@ class CentralController extends Controller
             if($gen == 0){
                 if(empty($doubleNumberTargetData)){
                     $data = $this->checkSmallerTotalSaleForDoubleAndarBahar($lastDrawId);
-                    $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,8,$data->andar_number_id,1))->content(),true);
                     $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,7,$data->combination_number_id,1))->content(),true);
+                    $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,8,$data->andar_number_id,1))->content(),true);
                     $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,9,$data->bahar_number_id,1))->content(),true);
                 }
             }
