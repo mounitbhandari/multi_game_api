@@ -61,15 +61,6 @@ class TerminalController extends Controller
     }
 
     public function claimPrizes(){
-
-//        $users = User::select('id')->whereAutoClaim(1)->whereUserTypeId(5)->get();
-
-//        return response()->json(['success'=>10,'data'=>$users], 200);
-
-        $users = Cache::remember('allTerminal', 3000000, function () {
-            return User::whereUserTypeId(5)->get();
-        });
-
         User::select('id')->whereAutoClaim(1)->whereUserTypeId(5)->chunk(300, function ($users){
 
             foreach ($users as $x){
