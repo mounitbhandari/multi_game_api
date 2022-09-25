@@ -112,13 +112,6 @@ class CentralController extends Controller
 
             while(true){
 
-//                $tripleNumberTargetData = DB::select("select * from play_details
-//                inner join number_combinations on number_combinations.id = play_details.combination_number_id
-//                inner join play_masters on play_details.play_master_id = play_masters.id
-//                where quantity <= ? and game_type_id = 2 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
-//                order by quantity desc
-//                ",[$tripleValue, $today, $lastDrawId]);
-
                 $tripleNumberTargetData = DB::select("select * from play_details
                 inner join number_combinations on number_combinations.id = play_details.combination_number_id
                 inner join play_masters on play_details.play_master_id = play_masters.id
@@ -176,10 +169,6 @@ class CentralController extends Controller
 //                                '$splitNumber' => $splitNumber,
 //                            ];
 
-//                        Log::info('$singleNumberValue: '.$singleNumberValue);
-//                        Log::info('$tripleData: '.$tripleData->combination_number_id);
-//                        Log::info('$doubleNumberValue: '.$doubleNumberValue);
-
 //                        return $temp;
 
                             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,1,$singleNumberValue,1))->content(),true);
@@ -194,75 +183,6 @@ class CentralController extends Controller
                     break;
                 }
 
-
-//                $tesmp = [
-//                    '$tripleNumberTargetData'=>$tripleNumberTargetData,
-//                    '$tripleValue' => $tripleValue
-//                ];
-//
-//                return $tesmp;
-
-//                foreach ($tripleNumberTargetData as $tripleData){
-//                    $splitNumber = str_split($tripleData->visible_triple_number);
-//                    $singleNumberValue = (SingleNumber::select()->whereSingleNumber($splitNumber[2])->first())->id;
-//                    $doubleNumberValue = (DoubleNumberCombination::select()->whereDoubleNumber($splitNumber[1].$splitNumber[2])->first())->id;
-//                    $doubleNumberQuantity = 0;
-//                    $singleNumberQuantity = 0;
-//
-//                    $doubleNumberTargetData = DB::select("select ifnull(sum(quantity),0) as quantity from play_details
-//                        inner join play_masters on play_details.play_master_id = play_masters.id
-//                        where play_details.combination_number_id = ? and game_type_id = 5 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
-//                        ",[$doubleNumberValue, $today, $lastDrawId]);
-//
-//                    if(empty($doubleNumberTargetData)) {
-//                        $doubleNumberQuantity = 0;
-//                    }else{
-//                        $doubleNumberQuantity = $doubleNumberTargetData[0]->quantity;
-//                    }
-//
-//                    $singleNumberTargetData = DB::select("select ifnull(sum(quantity),0) as quantity from play_details
-//                        inner join play_masters on play_details.play_master_id = play_masters.id
-//                        where play_details.combination_number_id = ?  and game_type_id = 1 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
-//                       ",[$singleNumberValue, $today, $lastDrawId]);
-//
-//                    if(empty($singleNumberTargetData)) {
-//                        $singleNumberQuantity = 0;
-//                    }else{
-//                        $singleNumberQuantity = $singleNumberTargetData[0]->quantity;
-//                    }
-//
-//                    $totalSale = (($tripleData->quantity) * $tripleNumber->winning_price) + ($doubleNumberQuantity * $doubleNumber->winning_price) + ($singleNumberQuantity * $singleNumber->winning_price);
-//
-//                    if($totalSale <= $allGameTotalSale){
-//                        $loopOn = 0;
-//                        $temp = [
-//                            'single x' => $splitNumber[2],
-//                            'single' => $singleNumberValue,
-//                            'single quantity' => $singleNumberQuantity,
-//                            'double' => $doubleNumberValue,
-//                            'double quantity' => $doubleNumberQuantity,
-//                            'triple' => $tripleData->combination_number_id,
-////                            'tripleNumberData' => $tripleNumberTargetData,
-//                            'total_sale' => $totalSale,
-//                            'allGameTotalSale' => $allGameTotalSale,
-//                            '$tripleData' => $tripleData,
-//                            '$splitNumber' => $splitNumber,
-//                        ];
-//
-////                        Log::info('$singleNumberValue: '.$singleNumberValue);
-////                        Log::info('$tripleData: '.$tripleData->combination_number_id);
-////                        Log::info('$doubleNumberValue: '.$doubleNumberValue);
-//
-////                        return $temp;
-//
-//                        $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,1,$singleNumberValue,$game_multiplexer))->content(),true);
-//                        $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,2,$tripleData->combination_number_id,$game_multiplexer))->content(),true);
-//                        $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,5,$doubleNumberValue,$game_multiplexer))->content(),true);
-//
-//                        array_push($resultToBeSaved, $temp);
-//                        break;
-//                    }
-//                }
 
                 if($loopOn == 1){
                     if($tripleValue > 0 ){
@@ -604,51 +524,141 @@ class CentralController extends Controller
             $lastDrawId = $nextGameDrawObj->last_draw_id;
 
             $doubleNumber = (GameType::find(7));
+            $andarNumber = (GameType::find(8));
+            $baharNumber = (GameType::find(9));
 
-            $doubleValue = (($playMasterControllerObj->get_total_sale($today,$lastDrawId,7) * ($doubleNumber->payout)/100)/$game_multiplexer)/($doubleNumber->winning_price);
+//            $doubleValue = (($playMasterControllerObj->get_total_sale($today,$lastDrawId,7) * ($doubleNumber->payout)/100)/$game_multiplexer)/($doubleNumber->winning_price);
+//            $andarValue = (($playMasterControllerObj->get_total_sale($today,$lastDrawId,8) * ($doubleNumber->payout)/100)/$game_multiplexer)/($doubleNumber->winning_price);
+//            $baharValue = (($playMasterControllerObj->get_total_sale($today,$lastDrawId,9) * ($doubleNumber->payout)/100)/$game_multiplexer)/($doubleNumber->winning_price);
 
-            $doubleNumberTargetData = DB::select("select * from play_details
-            inner join play_masters on play_details.play_master_id = play_masters.id
-            where quantity <= ? and game_type_id = 5 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
-            order by quantity desc
-            limit 1",[$doubleValue, $today, $lastDrawId]);
 
-            if(empty($doubleNumberTargetData)) {
-                $doubleNumberTargetData = DB::select("select id as combination_number_id, 0 as quantity from single_numbers
-                    where id not in (select combination_number_id from play_details
-                    inner join play_masters on play_details.play_master_id = play_masters.id
-                    where game_type_id = 5 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?)
-                    order by RAND()
-                    limit 1",[$today, $lastDrawId]);
-            }
+            $doubleValue = $playMasterControllerObj->get_total_sale($today,$lastDrawId,7);
+            $andarValue = $playMasterControllerObj->get_total_sale($today,$lastDrawId,8);
+            $baharValue = $playMasterControllerObj->get_total_sale($today,$lastDrawId,9);
 
-            if(empty($doubleNumberTargetData)){
+            $totalDoubleNumberSale = (int)($doubleValue * ($doubleNumber->payout)/100) + (int)($andarValue * ($andarNumber->payout)/100) + (int)($baharValue * ($baharNumber->payout)/100);
+
+            $doubleNumberQuantity = (int)($totalDoubleNumberSale/$doubleNumber->winning_price)/($game_multiplexer);
+            $loopOn = 1;
+            $gen = 0;
+
+            while (true){
                 $doubleNumberTargetData = DB::select("select * from play_details
+                inner join double_number_combinations on double_number_combinations.id = play_details.combination_number_id
                 inner join play_masters on play_details.play_master_id = play_masters.id
-                where quantity > ? and game_type_id = 5 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
-                order by quantity
-                limit 1",[$doubleValue, $today, $lastDrawId]);
+                where quantity <= ? and game_type_id = 7 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+                order by RAND(), quantity desc
+                ",[$doubleNumberQuantity, $today, $lastDrawId]);
+
+                if(!empty($doubleNumberTargetData)){
+                    foreach ($doubleNumberTargetData as $data){
+                        $andarNumberTargetData = DB::select("select ifnull(sum(quantity),0) as quantity from play_details
+                        inner join play_masters on play_details.play_master_id = play_masters.id
+                        where play_details.combination_number_id = ? and game_type_id = 8 and date(play_details.created_at) =  ? and play_masters.draw_master_id = ?
+                        ",[$data->andar_number_id, $today, $lastDrawId]);
+
+                        if(empty($andarNumberTargetData)) {
+                            $andarNumberTargetData = 0;
+                        }else{
+                            $andarNumberTargetData = $andarNumberTargetData[0]->quantity;
+                        }
+
+                        $baharNumberTargetData = DB::select("select ifnull(sum(quantity),0) as quantity from play_details
+                        inner join play_masters on play_details.play_master_id = play_masters.id
+                        where play_details.combination_number_id = ? and game_type_id = 9 and date(play_details.created_at) =  ? and play_masters.draw_master_id = ?
+                        ",[$data->bahar_number_id, $today, $lastDrawId]);
+
+                        if(empty($baharNumberTargetData)) {
+                            $baharNumberTargetData = 0;
+                        }else{
+                            $baharNumberTargetData = $baharNumberTargetData[0]->quantity;
+                        }
+
+                        $totalSale = (($data->quantity) * $doubleNumber->winning_price) + ($andarNumberTargetData * $andarNumber->winning_price) + ($baharNumberTargetData * $baharNumber->winning_price);
+
+                        if($totalSale <= $totalDoubleNumberSale){
+                            $gen = 1;
+
+                            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,8,$data->andar_number_id,1))->content(),true);
+                            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,7,$data->combination_number_id,1))->content(),true);
+                            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,9,$data->bahar_number_id,1))->content(),true);
+//                            return response()->json(['success'=>$data, 'success1' => $totalSale, 'success2'=>$totalDoubleNumberSale], 200);
+                            break;
+                        }
+                    }
+                }else{
+                    break;
+                }
+
+                if($loopOn == 1){
+                    if($doubleNumberQuantity > 0 ){
+                        $doubleNumberQuantity = $doubleNumberQuantity - 1;
+                        continue;
+                    }else{
+                        break;
+                    }
+                }else{
+                    break;
+                }
             }
 
-            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,7,$doubleNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
-
-//            $getResultSingle = (DoubleNumberCombination::find($doubleNumberTargetData[0]->combination_number_id))->andar_number_id;
-
-            if($playMasterSaveCheck['success'] == 0){
-                return response()->json(['success'=>0, 'message' => 'Save error double number'], 401);
+            if($gen == 0){
+                if(empty($doubleNumberTargetData)){
+                    $data = $this->checkSmallerTotalSaleForDoubleAndarBahar($lastDrawId);
+                    $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,8,$data->andar_number_id,1))->content(),true);
+                    $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,7,$data->combination_number_id,1))->content(),true);
+                    $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,9,$data->bahar_number_id,1))->content(),true);
+                }
             }
 
-            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,8,(DoubleNumberCombination::find($doubleNumberTargetData[0]->combination_number_id))->andar_number_id,$game_multiplexer))->content(),true);
 
-            if($playMasterSaveCheck['success'] == 0){
-                return response()->json(['success'=>0, 'message' => 'Save error andar number'], 401);
-            }
 
-            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,9,(DoubleNumberCombination::find($doubleNumberTargetData[0]->combination_number_id))->bahar_number_id,$game_multiplexer))->content(),true);
-
-            if($playMasterSaveCheck['success'] == 0){
-                return response()->json(['success'=>0, 'message' => 'Save error bahar number'], 401);
-            }
+//            return response()->json(['success'=>$doubleValue, 'success1' => $andarValue, 'success2'=>$baharValue, 'xx'=>$totalDoubleNumberSale, 'xxx'=>$doubleNumberQuantity], 200);
+//
+//            $doubleNumberTargetData = DB::select("select * from play_details
+//            inner join play_masters on play_details.play_master_id = play_masters.id
+//            where quantity <= ? and game_type_id = 5 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+//            order by quantity desc
+//            limit 1",[$doubleValue, $today, $lastDrawId]);
+//
+//            if(empty($doubleNumberTargetData)) {
+//                $doubleNumberTargetData = DB::select("select id as combination_number_id, 0 as quantity from single_numbers
+//                    where id not in (select combination_number_id from play_details
+//                    inner join play_masters on play_details.play_master_id = play_masters.id
+//                    where game_type_id = 5 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?)
+//                    order by RAND()
+//                    limit 1",[$today, $lastDrawId]);
+//            }
+//
+//            if(empty($doubleNumberTargetData)){
+//                $doubleNumberTargetData = DB::select("select * from play_details
+//                inner join play_masters on play_details.play_master_id = play_masters.id
+//                where quantity > ? and game_type_id = 5 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+//                order by quantity
+//                limit 1",[$doubleValue, $today, $lastDrawId]);
+//            }
+//
+//            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,7,$doubleNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
+//
+////            $getResultSingle = (DoubleNumberCombination::find($doubleNumberTargetData[0]->combination_number_id))->andar_number_id;
+//
+//            if($playMasterSaveCheck['success'] == 0){
+//                return response()->json(['success'=>0, 'message' => 'Save error double number'], 401);
+//            }
+//
+//            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,8,(DoubleNumberCombination::find($doubleNumberTargetData[0]->combination_number_id))->andar_number_id,$game_multiplexer))->content(),true);
+//
+//            if($playMasterSaveCheck['success'] == 0){
+//                return response()->json(['success'=>0, 'message' => 'Save error andar number'], 401);
+//            }
+//
+//            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,9,(DoubleNumberCombination::find($doubleNumberTargetData[0]->combination_number_id))->bahar_number_id,$game_multiplexer))->content(),true);
+//
+//            if($playMasterSaveCheck['success'] == 0){
+//                return response()->json(['success'=>0, 'message' => 'Save error bahar number'], 401);
+//            }
+//
+//            return;
         }
 
 
@@ -819,6 +829,57 @@ class CentralController extends Controller
 
     }
 
+    public function checkSmallerTotalSaleForDoubleAndarBahar($last_draw_master_id){
+        $today = Carbon::today();
+        $result = [];
+
+        $double_winning = GameType::find(7)->winning_price;
+        $andar_winning = GameType::find(8)->winning_price;
+        $bahar_winning = GameType::find(9)->winning_price;
+
+        $doubleChances = DB::select("select double_number_combinations.id as combination_number_id,double_number_combinations.visible_double_number ,double_number_combinations.andar_number_id , double_number_combinations.bahar_number_id, ifnull(table1.quantity,0) as quantity from
+            (select combination_number_id, sum(play_details.quantity) as quantity from play_details
+            inner join play_masters on play_details.play_master_id = play_masters.id
+            where play_details.game_type_id = 7 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+            group by combination_number_id) as table1
+            right outer join double_number_combinations on table1.combination_number_id = double_number_combinations.id
+            order by rand()
+            ",[$today,$last_draw_master_id]);
+
+        foreach ($doubleChances as $doubleChance){
+            $andar_value = DB::select("Select andar_numbers.id as combination_number_id, ifnull(quantity,0) as quantity from
+                (select combination_number_id, sum(quantity) as quantity from play_details
+                inner join play_masters on play_details.play_master_id = play_masters.id
+                where play_details.game_type_id = 8 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+                group by combination_number_id) as tabel1
+                right outer join andar_numbers on tabel1.combination_number_id = andar_numbers.id
+                where andar_numbers.id = ?",[$today,$last_draw_master_id,$doubleChance->andar_number_id])[0];
+
+            $bahar_value = DB::select("Select bahar_numbers.id as combination_number_id, ifnull(quantity,0) as quantity from
+                (select combination_number_id, sum(quantity) as quantity from play_details
+                inner join play_masters on play_details.play_master_id = play_masters.id
+                where play_details.game_type_id = 9 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+                group by combination_number_id) as tabel1
+                right outer join bahar_numbers on tabel1.combination_number_id = bahar_numbers.id
+                where bahar_numbers.id = ?",[$today,$last_draw_master_id,$doubleChance->bahar_number_id])[0];
+
+            $calc = ($doubleChance->quantity * $double_winning) + ($andar_value->quantity * $andar_winning) + ($bahar_value->quantity * $bahar_winning);
+            $doubleChance->calc = $calc;
+
+            if(count($result) == 0){
+                array_push($result, $doubleChance);
+            }else{
+                if($calc < $result[0]->calc){
+                    $result[0] = $doubleChance;
+                }
+            }
+        }
+
+        return $result[0];
+
+
+    }
+
     public function checkSmallerTotalSale($last_draw_master_id){
 
         $today = Carbon::today();
@@ -861,8 +922,6 @@ class CentralController extends Controller
                 where double_number_combinations.id = ?",[$today,$last_draw_master_id,$doubleNumberValue])[0];
 
             $calc = ($tripleChance->quantity * $triple_winning) + ($single_value->quantity * $single_winning) + ($double_value->quantity * $double_winning);
-//            $tripleChance->single_number = (object)$single_value;
-//            $tripleChance->double_number = (object)$double_value;
             $tripleChance->calc = $calc;
 
             if(count($result) == 0){
