@@ -332,6 +332,17 @@ class ResultMasterController extends Controller
         $return_array = [];
         $draw_id = [];
 
+        $resultMastersCheck = ResultMaster::select('id')->whereGameId($id)->whereGameDate($today)->get();
+
+        $sizeOfResultMaster = Cache::remember('sizeOfResultMasterAsc'.$id, 3000000, function () use ($resultMastersCheck) {
+            return sizeof($resultMastersCheck);
+        });
+
+        if(($sizeOfResultMaster === sizeof($resultMastersCheck)) && (Cache::has('returnArrayAsc'.$id) == 1)){
+            $data = Cache::get('returnArrayAsc'.$id);
+            return response()->json(['success'=>1, 'data' => $data], 200);
+        }
+
         $resultMasters = ResultMaster::select('id','draw_master_id','game_date')->whereGameId($id)->whereGameDate($today)->orderBy('id','DESC')->get();
 //        $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->limit(7)->get();
 
@@ -449,6 +460,15 @@ class ResultMasterController extends Controller
         else{
             return response()->json(['success'=> 0, 'message' => 'Invalid game id'], 200);
         }
+
+        Cache::forget('returnArrayAsc'.$id);
+        Cache::forget('sizeOfResultMasterAsc'.$id);
+        Cache::remember('returnArrayAsc'.$id, 3000000, function () use ($return_array) {
+            return $return_array;
+        });
+        Cache::remember('sizeOfResultMasterAsc'.$id, 3000000, function () use ($resultMasters) {
+            return sizeof($resultMasters);
+        });
 
 //        $return_array = collect($return_array)->sortBy('draw_time')->reverse()->toArray();
 //        $return_array = collect($return_array)->sortBy('draw_time')->toArray();
