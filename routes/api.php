@@ -247,9 +247,6 @@ Route::group(array('prefix' => 'dev'), function() {
 
     Route::get('seedingData',[NumberCombinationController::class, 'create_migration']);
 
-//    Route::get('getAndarNumbers',[AndarNumberController::class, 'get_all_andar_number']);
-//    Route::get('getBaharNumbers',[BaharNumberController::class, 'get_all_bahar_number']);
-
     Route::get('terminals',[TerminalController::class, 'get_all_terminals']);
 
     Route::post('superStockists',[SuperStockistController::class, 'create_super_stockist']);
