@@ -210,7 +210,7 @@ class ResultMasterController extends Controller
 
         if(($sizeOfResultMaster === sizeof($resultMastersCheck)) && (Cache::has('returnArraySeven'.$id) == 1)){
             $data = Cache::get('returnArraySeven'.$id);
-            return response()->json(['success'=>1, 'data' => $data], 200);
+            return response()->json(['success'=>1,'form' => 'Cache' , 'data' => $data], 200);
         }
 
         $resultMasters = ResultMaster::select('id','draw_master_id','game_date')->whereGameId($id)->whereGameDate($today)->orderBy('id','DESC')->limit(7)->get();
