@@ -345,18 +345,18 @@ class ResultMasterController extends Controller
         $return_array = [];
         $draw_id = [];
 
-        $resultMastersCheck = ResultMaster::select('id')->whereGameId($id)->whereGameDate($today)->get();
+//        $resultMastersCheck = ResultMaster::select('id')->whereGameId($id)->whereGameDate($today)->get();
 
-        $sizeOfResultMaster = Cache::remember('sizeOfResultMasterAsc'.$id, 3000000, function () use ($resultMastersCheck) {
-            return sizeof($resultMastersCheck);
+        $resultMasters = ResultMaster::select('id','draw_master_id','game_date')->whereGameId($id)->whereGameDate($today)->orderBy('id','DESC')->get();
+
+        $sizeOfResultMaster = Cache::remember('sizeOfResultMasterAsc'.$id, 3000000, function () use ($resultMasters) {
+            return sizeof($resultMasters);
         });
 
-        if(($sizeOfResultMaster === sizeof($resultMastersCheck)) && (Cache::has('returnArrayAsc'.$id) == 1)){
+        if(($sizeOfResultMaster === sizeof($resultMasters)) && (Cache::has('returnArrayAsc'.$id) == 1)){
             $data = Cache::get('returnArrayAsc'.$id);
             return response()->json(['success'=>1,'control'=>'cache' , 'data' => $data], 200);
         }
-
-        $resultMasters = ResultMaster::select('id','draw_master_id','game_date')->whereGameId($id)->whereGameDate($today)->orderBy('id','DESC')->get();
 
         if($id == 1){
             foreach ($resultMasters as $resultMaster){
