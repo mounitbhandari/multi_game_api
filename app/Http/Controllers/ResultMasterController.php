@@ -201,12 +201,19 @@ class ResultMasterController extends Controller
         $today= Carbon::today()->format('Y-m-d');
         $return_array = [];
         $draw_id = [];
-        $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->orderBy('id','DESC')->limit(7)->get();
-//        $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->limit(7)->get();
 
+        $resultMastersCheck = ResultMaster::select('id')->whereGameId($id)->whereGameDate($today)->get();
 
-//        return response()->json(['success'=>1, 'data' => $resultMasters], 200);
-//        $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->orderBy('draw_master_id','DESC')->limit(7)->get();
+        $sizeOfResultMaster = Cache::remember('sizeOfResultMasterSeven'.$id, 3000000, function () use ($resultMastersCheck) {
+            return sizeof($resultMastersCheck);
+        });
+
+        if(($sizeOfResultMaster === sizeof($resultMastersCheck)) && (Cache::has('returnArraySeven'.$id) == 1)){
+            $data = Cache::get('returnArraySeven'.$id);
+            return response()->json(['success'=>1, 'data' => $data], 200);
+        }
+
+        $resultMasters = ResultMaster::select('id','draw_master_id','game_date')->whereGameId($id)->whereGameDate($today)->orderBy('id','DESC')->limit(7)->get();
 
         if($id == 1){
             foreach ($resultMasters as $resultMaster){
@@ -319,8 +326,14 @@ class ResultMasterController extends Controller
             return response()->json(['success'=> 0, 'message' => 'Invalid game id'], 200);
         }
 
-//        $return_array = collect($return_array)->sortBy('draw_time')->reverse()->toArray();
-//        $return_array = collect($return_array)->sortBy('draw_time')->toArray();
+        Cache::forget('returnArraySeven'.$id);
+        Cache::forget('sizeOfResultMasterSeven'.$id);
+        Cache::remember('returnArraySeven'.$id, 3000000, function () use ($return_array) {
+            return $return_array;
+        });
+        Cache::remember('sizeOfResultMasterSeven'.$id, 3000000, function () use ($resultMasters) {
+            return sizeof($resultMasters);
+        });
 
         return response()->json(['success'=>1, 'data' => $return_array], 200);
 
@@ -344,11 +357,6 @@ class ResultMasterController extends Controller
         }
 
         $resultMasters = ResultMaster::select('id','draw_master_id','game_date')->whereGameId($id)->whereGameDate($today)->orderBy('id','DESC')->get();
-//        $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->limit(7)->get();
-
-
-//        return response()->json(['success'=>1, 'data' => $resultMasters], 200);
-//        $resultMasters = ResultMaster::whereGameId($id)->whereGameDate($today)->orderBy('draw_master_id','DESC')->limit(7)->get();
 
         if($id == 1){
             foreach ($resultMasters as $resultMaster){
