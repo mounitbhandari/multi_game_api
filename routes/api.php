@@ -60,6 +60,23 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::get('/me', function(Request $request) {
         return auth()->user();
     });
+    Route::group(['middleware' => 'lscache:max-age=3000000;public,esi=on,shared'], function(){
+        Route::get('unity/getDoubleNumber', [DoubleNumberCombinationController::class, 'get_all_double_number']);
+        Route::get("unity/singleNumbers",[SingleNumberController::class,'index']);
+        Route::get('unity/getSingleNumber', [SingleNumberController::class, 'get_all_single_number']);
+
+        //number_combinations
+        Route::get("unity/numberCombinations",[NumberCombinationController::class,'index']);
+        Route::get("unity/numberCombinations/number/{id}",[NumberCombinationController::class,'getNumbersBySingleNumber']);
+        Route::get("unity/numberCombinations/matrix",[NumberCombinationController::class,'getAllInMatrix']);
+
+        Route::get('unity/getTwelveCards',[CardCombinationController::class, 'get_all_twelve_card']);
+        Route::get('unity/getSixteenCards',[CardCombinationController::class, 'get_all_sixteen_card']);
+
+        Route::get('unity/getAndarNumbers',[AndarNumberController::class, 'get_all_andar_number']);
+        Route::get('unity/getBaharNumbers',[BaharNumberController::class, 'get_all_bahar_number']);
+    });
+
 
     //caching group
 //    Route::group(['middleware' => 'lscache:max-age=3000000;public,esi=on,shared'], function(){
