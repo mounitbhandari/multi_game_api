@@ -331,8 +331,8 @@ class ResultMasterController extends Controller
         Cache::remember('returnArraySeven'.$id, 3000000, function () use ($return_array) {
             return $return_array;
         });
-        Cache::remember('sizeOfResultMasterSeven'.$id, 3000000, function () use ($resultMasters) {
-            return sizeof($resultMasters);
+        Cache::remember('sizeOfResultMasterSeven'.$id, 3000000, function () use ($resultMastersCheck) {
+            return sizeof($resultMastersCheck);
         });
 
         return response()->json(['success'=>1, 'data' => $return_array], 200);
