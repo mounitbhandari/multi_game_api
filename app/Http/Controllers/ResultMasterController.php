@@ -210,7 +210,7 @@ class ResultMasterController extends Controller
 
         if(($sizeOfResultMaster === sizeof($resultMastersCheck)) && (Cache::has('returnArraySeven'.$id) == 1)){
             $data = Cache::get('returnArraySeven'.$id);
-            return response()->json(['success'=>1,'form' => 'Cache' , 'data' => $data], 200);
+            return response()->json(['success'=>1,'control' => 'Cache' , 'data' => $data], 200);
         }
 
         $resultMasters = ResultMaster::select('id','draw_master_id','game_date')->whereGameId($id)->whereGameDate($today)->orderBy('id','DESC')->limit(7)->get();
@@ -353,7 +353,7 @@ class ResultMasterController extends Controller
 
         if(($sizeOfResultMaster === sizeof($resultMastersCheck)) && (Cache::has('returnArrayAsc'.$id) == 1)){
             $data = Cache::get('returnArrayAsc'.$id);
-            return response()->json(['success'=>1,'form'=>'cache' , 'data' => $data], 200);
+            return response()->json(['success'=>1,'control'=>'cache' , 'data' => $data], 200);
         }
 
         $resultMasters = ResultMaster::select('id','draw_master_id','game_date')->whereGameId($id)->whereGameDate($today)->orderBy('id','DESC')->get();
@@ -497,7 +497,7 @@ class ResultMasterController extends Controller
 
         if(($sizeOfResultMaster === sizeof($resultMasters)) && (Cache::has('returnArray'.$id) == 1)){
             $data = Cache::get('returnArray'.$id);
-            return response()->json(['success'=>1, 'data' => $data], 200);
+            return response()->json(['success'=>1,'control'=> 'cache','data' => $data], 200);
         }
 
         if(sizeof($resultMasters)<=0){
