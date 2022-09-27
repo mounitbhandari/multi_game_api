@@ -73,8 +73,6 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
         Route::get("numberCombinations/number/{id}",[NumberCombinationController::class,'getNumbersBySingleNumber']);
         Route::get("numberCombinations/matrix",[NumberCombinationController::class,'getAllInMatrix']);
 
-
-
         //game
         Route::get('getGame', [GameController::class, 'getGame']);
 
