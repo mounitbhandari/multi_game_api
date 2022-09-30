@@ -22,6 +22,7 @@ use App\Http\Resources\TerminalResource;
 use App\Models\StockistToTerminal;
 use Illuminate\Http\Request;
 /////// for log
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Laravel\Sanctum\PersonalAccessToken;
@@ -452,12 +453,18 @@ class TerminalController extends Controller
 
     public function reset_terminal_password(Request $request){
         $requestedData = (object)$request->json()->all();
-        $terminalId = $requestedData->terminalId;
-        $terminalPassword = $requestedData->terminalNewPassword;
-        $terminal = User::find($terminalId);
-        $terminal->password = md5($terminalPassword);
-        $terminal->save();
-        return response()->json(['success'=>1,'data'=>$terminal], 200,[],JSON_NUMERIC_CHECK);
+
+        $user = User::find($requestedData->terminalId);
+        if (!$user || !Hash::check(md5($request->password), $user->password)) {
+            return response()->json(['success'=>0, 'message'=>'Wrong old password'], 200,[],JSON_NUMERIC_CHECK);
+        }
+
+        $user->password = md5($requestedData->newPassword);
+        $user->visible_password = $requestedData->newPassword;
+        $user->update();
+
+        return response()->json(['success'=>1, 'message'=>'Password Updated'], 200,[],JSON_NUMERIC_CHECK);
+
     }
 
 

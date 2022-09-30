@@ -181,7 +181,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::post('terminal/updateCancellation/{id}', [TerminalReportController::class, 'updateCancellationGameWise']);
 
 
-    Route::put('terminal/resetPassword', [TerminalController::class, 'reset_terminal_password']);
+    Route::patch('resetPassword', [TerminalController::class, 'reset_terminal_password']);
 
     Route::put('cPanel/game/payout',[GameTypeController::class, 'update_payout']);
     Route::post('getResultByDate', [ResultMasterController::class, 'get_result_by_date']);
