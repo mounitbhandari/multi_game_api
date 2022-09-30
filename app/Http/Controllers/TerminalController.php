@@ -227,16 +227,14 @@ class TerminalController extends Controller
         $requestedData = (object)$request->json()->all();
 
         $user = User::find($requestedData->id);
+        DB::select("update users set mac_address = null where mac_address = ".$user->temp_mac_address);
         $user->mac_address = $user->temp_mac_address;
         $user->login_activate = 2;
         $user->save();
 
-        $personalAccessToken = PersonalAccessToken::whereTokenableId($requestedData->id)->get();
-        foreach ($personalAccessToken as $x){
-            $x->delete();
-        }
+        DB::select("delete from personal_access_tokens where tokenable_id = ".$requestedData->id);
 
-        return response()->json(['success'=>1,'data'=>new TerminalResource($user), 'data1'=>$personalAccessToken], 200);
+        return response()->json(['success'=>1,'data'=>new TerminalResource($user)], 200);
     }
 
     public function game_permission_update(Request $request){

@@ -106,10 +106,12 @@ class UserController extends Controller
                 return response()->json(['success'=>0,'data'=>null, 'message'=>'Needs approval mac mismatch'], 200,[],JSON_NUMERIC_CHECK);
             }
 
-            $personalAccessToken = PersonalAccessToken::whereTokenableId($user->id)->get();
-            foreach ($personalAccessToken as $x){
-                $x->delete();
-            }
+//            $personalAccessToken = PersonalAccessToken::whereTokenableId($user->id)->get();
+//            foreach ($personalAccessToken as $x){
+//                $x->delete();
+//            }
+
+            DB::select("delete from personal_access_tokens where tokenable_id = ".$user->id);
 
             $token = $user->createToken('my-app-token')->plainTextToken;
 
