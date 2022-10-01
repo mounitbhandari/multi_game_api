@@ -228,7 +228,14 @@ class TerminalController extends Controller
         $requestedData = (object)$request->json()->all();
 
         $user = User::find($requestedData->id);
-        DB::select("update users set mac_address = null where mac_address = ".$user->temp_mac_address);
+
+        $user_mac = User::whereMacAddress($user->temp_mac_address);
+        if($user_mac){
+            $user_mac->mac_address = null;
+            $user_mac->save();
+        }
+
+//        DB::select("update users set mac_address = null where mac_address = ".$user->temp_mac_address);
         $user->mac_address = $user->temp_mac_address;
         $user->login_activate = 2;
         $user->save();
