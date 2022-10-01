@@ -228,8 +228,6 @@ class TerminalController extends Controller
         $requestedData = (object)$request->json()->all();
 
         $user = User::find($requestedData->id);
-
-        $user_mac = User::whereMacAddress($user->temp_mac_address);
         $user->mac_address = $user->temp_mac_address;
         $user->login_activate = 2;
         $user->save();
