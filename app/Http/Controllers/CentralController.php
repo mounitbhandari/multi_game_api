@@ -938,74 +938,6 @@ class CentralController extends Controller
     }
 
 
-//    public function createResult($id){
-//
-//        $game = Game::whereId($id)->first();
-//        if($game->active === 'no'){
-//            return response()->json(['success'=>0, 'message' => 'game not active'], 401);
-//        }
-//
-//        $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
-//        $nextDrawId = $nextGameDrawObj->next_draw_id;
-//        $lastDrawId = $nextGameDrawObj->last_draw_id;
-//
-//        if(!empty($nextGameDrawObj)){
-//
-//            $tempDrawMaster = new DrawMaster();
-//            $tempDrawMasterLastDraw = DrawMaster::whereId($lastDrawId)->whereGameId($id)->first();
-//            $tempDrawMasterLastDraw->active = 0;
-//            $tempDrawMasterLastDraw->is_draw_over = 'yes';
-//            $tempDrawMasterLastDraw->update();
-//
-//            $tempDrawMasterNextDraw = DrawMaster::whereId($nextDrawId)->whereGameId($id)->first();
-//            $tempDrawMasterNextDraw->active = 1;
-//            $tempDrawMasterNextDraw->update();
-//
-//        }
-//
-//        $resultMasterController = new ResultMasterController();
-//        $jsonData = $resultMasterController->save_auto_result($lastDrawId);
-//
-//        $resultCreatedObj = json_decode($jsonData->content(),true);
-//
-//        if( !empty($resultCreatedObj) && $resultCreatedObj['success']==1){
-//
-//            $totalDraw = DrawMaster::whereGameId($id)->count();
-//            $gameCountLastDraw = DrawMaster::whereGameId($id)->where('id', '<=', $lastDrawId)->count();
-//            $gameCountNextDraw = DrawMaster::whereGameId($id)->where('id', '<=', $nextDrawId)->count();
-//
-//            if($gameCountNextDraw==$totalDraw){
-//                $nextDrawId = (DrawMaster::whereGameId($id)->first())->id;
-//            }
-//            else {
-//                $nextDrawId = $nextDrawId + 1;
-//            }
-//
-//            if($gameCountLastDraw==$totalDraw){
-//                $lastDrawId = (DrawMaster::whereGameId($id)->first())->id;
-//            }
-//            else{
-//                $lastDrawId = $lastDrawId + 1;
-//            }
-//
-//            $nextGameDrawObj->next_draw_id = $nextDrawId;
-//            $nextGameDrawObj->last_draw_id = $lastDrawId;
-//            $nextGameDrawObj->save();
-//
-//            $tempPlayMaster = PlayMaster::select()->where('is_cancelable',1)->whereGameId($id)->get();
-//            foreach ($tempPlayMaster as $x){
-//                $y = PlayMaster::find($x->id);
-//                $y->is_cancelable = 0;
-//                $y->update();
-//            }
-//
-//            return response()->json(['success'=>1, 'message' => 'Result added'], 200);
-//        }else{
-//            return response()->json(['success'=>0, 'message' => 'Result not added'], 401);
-//        }
-//
-//    }
-
 
 
     public function update_is_draw_over(){
@@ -1018,34 +950,17 @@ class CentralController extends Controller
         return response()->json(['success'=>1, 'message' => $data], 200);
     }
 
-    public function delete_data_except_seven_days(){
-        $today = Carbon::now()->subDays(8)->format('Y-m-d');
+    public function delete_data_except_thirty_days(){
 
-        $playMasters = DB::select("select * from play_masters where date(created_at) <= ?",[$today]);
+        $today = Carbon::now()->subDays(42)->format('Y-m-d');
 
-        foreach ($playMasters as $playMaster){
-            $playDetails = PlayDetails::wherePlayMasterId($playMaster->id)->get();
-            foreach ($playDetails as $playDetail){
-                $playDetail->delete();
-            }
-            $playMaster1 = PlayMaster::find($playMaster->id);
-
-            $playMaster1->delete();
-        }
-
-        $resultMasters = DB::select("select * from result_masters where date(created_at) <= ?",[$today]);
-
-        foreach ($resultMasters as $resultMaster){
-
-            $resultDetails = ResultDetail::whereResultMasterId($resultMaster->id)->get();
-            foreach ($resultDetails as $resultDetail){
-                $resultDetail->delete();
-            }
-
-            $resultMaster1 = ResultMaster::find($resultMaster->id);
-            $resultMaster1->delete();
-
-        }
+        DB::select("delete from play_details where date(created_at) = ".$today);
+        DB::select("delete from play_masters where date(created_at) = ".$today);
+        DB::select("delete from result_details where date(created_at) = ".$today);
+        DB::select("delete from result_masters where date(created_at) = ".$today);
+        DB::select("delete from manual_results where date(created_at) = ".$today);
+        DB::select("delete from recharge_to_users where date(created_at) = ".$today);
+        DB::select("delete from transactions where date(created_at) = ".$today);
 
         return response()->json(['success'=>1, 'message' => $today], 200);
     }

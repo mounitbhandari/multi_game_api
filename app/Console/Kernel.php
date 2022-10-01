@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\GenerateResult;
+use App\Http\Controllers\CentralController;
 use App\Http\Controllers\CommonFunctionController;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -63,6 +64,12 @@ class Kernel extends ConsoleKernel
             $commonFunctionController = new CommonFunctionController();
             $commonFunctionController->backup_database();
         })->weekly()->mondays()->at('02:00');
+
+        //keep 42 days data only 2 days for security
+        $schedule->call(function () {
+            $centralController = new CentralController();
+            $centralController->delete_data_except_thirty_days();
+        })->dailyAt('03:00')->timezone('Asia/Kolkata');
 
         //cache files
 //       $schedule->command('config:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');

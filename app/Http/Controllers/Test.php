@@ -33,6 +33,10 @@ class Test extends Controller
 
     public function testNew(){
 
+        $x = Carbon::now()->subDays(30);
+
+        DB::select("delete from play_masters where date(created_at) = ".$x);
+
 //        $transaction = new Transaction();
 //        $transaction->terminal_id = 12;
 //        $transaction->play_master_id = 4;
@@ -71,14 +75,14 @@ class Test extends Controller
 
 //        Cache::get('allTerminal');
 
-        $value = Cache::remember('users', 100, function () {
-            return Game::get();
-    });
+//        $value = Cache::remember('users', 100, function () {
+//            return Game::get();
+//    });
 
 //        $newa = DB::select("select game_type_id from ?",[collect($value)->all()]);
 
 
-        return collect($value)->where('game_type_id', 1)->all();
+//        return collect($value)->where('game_type_id', 1)->all();
 //        return Object.entries(obj) collect($value)->where('game_type_id', 1)->all();
 //        return json_decode(json_encode(collect($value)->where('game_type_id', 1)->all()), true)->to;
 

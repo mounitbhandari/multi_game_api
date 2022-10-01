@@ -475,6 +475,7 @@ class CPanelReportController extends Controller
         return $prize_value;
     }
 
+
     public function get_total_quantity_by_barcode($play_master_id){
 //        $play_master = PlayMaster::findOrFail($play_master_id);
 //        $play_game_ids = PlayDetails::where('play_master_id',$play_master_id)->distinct()->pluck('game_type_id');
