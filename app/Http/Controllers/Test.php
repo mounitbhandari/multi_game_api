@@ -33,9 +33,12 @@ class Test extends Controller
 
     public function testNew(){
 
-        $x = Carbon::now()->subDays(30);
+        $x = DB::select("delete from play_masters where date(created_at) = ");
+        return $x;
 
-        DB::select("delete from play_masters where date(created_at) = ".$x);
+//        $x = Carbon::now()->subDays(30);
+//
+//        DB::select("delete from play_masters where date(created_at) = ".$x);
 
 //        $transaction = new Transaction();
 //        $transaction->terminal_id = 12;
