@@ -808,7 +808,8 @@ class ResultMasterController extends Controller
 //            $set_game_date = Carbon::today()->addDays(1)->format('Y-m-d');
             if($game_id == 1 || $game_id == 5){
                 $count = DB::select("select COUNT(id) as total_count from result_details where result_master_id = ".$resultMaster->id)[0]->total_count;
-                if($count>3){
+                if($count>=3){
+
                     $resultMaster = new ResultMaster();
                     $resultMaster->draw_master_id = $draw_id;
                     $resultMaster->game_id = $game_id;
