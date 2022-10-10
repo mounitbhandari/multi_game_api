@@ -88,14 +88,10 @@ class UserController extends Controller
             if($cacheAppVer){
                 if($cacheAppVer <= $appVer){
                     Cache::forget('cacheAppVersion');
-                    $cacheAppVer = Cache::remember('cacheAppVersion', 3000000, function () use ($appVer) {
-                        return $appVer;
-                    });
+                    $cacheAppVer = Cache::forever('cacheAppVersion', $appVer);
                 }
             }else{
-                $cacheAppVer = Cache::remember('cacheAppVersion', 3000000, function () use ($appVer) {
-                    return $appVer;
-                });
+                $cacheAppVer = Cache::forever('cacheAppVersion', $appVer);
             }
 
             if(!($request->appVer == $cacheAppVer)){
