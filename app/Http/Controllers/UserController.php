@@ -9,6 +9,7 @@ use App\Http\Resources\UserResource;
 use App\Models\PlayMaster;
 use App\Models\User;
 use App\Models\UserRelationWithOther;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Artisan;
@@ -82,7 +83,22 @@ class UserController extends Controller
             }
             $user->save();
 
-            if(!($request->appVer == 2.0)){
+            $appVer = $request->appVer;
+            $cacheAppVer = Cache::get('cacheAppVersion');
+            if($cacheAppVer){
+                if($cacheAppVer <= $appVer){
+                    Cache::forget('cacheAppVersion');
+                    $cacheAppVer = Cache::remember('cacheAppVersion', 3000000, function () use ($appVer) {
+                        return $appVer;
+                    });
+                }
+            }else{
+                $cacheAppVer = Cache::remember('cacheAppVersion', 3000000, function () use ($appVer) {
+                    return $appVer;
+                });
+            }
+
+            if(!($request->appVer == $cacheAppVer)){
                 return response()->json(['success'=>0,'data'=>null, 'message'=>'Update app to login'], 200,[],JSON_NUMERIC_CHECK);
             }
 

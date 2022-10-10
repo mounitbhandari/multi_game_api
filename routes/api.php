@@ -345,7 +345,7 @@ Route::group(array('prefix' => 'dev'), function() {
 
 
 //    test
-     Route::get('test',[Test::class, 'testNew']);
+     Route::get('test/{id}',[Test::class, 'testNew']);
 
 
      Route::get('stockists',[StockistController::class, 'get_all_stockists']);

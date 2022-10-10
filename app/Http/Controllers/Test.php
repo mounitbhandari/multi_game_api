@@ -31,10 +31,27 @@ class Test extends Controller
         return response()->json(['success'=>1,'data'=>$result], 200,[],JSON_NUMERIC_CHECK);
     }
 
-    public function testNew(){
+    public function testNew($id){
+//        $x = Cache::remember('testCache', 3000000, function (){
+//            return 2.1;
+//        });
 
-        $x = DB::select("delete from play_masters where date(created_at) = ");
-        return $x;
+        $x = Cache::get('testCache');
+        if($x){
+           if($x < $id){
+               Cache::forget('testCache');
+               $x = Cache::remember('testCache', 3000000, function () use ($id) {
+                   return $id;
+               });
+           }
+            return response()->json(['success'=>1,'data'=>$x], 200,[],JSON_NUMERIC_CHECK);
+        }else{
+            $x = Cache::remember('testCache', 3000000, function () use ($id) {
+                return $id;
+            });
+            return response()->json(['success'=>11,'data'=>$x], 200,[],JSON_NUMERIC_CHECK);
+        }
+//        return $x;
 
 //        $x = Carbon::now()->subDays(30);
 //
