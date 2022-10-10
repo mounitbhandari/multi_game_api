@@ -216,27 +216,34 @@ class PlayMasterController extends Controller
         $data = $cPanelReportControllerObj->get_prize_value_by_barcode($playMasterId);
 
         if($data){
-//            $playMaster = new PlayMaster();
             $playMaster = PlayMaster::find($playMasterId);
             $playMaster->is_claimed = 1;
-//            $playMaster->is_cancelable = 1;
             $playMaster->update();
 
-            if($playMaster){
-//                $user = new User();
+            if ($playMaster) {
                 $user = User::find($playMaster->user_id);
                 $old_amount = $user->closing_balance;
-                $user->closing_balance += $data;
+                $user->closing_balance = $user->closing_balance + $data;
                 $user->update();
 
-//                $transaction = new Transaction();
                 $transaction = Transaction::wherePlayMasterId($playMaster->id)->first();
-                $transaction->prize_amount = $data;
-                $transaction->new_amount = $user->closing_balance;
-                $transaction->save();
+                if ($transaction) {
+                    $transaction->prize_amount = $data;
+                    $transaction->new_amount = $user->closing_balance;
+                    $transaction->save();
+                } else {
+                    $transaction = new Transaction();
+                    $transaction->terminal_id = $playMaster->user_id;
+                    $transaction->play_master_id = $playMaster->id;
+                    $transaction->old_amount = $old_amount;
+                    $transaction->prize_amount = $data;
+                    $transaction->new_amount = $user->closing_balance;
+                    $transaction->save();
+                }
+
             }
         }
-        return response()->json(['success' => 1, 'point'=>$user->closing_balance, 'id' =>$playMaster->id], 200);
+        return response()->json(['success' => 1, 'point'=>$user->closing_balance], 200);
     }
 
     public function claimPrizes($id){

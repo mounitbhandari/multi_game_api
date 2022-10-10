@@ -85,7 +85,7 @@ class UserController extends Controller
 
             $appVer = $request->appVer;
             $cacheAppVer = Cache::get('cacheAppVersion');
-            if($cacheAppVer){
+            if(($cacheAppVer)){
                 if($cacheAppVer <= $appVer){
                     Cache::forget('cacheAppVersion');
                     $cacheAppVer = Cache::forever('cacheAppVersion', $appVer);

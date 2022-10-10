@@ -807,21 +807,30 @@ class ResultMasterController extends Controller
         if($resultMaster){
 //            $set_game_date = Carbon::today()->addDays(1)->format('Y-m-d');
             if($game_id == 1 || $game_id == 5){
-                $count = DB::select("select COUNT(id) as total_count from result_details where result_master_id = ".$resultMaster->id)[0]->total_count;
-                if($count>=3){
+                if($game_id == 1) {
+                    $count = DB::select("select COUNT(id) as total_count from result_details where result_master_id = ".$resultMaster->id)[0]->total_count;
+                    if($count>=3){
 
-                    $resultMaster = new ResultMaster();
-                    $resultMaster->draw_master_id = $draw_id;
-                    $resultMaster->game_id = $game_id;
-                    $resultMaster->game_date = Carbon::today()->addDays(1)->format('Y-m-d');
-                    $resultMaster-> save();
+                        $resultMaster = new ResultMaster();
+                        $resultMaster->draw_master_id = $draw_id;
+                        $resultMaster->game_id = $game_id;
+                        $resultMaster->game_date = Carbon::today()->addDays(1)->format('Y-m-d');
+                        $resultMaster-> save();
 
-                    $resultDetail = new ResultDetail();
-                    $resultDetail->result_master_id = $resultMaster->id;
-                    $resultDetail->game_type_id = $game_type_id;
-                    $resultDetail->combination_number_id = $combination_number_id;
-                    $resultDetail->multiplexer = $game_multiplexer;
-                    $resultDetail->save();
+                        $resultDetail = new ResultDetail();
+                        $resultDetail->result_master_id = $resultMaster->id;
+                        $resultDetail->game_type_id = $game_type_id;
+                        $resultDetail->combination_number_id = $combination_number_id;
+                        $resultDetail->multiplexer = $game_multiplexer;
+                        $resultDetail->save();
+                }else{
+                        $resultDetail = new ResultDetail();
+                        $resultDetail->result_master_id = $resultMaster->id;
+                        $resultDetail->game_type_id = $game_type_id;
+                        $resultDetail->combination_number_id = $combination_number_id;
+                        $resultDetail->multiplexer = $game_multiplexer;
+                        $resultDetail->save();
+                    }
                 }else{
                     $resultDetail = new ResultDetail();
                     $resultDetail->result_master_id = $resultMaster->id;
