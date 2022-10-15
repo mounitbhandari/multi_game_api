@@ -216,6 +216,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::post('drawWiseReportToday', [CPanelReportController::class, 'draw_wise_report']);
     Route::post('mailTransaction', [TransactionController::class, 'mailTransactionOneMonth']);
 
+    Route::get('superStockist/gameTotalReportToday/{id}', [GameController::class, 'get_game_total_sale_today_super_stockist']);
+
 });
 
 
@@ -223,7 +225,7 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 
 Route::group(array('prefix' => 'dev'), function() {
 
-    Route::get('superStockist/gameTotalReportToday/{id}', [GameController::class, 'get_game_total_sale_today_super_stockist']);
+//    Route::get('superStockist/gameTotalReportToday/{id}', [GameController::class, 'get_game_total_sale_today_super_stockist']);
 
     Route::post('cancelTicket',[PlayMasterController::class,'cancelPlay']);
 
