@@ -65,7 +65,7 @@ class GameController extends Controller
     }
 
     public function get_game_total_sale_today_stockist($id){
-        $terminals = UserRelationWithOther::whereStockistId($id)->get();
+        $terminals = UserRelationWithOther::whereStockistId($id)->whereActive(1)->get();
 
 
         $today = Carbon::today()->format('Y-m-d');
@@ -278,7 +278,7 @@ class GameController extends Controller
     }
 
     public function get_game_total_sale_today_super_stockist($id){
-        $terminals = UserRelationWithOther::whereSuperStockistId($id)->get();
+        $terminals = UserRelationWithOther::whereSuperStockistId($id)->whereActive(1)->get();
 
 
         $today = Carbon::today()->format('Y-m-d');
