@@ -6,10 +6,12 @@ use App\Models\DrawMaster;
 use App\Models\Game;
 use App\Http\Controllers\Controller;
 use App\Models\PlayMaster;
+use App\Models\User;
 use App\Models\UserRelationWithOther;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class GameController extends Controller
 {
@@ -77,6 +79,8 @@ class GameController extends Controller
         $singleNumberPrize = 0;
         $doubleNumberPrize = 0;
 
+        $online_count = 0;
+
         //variable fol every game
         $totalTripleNumber = 0;
         $twelveCardValue = 0;
@@ -88,6 +92,11 @@ class GameController extends Controller
         $CPanelReportController = new CPanelReportController();
 
         foreach ($terminals as $terminal){
+
+            $onlineCheck = PersonalAccessToken::whereTokenableId($terminal->terminal_id)->first();
+            if($onlineCheck){
+                $online_count = $online_count + 1;
+            }
 
             $tripleAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(1)->get();
             $twelveCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(2)->get();
@@ -290,6 +299,8 @@ class GameController extends Controller
         $singleNumberPrize = 0;
         $doubleNumberPrize = 0;
 
+        $online_count = 0;
+
         //variable fol every game
         $totalTripleNumber = 0;
         $twelveCardValue = 0;
@@ -301,6 +312,11 @@ class GameController extends Controller
         $CPanelReportController = new CPanelReportController();
 
         foreach ($terminals as $terminal){
+
+            $onlineCheck = PersonalAccessToken::whereTokenableId($terminal->terminal_id)->first();
+            if($onlineCheck){
+                $online_count = $online_count + 1;
+            }
 
             $tripleAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(1)->get();
             $twelveCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(2)->get();
@@ -486,7 +502,7 @@ class GameController extends Controller
 
         array_push($returnArray , $x);
 
-        return response()->json(['success'=>1,'data'=> $returnArray], 200);
+        return response()->json(['success'=>1,'data'=> $returnArray, 'online'=> $online_count], 200);
 
     }
 
@@ -500,6 +516,9 @@ class GameController extends Controller
         $sixteenCardPrize = 0;
         $singleNumberPrize = 0;
         $doubleNumberPrize = 0;
+
+//        $terminals = User::select('id')->whereUserTypeId(5)->get();
+//        $activeUsers = PersonalAccessToken::whereTokenableId()->get();
 
         $CPanelReportController = new CPanelReportController();
 

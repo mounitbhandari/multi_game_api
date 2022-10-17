@@ -10,12 +10,14 @@ use App\Models\NumberCombination;
 use App\Models\PlayDetails;
 use App\Models\PlayMaster;
 use App\Models\Transaction;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Laravel\Sanctum\PersonalAccessToken;
 use Litespeed\LSCache\LSCache;
 use Litespeed\LSCache\LSCacheMiddleware;
 use PhpParser\Node\Expr\Cast\Object_;
@@ -31,26 +33,32 @@ class Test extends Controller
         return response()->json(['success'=>1,'data'=>$result], 200,[],JSON_NUMERIC_CHECK);
     }
 
-    public function testNew($id){
+    public function testNew(){
 //        $x = Cache::remember('testCache', 3000000, function (){
 //            return 2.1;
 //        });
+        $terminals = collect(User::select('id')->whereUserTypeId(5)->get()->first());
 
-        $x = Cache::get('testCache');
-        if($x){
-           if($x < $id){
-               Cache::forget('testCache');
-               $x = Cache::remember('testCache', 3000000, function () use ($id) {
-                   return $id;
-               });
-           }
-            return response()->json(['success'=>1,'data'=>$x], 200,[],JSON_NUMERIC_CHECK);
-        }else{
-            $x = Cache::remember('testCache', 3000000, function () use ($id) {
-                return $id;
-            });
-            return response()->json(['success'=>11,'data'=>$x], 200,[],JSON_NUMERIC_CHECK);
-        }
+//        $activeUsers = PersonalAccessToken::whereTokenableId(collect($terminals))->get();
+
+        return $terminals;
+//        return User::get();
+
+//        $x = Cache::get('testCache');
+//        if($x){
+//           if($x < $id){
+//               Cache::forget('testCache');
+//               $x = Cache::remember('testCache', 3000000, function () use ($id) {
+//                   return $id;
+//               });
+//           }
+//            return response()->json(['success'=>1,'data'=>$x], 200,[],JSON_NUMERIC_CHECK);
+//        }else{
+//            $x = Cache::remember('testCache', 3000000, function () use ($id) {
+//                return $id;
+//            });
+//            return response()->json(['success'=>11,'data'=>$x], 200,[],JSON_NUMERIC_CHECK);
+//        }
 //        return $x;
 
 //        $x = Carbon::now()->subDays(30);
