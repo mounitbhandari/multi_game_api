@@ -507,7 +507,7 @@ class GameController extends Controller
         ];
         array_push($returnArray , $x);
 
-        return response()->json(['success'=>1,'data'=> $returnArray, 'online'=> $online_count], 200);
+        return response()->json(['success'=>1,'data'=> $returnArray], 200);
 
     }
 
