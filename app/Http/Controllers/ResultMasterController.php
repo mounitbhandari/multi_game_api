@@ -803,6 +803,7 @@ class ResultMasterController extends Controller
 //        return response()->json(['success'=>1, 'data' => $resultMaster], 200);
 
         $resultMaster = ResultMaster::whereGameId($game_id)->whereDrawMasterId($draw_id)->whereGameDate($today)->first();
+        $next_day = Carbon::today()->addDays(1)->format('Y-m-d');
 
         if($resultMaster){
 //            $set_game_date = Carbon::today()->addDays(1)->format('Y-m-d');
@@ -814,7 +815,7 @@ class ResultMasterController extends Controller
                         $resultMaster = new ResultMaster();
                         $resultMaster->draw_master_id = $draw_id;
                         $resultMaster->game_id = $game_id;
-                        $resultMaster->game_date = Carbon::today()->addDays(1)->format('Y-m-d');
+                        $resultMaster->game_date = $next_day;
                         $resultMaster-> save();
 
                         $resultDetail = new ResultDetail();
