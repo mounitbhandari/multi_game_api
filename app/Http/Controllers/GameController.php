@@ -282,6 +282,11 @@ class GameController extends Controller
 
         array_push($returnArray , $x);
 
+        $x = [
+            'online' => $online_count
+        ];
+        array_push($returnArray , $x);
+
         return response()->json(['success'=>1,'data'=> $returnArray], 200);
 
     }
