@@ -318,11 +318,6 @@ class GameController extends Controller
                 $online_count = $online_count + 1;
             }
 
-            $x = [
-                'online' => $online_count
-            ];
-            array_push($returnArray , $x);
-
             $tripleAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(1)->get();
             $twelveCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(2)->get();
             $sixteenCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(3)->get();
@@ -505,6 +500,11 @@ class GameController extends Controller
             'profit' =>   (int)$totalDoubleNumber - $doubleNumberPrize
         ];
 
+        array_push($returnArray , $x);
+
+        $x = [
+            'online' => $online_count
+        ];
         array_push($returnArray , $x);
 
         return response()->json(['success'=>1,'data'=> $returnArray, 'online'=> $online_count], 200);
