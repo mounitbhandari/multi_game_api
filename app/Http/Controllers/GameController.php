@@ -93,7 +93,7 @@ class GameController extends Controller
 
         foreach ($terminals as $terminal){
 
-            $onlineCheck = PersonalAccessToken::whereTokenableId($terminal->terminal_id)->first();
+            $onlineCheck = PersonalAccessToken::whereTokenableId($terminal->terminal_id)->whereRaw('date(created_at) = ?', [$today])->first();
             if($onlineCheck){
                 $online_count = $online_count + 1;
             }
@@ -318,7 +318,7 @@ class GameController extends Controller
 
         foreach ($terminals as $terminal){
 
-            $onlineCheck = PersonalAccessToken::whereTokenableId($terminal->terminal_id)->first();
+            $onlineCheck = PersonalAccessToken::whereTokenableId($terminal->terminal_id)->whereRaw('date(created_at) = ?', [$today])->first();
             if($onlineCheck){
                 $online_count = $online_count + 1;
             }
@@ -538,6 +538,10 @@ class GameController extends Controller
         $singleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(4)->get();
         $doubleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(5)->get();
 
+        $online_count = (DB::select("select count(personal_access_tokens.id) as total_count from personal_access_tokens
+            inner join users on personal_access_tokens.tokenable_id = users.id
+            where date(personal_access_tokens.created_at) = '2022-10-18'"))[0]->total_count;
+
 
         foreach ($tripleAllPlayMasters as $tripleAllPlayMaster){
             $triplePrize = $triplePrize + $CPanelReportController->get_prize_value_by_barcode($tripleAllPlayMaster->id);
@@ -706,6 +710,11 @@ class GameController extends Controller
             'profit' =>   (int)$totalDoubleNumber - $doubleNumberPrize
         ];
 
+        array_push($returnArray , $x);
+
+        $x = [
+            'online' => $online_count
+        ];
         array_push($returnArray , $x);
 
         return response()->json(['success'=>1,'data'=> $returnArray], 200);
