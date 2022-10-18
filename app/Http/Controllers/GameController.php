@@ -527,9 +527,6 @@ class GameController extends Controller
         $singleNumberPrize = 0;
         $doubleNumberPrize = 0;
 
-//        $terminals = User::select('id')->whereUserTypeId(5)->get();
-//        $activeUsers = PersonalAccessToken::whereTokenableId()->get();
-
         $CPanelReportController = new CPanelReportController();
 
         $tripleAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(1)->get();
@@ -540,7 +537,7 @@ class GameController extends Controller
 
         $online_count = (DB::select("select count(personal_access_tokens.id) as total_count from personal_access_tokens
             inner join users on personal_access_tokens.tokenable_id = users.id
-            where date(personal_access_tokens.created_at) = '2022-10-18'"))[0]->total_count;
+            where date(personal_access_tokens.created_at) = ? and users.user_type_id = 5",[$today]))[0]->total_count;
 
 
         foreach ($tripleAllPlayMasters as $tripleAllPlayMaster){
