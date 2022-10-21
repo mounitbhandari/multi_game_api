@@ -243,7 +243,7 @@ class StockistController extends Controller
 
         $stockist_id = $requestedData->id;
         $super_stockist_id = $requestedData->superStockistId;
-        $stockist_name = $requestedData->stockistName;
+        $stockist_name = $requestedData->userName;
 
         $stockist = User::findOrFail($stockist_id);
         $stockist->user_name = $stockist_name;
