@@ -241,7 +241,7 @@ class StockistController extends Controller
     public function update_stockist(Request $request){
         $requestedData = (object)$request->json()->all();
 
-        $stockist_id = $requestedData->stockistId;
+        $stockist_id = $requestedData->id;
         $super_stockist_id = $requestedData->superStockistId;
         $stockist_name = $requestedData->stockistName;
 
