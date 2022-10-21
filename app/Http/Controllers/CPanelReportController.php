@@ -380,9 +380,9 @@ class CPanelReportController extends Controller
 
     public function get_prize_value_by_barcode($play_master_id){
 
-        if((Cache::has('prize_value_by_play_master_id'.$play_master_id)) == 1){
-            return Cache::get('prize_value_by_play_master_id'.$play_master_id);
-        }
+//        if((Cache::has('prize_value_by_play_master_id'.$play_master_id)) == 1){
+//            return Cache::get('prize_value_by_play_master_id'.$play_master_id);
+//        }
 
         $play_master = PlayMaster::findOrFail($play_master_id);
         $play_master_game_id = $play_master->game_id;
@@ -444,33 +444,17 @@ class CPanelReportController extends Controller
             }
         }
 
-        $playMasterDate = Carbon::parse($play_master->created_at)->format('Y-m-d');
-        $dateWork = Carbon::createFromDate($playMasterDate);
-        $now = Carbon::now();
-        $differenceDateCheck = $dateWork->diffInDays($now);
-
-//        if($differenceDateCheck > 1){
+//        $playMasterDate = Carbon::parse($play_master->created_at)->format('Y-m-d');
+//        $dateWork = Carbon::createFromDate($playMasterDate);
+//        $now = Carbon::now();
+//        $differenceDateCheck = $dateWork->diffInDays($now);
+//
+//        if(($prize_value > 0) || ($differenceDateCheck > 1)){
 //            $prize_value = Cache::remember('prize_value_by_play_master_id'.$play_master_id, 3000000, function () use ($prize_value) {
 //                return $prize_value;
 //            });
 //        }
 
-        if(($prize_value > 0) || ($differenceDateCheck > 1)){
-            $prize_value = Cache::remember('prize_value_by_play_master_id'.$play_master_id, 3000000, function () use ($prize_value) {
-                return $prize_value;
-            });
-        }
-
-
-
-//        return ['single' => $singleGamePrize];
-
-//        if(!empty($singleGamePrize)){
-//            $prize_value+= $singleGamePrize->prize_value;
-//        }
-//        if(!empty($tripleGamePrize)){
-//            $prize_value+= $tripleGamePrize->prize_value;
-//        }
         return $prize_value;
     }
 
