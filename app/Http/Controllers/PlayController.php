@@ -234,7 +234,7 @@ class PlayController extends Controller
                         $playDetails->commission = $user->commission;
                         $playDetails->ps_commission = $ps_commission;
                         $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
-                        $playDetails->pss_commission = $pss_commission
+                        $playDetails->pss_commission = $pss_commission;
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                         $playDetails->global_payout = $gameType->payout;
                         $playDetails->terminal_payout = $payoutSlabValue;
