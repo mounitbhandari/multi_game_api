@@ -225,10 +225,9 @@ class CPanelReportController extends Controller
             ->get();
         $data['singleIndividual'] = $singleGameData;
 //
-        $doubleGameData = PlayDetails::select('double_number_combinations.visible_double_number','single_numbers.single_number'
+        $doubleGameData = PlayDetails::select('double_number_combinations.visible_double_number'
             ,'play_details.quantity')
             ->join('double_number_combinations','play_details.combination_number_id','double_number_combinations.id')
-            ->join('single_numbers','double_number_combinations.single_number_id','single_numbers.id')
             ->where('play_details.play_master_id',$play_master_id)
             ->where('play_details.game_type_id',7)
             ->orderBy('single_numbers.single_order')
