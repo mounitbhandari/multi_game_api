@@ -479,7 +479,11 @@ class CentralController extends Controller
 
             $singleNumber = (GameType::find(6));
 
-            $singleValue = (($playMasterControllerObj->get_total_sale($today,$lastDrawId,6) * (($singleNumber->payout)/100))/$game_multiplexer)/($singleNumber->winning_price);
+            $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,6);
+            $payout = (($totalSale * ($singleNumber->payout)) / 100)/$game_multiplexer;
+            $singleValue = floor($payout / $singleNumber->winning_price);
+
+//            $singleValue = (($playMasterControllerObj->get_total_sale($today,$lastDrawId,6) * (($singleNumber->payout)/100))/$game_multiplexer)/($singleNumber->winning_price);
 
             $singleNumberTargetData = DB::select("select * from play_details
                 inner join play_masters on play_details.play_master_id = play_masters.id
