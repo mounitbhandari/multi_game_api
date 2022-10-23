@@ -296,7 +296,7 @@ class CPanelReportController extends Controller
         $return_array = [];
         $data = null;
 
-        $draw_times = DB::select("select draw_master_id from play_masters where date(created_at) = ? order by id",[$today]);
+        $draw_times = DB::select("select draw_master_id from play_masters where date(created_at) = ? order by id desc",[$today]);
 
         foreach ($draw_times as $draw_time){
             $data = null;
