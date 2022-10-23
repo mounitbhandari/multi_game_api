@@ -206,14 +206,14 @@ class CPanelReportController extends Controller
             ->get();
         $data['sixteenCard'] = $sixteenCard;
 
-        $sixteenCard = PlayDetails::select('card_combinations.rank_name','card_combinations.suit_name'
-            ,'play_details.quantity')
-            ->join('card_combinations','play_details.combination_number_id','card_combinations.id')
-            ->where('play_details.play_master_id',$play_master_id)
-            ->where('play_details.game_type_id',4)
-            ->where('card_combinations.card_combination_type_id',2)
-            ->get();
-        $data['sixteenCard'] = $sixteenCard;
+//        $sixteenCard = PlayDetails::select('card_combinations.rank_name','card_combinations.suit_name'
+//            ,'play_details.quantity')
+//            ->join('card_combinations','play_details.combination_number_id','card_combinations.id')
+//            ->where('play_details.play_master_id',$play_master_id)
+//            ->where('play_details.game_type_id',4)
+//            ->where('card_combinations.card_combination_type_id',2)
+//            ->get();
+//        $data['sixteenCard'] = $sixteenCard;
 //
         $singleGameData = PlayDetails::select(DB::raw('max(single_numbers.single_number) as single_number')
             ,DB::raw('max(play_details.quantity) as quantity'))
@@ -230,7 +230,6 @@ class CPanelReportController extends Controller
             ->join('double_number_combinations','play_details.combination_number_id','double_number_combinations.id')
             ->where('play_details.play_master_id',$play_master_id)
             ->where('play_details.game_type_id',7)
-            ->orderBy('single_numbers.single_order')
             ->get();
         $data['doubleIndividual'] = $doubleGameData;
 //
