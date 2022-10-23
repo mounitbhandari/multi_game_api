@@ -487,7 +487,7 @@ class CentralController extends Controller
 
             $singleNumberTargetData = DB::select("select * from play_details
                 inner join play_masters on play_details.play_master_id = play_masters.id
-                where quantity <= ? and game_type_id = 1 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+                where quantity <= ? and game_type_id = 6 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
                 order by quantity desc
                 limit 1",[$singleValue, $today, $lastDrawId]);
 
@@ -496,7 +496,7 @@ class CentralController extends Controller
                 $singleNumberTargetData = DB::select("select id as combination_number_id, 0 as quantity from single_numbers
                     where id not in (select combination_number_id from play_details
                     inner join play_masters on play_details.play_master_id = play_masters.id
-                    where game_type_id = 1 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?)
+                    where game_type_id = 6 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?)
                     order by RAND()
                     limit 1",[$today, $lastDrawId]);
             }
@@ -505,7 +505,7 @@ class CentralController extends Controller
             if(empty($singleNumberTargetData)){
                 $singleNumberTargetData = DB::select("select * from play_details
                     inner join play_masters on play_details.play_master_id = play_masters.id
-                    where quantity > ? and game_type_id = 1 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+                    where quantity > ? and game_type_id = 6 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
                     order by quantity
                     limit 1",[$singleValue, $today, $lastDrawId]);
             }
