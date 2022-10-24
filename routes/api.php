@@ -219,6 +219,9 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::get('superStockist/gameTotalReportToday/{id}', [GameController::class, 'get_game_total_sale_today_super_stockist']);
     Route::get('stockist/gameTotalReportToday/{id}', [GameController::class, 'get_game_total_sale_today_stockist']);
 
+    Route::post('superStockist/turnOverReport', [GameController::class, 'super_stockist_turnover_report']);
+    Route::post('stockist/turnOverReport', [GameController::class, 'stockist_turnover_report']);
+
 });
 
 
@@ -227,6 +230,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
 Route::group(array('prefix' => 'dev'), function() {
 
     Route::get('superStockist/gameTotalReportToday/{id}', [GameController::class, 'get_game_total_sale_today_super_stockist']);
+    Route::post('superStockist/turnOverReport', [GameController::class, 'super_stockist_turnover_report']);
+    Route::post('stockist/turnOverReport', [GameController::class, 'stockist_turnover_report']);
 
     Route::post('cancelTicket',[PlayMasterController::class,'cancelPlay']);
 
