@@ -294,10 +294,11 @@ class GameController extends Controller
 
     public function stockist_turnover_report(Request $request){
         $requestedData = (object)($request->json()->all());
-        $terminals = UserRelationWithOther::whereSuperStockistId($requestedData->stockist_id)->whereActive(1)->get();
+        $terminals = UserRelationWithOther::whereStockistId($requestedData->stockist_id)->whereActive(1)->get();
 
         $returnArray = [];
-        $totalPrize = 0;
+        $totalPrizeClaimed = 0;
+        $totalPrizeUnclaimed = 0;
         $totalCommission = 0;
 
         $totalBet = 0;
@@ -309,7 +310,8 @@ class GameController extends Controller
                 [$requestedData->start_date,$requestedData->end_date, $terminal->terminal_id, $requestedData->game_id]);
 
             foreach ($allPlayMasters as $allPlayMaster) {
-                $totalPrize = $totalPrize + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id);
+                $totalPrizeClaimed = $allPlayMaster->is_claimed == 1 ? ($totalPrizeClaimed + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id)): $totalPrizeClaimed + 0;
+                $totalPrizeUnclaimed = $allPlayMaster->is_claimed == 0 ? ($totalPrizeUnclaimed + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id)): $totalPrizeUnclaimed + 0;
                 $totalBet = $totalBet + $CPanelReportController->total_sale_by_play_master_id($allPlayMaster->id);
                 $totalCommission = $totalCommission + ($totalBet * ((PlayDetails::wherePlayMasterId($allPlayMaster->id)->first())->commission/100));
             }
@@ -317,13 +319,14 @@ class GameController extends Controller
 
         $x = [
             'total_bet' =>   $totalBet,
-            'total_win' =>   $totalPrize,
-            'profit' =>   $totalBet - $totalPrize,
+            'total_win_claimed' =>   $totalPrizeClaimed,
+            'total_win_unclaimed' =>   $totalPrizeUnclaimed,
+            'profit' =>   $totalBet - $totalPrizeClaimed,
             'total_commission' =>   $totalCommission,
         ];
         array_push($returnArray , $x);
 
-        return response()->json(['success'=>1,'data'=> $returnArray], 200);
+        return response()->json(['success'=>1,'data'=> $returnArray[0]], 200);
     }
 
     public function super_stockist_turnover_report(Request $request){
@@ -331,7 +334,8 @@ class GameController extends Controller
         $terminals = UserRelationWithOther::whereSuperStockistId($requestedData->super_stockist_id)->whereActive(1)->get();
 
         $returnArray = [];
-        $totalPrize = 0;
+        $totalPrizeClaimed = 0;
+        $totalPrizeUnclaimed = 0;
         $totalCommission = 0;
 
         $totalBet = 0;
@@ -343,7 +347,8 @@ class GameController extends Controller
                 [$requestedData->start_date,$requestedData->end_date, $terminal->terminal_id, $requestedData->game_id]);
 
             foreach ($allPlayMasters as $allPlayMaster) {
-                $totalPrize = $totalPrize + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id);
+                $totalPrizeClaimed = $allPlayMaster->is_claimed == 1 ? ($totalPrizeClaimed + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id)): $totalPrizeClaimed + 0;
+                $totalPrizeUnclaimed = $allPlayMaster->is_claimed == 0 ? ($totalPrizeUnclaimed + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id)): $totalPrizeUnclaimed + 0;
                 $totalBet = $totalBet + $CPanelReportController->total_sale_by_play_master_id($allPlayMaster->id);
                 $totalCommission = $totalCommission + ($totalBet * ((PlayDetails::wherePlayMasterId($allPlayMaster->id)->first())->commission/100));
             }
@@ -351,13 +356,14 @@ class GameController extends Controller
 
         $x = [
             'total_bet' =>   $totalBet,
-            'total_win' =>   $totalPrize,
-            'profit' =>   $totalBet - $totalPrize,
+            'total_win_claimed' =>   $totalPrizeClaimed,
+            'total_win_unclaimed' =>   $totalPrizeUnclaimed,
+            'profit' =>   $totalBet - $totalPrizeClaimed,
             'total_commission' =>   $totalCommission,
         ];
         array_push($returnArray , $x);
 
-        return response()->json(['success'=>1,'data'=> $returnArray], 200);
+        return response()->json(['success'=>1,'data'=> $returnArray[0]], 200);
     }
 
     public function get_game_total_sale_today_super_stockist($id){
