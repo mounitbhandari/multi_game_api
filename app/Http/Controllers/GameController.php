@@ -350,7 +350,7 @@ class GameController extends Controller
                 $totalPrizeClaimed = $allPlayMaster->is_claimed == 1 ? ($totalPrizeClaimed + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id)): $totalPrizeClaimed + 0;
                 $totalPrizeUnclaimed = $allPlayMaster->is_claimed == 0 ? ($totalPrizeUnclaimed + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id)): $totalPrizeUnclaimed + 0;
                 $totalBet = $totalBet + $CPanelReportController->total_sale_by_play_master_id($allPlayMaster->id);
-                $totalCommission = $totalCommission + ($totalBet * (floor((PlayDetails::wherePlayMasterId($allPlayMaster->id)->first())->commission)/100));
+//                $totalCommission = $totalCommission + ($totalBet * (floor((PlayDetails::wherePlayMasterId($allPlayMaster->id)->first())->commission)/100));
             }
         }
 
@@ -359,7 +359,7 @@ class GameController extends Controller
             'total_win_claimed' =>   $totalPrizeClaimed,
             'total_win_unclaimed' =>   $totalPrizeUnclaimed,
             'profit' =>   $totalBet - $totalPrizeClaimed,
-            'total_commission' =>   $totalCommission,
+//            'total_commission' =>   $totalCommission,
         ];
         array_push($returnArray , $x);
 
