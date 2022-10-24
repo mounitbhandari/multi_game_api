@@ -351,7 +351,7 @@ class GameController extends Controller
                 $totalPrizeUnclaimed = $allPlayMaster->is_claimed == 0 ? ($totalPrizeUnclaimed + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id)): $totalPrizeUnclaimed + 0;
                 $totalBet = $totalBet + $CPanelReportController->total_sale_by_play_master_id($allPlayMaster->id);
 //                $totalCommission = $totalCommission + ($totalBet * (floor((PlayDetails::wherePlayMasterId($allPlayMaster->id)->first())->commission)/100));
-                $totalCommission = $totalCommission + ($totalBet * (DB::select("select commission/100 as commission from play_details where play_master_id = ?",[$allPlayMaster->id])[0]->commission));
+                $totalCommission = $totalCommission + ($totalBet * (DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ?",[$allPlayMaster->id])[0]->commission));
             }
         }
 
