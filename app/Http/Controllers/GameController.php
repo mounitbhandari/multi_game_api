@@ -363,7 +363,7 @@ class GameController extends Controller
             'total_win_claimed' =>   $totalPrizeClaimed,
             'total_win_unclaimed' =>   $totalPrizeUnclaimed,
             'profit' =>   $totalBet - $totalPrizeClaimed,
-            'total_commission' =>   round($totalCommission, 2),
+            'total_commission' =>   sprintf('%0.2f', $totalCommission),
         ];
         array_push($returnArray , $x);
 
