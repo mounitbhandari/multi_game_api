@@ -353,6 +353,8 @@ class CPanelReportController extends Controller
 
         }
 
+//        $return_array = Array(collect($return_array)->unique()->all());
+
 
 //        $data = DB::select("select play_masters.id, play_masters.barcode_number, play_masters.draw_master_id, play_masters.user_id, play_masters.game_id,
 //       play_masters.user_relation_id, play_masters.is_claimed, play_masters.is_cancelled, play_masters.is_cancelable, play_masters.created_at, play_masters.updated_at,
@@ -485,13 +487,15 @@ class CPanelReportController extends Controller
 //        }
 //        return $total_quantity;
 
-        $data = Cache::remember('get_total_quantity_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
-            return (DB::select("select sum(play_details.quantity) as total_quantity from play_details where play_master_id = ".$play_master_id)[0])->total_quantity;
-        });
+//        $data = Cache::remember('get_total_quantity_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
+//            return (DB::select("select sum(play_details.quantity) as total_quantity from play_details where play_master_id = ".$play_master_id)[0])->total_quantity;
+//        });
 
 //        $data = (DB::select("select sum(play_details.quantity) as total_quantity from play_details where play_master_id = ".$play_master_id)[0])->total_quantity;
 
-        return (int)$data;
+//        return (int)$data;
+
+        return (DB::select("select sum(play_details.quantity) as total_quantity from play_details where play_master_id = ".$play_master_id)[0])->total_quantity;
     }
 
     public function get_total_amount_by_barcode($play_master_id){

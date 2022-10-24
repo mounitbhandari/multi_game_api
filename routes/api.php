@@ -245,7 +245,7 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::post('mailTransaction', [TransactionController::class, 'mailTransactionOneMonth']);
 
 
-    Route::post('drawWiseReportToday', [CPanelReportController::class, 'draw_wise_report']);
+    Route::post('drawWiseReportToday', [CPanelReportController::class, 'draw_wi se_report']);
 
 
     Route::get('results/lastResult',[ResultMasterController::class, 'get_last_result']);
