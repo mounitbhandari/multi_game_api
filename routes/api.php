@@ -233,6 +233,8 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::post('superStockist/turnOverReport', [GameController::class, 'super_stockist_turnover_report']);
     Route::post('stockist/turnOverReport', [GameController::class, 'stockist_turnover_report']);
 
+    Route::post('result_test', [CentralController::class, 'testResult']);
+
     Route::post('cancelTicket',[PlayMasterController::class,'cancelPlay']);
 
     Route::get('terminal/{id}',[TerminalController::class, 'get_logged_in_terminal']);

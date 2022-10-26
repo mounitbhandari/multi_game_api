@@ -832,6 +832,58 @@ class CentralController extends Controller
 
     }
 
+    public function testResult(Request $request){
+        $requestedData = (object)$request->json()->all();
+
+        $playMasterControllerObj = new PlayMasterController();
+        $today= $requestedData->today;
+        $lastDrawId = $requestedData->lastDrawId;
+
+        $game_multiplexer = 1;
+
+        $singleNumber = (GameType::find(6));
+
+        $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,6);
+        $payout = (($totalSale * ($singleNumber->payout)) / 100)/$game_multiplexer;
+        $singleValue = floor($payout / $singleNumber->winning_price);
+
+//            $singleValue = (($playMasterControllerObj->get_total_sale($today,$lastDrawId,6) * (($singleNumber->payout)/100))/$game_multiplexer)/($singleNumber->winning_price);
+
+        $singleNumberTargetData = DB::select("select * from play_details
+                inner join play_masters on play_details.play_master_id = play_masters.id
+                where quantity <= ? and game_type_id = 6 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+                order by quantity desc
+                limit 1",[$singleValue, $today, $lastDrawId]);
+
+        //empty check
+        if(empty($singleNumberTargetData)) {
+            $singleNumberTargetData = DB::select("select id as combination_number_id, 0 as quantity from single_numbers
+                    where id not in (select combination_number_id from play_details
+                    inner join play_masters on play_details.play_master_id = play_masters.id
+                    where game_type_id = 6 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?)
+                    order by RAND()
+                    limit 1",[$today, $lastDrawId]);
+        }
+
+        // greater target value
+        if(empty($singleNumberTargetData)){
+            $singleNumberTargetData = DB::select("select * from play_details
+                    inner join play_masters on play_details.play_master_id = play_masters.id
+                    where quantity > ? and game_type_id = 6 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+                    order by quantity
+                    limit 1",[$singleValue, $today, $lastDrawId]);
+        }
+
+        if(($singleNumberTargetData[0]->quantity) > $singleValue){
+            $game_multiplexer = 1;
+        }
+
+//        $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,6,$singleNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
+        return  $singleNumberTargetData[0]->combination_number_id;
+
+
+    }
+
     public function checkSmallerTotalSaleForDoubleAndarBahar($last_draw_master_id){
         $today = Carbon::today();
         $result = [];
