@@ -860,7 +860,7 @@ class CentralController extends Controller
                 inner join play_masters on play_details.play_master_id = play_masters.id
                 where play_masters.draw_master_id = ? and play_masters.game_id = 4 and date(play_masters.created_at) = ?
                 GROUP by combination_number_id
-                having sum(play_details.quantity)<= ",[$lastDrawId,$today,$singleValue]);
+                having sum(play_details.quantity)<= ?",[$lastDrawId,$today,$singleValue]);
         $test = 1;
 
         //empty check
