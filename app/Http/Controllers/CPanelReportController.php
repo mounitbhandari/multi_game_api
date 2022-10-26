@@ -524,17 +524,19 @@ class CPanelReportController extends Controller
 //        }
 //        return $total_amount;
 
-        $data = Cache::remember('get_total_amount_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
-            return ((DB::select("select sum(play_details.quantity* game_types.mrp) as total_mrp from play_details
-                    inner join game_types on game_types.id = play_details.game_type_id
-                    where play_details.play_master_id = ".$play_master_id)[0])->total_mrp);
-        });
+//        $data = Cache::remember('get_total_amount_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
+//            return ((DB::select("select sum(play_details.quantity* game_types.mrp) as total_mrp from play_details
+//                    inner join game_types on game_types.id = play_details.game_type_id
+//                    where play_details.play_master_id = ".$play_master_id)[0])->total_mrp);
+//        });
 
 //        $data = (DB::select("select sum(play_details.quantity* game_types.mrp) as total_mrp from play_details
 //            inner join game_types on game_types.id = play_details.game_type_id
 //            where play_details.play_master_id = ".$play_master_id)[0])->total_mrp;
 
-        return $data;
+        return (DB::select("select sum(play_details.quantity* game_types.mrp) as total_mrp from play_details
+                    inner join game_types on game_types.id = play_details.game_type_id
+                    where play_details.play_master_id = ".$play_master_id)[0])->total_mrp;
     }
 
     public function customer_sale_report(){
