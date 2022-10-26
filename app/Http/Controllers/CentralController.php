@@ -850,7 +850,7 @@ class CentralController extends Controller
         $lastDrawId = $requestedData->lastDrawId;
 
         $game_multiplexer = 1;
-        $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,3);
+        $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,4);
         $gameType = GameType::find(4);
         $payout = (($totalSale * ($gameType->payout)) / 100)/$game_multiplexer;
         $targetValue = floor($payout / $gameType->winning_price);
