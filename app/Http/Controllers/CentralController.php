@@ -850,7 +850,6 @@ class CentralController extends Controller
         $lastDrawId = $requestedData->lastDrawId;
 
         $game_multiplexer = 1;
-        $lastDrawId = $nextGameDrawObj->last_draw_id;
 
         $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,4);
 
