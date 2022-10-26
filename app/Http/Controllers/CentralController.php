@@ -850,54 +850,57 @@ class CentralController extends Controller
         $lastDrawId = $requestedData->lastDrawId;
 
         $game_multiplexer = 1;
-        $test = 0;
+        $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,3);
+        $gameType = GameType::find(4);
+        $payout = (($totalSale * ($gameType->payout)) / 100)/$game_multiplexer;
+        $targetValue = floor($payout / $gameType->winning_price);
 
-        $singleNumber = (GameType::find(6));
+//        $result = DB::select(DB::raw("select card_combinations.id as card_combination_id,
+//                sum(play_details.quantity) as total_quantity
+//                from play_details
+//                inner join play_masters ON play_masters.id = play_details.play_master_id
+//                inner join card_combinations ON card_combinations.id = play_details.combination_number_id
+//                where play_details.game_type_id = 4 and card_combinations.card_combination_type_id = 2 and play_masters.draw_master_id = $lastDrawId and date(play_details.created_at)= " . "'" . $today . "'" . "
+//                group by card_combinations.id
+//                having sum(play_details.quantity)<= $targetValue
+//                order by rand() limit 1"));
 
-        $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,6);
-        $payout = (($totalSale * ($singleNumber->payout)) / 100)/$game_multiplexer;
-        $singleValue = floor($payout / $singleNumber->winning_price);
-
-//            $singleValue = (($playMasterControllerObj->get_total_sale($today,$lastDrawId,6) * (($singleNumber->payout)/100))/$game_multiplexer)/($singleNumber->winning_price);
-
-        $singleNumberTargetData = DB::select("select sum(quantity) as quantity,combination_number_id from play_details
-                inner join play_masters on play_details.play_master_id = play_masters.id
-                where play_masters.draw_master_id = ? and play_masters.game_id = 4 and play_details.game_type_id = 6 and date(play_masters.created_at) = ?
-                GROUP by combination_number_id
+        $result = DB::select("select card_combinations.id as card_combination_id,
+                sum(play_details.quantity) as total_quantity
+                from play_details
+                inner join play_masters ON play_masters.id = play_details.play_master_id
+                inner join card_combinations ON card_combinations.id = play_details.combination_number_id
+                where play_details.game_type_id = 4 and card_combinations.card_combination_type_id = 2 and play_masters.draw_master_id = ? and date(play_details.created_at)= ?
+                group by card_combinations.id
                 having sum(play_details.quantity)<= ?
-                order by rand()
-                limit 1",[$lastDrawId,$today,$singleValue]);
-        $test = 1;
+                order by rand() limit 1",[$lastDrawId,$today,$targetValue]);
 
-        //empty check
-        if(empty($singleNumberTargetData)) {
-            $singleNumberTargetData = DB::select("select id as combination_number_id, 0 as quantity from single_numbers
-                    where id not in (select combination_number_id from play_details
-                    inner join play_masters on play_details.play_master_id = play_masters.id
-                    where game_type_id = 6 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?)
-                    order by RAND()
-                    limit 1",[$today, $lastDrawId]);
-
-            $test = 2;
+        if (empty($result)) {
+            // empty value
+            $result = DB::select(DB::raw("SELECT card_combinations.id as card_combination_id, 0 as total_quantity
+                    FROM card_combinations
+                    WHERE card_combination_type_id = 2 and card_combinations.id NOT IN(SELECT DISTINCT
+                    play_details.combination_number_id FROM play_details
+                    INNER JOIN play_masters on play_details.play_master_id= play_masters.id
+                    WHERE  play_details.game_type_id=4 and DATE(play_masters.created_at) = " . "'" . $today . "'" . " and play_masters.draw_master_id = $lastDrawId)
+                    ORDER by rand() LIMIT 1"));
         }
 
-        // greater target value
-        if(empty($singleNumberTargetData)){
-            $singleNumberTargetData = DB::select("select sum(quantity) as quantity,combination_number_id from play_details
-                inner join play_masters on play_details.play_master_id = play_masters.id
-                where play_masters.draw_master_id = ? and play_masters.game_id = 4 and play_details.game_type_id = 6 and date(play_masters.created_at) = ?
-                GROUP by combination_number_id
-                having sum(play_details.quantity)>= ?
-                order by rand()
-                limit 1",[$lastDrawId,$today,$singleValue]);
-
-            $test = 3;
+        if (empty($result)) {
+            $result = DB::select(DB::raw("select card_combinations.id as card_combination_id,
+                    sum(play_details.quantity) as total_quantity
+                    from play_details
+                    inner join play_masters ON play_masters.id = play_details.play_master_id
+                    inner join card_combinations ON card_combinations.id = play_details.combination_number_id
+                    where  play_details.game_type_id=4 and card_combination_type_id = 2 and play_masters.draw_master_id = $lastDrawId and date(play_details.created_at)= " . "'" . $today . "'" . "
+                    group by card_combinations.id
+                    having sum(play_details.quantity)>= $targetValue
+                    order by rand() limit 1"));
         }
 
-        if(($singleNumberTargetData[0]->quantity) > $singleValue){
+        if(($result[0]->total_quantity) > $targetValue){
             $game_multiplexer = 1;
         }
-
 //        $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,6,$singleNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
         return response()->json(['$test' => $test,'$totalSale'=>$totalSale, '$singleNumberTargetData' => $singleNumberTargetData, '$singleValue'=> $singleValue], 200);
 
