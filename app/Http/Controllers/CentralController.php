@@ -840,6 +840,7 @@ class CentralController extends Controller
         $lastDrawId = $requestedData->lastDrawId;
 
         $game_multiplexer = 1;
+        $test = 0;
 
         $singleNumber = (GameType::find(6));
 
@@ -854,6 +855,7 @@ class CentralController extends Controller
                 where quantity <= ? and game_type_id = 6 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
                 order by quantity desc
                 limit 1",[$singleValue, $today, $lastDrawId]);
+        $test = 1;
 
         //empty check
         if(empty($singleNumberTargetData)) {
@@ -863,6 +865,8 @@ class CentralController extends Controller
                     where game_type_id = 6 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?)
                     order by RAND()
                     limit 1",[$today, $lastDrawId]);
+
+            $test = 2;
         }
 
         // greater target value
@@ -872,6 +876,8 @@ class CentralController extends Controller
                     where quantity > ? and game_type_id = 6 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
                     order by quantity
                     limit 1",[$singleValue, $today, $lastDrawId]);
+
+            $test = 3;
         }
 
         if(($singleNumberTargetData[0]->quantity) > $singleValue){
@@ -879,7 +885,7 @@ class CentralController extends Controller
         }
 
 //        $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,6,$singleNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
-        return response()->json(['$totalSale'=>$totalSale, '$singleNumberTargetData' => $singleNumberTargetData[0]->combination_number_id, '$singleValue'=> $singleValue], 200);
+        return response()->json(['$test' => $test,'$totalSale'=>$totalSale, '$singleNumberTargetData' => $singleNumberTargetData[0]->combination_number_id, '$singleValue'=> $singleValue], 200);
 
 
     }
