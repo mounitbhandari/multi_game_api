@@ -485,17 +485,17 @@ class CentralController extends Controller
 
 //            $singleValue = (($playMasterControllerObj->get_total_sale($today,$lastDrawId,6) * (($singleNumber->payout)/100))/$game_multiplexer)/($singleNumber->winning_price);
 
-//            $singleNumberTargetData = DB::select("select * from play_details
-//                inner join play_masters on play_details.play_master_id = play_masters.id
-//                where quantity <= ? and game_type_id = 6 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
-//                order by quantity desc
-//                limit 1",[$singleValue, $today, $lastDrawId]);
-
-            $singleNumberTargetData = DB::select("select sum(quantity),combination_number_id from play_details
+            $singleNumberTargetData = DB::select("select * from play_details
                 inner join play_masters on play_details.play_master_id = play_masters.id
-                where play_masters.draw_master_id = ? and play_masters.game_id = 4 and date(play_masters.created_at) = ?
-                GROUP by combination_number_id
-                having sum(play_details.quantity)<= ",[$lastDrawId,$today,$singleValue]);
+                where quantity <= ? and game_type_id = 6 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
+                order by quantity desc
+                limit 1",[$singleValue, $today, $lastDrawId]);
+
+//            $singleNumberTargetData = DB::select("select sum(quantity),combination_number_id from play_details
+//                inner join play_masters on play_details.play_master_id = play_masters.id
+//                where play_masters.draw_master_id = ? and play_masters.game_id = 4 and date(play_masters.created_at) = ?
+//                GROUP by combination_number_id
+//                having sum(play_details.quantity)<= ",[$lastDrawId,$today,$singleValue]);
 
             //empty check
             if(empty($singleNumberTargetData)) {
