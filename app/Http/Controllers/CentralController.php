@@ -885,7 +885,7 @@ class CentralController extends Controller
         }
 
 //        $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,6,$singleNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
-        return response()->json(['$test' => $test,'$totalSale'=>$totalSale, '$singleNumberTargetData' => $singleNumberTargetData[0]->combination_number_id, '$singleValue'=> $singleValue], 200);
+        return response()->json(['$test' => $test,'$totalSale'=>$totalSale, '$singleNumberTargetData' => $singleNumberTargetData, '$singleValue'=> $singleValue], 200);
 
 
     }
