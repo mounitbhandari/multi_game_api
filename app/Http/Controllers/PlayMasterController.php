@@ -173,6 +173,21 @@ class PlayMasterController extends Controller
 
     }
 
+    public function get_total_sale_test(Request $request)
+    {
+        $requestedData = (object)$request->json()->all();
+        $today = $requestedData->today;;
+        $draw_id = $requestedData->lastDrawId;
+        $gameType = $requestedData->gameType;
+
+        $total = DB::select("select ifnull(sum(play_details.quantity*play_details.mrp),0) as total_balance from play_details
+        inner join play_masters ON play_masters.id = play_details.play_master_id
+        where date(play_details.created_at) = ? and play_masters.draw_master_id = ? and play_details.game_type_id = ?", [$today, $draw_id, $gameType]);
+
+        return $total[0]->total_balance;
+
+    }
+
     public function get_total_sale_by_terminal($today, $draw_id, $userId)
     {
         $total = 0;

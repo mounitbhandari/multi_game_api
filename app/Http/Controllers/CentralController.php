@@ -850,30 +850,26 @@ class CentralController extends Controller
         $lastDrawId = $requestedData->lastDrawId;
 
         $game_multiplexer = 1;
+        $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
+        $nextDrawId = $nextGameDrawObj->next_draw_id;
+        $lastDrawId = $nextGameDrawObj->last_draw_id;
+
         $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,4);
+
+        return response()->json(['$totalSale'=>$totalSale], 200);
         $gameType = GameType::find(4);
         $payout = (($totalSale * ($gameType->payout)) / 100)/$game_multiplexer;
         $targetValue = floor($payout / $gameType->winning_price);
 
-//        $result = DB::select(DB::raw("select card_combinations.id as card_combination_id,
-//                sum(play_details.quantity) as total_quantity
-//                from play_details
-//                inner join play_masters ON play_masters.id = play_details.play_master_id
-//                inner join card_combinations ON card_combinations.id = play_details.combination_number_id
-//                where play_details.game_type_id = 4 and card_combinations.card_combination_type_id = 2 and play_masters.draw_master_id = $lastDrawId and date(play_details.created_at)= " . "'" . $today . "'" . "
-//                group by card_combinations.id
-//                having sum(play_details.quantity)<= $targetValue
-//                order by rand() limit 1"));
-
-        $result = DB::select("select card_combinations.id as card_combination_id,
+        $result = DB::select(DB::raw("select card_combinations.id as card_combination_id,
                 sum(play_details.quantity) as total_quantity
                 from play_details
                 inner join play_masters ON play_masters.id = play_details.play_master_id
                 inner join card_combinations ON card_combinations.id = play_details.combination_number_id
-                where play_details.game_type_id = 4 and card_combinations.card_combination_type_id = 2 and play_masters.draw_master_id = ? and date(play_details.created_at)= ?
+                where play_details.game_type_id = 4 and card_combinations.card_combination_type_id = 2 and play_masters.draw_master_id = $lastDrawId and date(play_details.created_at)= " . "'" . $today . "'" . "
                 group by card_combinations.id
-                having sum(play_details.quantity)<= ?
-                order by rand() limit 1",[$lastDrawId,$today,$targetValue]);
+                having sum(play_details.quantity)<= $targetValue
+                order by rand() limit 1"));
 
         if (empty($result)) {
             // empty value
@@ -898,9 +894,7 @@ class CentralController extends Controller
                     order by rand() limit 1"));
         }
 
-        if(($result[0]->total_quantity) > $targetValue){
-            $game_multiplexer = 1;
-        }
+
 //        $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,6,$singleNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
         return response()->json(['$totalSale'=>$totalSale, '$singleNumberTargetData' => $result], 200);
 
