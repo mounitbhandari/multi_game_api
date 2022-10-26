@@ -454,7 +454,7 @@ class TerminalController extends Controller
         $requestedData = (object)$request->json()->all();
 
         $user = User::find($requestedData->terminalId);
-        if (!$user || !Hash::check(md5($request->password), $user->password)) {
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['success'=>0, 'message'=>'Wrong old password'], 200,[],JSON_NUMERIC_CHECK);
         }
 
