@@ -856,7 +856,7 @@ class CentralController extends Controller
 
 //            $singleValue = (($playMasterControllerObj->get_total_sale($today,$lastDrawId,6) * (($singleNumber->payout)/100))/$game_multiplexer)/($singleNumber->winning_price);
 
-        $singleNumberTargetData = DB::select("select sum(quantity),combination_number_id from play_details
+        $singleNumberTargetData = DB::select("select sum(quantity) as quantity,combination_number_id from play_details
                 inner join play_masters on play_details.play_master_id = play_masters.id
                 where play_masters.draw_master_id = ? and play_masters.game_id = 4 and date(play_masters.created_at) = ?
                 GROUP by combination_number_id
