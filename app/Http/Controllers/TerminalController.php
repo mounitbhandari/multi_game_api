@@ -61,6 +61,63 @@ class TerminalController extends Controller
         return TerminalResource::collection($request->user());
     }
 
+    public function claimAllPrizes($x){
+//        User::select('id')->whereAutoClaim(1)->whereUserTypeId(5)->chunk(300, function ($users){
+
+//            foreach ($users as $x){
+                $prize_value = 0;
+//                $y = PlayMaster::whereUserId($x->id)->whereIsClaimed(0)->whereIsCancelled(0)->get();
+                PlayMaster::select('id')->whereUserId($x)->whereIsClaimed(0)->whereIsCancelled(0)->chunk(300, function ($y) {
+
+                    if ($y) {
+                        foreach ($y as $z) {
+
+                            if ($z !== []) {
+
+                                $cPanelReportControllerObj = new CPanelReportController();
+                                $data = $cPanelReportControllerObj->get_prize_value_by_barcode($z->id);
+
+                                if ($data != 0) {
+                                    $playMaster = PlayMaster::find($z->id);
+                                    $playMaster->is_claimed = 1;
+                                    $playMaster->update();
+
+                                    if ($playMaster) {
+                                        $user = User::find($playMaster->user_id);
+                                        $old_amount = $user->closing_balance;
+                                        $user->closing_balance = $user->closing_balance + $data;
+                                        $user->update();
+
+                                        $transaction = Transaction::wherePlayMasterId($z->id)->first();
+                                        if ($transaction) {
+                                            $transaction->prize_amount = $data;
+                                            $transaction->new_amount = $user->closing_balance;
+                                            $transaction->save();
+                                        } else {
+                                            $transaction = new Transaction();
+                                            $transaction->terminal_id = $playMaster->user_id;
+                                            $transaction->play_master_id = $playMaster->id;
+                                            $transaction->old_amount = $old_amount;
+                                            $transaction->prize_amount = $data;
+                                            $transaction->new_amount = $user->closing_balance;
+                                            $transaction->save();
+                                        }
+
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                });
+
+//            }
+
+//        });
+
+        return response()->json(['success'=>1], 200);
+    }
+
     public function claimPrizes(){
         User::select('id')->whereAutoClaim(1)->whereUserTypeId(5)->chunk(300, function ($users){
 

@@ -255,6 +255,7 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::get('results/lastResult',[ResultMasterController::class, 'get_last_result']);
 
     Route::get('claimPrizes',[TerminalController::class, 'claimPrizes']);
+    Route::get('claimAllPrizes/{id}',[TerminalController::class, 'claimAllPrizes']);
 
     Route::post('totalSaleOnCurrentDraw',[ManualResultController::class, 'check_total_sale_on_current_draw']);
 
