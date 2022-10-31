@@ -393,7 +393,7 @@ Route::group(array('prefix' => 'dev'), function() {
      Route::post('terminal/barcodeReport',[TerminalReportController::class, 'barcode_wise_report_by_terminal']);
 
 
-    // Route::put('terminal/resetPassword', [TerminalController::class, 'reset_terminal_password']);
+    Route::patch('terminal/resetPassword', [TerminalController::class, 'reset_terminal_password']);
 
      Route::put('cPanel/game/payout',[GameTypeController::class, 'update_payout']);
 

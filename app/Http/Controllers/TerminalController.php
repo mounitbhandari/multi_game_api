@@ -453,7 +453,7 @@ class TerminalController extends Controller
     public function reset_terminal_password(Request $request){
         $requestedData = (object)$request->json()->all();
 
-        $user = User::find($requestedData->terminalId);
+        $user = User::find($requestedData->userId);
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['success'=>0, 'message'=>'Wrong old password'], 200,[],JSON_NUMERIC_CHECK);
         }
