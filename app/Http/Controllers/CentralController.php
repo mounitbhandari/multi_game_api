@@ -541,11 +541,6 @@ class CentralController extends Controller
             $andarNumber = (GameType::find(8));
             $baharNumber = (GameType::find(9));
 
-//            $doubleValue = (($playMasterControllerObj->get_total_sale($today,$lastDrawId,7) * ($doubleNumber->payout)/100)/$game_multiplexer)/($doubleNumber->winning_price);
-//            $andarValue = (($playMasterControllerObj->get_total_sale($today,$lastDrawId,8) * ($doubleNumber->payout)/100)/$game_multiplexer)/($doubleNumber->winning_price);
-//            $baharValue = (($playMasterControllerObj->get_total_sale($today,$lastDrawId,9) * ($doubleNumber->payout)/100)/$game_multiplexer)/($doubleNumber->winning_price);
-
-
             $doubleValue = $playMasterControllerObj->get_total_sale($today,$lastDrawId,7);
             $andarValue = $playMasterControllerObj->get_total_sale($today,$lastDrawId,8);
             $baharValue = $playMasterControllerObj->get_total_sale($today,$lastDrawId,9);
@@ -624,54 +619,6 @@ class CentralController extends Controller
                 }
             }
 
-
-
-//            return response()->json(['success'=>$doubleValue, 'success1' => $andarValue, 'success2'=>$baharValue, 'xx'=>$totalDoubleNumberSale, 'xxx'=>$doubleNumberQuantity], 200);
-//
-//            $doubleNumberTargetData = DB::select("select * from play_details
-//            inner join play_masters on play_details.play_master_id = play_masters.id
-//            where quantity <= ? and game_type_id = 5 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
-//            order by quantity desc
-//            limit 1",[$doubleValue, $today, $lastDrawId]);
-//
-//            if(empty($doubleNumberTargetData)) {
-//                $doubleNumberTargetData = DB::select("select id as combination_number_id, 0 as quantity from single_numbers
-//                    where id not in (select combination_number_id from play_details
-//                    inner join play_masters on play_details.play_master_id = play_masters.id
-//                    where game_type_id = 5 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?)
-//                    order by RAND()
-//                    limit 1",[$today, $lastDrawId]);
-//            }
-//
-//            if(empty($doubleNumberTargetData)){
-//                $doubleNumberTargetData = DB::select("select * from play_details
-//                inner join play_masters on play_details.play_master_id = play_masters.id
-//                where quantity > ? and game_type_id = 5 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
-//                order by quantity
-//                limit 1",[$doubleValue, $today, $lastDrawId]);
-//            }
-//
-//            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,7,$doubleNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
-//
-////            $getResultSingle = (DoubleNumberCombination::find($doubleNumberTargetData[0]->combination_number_id))->andar_number_id;
-//
-//            if($playMasterSaveCheck['success'] == 0){
-//                return response()->json(['success'=>0, 'message' => 'Save error double number'], 401);
-//            }
-//
-//            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,8,(DoubleNumberCombination::find($doubleNumberTargetData[0]->combination_number_id))->andar_number_id,$game_multiplexer))->content(),true);
-//
-//            if($playMasterSaveCheck['success'] == 0){
-//                return response()->json(['success'=>0, 'message' => 'Save error andar number'], 401);
-//            }
-//
-//            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,9,(DoubleNumberCombination::find($doubleNumberTargetData[0]->combination_number_id))->bahar_number_id,$game_multiplexer))->content(),true);
-//
-//            if($playMasterSaveCheck['success'] == 0){
-//                return response()->json(['success'=>0, 'message' => 'Save error bahar number'], 401);
-//            }
-//
-//            return;
         }
 
 

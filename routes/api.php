@@ -222,6 +222,8 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::post('superStockist/turnOverReport', [GameController::class, 'super_stockist_turnover_report']);
     Route::post('stockist/turnOverReport', [GameController::class, 'stockist_turnover_report']);
 
+    Route::get('claimAllPrizes/{id}',[TerminalController::class, 'claimAllPrizes']);
+
 });
 
 
@@ -255,6 +257,7 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::get('results/lastResult',[ResultMasterController::class, 'get_last_result']);
 
     Route::get('claimPrizes',[TerminalController::class, 'claimPrizes']);
+    Route::get('claimAllPrizes/{id}',[TerminalController::class, 'claimAllPrizes']);
 
     Route::post('totalSaleOnCurrentDraw',[ManualResultController::class, 'check_total_sale_on_current_draw']);
 
