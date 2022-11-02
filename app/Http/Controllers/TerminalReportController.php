@@ -55,7 +55,7 @@ class TerminalReportController extends Controller
 
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
             ,'draw_masters.visible_time as draw_time','draw_masters.id as draw_master_id','play_masters.created_at',
-            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','play_masters.is_cancelled','play_masters.is_cancelable','games.game_name',
+            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','play_masters.is_cancelled','play_masters.is_cancelable','games.game_name','play_masters.is_claimed',
             DB::raw('games.id as game_id')
         )
             ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
@@ -68,7 +68,7 @@ class TerminalReportController extends Controller
             ->where('play_masters.is_cancelled',0)
             ->where('play_masters.user_id',$terminalId)
             ->groupBy('play_masters.id','play_masters.barcode_number','play_masters.is_claimed','draw_masters.visible_time','users.email','play_masters.created_at'
-                ,'play_masters.is_cancelled','play_masters.is_cancelable','games.game_name','games.id','draw_masters.id'
+                ,'play_masters.is_cancelled','play_masters.is_cancelable','games.game_name','games.id','draw_masters.id','play_masters.is_claimed'
             )
             ->orderBy('play_masters.created_at','desc')
             ->get();
