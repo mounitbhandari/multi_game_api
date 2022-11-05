@@ -62,14 +62,19 @@ class CentralController extends Controller
 
         if($id == 1){
 
-            $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
+//            $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
+            $nextGameDrawObj = DB::select("select id,next_draw_id,last_draw_id from next_game_draws where game_id = ?",[$id])[0];
             $nextDrawId = $nextGameDrawObj->next_draw_id;
             $lastDrawId = $nextGameDrawObj->last_draw_id;
 
             //payouts
-            $singleNumber = (GameType::find(1));
-            $doubleNumber = (GameType::find(5));
-            $tripleNumber = (GameType::find(2));
+//            $singleNumber = (GameType::find(1));
+//            $doubleNumber = (GameType::find(5));
+//            $tripleNumber = (GameType::find(2));
+
+            $singleNumber = DB::select("select id,mrp,winning_price,payout,multiplexer from game_types where id = 1")[0];
+            $doubleNumber = DB::select("select id,mrp,winning_price,payout,multiplexer from game_types where id = 5")[0];
+            $tripleNumber = DB::select("select id,mrp,winning_price,payout,multiplexer from game_types where id = 2")[0];
 
             //total sales
             $singleNumberTotalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,1);
@@ -662,6 +667,7 @@ class CentralController extends Controller
             $lastDrawId = $lastDrawId + 1;
         }
 
+        $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
         $nextGameDrawObj->next_draw_id = $nextDrawId;
         $nextGameDrawObj->last_draw_id = $lastDrawId;
         $nextGameDrawObj->save();
