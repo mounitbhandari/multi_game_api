@@ -367,7 +367,8 @@ class GameController extends Controller
         ];
         array_push($returnArray , $x);
 
-        return response()->json(['success'=>1,'data'=> $returnArray[0]], 200);
+        // return response()->json(['success'=>1,'data'=> $returnArray[0]], 200);
+        return response()->json(['success'=>1,'data'=> $returnArray], 200);
     }
 
     public function get_game_total_sale_today_super_stockist($id){
