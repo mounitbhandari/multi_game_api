@@ -379,9 +379,9 @@ class CPanelReportController extends Controller
 
     public function get_prize_value_by_barcode($play_master_id){
 
-//        if((Cache::has('prize_value_by_play_master_id'.$play_master_id)) == 1){
-//            return Cache::get('prize_value_by_play_master_id'.$play_master_id);
-//        }
+        if((Cache::has('prize_value_by_play_master_id'.$play_master_id)) == 1){
+            return Cache::get('prize_value_by_play_master_id'.$play_master_id);
+        }
 
         $play_master = PlayMaster::findOrFail($play_master_id);
         $play_master_game_id = $play_master->game_id;
@@ -443,16 +443,16 @@ class CPanelReportController extends Controller
             }
         }
 
-//        $playMasterDate = Carbon::parse($play_master->created_at)->format('Y-m-d');
-//        $dateWork = Carbon::createFromDate($playMasterDate);
-//        $now = Carbon::now();
-//        $differenceDateCheck = $dateWork->diffInDays($now);
-//
-//        if(($prize_value > 0) || ($differenceDateCheck > 1)){
-//            $prize_value = Cache::remember('prize_value_by_play_master_id'.$play_master_id, 3000000, function () use ($prize_value) {
-//                return $prize_value;
-//            });
-//        }
+        $playMasterDate = Carbon::parse($play_master->created_at)->format('Y-m-d');
+        $dateWork = Carbon::createFromDate($playMasterDate);
+        $now = Carbon::now();
+        $differenceDateCheck = $dateWork->diffInDays($now);
+
+        if(($prize_value > 0) || ($differenceDateCheck > 1)){
+            $prize_value = Cache::remember('prize_value_by_play_master_id'.$play_master_id, 3000000, function () use ($prize_value) {
+                return $prize_value;
+            });
+        }
 
         return $prize_value;
     }
@@ -487,15 +487,16 @@ class CPanelReportController extends Controller
 //        }
 //        return $total_quantity;
 
-//        $data = Cache::remember('get_total_quantity_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
-//            return (DB::select("select sum(play_details.quantity) as total_quantity from play_details where play_master_id = ".$play_master_id)[0])->total_quantity;
-//        });
+        $data = Cache::remember('get_total_quantity_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
+            return (DB::select("select sum(play_details.quantity) as total_quantity from play_details where play_master_id = ".$play_master_id)[0])->total_quantity;
+        });
 
 //        $data = (DB::select("select sum(play_details.quantity) as total_quantity from play_details where play_master_id = ".$play_master_id)[0])->total_quantity;
 
 //        return (int)$data;
 
-        return (DB::select("select sum(play_details.quantity) as total_quantity from play_details where play_master_id = ".$play_master_id)[0])->total_quantity;
+//        return (DB::select("select sum(play_details.quantity) as total_quantity from play_details where play_master_id = ".$play_master_id)[0])->total_quantity;
+        return $data;
     }
 
     public function get_total_amount_by_barcode($play_master_id){
@@ -524,19 +525,20 @@ class CPanelReportController extends Controller
 //        }
 //        return $total_amount;
 
-//        $data = Cache::remember('get_total_amount_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
-//            return ((DB::select("select sum(play_details.quantity* game_types.mrp) as total_mrp from play_details
-//                    inner join game_types on game_types.id = play_details.game_type_id
-//                    where play_details.play_master_id = ".$play_master_id)[0])->total_mrp);
-//        });
+        $data = Cache::remember('get_total_amount_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
+            return ((DB::select("select sum(play_details.quantity* game_types.mrp) as total_mrp from play_details
+                    inner join game_types on game_types.id = play_details.game_type_id
+                    where play_details.play_master_id = ".$play_master_id)[0])->total_mrp);
+        });
 
 //        $data = (DB::select("select sum(play_details.quantity* game_types.mrp) as total_mrp from play_details
 //            inner join game_types on game_types.id = play_details.game_type_id
 //            where play_details.play_master_id = ".$play_master_id)[0])->total_mrp;
 
-        return (DB::select("select sum(play_details.quantity* game_types.mrp) as total_mrp from play_details
-                    inner join game_types on game_types.id = play_details.game_type_id
-                    where play_details.play_master_id = ".$play_master_id)[0])->total_mrp;
+//        return (DB::select("select sum(play_details.quantity* game_types.mrp) as total_mrp from play_details
+//                    inner join game_types on game_types.id = play_details.game_type_id
+//                    where play_details.play_master_id = ".$play_master_id)[0])->total_mrp;
+        return $data;
     }
 
     public function customer_sale_report(){

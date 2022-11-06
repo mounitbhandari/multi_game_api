@@ -41,7 +41,7 @@ class generateTripleChanceResult extends Command
     public function handle()
     {
         // LOG::info('Triple chance: '.Carbon::today());
-        sleep(4);
+        sleep(2);
         $centralControllerObj = new CentralController();
         $ret = $centralControllerObj->createResult(1,1);
         // LOG::info('Triple chance:: '.$ret);

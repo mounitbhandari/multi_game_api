@@ -119,12 +119,15 @@ class TerminalController extends Controller
     }
 
     public function claimPrizes(){
-        User::select('id')->whereAutoClaim(1)->whereUserTypeId(5)->chunk(300, function ($users){
+
+        $two_days = Carbon::now()->subDays(1)->format('Y-m-d');
+
+        User::select('id')->whereAutoClaim(1)->whereUserTypeId(5)->chunk(300, function ($users,$two_days){
 
             foreach ($users as $x){
                 $prize_value = 0;
 //                $y = PlayMaster::whereUserId($x->id)->whereIsClaimed(0)->whereIsCancelled(0)->get();
-                PlayMaster::select('id')->whereUserId($x->id)->whereIsClaimed(0)->whereIsCancelled(0)->chunk(300, function ($y) {
+                PlayMaster::select('id')->whereUserId($x->id)->whereIsClaimed(0)->whereIsCancelled(0)->whereRaw('date(play_masters.created_at) >= ?', [$two_days])->chunk(200, function ($y) {
 
                     if ($y) {
                         foreach ($y as $z) {
@@ -135,7 +138,7 @@ class TerminalController extends Controller
                                 $data = $cPanelReportControllerObj->get_prize_value_by_barcode($z->id);
 
                                 if ($data != 0) {
-                                    $playMaster = PlayMaster::find($z->id);
+                                    $playMaster = PlayMaster::select('id','is_claimed','user_id')->find($z->id);
                                     $playMaster->is_claimed = 1;
                                     $playMaster->update();
 
