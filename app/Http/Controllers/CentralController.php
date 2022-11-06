@@ -42,6 +42,8 @@ class CentralController extends Controller
             return response()->json(['success'=>0, 'message' => 'Game not active'], 200);
         }
 
+        $nextGameDrawObj = DB::select("select id,next_draw_id,last_draw_id from next_game_draws where game_id = ?",[$id])[0];
+
         $today= Carbon::today()->format('Y-m-d');
         $playMasterControllerObj = new PlayMasterController();
         $resultMasterControllerObj = new ResultMasterController();
@@ -63,7 +65,6 @@ class CentralController extends Controller
         if($id == 1){
 
 //            $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
-            $nextGameDrawObj = DB::select("select id,next_draw_id,last_draw_id from next_game_draws where game_id = ?",[$id])[0];
             $nextDrawId = $nextGameDrawObj->next_draw_id;
             $lastDrawId = $nextGameDrawObj->last_draw_id;
 
@@ -364,7 +365,7 @@ class CentralController extends Controller
 
         if($id == 2){
 
-            $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
+//            $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
             $nextDrawId = $nextGameDrawObj->next_draw_id;
             $lastDrawId = $nextGameDrawObj->last_draw_id;
 
@@ -421,7 +422,7 @@ class CentralController extends Controller
 
         if($id == 3){
 
-            $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
+//            $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
             $nextDrawId = $nextGameDrawObj->next_draw_id;
             $lastDrawId = $nextGameDrawObj->last_draw_id;
 
@@ -478,7 +479,7 @@ class CentralController extends Controller
 
         if($id == 4){
 
-            $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
+//            $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
             $nextDrawId = $nextGameDrawObj->next_draw_id;
             $lastDrawId = $nextGameDrawObj->last_draw_id;
 
@@ -538,7 +539,7 @@ class CentralController extends Controller
 
         if($id == 5){
 
-            $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
+//            $nextGameDrawObj = NextGameDraw::whereGameId($id)->first();
             $nextDrawId = $nextGameDrawObj->next_draw_id;
             $lastDrawId = $nextGameDrawObj->last_draw_id;
 
