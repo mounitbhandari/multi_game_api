@@ -349,14 +349,14 @@ class ResultMasterController extends Controller
 
         $resultMasters = ResultMaster::select('id','draw_master_id','game_date')->whereGameId($id)->whereGameDate($today)->orderBy('id','DESC')->get();
 
-//        $sizeOfResultMaster = Cache::remember('sizeOfResultMasterAsc'.$id, 3000000, function () use ($resultMasters) {
-//            return sizeof($resultMasters);
-//        });
-//
-//        if(($sizeOfResultMaster === sizeof($resultMasters)) && (Cache::has('returnArrayAsc'.$id) == 1)){
-//            $data = Cache::get('returnArrayAsc'.$id);
-//            return response()->json(['success'=>1, 'data' => $data], 200);
-//        }
+        $sizeOfResultMaster = Cache::remember('sizeOfResultMasterAsc'.$id, 3000000, function () use ($resultMasters) {
+            return sizeof($resultMasters);
+        });
+
+        if(($sizeOfResultMaster === sizeof($resultMasters)) && (Cache::has('returnArrayAsc'.$id) == 1)){
+            $data = Cache::get('returnArrayAsc'.$id);
+            return response()->json(['success'=>1, 'data' => $data], 200);
+        }
 
         if($id == 1){
             foreach ($resultMasters as $resultMaster){
@@ -469,14 +469,14 @@ class ResultMasterController extends Controller
             return response()->json(['success'=> 0, 'message' => 'Invalid game id'], 200);
         }
 
-//        Cache::forget('returnArrayAsc'.$id);
-//        Cache::forget('sizeOfResultMasterAsc'.$id);
-//        Cache::remember('returnArrayAsc'.$id, 3000000, function () use ($return_array) {
-//            return $return_array;
-//        });
-//        Cache::remember('sizeOfResultMasterAsc'.$id, 3000000, function () use ($resultMasters) {
-//            return sizeof($resultMasters);
-//        });
+        Cache::forget('returnArrayAsc'.$id);
+        Cache::forget('sizeOfResultMasterAsc'.$id);
+        Cache::remember('returnArrayAsc'.$id, 3000000, function () use ($return_array) {
+            return $return_array;
+        });
+        Cache::remember('sizeOfResultMasterAsc'.$id, 3000000, function () use ($resultMasters) {
+            return sizeof($resultMasters);
+        });
 
 //        $return_array = collect($return_array)->sortBy('draw_time')->reverse()->toArray();
 //        $return_array = collect($return_array)->sortBy('draw_time')->toArray();
@@ -491,14 +491,14 @@ class ResultMasterController extends Controller
         $draw_id = [];
         $resultMasters = ResultMaster::select('id','draw_master_id','game_date')->whereGameId($id)->whereGameDate($today)->get();
 
-//        $sizeOfResultMaster = Cache::remember('sizeOfResultMaster'.$id, 3000000, function () use ($resultMasters) {
-//            return sizeof($resultMasters);
-//        });
-//
-//        if(($sizeOfResultMaster === sizeof($resultMasters)) && (Cache::has('returnArray'.$id) == 1)){
-//            $data = Cache::get('returnArray'.$id);
-//            return response()->json(['success'=>1,'data' => $data], 200);
-//        }
+        $sizeOfResultMaster = Cache::remember('sizeOfResultMaster'.$id, 3000000, function () use ($resultMasters) {
+            return sizeof($resultMasters);
+        });
+
+        if(($sizeOfResultMaster === sizeof($resultMasters)) && (Cache::has('returnArray'.$id) == 1)){
+            $data = Cache::get('returnArray'.$id);
+            return response()->json(['success'=>1,'data' => $data], 200);
+        }
 
         if(sizeof($resultMasters)<=0){
             if($id == 1) {
@@ -759,14 +759,14 @@ class ResultMasterController extends Controller
             return response()->json(['success'=> 0, 'message' => 'Invalid game id'], 200);
         }
 
-//        Cache::forget('returnArray'.$id);
-//        Cache::forget('sizeOfResultMaster'.$id);
-//        Cache::remember('returnArray'.$id, 3000000, function () use ($return_array) {
-//            return $return_array;
-//        });
-//        Cache::remember('sizeOfResultMaster'.$id, 3000000, function () use ($resultMasters) {
-//            return sizeof($resultMasters);
-//        });
+        Cache::forget('returnArray'.$id);
+        Cache::forget('sizeOfResultMaster'.$id);
+        Cache::remember('returnArray'.$id, 3000000, function () use ($return_array) {
+            return $return_array;
+        });
+        Cache::remember('sizeOfResultMaster'.$id, 3000000, function () use ($resultMasters) {
+            return sizeof($resultMasters);
+        });
 
         return response()->json(['success'=>1, 'data' => $return_array], 200);
 
