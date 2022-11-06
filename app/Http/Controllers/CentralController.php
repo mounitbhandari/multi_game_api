@@ -491,6 +491,7 @@ class CentralController extends Controller
         $tempDrawMasterLastDraw = DrawMaster::whereId($lastDrawId)->whereGameId($id)->first();
         $tempDrawMasterLastDraw->active = 0;
         $tempDrawMasterLastDraw->is_draw_over = 'yes';
+        $tempDrawMasterLastDraw->payout = DB::select("select payout from game_types where game_id = ? limit 1",[$id])[0]->payout;
         $tempDrawMasterLastDraw->update();
 
         $tempDrawMasterNextDraw = DrawMaster::whereId($nextDrawId)->whereGameId($id)->first();
@@ -519,6 +520,8 @@ class CentralController extends Controller
         $nextGameDrawObj->next_draw_id = $nextDrawId;
         $nextGameDrawObj->last_draw_id = $lastDrawId;
         $nextGameDrawObj->save();
+
+
 
 //        $tempPlayMaster = PlayMaster::select()->where('is_cancelable',1)->whereGameId($id)->get();
 //        $chunks = collect($tempPlayMaster)->chunk(100);
@@ -811,13 +814,15 @@ class CentralController extends Controller
 
 
     public function update_is_draw_over(){
-        $data = DrawMaster::whereIsDrawOver('yes')->get();
-        foreach($data as $x){
-            $y = DrawMaster::find($x->id);
-            $y->is_draw_over = 'no';
-            $y->update();
-        }
-        return response()->json(['success'=>1, 'message' => $data], 200);
+//        $data = DrawMaster::whereIsDrawOver('yes')->get();
+//        foreach($data as $x){
+//            $y = DrawMaster::find($x->id);
+//            $y->is_draw_over = 'no';
+//            $y->payout = null;
+//            $y->update();
+//        }
+        DB::select("update draw_masters set is_draw_over = 'yes', payout = null");
+        return response()->json(['success'=>1], 200);
     }
 
     public function delete_data_except_thirty_days(){
