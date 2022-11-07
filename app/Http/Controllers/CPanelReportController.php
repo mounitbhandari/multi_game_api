@@ -668,10 +668,10 @@ class CPanelReportController extends Controller
             $newPrizeUnClaimed = 0;
             $tempntp = 0;
             $tempPrize = 0;
-            $newData = PlayMaster::select('id')->where('user_id',$x->user_id)->whereRaw('date(created_at) >= ?', [$start_date])->whereRaw('date(created_at) <= ?', [$end_date])->get();
+            $newData = PlayMaster::select('id','is_claimed')->where('user_id',$x->user_id)->whereRaw('date(created_at) >= ?', [$start_date])->whereRaw('date(created_at) <= ?', [$end_date])->get();
             foreach($newData as $y) {
                 $tempData = 0;
-                $tempPrize += $this->get_prize_value_by_barcode($y->id);
+                $tempPrize = $this->get_prize_value_by_barcode($y->id);
 //                if ($tempPrize > 0 && $y->is_claimed == 1) {
                 if ($tempPrize > 0) {
                     $newPrizeClaimed += $y->is_claimed == 1? $this->get_prize_value_by_barcode($y->id) : 0;
