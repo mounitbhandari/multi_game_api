@@ -5,19 +5,26 @@ namespace App\Http\Controllers;
 use App\Models\CardCombination;
 use App\Http\Requests\StoreCardCombinationRequest;
 use App\Http\Requests\UpdateCardCombinationRequest;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class CardCombinationController extends Controller
 {
 
     public function get_all_twelve_card()
     {
-        $data = CardCombination::select('id','rank_name','suit_name','rank_initial')->whereCardCombinationTypeId(1)->get();
+        $data = Cache::remember('get_all_twelve_card', 3000000, function () {
+            return CardCombination::select('id','rank_name','suit_name','rank_initial')->whereCardCombinationTypeId(1)->get();
+        });
         return response()->json(['success'=>1,'data'=> $data], 200,[],JSON_NUMERIC_CHECK);
     }
 
     public function get_all_sixteen_card()
     {
-        $data = CardCombination::select('id','rank_name','suit_name','rank_initial')->whereCardCombinationTypeId(2)->get();
+        $data = Cache::remember('get_all_sixteen_card', 3000000, function () {
+            return CardCombination::select('id','rank_name','suit_name','rank_initial')->whereCardCombinationTypeId(2)->get();
+        });
+
         return response()->json(['success'=>1,'data'=> $data], 200,[],JSON_NUMERIC_CHECK);
     }
 

@@ -11,6 +11,7 @@ use App\Models\SingleNumber;
 use Illuminate\Http\Request;
 use App\Http\Resources\NumberCombinationsResource;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class NumberCombinationController extends Controller
 {
@@ -26,9 +27,11 @@ class NumberCombinationController extends Controller
     }
     public function getAllInMatrix(){
 
-        $singleNumbers = NumberCombination::get();
+        $numberCombinations = Cache::remember('get_all_number_combinations', 3000000, function () {
+            return DB::select("select id, single_number_id, triple_number, visible_triple_number from number_combinations");
+        });
 
-        return response()->json(['success'=>1,'data'=> NumberCombinationsResource::collection($singleNumbers)], 200);
+        return response()->json(['success'=>1,'data'=> NumberCombinationsResource::collection($numberCombinations)], 200);
     }
 
     public function create_migration(){
