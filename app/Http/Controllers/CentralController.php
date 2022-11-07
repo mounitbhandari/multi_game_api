@@ -195,8 +195,8 @@ class CentralController extends Controller
                     $tripleNumberTargetData = $this->checkSmallerTotalSale($lastDrawId);
 
                     $splitNumber = str_split($tripleNumberTargetData[0]->visible_triple_number);
-                    $singleNumberValue = (SingleNumber::select()->whereSingleNumber($splitNumber[2])->first())->id;
-                    $doubleNumberValue = (DoubleNumberCombination::select()->whereDoubleNumber($splitNumber[1].$splitNumber[2])->first())->id;
+                    $singleNumberValue = (collect($single_numbers)->where('single_number', $splitNumber[2])->first())->id;
+                    $doubleNumberValue = (collect($double_numbers)->where('double_number', $splitNumber[1].$splitNumber[2])->first())->id;
 
                     $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,1,$singleNumberValue,1))->content(),true);
                     $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,2,$tripleNumberTargetData[0]->combination_number_id,1))->content(),true);
@@ -765,6 +765,14 @@ class CentralController extends Controller
 
     public function checkSmallerTotalSale($last_draw_master_id){
 
+        $single_numbers = Cache::remember('get_all_single_number', 3000000, function () {
+            return SingleNumber::select('id','single_number')->get();
+        });
+
+        $double_numbers = Cache::remember('get_all_double_number', 3000000, function () {
+            return DB::select("select id, single_number_id, double_number, visible_double_number, andar_number_id, bahar_number_id from double_number_combinations");
+        });
+
         $today = Carbon::today();
 
         $result = [];
@@ -785,8 +793,8 @@ class CentralController extends Controller
 
         foreach ($tripleChances as $tripleChance){
             $splitNumber = str_split($tripleChance->visible_triple_number);
-            $singleNumberValue = (SingleNumber::select()->whereSingleNumber($splitNumber[2])->first())->id;
-            $doubleNumberValue = (DoubleNumberCombination::select()->whereDoubleNumber($splitNumber[1].$splitNumber[2])->first())->id;
+            $singleNumberValue = (collect($single_numbers)->where('single_number', $splitNumber[2])->first())->id;
+            $doubleNumberValue = (collect($double_numbers)->where('double_number', $splitNumber[1].$splitNumber[2])->first())->id;
 
             $single_value = DB::select("Select single_numbers.id as combination_number_id, ifnull(quantity,0) as quantity from
                 (select combination_number_id, sum(quantity) as quantity from play_details
