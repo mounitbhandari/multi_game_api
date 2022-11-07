@@ -153,58 +153,60 @@ class CPanelReportController extends Controller
 
 
     public function get_barcode_report_particulars($play_master_id){
-        $data = array();
-        $playMaster = PlayMaster::findOrFail($play_master_id);
-        $data['barcode'] = Str::substr($playMaster->barcode_number,0,8);
 
-        $singleGameData = PlayDetails::select(DB::raw('max(single_numbers.single_number) as single_number')
-            ,DB::raw('max(play_details.quantity) as quantity'))
-//            ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
-            ->join('single_numbers','play_details.combination_number_id','single_numbers.id')
-            ->where('play_details.play_master_id',$play_master_id)
-            ->where('play_details.game_type_id',1)
-            ->groupBy('single_numbers.id')
-            ->orderBy('single_numbers.single_order')
-            ->get();
+        $returnData = Cache::remember('get_barcode_report_particulars'.$play_master_id, 3000000, function () use ($play_master_id) {
 
-        $data['single'] = $singleGameData;
+            $data = array();
+            $playMaster = PlayMaster::findOrFail($play_master_id);
+            $data['barcode'] = Str::substr($playMaster->barcode_number,0,8);
 
-        $tripleGameData = PlayDetails::select('number_combinations.visible_triple_number','single_numbers.single_number'
-            ,'play_details.quantity')
-            ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
-            ->join('single_numbers','number_combinations.single_number_id','single_numbers.id')
-            ->where('play_details.play_master_id',$play_master_id)
-            ->where('play_details.game_type_id',2)
-            ->orderBy('number_combinations.visible_triple_number')
-            ->get();
-        $data['triple'] = $tripleGameData;
+            $singleGameData = PlayDetails::select(DB::raw('max(single_numbers.single_number) as single_number')
+                ,DB::raw('max(play_details.quantity) as quantity'))
+                ->join('single_numbers','play_details.combination_number_id','single_numbers.id')
+                ->where('play_details.play_master_id',$play_master_id)
+                ->where('play_details.game_type_id',1)
+                ->groupBy('single_numbers.id')
+                ->orderBy('single_numbers.single_order')
+                ->get();
 
-        $doubleGameData = PlayDetails::select('double_number_combinations.visible_double_number'
-            ,'play_details.quantity')
-            ->join('double_number_combinations','play_details.combination_number_id','double_number_combinations.id')
-            ->where('play_details.play_master_id',$play_master_id)
-            ->where('play_details.game_type_id',5)
-            ->orderBy('double_number_combinations.visible_double_number')
-            ->get();
-        $data['double'] = $doubleGameData;
+            $data['single'] = $singleGameData;
 
-        $twelveCard = PlayDetails::select('card_combinations.rank_name','card_combinations.suit_name'
-            ,'play_details.quantity')
-            ->join('card_combinations','play_details.combination_number_id','card_combinations.id')
-            ->where('play_details.play_master_id',$play_master_id)
-            ->where('play_details.game_type_id',3)
-            ->where('card_combinations.card_combination_type_id',1)
-            ->get();
-        $data['twelveCard'] = $twelveCard;
+            $tripleGameData = PlayDetails::select('number_combinations.visible_triple_number','single_numbers.single_number'
+                ,'play_details.quantity')
+                ->join('number_combinations','play_details.combination_number_id','number_combinations.id')
+                ->join('single_numbers','number_combinations.single_number_id','single_numbers.id')
+                ->where('play_details.play_master_id',$play_master_id)
+                ->where('play_details.game_type_id',2)
+                ->orderBy('number_combinations.visible_triple_number')
+                ->get();
+            $data['triple'] = $tripleGameData;
 
-        $sixteenCard = PlayDetails::select('card_combinations.rank_name','card_combinations.suit_name'
-            ,'play_details.quantity')
-            ->join('card_combinations','play_details.combination_number_id','card_combinations.id')
-            ->where('play_details.play_master_id',$play_master_id)
-            ->where('play_details.game_type_id',4)
-            ->where('card_combinations.card_combination_type_id',2)
-            ->get();
-        $data['sixteenCard'] = $sixteenCard;
+            $doubleGameData = PlayDetails::select('double_number_combinations.visible_double_number'
+                ,'play_details.quantity')
+                ->join('double_number_combinations','play_details.combination_number_id','double_number_combinations.id')
+                ->where('play_details.play_master_id',$play_master_id)
+                ->where('play_details.game_type_id',5)
+                ->orderBy('double_number_combinations.visible_double_number')
+                ->get();
+            $data['double'] = $doubleGameData;
+
+            $twelveCard = PlayDetails::select('card_combinations.rank_name','card_combinations.suit_name'
+                ,'play_details.quantity')
+                ->join('card_combinations','play_details.combination_number_id','card_combinations.id')
+                ->where('play_details.play_master_id',$play_master_id)
+                ->where('play_details.game_type_id',3)
+                ->where('card_combinations.card_combination_type_id',1)
+                ->get();
+            $data['twelveCard'] = $twelveCard;
+
+            $sixteenCard = PlayDetails::select('card_combinations.rank_name','card_combinations.suit_name'
+                ,'play_details.quantity')
+                ->join('card_combinations','play_details.combination_number_id','card_combinations.id')
+                ->where('play_details.play_master_id',$play_master_id)
+                ->where('play_details.game_type_id',4)
+                ->where('card_combinations.card_combination_type_id',2)
+                ->get();
+            $data['sixteenCard'] = $sixteenCard;
 
 //        $sixteenCard = PlayDetails::select('card_combinations.rank_name','card_combinations.suit_name'
 //            ,'play_details.quantity')
@@ -215,42 +217,45 @@ class CPanelReportController extends Controller
 //            ->get();
 //        $data['sixteenCard'] = $sixteenCard;
 //
-        $singleGameData = PlayDetails::select(DB::raw('max(single_numbers.single_number) as single_number')
-            ,DB::raw('max(play_details.quantity) as quantity'))
-            ->join('single_numbers','play_details.combination_number_id','single_numbers.id')
-            ->where('play_details.play_master_id',$play_master_id)
-            ->where('play_details.game_type_id',6)
-            ->groupBy('single_numbers.id')
-            ->orderBy('single_numbers.single_order')
-            ->get();
-        $data['singleIndividual'] = $singleGameData;
-//
-        $doubleGameData = PlayDetails::select('double_number_combinations.visible_double_number'
-            ,'play_details.quantity')
-            ->join('double_number_combinations','play_details.combination_number_id','double_number_combinations.id')
-            ->where('play_details.play_master_id',$play_master_id)
-            ->where('play_details.game_type_id',7)
-            ->get();
-        $data['doubleIndividual'] = $doubleGameData;
-//
-        $andarNumber = PlayDetails::select('andar_numbers.andar_number'
-            ,'play_details.quantity')
-            ->join('andar_numbers','play_details.combination_number_id','andar_numbers.id')
-            ->where('play_details.play_master_id',$play_master_id)
-            ->where('play_details.game_type_id',8)
-            ->get();
-        $data['andarNumber'] = $andarNumber;
-//
-        $baharNumber = PlayDetails::select('bahar_numbers.bahar_number'
-            ,'play_details.quantity')
-            ->join('bahar_numbers','play_details.combination_number_id','bahar_numbers.id')
-            ->where('play_details.play_master_id',$play_master_id)
-            ->where('play_details.game_type_id',9)
-            ->get();
-        $data['baharNumber'] = $baharNumber;
+            $singleGameData = PlayDetails::select(DB::raw('max(single_numbers.single_number) as single_number')
+                ,DB::raw('max(play_details.quantity) as quantity'))
+                ->join('single_numbers','play_details.combination_number_id','single_numbers.id')
+                ->where('play_details.play_master_id',$play_master_id)
+                ->where('play_details.game_type_id',6)
+                ->groupBy('single_numbers.id')
+                ->orderBy('single_numbers.single_order')
+                ->get();
+            $data['singleIndividual'] = $singleGameData;
 
+            $doubleGameData = PlayDetails::select('double_number_combinations.visible_double_number'
+                ,'play_details.quantity')
+                ->join('double_number_combinations','play_details.combination_number_id','double_number_combinations.id')
+                ->where('play_details.play_master_id',$play_master_id)
+                ->where('play_details.game_type_id',7)
+                ->get();
+            $data['doubleIndividual'] = $doubleGameData;
 
-        return response()->json(['success'=> 1, 'data' => $data], 200);
+            $andarNumber = PlayDetails::select('andar_numbers.andar_number'
+                ,'play_details.quantity')
+                ->join('andar_numbers','play_details.combination_number_id','andar_numbers.id')
+                ->where('play_details.play_master_id',$play_master_id)
+                ->where('play_details.game_type_id',8)
+                ->get();
+            $data['andarNumber'] = $andarNumber;
+
+            $baharNumber = PlayDetails::select('bahar_numbers.bahar_number'
+                ,'play_details.quantity')
+                ->join('bahar_numbers','play_details.combination_number_id','bahar_numbers.id')
+                ->where('play_details.play_master_id',$play_master_id)
+                ->where('play_details.game_type_id',9)
+                ->get();
+            $data['baharNumber'] = $baharNumber;
+
+            return $data;
+
+        });
+
+        return response()->json(['success'=> 1, 'data' => $returnData], 200);
 
     }
 
