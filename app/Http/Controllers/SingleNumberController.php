@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\SingleNumber;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use App\Http\Resources\SingleNumbers;
 
@@ -16,7 +17,9 @@ class SingleNumberController extends Controller
 
     public function get_all_single_number()
     {
-        $result = SingleNumber::select('id','single_number')->get();
+        $result = Cache::remember('get_all_single_number', 3000000, function () {
+            return SingleNumber::select('id','single_number')->get();
+        });
         return response()->json(['success'=>1,'data'=>SingleNumbers::collection($result)], 200);
 
     }

@@ -6,13 +6,17 @@ use App\Models\DoubleNumberCombination;
 use App\Http\Requests\StoreDoubleNumberCombinationRequest;
 use App\Http\Requests\UpdateDoubleNumberCombinationRequest;
 use App\Http\Resources\DoubleNumberCombinationResource;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Expr\Cast\Double;
 
 class DoubleNumberCombinationController extends Controller
 {
     public function get_all_double_number()
     {
-        $double = DoubleNumberCombination::get();
+        $double = Cache::remember('get_all_double_number', 3000000, function () {
+            return DB::select("select id, single_number_id, double_number, visible_double_number, andar_number_id, bahar_number_id from double_number_combinations");
+        });
 
         // return response()->json(['success'=>1,'data'=> $double], 200);
         return response()->json(['success'=>1,'data'=> DoubleNumberCombinationResource::collection($double)], 200);

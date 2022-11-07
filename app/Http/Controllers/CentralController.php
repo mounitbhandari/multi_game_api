@@ -20,6 +20,7 @@ use App\Models\NextGameDraw;
 use App\Models\DrawMaster;
 use App\Http\Controllers\ManualResultController;
 use App\Http\Controllers\NumberCombinationController;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use PhpParser\Node\Scalar\String_;
@@ -43,6 +44,14 @@ class CentralController extends Controller
         }
 
         $nextGameDrawObj = DB::select("select id,next_draw_id,last_draw_id from next_game_draws where game_id = ?",[$id])[0];
+
+        $single_numbers = Cache::remember('get_all_single_number', 3000000, function () {
+            return SingleNumber::select('id','single_number')->get();
+        });
+
+        $double_numbers = Cache::remember('get_all_double_number', 3000000, function () {
+            return DB::select("select id, single_number_id, double_number, visible_double_number, andar_number_id, bahar_number_id from double_number_combinations");
+        });
 
         $today= Carbon::today()->format('Y-m-d');
         $playMasterControllerObj = new PlayMasterController();
@@ -104,8 +113,10 @@ class CentralController extends Controller
                 if(!empty($tripleNumberTargetData)){
                     foreach ($tripleNumberTargetData as $tripleData){
                         $splitNumber = str_split($tripleData->visible_triple_number);
-                        $singleNumberValue = (SingleNumber::select()->whereSingleNumber($splitNumber[2])->first())->id;
-                        $doubleNumberValue = (DoubleNumberCombination::select()->whereDoubleNumber($splitNumber[1].$splitNumber[2])->first())->id;
+//                        $singleNumberValue = (SingleNumber::select()->whereSingleNumber($splitNumber[2])->first())->id;
+                        $singleNumberValue = (collect($single_numbers)->where('single_number', $splitNumber[2])->first())->id;
+//                        $doubleNumberValue = (DoubleNumberCombination::select()->whereDoubleNumber($splitNumber[1].$splitNumber[2])->first())->id;
+                        $doubleNumberValue = (collect($double_numbers)->where('double_number', $splitNumber[1].$splitNumber[2])->first())->id;
                         $doubleNumberQuantity = 0;
                         $singleNumberQuantity = 0;
 
