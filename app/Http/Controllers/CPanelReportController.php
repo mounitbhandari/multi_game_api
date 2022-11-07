@@ -88,7 +88,8 @@ class CPanelReportController extends Controller
         foreach($data as $x){
             $detail = (object)$x;
 
-            $detail->game_name = (collect($allGame)->where('id', $detail->game_id)->first())->game_name;
+//            $detail->game_name = (collect($allGame)->where('id', $detail->game_id)->first())->game_name;
+            $detail->game_name = DB::select("select game_name from games where id =?",[$detail->game_id]);
             $detail->terminal_pin = (collect($terminals)->where('id', $detail->user_id)->first())->email;
 
 
