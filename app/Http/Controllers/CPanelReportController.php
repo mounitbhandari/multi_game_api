@@ -293,7 +293,11 @@ class CPanelReportController extends Controller
         $return_array = [];
         $data = null;
 
-        $draw_times = DB::select("select distinct draw_master_id from play_masters where date(created_at) = ? and game_id = ? order by id desc",[$today, $gameId]);
+        $draw_times = DB::select("select distinct play_masters.id, play_masters.draw_master_id, draw_masters.payout from play_masters
+                                    inner join draw_masters on draw_masters.id = play_masters.draw_master_id
+                                    where date(play_masters.created_at) = ? and play_masters.game_id = ? order by id desc",[$today, $gameId]);
+
+//        return $draw_times;
 
         foreach ($draw_times as $draw_time){
             $data = null;
@@ -346,7 +350,8 @@ class CPanelReportController extends Controller
                 'total_prize' => $total_prize,
                 'total_quantity' =>$total_quantity,
                 'total_commission' =>$total_commission,
-                'commission_percentage' =>$commission_percentage
+                'commission_percentage' =>$commission_percentage,
+                'draw_payout' =>$draw_time->payout
             ];
 
             array_push($return_array, $temp_arr);

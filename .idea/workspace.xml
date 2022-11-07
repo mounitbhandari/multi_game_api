@@ -3,8 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="5eca29a0-ed15-4037-b786-6b351566af54" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CentralController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CentralController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_05_15_152004_create_draw_masters_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_05_15_152004_create_draw_masters_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CPanelReportController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CPanelReportController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/GameController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/GameController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -271,7 +272,9 @@
       <workItem from="1667625785999" duration="1046000" />
       <workItem from="1667706909010" duration="1271000" />
       <workItem from="1667735358973" duration="6022000" />
-      <workItem from="1667750239853" duration="981000" />
+      <workItem from="1667750239853" duration="1314000" />
+      <workItem from="1667793843034" duration="338000" />
+      <workItem from="1667794314442" duration="2154000" />
     </task>
     <servers />
   </component>
