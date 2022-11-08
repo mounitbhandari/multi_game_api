@@ -616,7 +616,7 @@ class GameController extends Controller
         $singleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(4)->get();
         $doubleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(5)->get();
 
-        $online_count = (DB::select("select count(personal_access_tokens.id) as total_count from personal_access_tokens
+        $online_count = (DB::select("select COUNT(distinct users.id) as total_count from personal_access_tokens
             inner join users on personal_access_tokens.tokenable_id = users.id
             where date(personal_access_tokens.created_at) = ? and users.user_type_id = 5",[$today]))[0]->total_count;
 
