@@ -416,7 +416,7 @@ class CentralController extends Controller
             $gen = 0;
 
             while (true){
-                $doubleNumberTargetData = DB::select("select play_details.combination_number_id, double_number_combinations.andar_number_id, double_number_combinations.bahar_number_id from play_details
+                $doubleNumberTargetData = DB::select("select * from play_details
                 inner join double_number_combinations on double_number_combinations.id = play_details.combination_number_id
                 inner join play_masters on play_details.play_master_id = play_masters.id
                 where quantity <= ? and game_type_id = 7 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?
