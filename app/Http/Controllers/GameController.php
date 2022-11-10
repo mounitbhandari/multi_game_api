@@ -363,6 +363,7 @@ class GameController extends Controller
             }
 
             $x = [
+                'stockist_id' => $stockist->id,
                 'stockist_name' => $stockist->email,
                 'total_bet' => $totalBet,
                 'total_win_claimed' => $totalPrizeClaimed,
@@ -447,6 +448,7 @@ class GameController extends Controller
             }
 
             $x = [
+                'super_stockist_id' => $superStockist->id,
                 'super_stockist_name' => $superStockist->email,
                 'total_bet' => $totalBet,
                 'total_win_claimed' => $totalPrizeClaimed,
@@ -456,6 +458,102 @@ class GameController extends Controller
             ];
             array_push($returnArray, $x);
         }
+
+        return response()->json(['success'=>1,'data'=> $returnArray], 200);
+    }
+
+    public function admin_stockist_over_super_stockist_turnover_report(Request $request){
+        $requestedData = (object)($request->json()->all());
+        $stockists = DB::select("select table1.stockist_id, users.email from (select distinct user_relation_with_others.stockist_id from users
+            inner join user_relation_with_others on users.id = user_relation_with_others.super_stockist_id
+            where user_relation_with_others.active = 1 and user_relation_with_others.super_stockist_id = ?) as table1
+            inner join users on table1.stockist_id = users.id", [$requestedData->super_stockist_id]);
+        $returnArray = [];
+
+        foreach ($stockists as $stockist) {
+            $terminals = UserRelationWithOther::whereStockistId($stockist->stockist_id)->whereActive(1)->get();
+
+            $totalPrizeClaimed = 0;
+            $totalPrizeUnclaimed = 0;
+            $totalCommission = 0;
+
+            $totalBet = 0;
+
+            $CPanelReportController = new CPanelReportController();
+
+            foreach ($terminals as $terminal) {
+                $allPlayMasters = DB::select("select * from play_masters where date(created_at) >= ? and DATE(created_at) <= ? and user_id = ?",
+                    [$requestedData->start_date, $requestedData->end_date, $terminal->terminal_id]);
+
+                foreach ($allPlayMasters as $allPlayMaster) {
+                    $totalPrizeClaimed = $allPlayMaster->is_claimed == 1 ? ($totalPrizeClaimed + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id)) : $totalPrizeClaimed + 0;
+                    $totalPrizeUnclaimed = $allPlayMaster->is_claimed == 0 ? ($totalPrizeUnclaimed + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id)) : $totalPrizeUnclaimed + 0;
+                    $totalBet = $totalBet + $CPanelReportController->total_sale_by_play_master_id($allPlayMaster->id);
+//                $totalCommission = $totalCommission + ($totalBet * (floor((PlayDetails::wherePlayMasterId($allPlayMaster->id)->first())->commission)/100));
+                    $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ?", [$allPlayMaster->id]);
+                    $totalCommission = $totalCommission + ($totalBet * ($tempCommission ? $tempCommission[0]->commission : 0));
+                }
+            }
+
+            $x = [
+                'stockist_id' => $stockist->stockist_id,
+                'stockist_name' => $stockist->email,
+                'total_bet' => $totalBet,
+                'total_win_claimed' => $totalPrizeClaimed,
+                'total_win_unclaimed' => $totalPrizeUnclaimed,
+                'profit' => $totalBet - $totalPrizeClaimed,
+                'total_commission' => sprintf('%0.2f', $totalCommission),
+            ];
+            array_push($returnArray, $x);
+        }
+
+        return response()->json(['success'=>1,'data'=> $returnArray], 200);
+    }
+
+    public function admin_terminal_over_stockist_turnover_report(Request $request){
+        $requestedData = (object)($request->json()->all());
+        $terminals = DB::select("select table1.terminal_id, users.email from (select user_relation_with_others.terminal_id from users
+            inner join user_relation_with_others on users.id = user_relation_with_others.stockist_id
+            where user_relation_with_others.active = 1 and user_relation_with_others.stockist_id = ?) as table1
+            inner join users on table1.terminal_id = users.id", [$requestedData->stockist_id]);
+        $returnArray = [];
+
+//        foreach ($stockists as $stockist) {
+//            $terminals = UserRelationWithOther::whereStockistId($stockist->stockist_id)->whereActive(1)->get();
+
+            $totalPrizeClaimed = 0;
+            $totalPrizeUnclaimed = 0;
+            $totalCommission = 0;
+
+            $totalBet = 0;
+
+            $CPanelReportController = new CPanelReportController();
+
+            foreach ($terminals as $terminal) {
+                $allPlayMasters = DB::select("select * from play_masters where date(created_at) >= ? and DATE(created_at) <= ? and user_id = ?",
+                    [$requestedData->start_date, $requestedData->end_date, $terminal->terminal_id]);
+
+                foreach ($allPlayMasters as $allPlayMaster) {
+                    $totalPrizeClaimed = $allPlayMaster->is_claimed == 1 ? ($totalPrizeClaimed + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id)) : $totalPrizeClaimed + 0;
+                    $totalPrizeUnclaimed = $allPlayMaster->is_claimed == 0 ? ($totalPrizeUnclaimed + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id)) : $totalPrizeUnclaimed + 0;
+                    $totalBet = $totalBet + $CPanelReportController->total_sale_by_play_master_id($allPlayMaster->id);
+//                $totalCommission = $totalCommission + ($totalBet * (floor((PlayDetails::wherePlayMasterId($allPlayMaster->id)->first())->commission)/100));
+                    $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ?", [$allPlayMaster->id]);
+                    $totalCommission = $totalCommission + ($totalBet * ($tempCommission ? $tempCommission[0]->commission : 0));
+                }
+
+                $x = [
+                    'terminal_id' => $terminal->terminal_id,
+                    'stockist_name' => $terminal->email,
+                    'total_bet' => $totalBet,
+                    'total_win_claimed' => $totalPrizeClaimed,
+                    'total_win_unclaimed' => $totalPrizeUnclaimed,
+                    'profit' => $totalBet - $totalPrizeClaimed,
+                    'total_commission' => sprintf('%0.2f', $totalCommission),
+                ];
+                array_push($returnArray, $x);
+            }
+//        }
 
         return response()->json(['success'=>1,'data'=> $returnArray], 200);
     }
