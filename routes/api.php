@@ -219,7 +219,11 @@ Route::group(['middleware' => 'auth:sanctum'],
     Route::get('stockist/gameTotalReportToday/{id}', [GameController::class, 'get_game_total_sale_today_stockist']);
 
     Route::post('superStockist/turnOverReport', [GameController::class, 'super_stockist_turnover_report']);
+
     Route::post('stockist/turnOverReport', [GameController::class, 'stockist_turnover_report']);
+
+    Route::post('adminStockist/turnOverReport', [GameController::class, 'admin_stockist_turnover_report']);
+    Route::post('adminSuperStockist/turnOverReport', [GameController::class, 'admin_super_stockist_turnover_report']);
 
     Route::get('claimAllPrizes/{id}',[TerminalController::class, 'claimAllPrizes']);
 
@@ -229,6 +233,9 @@ Route::group(['middleware' => 'auth:sanctum'],
 
 
 Route::group(array('prefix' => 'dev'), function() {
+
+    Route::post('adminSuperStockist/turnOverReport', [GameController::class, 'admin_super_stockist_turnover_report']);
+    Route::post('adminStockist/turnOverReport', [GameController::class, 'admin_stockist_turnover_report']);
 
     Route::get('superStockist/gameTotalReportToday/{id}', [GameController::class, 'get_game_total_sale_today_super_stockist']);
     Route::post('superStockist/turnOverReport', [GameController::class, 'super_stockist_turnover_report']);
