@@ -101,26 +101,22 @@ class CPanelReportController extends Controller
                     if($detail->game_id == 1){
                         $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(2)->first();
                         $showNumber = (NumberCombination::find($resultDetails->combination_number_id))->visible_triple_number;
-                        $bonus = $resultDetails->multiplexer;
                     }else if($detail->game_id == 2){
                         $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(3)->first();
                         $x = CardCombination::find($resultDetails->combination_number_id);
                         $showNumber = $x->rank_name. ' ' .$x->suit_name;
-                        $bonus = $resultDetails->multiplexer;
                     }else if($detail->game_id == 3){
                         $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(4)->first();
                         $x = CardCombination::find($resultDetails->combination_number_id);
                         $showNumber = $x->rank_name. ' ' .$x->suit_name;
-                        $bonus = $resultDetails->multiplexer;
                     }else if($detail->game_id == 4){
                         $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(6)->first();
                         $showNumber = (SingleNumber::find($resultDetails->combination_number_id))->single_number;
-                        $bonus = $resultDetails->multiplexer;
                     }else if($detail->game_id == 5){
                         $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(7)->first();
                         $showNumber = (DoubleNumberCombination::find($resultDetails->combination_number_id))->visible_double_number;
-                        $bonus = $resultDetails->multiplexer;
                     }
+                    $bonus = $resultDetails->multiplexer;
                     $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 3000000, function () use ($showNumber) {
                         return $showNumber;
                     });
