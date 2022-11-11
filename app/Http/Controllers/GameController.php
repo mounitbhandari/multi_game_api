@@ -493,6 +493,8 @@ class GameController extends Controller
                     $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ? limit 1", [$allPlayMaster->id]);
                     $totalCommission = $totalCommission + ($totalBet * ($tempCommission ? ($tempCommission[0]->commission)/100 : 0));
                 }
+//                $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ? limit 1", [$allPlayMaster->id]);
+//                $totalCommission = $totalCommission + ($totalBet * ($tempCommission ? ($tempCommission[0]->commission)/100 : 0));
             }
 
             $x = [
