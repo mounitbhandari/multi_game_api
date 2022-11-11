@@ -477,6 +477,7 @@ class GameController extends Controller
             $totalPrizeUnclaimed = 0;
             $totalCommission = 0;
             $totalBet = 0;
+            $testarr = [];
 
             $CPanelReportController = new CPanelReportController();
 
@@ -492,6 +493,7 @@ class GameController extends Controller
                     $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ?", [$allPlayMaster->id]);
                     $totalCommission = $totalCommission + ($totalBet * ($tempCommission ? ($tempCommission[0]->commission)/100 : 0));
                 }
+                array_push($testarr, $totalCommission);
             }
 
             $x = [
@@ -506,7 +508,7 @@ class GameController extends Controller
             array_push($returnArray, $x);
         }
 
-        return response()->json(['success'=>1,'data'=> $returnArray], 200);
+        return response()->json(['success'=>1,'data'=> $returnArray, 'test_data' => $testarr], 200);
     }
 
     public function admin_terminal_over_stockist_turnover_report(Request $request){
