@@ -314,8 +314,8 @@ class GameController extends Controller
                 $totalPrizeUnclaimed = $allPlayMaster->is_claimed == 0 ? ($totalPrizeUnclaimed + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id)): $totalPrizeUnclaimed + 0;
                 $totalBet = $totalBet + $CPanelReportController->total_sale_by_play_master_id($allPlayMaster->id);
 //                $totalCommission = $totalCommission + ($totalBet * (floor((PlayDetails::wherePlayMasterId($allPlayMaster->id)->first())->commission)/100));
-                $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ?",[$allPlayMaster->id]);
-                $totalCommission = $totalCommission + (($totalBet * ($tempCommission ? $tempCommission[0]->commission : 0))/100);
+//                $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ?",[$allPlayMaster->id]);
+                $totalCommission + $CPanelReportController->get_terminal_commission($allPlayMaster->id);
             }
         }
 
@@ -357,8 +357,8 @@ class GameController extends Controller
                     $totalPrizeUnclaimed = $allPlayMaster->is_claimed == 0 ? ($totalPrizeUnclaimed + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id)) : $totalPrizeUnclaimed + 0;
                     $totalBet = $totalBet + $CPanelReportController->total_sale_by_play_master_id($allPlayMaster->id);
 //                $totalCommission = $totalCommission + ($totalBet * (floor((PlayDetails::wherePlayMasterId($allPlayMaster->id)->first())->commission)/100));
-                    $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ?", [$allPlayMaster->id]);
-                    $totalCommission = $totalCommission + (($totalBet * ($tempCommission ? $tempCommission[0]->commission : 0))/100);
+//                    $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ?", [$allPlayMaster->id]);
+                    $totalCommission + $CPanelReportController->get_terminal_commission($allPlayMaster->id);
                 }
             }
 
@@ -399,8 +399,8 @@ class GameController extends Controller
                 $totalPrizeUnclaimed = $allPlayMaster->is_claimed == 0 ? ($totalPrizeUnclaimed + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id)): $totalPrizeUnclaimed + 0;
                 $totalBet = $totalBet + $CPanelReportController->total_sale_by_play_master_id($allPlayMaster->id);
 //                $totalCommission = $totalCommission + ($totalBet * (floor((PlayDetails::wherePlayMasterId($allPlayMaster->id)->first())->commission)/100));
-                $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ?",[$allPlayMaster->id]);
-                $totalCommission = $totalCommission + (($totalBet * ($tempCommission ? $tempCommission[0]->commission : 0))/100);
+//                $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ?",[$allPlayMaster->id]);
+                $totalCommission + $CPanelReportController->get_terminal_commission($allPlayMaster->id);
             }
         }
 
@@ -442,8 +442,8 @@ class GameController extends Controller
                     $totalPrizeUnclaimed = $allPlayMaster->is_claimed == 0 ? ($totalPrizeUnclaimed + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id)) : $totalPrizeUnclaimed + 0;
                     $totalBet = $totalBet + $CPanelReportController->total_sale_by_play_master_id($allPlayMaster->id);
 //                $totalCommission = $totalCommission + ($totalBet * (floor((PlayDetails::wherePlayMasterId($allPlayMaster->id)->first())->commission)/100));
-                    $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ?", [$allPlayMaster->id]);
-                    $totalCommission = $totalCommission + (($totalBet * ($tempCommission ? $tempCommission[0]->commission : 0))/100);
+//                    $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ?", [$allPlayMaster->id]);
+                    $totalCommission + $CPanelReportController->get_terminal_commission($allPlayMaster->id);
                 }
             }
 
