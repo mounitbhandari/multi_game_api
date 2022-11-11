@@ -244,6 +244,7 @@ Route::group(array('prefix' => 'dev'), function() {
 
 
     Route::get('total_sale_by_play_master_id/{id}', [CPanelReportController::class, 'total_sale_by_play_master_id']);
+    Route::get('get_terminal_commission/{id}', [CPanelReportController::class, 'get_terminal_commission']);
 
     Route::get('superStockist/gameTotalReportToday/{id}', [GameController::class, 'get_game_total_sale_today_super_stockist']);
     Route::post('superStockist/turnOverReport', [GameController::class, 'super_stockist_turnover_report']);

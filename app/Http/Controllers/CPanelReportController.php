@@ -293,6 +293,13 @@ class CPanelReportController extends Controller
         return $totalSaleReturn;
     }
 
+    public function get_terminal_commission($id){
+        $get_total_sale = $this->total_sale_by_play_master_id($id);
+        $p_commission = (PlayDetails::wherePlayMasterId($id)->first())->commission;
+        $commission = $get_total_sale * ($p_commission/100);
+        return $commission;
+    }
+
     public function draw_wise_report(Request $request){
         $requestedData = (object)$request->json()->all();
         $gameId = $requestedData->game_id;
