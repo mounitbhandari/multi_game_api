@@ -512,7 +512,7 @@ class GameController extends Controller
             array_push($returnArray, $x);
         }
 
-        return response()->json(['success'=>1,'data'=> $returnArray, 'test_data' => $testarr], 200);
+        return response()->json(['success'=>1,'data'=> $returnArray], 200);
     }
 
     public function admin_terminal_over_stockist_turnover_report(Request $request){
