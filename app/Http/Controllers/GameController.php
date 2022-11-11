@@ -530,6 +530,11 @@ class GameController extends Controller
             $CPanelReportController = new CPanelReportController();
 
             foreach ($terminals as $terminal) {
+                $totalPrizeClaimed = 0;
+                $totalPrizeUnclaimed = 0;
+                $totalBet = 0;
+                $totalCommission = 0;
+
                 $allPlayMasters = DB::select("select * from play_masters where date(created_at) >= ? and DATE(created_at) <= ? and user_id = ?",
                     [$requestedData->start_date, $requestedData->end_date, $terminal->terminal_id]);
 
