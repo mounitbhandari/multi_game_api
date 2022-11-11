@@ -303,7 +303,7 @@ class CPanelReportController extends Controller
             }else{
                 $commission = $get_total_sale * (0/100);
             }
-            
+
             return $commission;
         });
 
