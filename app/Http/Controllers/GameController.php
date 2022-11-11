@@ -544,7 +544,7 @@ class GameController extends Controller
 
                 $x = [
                     'terminal_id' => $terminal->terminal_id,
-                    'stockist_name' => $terminal->email,
+                    'terminal_name' => $terminal->email,
                     'total_bet' => $totalBet,
                     'total_win_claimed' => $totalPrizeClaimed,
                     'total_win_unclaimed' => $totalPrizeUnclaimed,
