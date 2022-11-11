@@ -295,10 +295,16 @@ class CPanelReportController extends Controller
 
     public function get_terminal_commission($id){
         $commission = Cache::remember('get_terminal_commission_by_play_master_id'.$id, 3000000, function () use ($id) {
-            
+
             $get_total_sale = $this->total_sale_by_play_master_id($id);
-            $p_commission = (PlayDetails::wherePlayMasterId($id)->first())->commission;
-            return $get_total_sale * ($p_commission/100);
+            $p_commission = (PlayDetails::wherePlayMasterId($id)->first());
+            if($p_commission){
+                $commission =  $get_total_sale * ($p_commission->commission/100);
+            }else{
+                $commission = $get_total_sale * (0/100);
+            }
+            
+            return $commission;
         });
 
 
