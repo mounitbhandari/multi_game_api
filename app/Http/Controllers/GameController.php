@@ -473,19 +473,14 @@ class GameController extends Controller
         foreach ($stockists as $stockist) {
             $terminals = UserRelationWithOther::whereStockistId($stockist->stockist_id)->whereActive(1)->get();
 
-//            $totalPrizeClaimed = 0;
-//            $totalPrizeUnclaimed = 0;
-//            $totalCommission = 0;
-//            $totalBet = 0;
+            $totalPrizeClaimed = 0;
+            $totalPrizeUnclaimed = 0;
+            $totalCommission = 0;
+            $totalBet = 0;
 
             $CPanelReportController = new CPanelReportController();
 
             foreach ($terminals as $terminal) {
-                $totalPrizeClaimed = 0;
-                $totalPrizeUnclaimed = 0;
-                $totalBet = 0;
-                $totalCommission = 0;
-
 
                 $allPlayMasters = DB::select("select * from play_masters where date(created_at) >= ? and DATE(created_at) <= ? and user_id = ?",
                     [$requestedData->start_date, $requestedData->end_date, $terminal->terminal_id]);
@@ -495,7 +490,7 @@ class GameController extends Controller
                     $totalPrizeUnclaimed = $allPlayMaster->is_claimed == 0 ? ($totalPrizeUnclaimed + $CPanelReportController->get_prize_value_by_barcode($allPlayMaster->id)) : $totalPrizeUnclaimed + 0;
                     $totalBet = $totalBet + $CPanelReportController->total_sale_by_play_master_id($allPlayMaster->id);
 //                $totalCommission = $totalCommission + ($totalBet * (floor((PlayDetails::wherePlayMasterId($allPlayMaster->id)->first())->commission)/100));
-                    $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ?", [$allPlayMaster->id]);
+                    $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ? limit 1", [$allPlayMaster->id]);
                     $totalCommission = $totalCommission + ($totalBet * ($tempCommission ? ($tempCommission[0]->commission)/100 : 0));
                 }
             }
