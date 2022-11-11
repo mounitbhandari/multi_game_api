@@ -443,7 +443,7 @@ class GameController extends Controller
                     $totalBet = $totalBet + $CPanelReportController->total_sale_by_play_master_id($allPlayMaster->id);
 //                $totalCommission = $totalCommission + ($totalBet * (floor((PlayDetails::wherePlayMasterId($allPlayMaster->id)->first())->commission)/100));
 //                    $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ?", [$allPlayMaster->id]);
-                    $totalCommission + $CPanelReportController->get_terminal_commission($allPlayMaster->id);
+                    $totalCommission = $totalCommission + $CPanelReportController->get_terminal_commission($allPlayMaster->id);
                 }
             }
 
