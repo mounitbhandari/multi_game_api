@@ -476,7 +476,6 @@ class GameController extends Controller
             $totalPrizeClaimed = 0;
             $totalPrizeUnclaimed = 0;
             $totalCommission = 0;
-
             $totalBet = 0;
 
             $CPanelReportController = new CPanelReportController();
@@ -491,7 +490,7 @@ class GameController extends Controller
                     $totalBet = $totalBet + $CPanelReportController->total_sale_by_play_master_id($allPlayMaster->id);
 //                $totalCommission = $totalCommission + ($totalBet * (floor((PlayDetails::wherePlayMasterId($allPlayMaster->id)->first())->commission)/100));
                     $tempCommission = DB::select("select ifnull(commission,0)/100 as commission from play_details where play_master_id = ?", [$allPlayMaster->id]);
-                    $totalCommission = $totalCommission + (($totalBet * ($tempCommission ? $tempCommission[0]->commission : 0))/100);
+                    $totalCommission = $totalCommission + ($totalBet * ($tempCommission ? ($tempCommission[0]->commission)/100 : 0));
                 }
             }
 
