@@ -120,9 +120,11 @@ class CPanelReportController extends Controller
                     $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 3000000, function () use ($showNumber) {
                         return $showNumber;
                     });
-                    $detail->bonus = Cache::remember(((String)$detail->play_master_id).'bonus', 3000000, function () use ($bonus) {
-                        return $bonus;
-                    });
+                    if($bonus != null){
+                        $detail->bonus = Cache::remember(((String)$detail->play_master_id).'bonus', 3000000, function () use ($bonus) {
+                            return $bonus;
+                        });
+                    }
                 }else{
                     $showNumber = "---";
                     $detail->result = $showNumber;
