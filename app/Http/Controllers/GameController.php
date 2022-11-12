@@ -572,6 +572,9 @@ class GameController extends Controller
         $sixteenCardValue = 0;
         $singleNUmberValue = 0;
         $totalDoubleNumber = 0;
+        $twelveCard = 0;
+        $sixteenCard = 0;
+        $singleNUmber = 0;
 
 
         $CPanelReportController = new CPanelReportController();
@@ -592,135 +595,140 @@ class GameController extends Controller
 
             foreach ($tripleAllPlayMasters as $tripleAllPlayMaster){
                 $triplePrize = $triplePrize + $CPanelReportController->get_prize_value_by_barcode($tripleAllPlayMaster->id);
+                $totalTripleNumber = $totalTripleNumber + $CPanelReportController->total_sale_by_play_master_id($tripleAllPlayMaster->id);
             }
 
             foreach ($twelveCardAllPlayMasters as $twelveCardAllPlayMaster){
                 $twelveCardPrize = $twelveCardPrize + $CPanelReportController->get_prize_value_by_barcode($twelveCardAllPlayMaster->id);
+                $twelveCard = $twelveCard + $CPanelReportController->total_sale_by_play_master_id($twelveCardAllPlayMaster->id);
             }
 
             foreach ($sixteenCardAllPlayMasters as $sixteenCardAllPlayMaster){
                 $sixteenCardPrize = $sixteenCardPrize + $CPanelReportController->get_prize_value_by_barcode($sixteenCardAllPlayMaster->id);
+                $sixteenCard = $sixteenCard + $CPanelReportController->total_sale_by_play_master_id($sixteenCardAllPlayMaster->id);
             }
 
             foreach ($singleNumberAllPlayMasters as $singleNumberAllPlayMaster){
                 $singleNumberPrize = $singleNumberPrize + $CPanelReportController->get_prize_value_by_barcode($singleNumberAllPlayMaster->id);
+                $singleNUmber = $singleNUmber + $CPanelReportController->total_sale_by_play_master_id($singleNumberAllPlayMaster->id);
             }
 
             foreach ($doubleNumberAllPlayMasters as $doubleNumberAllPlayMaster){
                 $doubleNumberPrize = $doubleNumberPrize + $CPanelReportController->get_prize_value_by_barcode($doubleNumberAllPlayMaster->id);
+                $totalDoubleNumber = $totalDoubleNumber + $CPanelReportController->total_sale_by_play_master_id($doubleNumberAllPlayMaster->id);
             }
 
 
-            $singleNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as single_number from play_details
-            inner join game_types on play_details.game_type_id = game_types.id
-            inner join play_masters on play_details.play_master_id = play_masters.id
-            where date(play_details.created_at) = ? and play_details.game_type_id = 1 and play_masters.user_id = ?
-            group by game_types.mrp",[$today, $terminal->terminal_id]);
+//            $singleNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as single_number from play_details
+//            inner join game_types on play_details.game_type_id = game_types.id
+//            inner join play_masters on play_details.play_master_id = play_masters.id
+//            where date(play_details.created_at) = ? and play_details.game_type_id = 1 and play_masters.user_id = ?
+//            group by game_types.mrp",[$today, $terminal->terminal_id]);
+//
+//            if(!empty($singleNumber)){
+//                $singleNumber = $singleNumber[0]->single_number;
+//            }else{
+//                $singleNumber = 0;
+//            }
+//
+//            $doubleNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as double_number from play_details
+//            inner join game_types on play_details.game_type_id = game_types.id
+//            inner join play_masters on play_details.play_master_id = play_masters.id
+//            where date(play_details.created_at) = ? and play_details.game_type_id = 5 and play_masters.user_id = ?
+//            group by game_types.mrp",[$today, $terminal->terminal_id]);
+//
+//            if(!empty($doubleNumber)){
+//                $doubleNumber = $doubleNumber[0]->double_number;
+//            }else{
+//                $doubleNumber = 0;
+//            }
+//
+//            $tripleNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as triple_number from play_details
+//            inner join game_types on play_details.game_type_id = game_types.id
+//            inner join play_masters on play_details.play_master_id = play_masters.id
+//            where date(play_details.created_at) = ? and play_details.game_type_id = 2 and play_masters.user_id = ?
+//            group by game_types.mrp",[$today, $terminal->terminal_id]);
+//
+//            if(!empty($tripleNumber)){
+//                $tripleNumber = $tripleNumber[0]->triple_number;
+//            }else{
+//                $tripleNumber = 0;
+//            }
+//
+//            $totalTripleNumber = $totalTripleNumber + ($singleNumber + $doubleNumber + $tripleNumber);
 
-            if(!empty($singleNumber)){
-                $singleNumber = $singleNumber[0]->single_number;
-            }else{
-                $singleNumber = 0;
-            }
+//            $twelveCard = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as twelve_card from play_details
+//            inner join game_types on play_details.game_type_id = game_types.id
+//            inner join play_masters on play_details.play_master_id = play_masters.id
+//            where date(play_details.created_at) = ? and play_details.game_type_id = 3 and play_masters.user_id = ?
+//            group by game_types.mrp",[$today, $terminal->terminal_id]);
+//
+//            if(!empty($twelveCard)){
+//                $twelveCardValue = $twelveCardValue + $twelveCard[0]->twelve_card;
+//            }else{
+//                $twelveCardValue = $twelveCardValue + 0;
+//            }
 
-            $doubleNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as double_number from play_details
-            inner join game_types on play_details.game_type_id = game_types.id
-            inner join play_masters on play_details.play_master_id = play_masters.id
-            where date(play_details.created_at) = ? and play_details.game_type_id = 5 and play_masters.user_id = ?
-            group by game_types.mrp",[$today, $terminal->terminal_id]);
+//            $sixteenCard = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as sixteen_card from play_details
+//            inner join game_types on play_details.game_type_id = game_types.id
+//            inner join play_masters on play_details.play_master_id = play_masters.id
+//            where date(play_details.created_at) = ? and play_details.game_type_id = 4 and play_masters.user_id = ?
+//            group by game_types.mrp",[$today, $terminal->terminal_id]);
+//
+//            if(!empty($sixteenCard)){
+//                $sixteenCardValue = $sixteenCardValue + $sixteenCard[0]->sixteen_card;
+//            }else{
+//                $sixteenCardValue = $sixteenCardValue + 0;
+//            }
 
-            if(!empty($doubleNumber)){
-                $doubleNumber = $doubleNumber[0]->double_number;
-            }else{
-                $doubleNumber = 0;
-            }
+//            $singleNUmber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as single_number from play_details
+//            inner join game_types on play_details.game_type_id = game_types.id
+//            inner join play_masters on play_details.play_master_id = play_masters.id
+//            where date(play_details.created_at) = ? and play_details.game_type_id = 6 and play_masters.user_id = ?
+//            group by game_types.mrp",[$today, $terminal->terminal_id]);
+//
+//            if(!empty($singleNUmber)){
+//                $singleNUmberValue = $singleNUmberValue + $singleNUmber[0]->single_number;
+//            }else{
+//                $singleNUmberValue = $singleNUmberValue + 0;
+//            }
 
-            $tripleNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as triple_number from play_details
-            inner join game_types on play_details.game_type_id = game_types.id
-            inner join play_masters on play_details.play_master_id = play_masters.id
-            where date(play_details.created_at) = ? and play_details.game_type_id = 2 and play_masters.user_id = ?
-            group by game_types.mrp",[$today, $terminal->terminal_id]);
-
-            if(!empty($tripleNumber)){
-                $tripleNumber = $tripleNumber[0]->triple_number;
-            }else{
-                $tripleNumber = 0;
-            }
-
-            $totalTripleNumber = $totalTripleNumber + ($singleNumber + $doubleNumber + $tripleNumber);
-
-            $twelveCard = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as twelve_card from play_details
-            inner join game_types on play_details.game_type_id = game_types.id
-            inner join play_masters on play_details.play_master_id = play_masters.id
-            where date(play_details.created_at) = ? and play_details.game_type_id = 3 and play_masters.user_id = ?
-            group by game_types.mrp",[$today, $terminal->terminal_id]);
-
-            if(!empty($twelveCard)){
-                $twelveCardValue = $twelveCardValue + $twelveCard[0]->twelve_card;
-            }else{
-                $twelveCardValue = $twelveCardValue + 0;
-            }
-
-            $sixteenCard = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as sixteen_card from play_details
-            inner join game_types on play_details.game_type_id = game_types.id
-            inner join play_masters on play_details.play_master_id = play_masters.id
-            where date(play_details.created_at) = ? and play_details.game_type_id = 4 and play_masters.user_id = ?
-            group by game_types.mrp",[$today, $terminal->terminal_id]);
-
-            if(!empty($sixteenCard)){
-                $sixteenCardValue = $sixteenCardValue + $sixteenCard[0]->sixteen_card;
-            }else{
-                $sixteenCardValue = $sixteenCardValue + 0;
-            }
-
-            $singleNUmber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as single_number from play_details
-            inner join game_types on play_details.game_type_id = game_types.id
-            inner join play_masters on play_details.play_master_id = play_masters.id
-            where date(play_details.created_at) = ? and play_details.game_type_id = 6 and play_masters.user_id = ?
-            group by game_types.mrp",[$today, $terminal->terminal_id]);
-
-            if(!empty($singleNUmber)){
-                $singleNUmberValue = $singleNUmberValue + $singleNUmber[0]->single_number;
-            }else{
-                $singleNUmberValue = $singleNUmberValue + 0;
-            }
-
-            $doubleNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as double_number from play_details
-            inner join game_types on play_details.game_type_id = game_types.id
-            inner join play_masters on play_details.play_master_id = play_masters.id
-            where date(play_details.created_at) = ? and play_details.game_type_id = 7 and play_masters.user_id = ?
-            group by game_types.mrp",[$today, $terminal->terminal_id]);
-
-            if(!empty($doubleNumber)){
-                $doubleNumber = $doubleNumber[0]->double_number;
-            }else{
-                $doubleNumber =  0;
-            }
-
-            $andarNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as andar_number from play_details
-            inner join game_types on play_details.game_type_id = game_types.id
-            inner join play_masters on play_details.play_master_id = play_masters.id
-            where date(play_details.created_at) = ? and play_details.game_type_id = 8 and play_masters.user_id = ?
-            group by game_types.mrp",[$today , $terminal->terminal_id]);
-
-            if(!empty($andarNumber)){
-                $andarNumber = $andarNumber[0]->andar_number;
-            }else{
-                $andarNumber = 0;
-            }
-
-            $baharNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as bahar_number from play_details
-            inner join game_types on play_details.game_type_id = game_types.id
-            where date(play_details.created_at) = ? and play_details.game_type_id = 9
-            group by game_types.mrp",[$today]);
-
-            if(!empty($baharNumber)){
-                $baharNumber = $baharNumber[0]->bahar_number;
-            }else{
-                $baharNumber = 0;
-            }
-
-            $totalDoubleNumber = $totalDoubleNumber + ($doubleNumber + $andarNumber + $baharNumber);
+//            $doubleNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as double_number from play_details
+//            inner join game_types on play_details.game_type_id = game_types.id
+//            inner join play_masters on play_details.play_master_id = play_masters.id
+//            where date(play_details.created_at) = ? and play_details.game_type_id = 7 and play_masters.user_id = ?
+//            group by game_types.mrp",[$today, $terminal->terminal_id]);
+//
+//            if(!empty($doubleNumber)){
+//                $doubleNumber = $doubleNumber[0]->double_number;
+//            }else{
+//                $doubleNumber =  0;
+//            }
+//
+//            $andarNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as andar_number from play_details
+//            inner join game_types on play_details.game_type_id = game_types.id
+//            inner join play_masters on play_details.play_master_id = play_masters.id
+//            where date(play_details.created_at) = ? and play_details.game_type_id = 8 and play_masters.user_id = ?
+//            group by game_types.mrp",[$today , $terminal->terminal_id]);
+//
+//            if(!empty($andarNumber)){
+//                $andarNumber = $andarNumber[0]->andar_number;
+//            }else{
+//                $andarNumber = 0;
+//            }
+//
+//            $baharNumber = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as bahar_number from play_details
+//            inner join game_types on play_details.game_type_id = game_types.id
+//            where date(play_details.created_at) = ? and play_details.game_type_id = 9
+//            group by game_types.mrp",[$today]);
+//
+//            if(!empty($baharNumber)){
+//                $baharNumber = $baharNumber[0]->bahar_number;
+//            }else{
+//                $baharNumber = 0;
+//            }
+//
+//            $totalDoubleNumber = $totalDoubleNumber + ($doubleNumber + $andarNumber + $baharNumber);
         }
 
         $x = [
