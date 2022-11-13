@@ -360,6 +360,12 @@ class TerminalController extends Controller
 
             $gameAllocation = new GameAllocation();
             $gameAllocation->user_id = $user->id;
+            $gameAllocation->game1 = $requestedData->game1;
+            $gameAllocation->game2 = $requestedData->game2;
+            $gameAllocation->game3 = $requestedData->game3;
+            $gameAllocation->game4 = $requestedData->game4;
+            $gameAllocation->game5 = $requestedData->game5;
+
             $gameAllocation->save();
 
             Cache::forget('allTerminal');
