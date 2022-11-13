@@ -43,6 +43,7 @@ class PlayMasterController extends Controller
         $transaction = new Transaction();
         $transaction->description = 'Cancelled Ticket';
         $transaction->terminal_id = $playMaster->user_id;
+        $transaction->play_master_id = $playMaster->id;
         $transaction->old_amount = $old_amount;
         $transaction->played_amount = $data;
         $transaction->new_amount = $user->closing_balance;
