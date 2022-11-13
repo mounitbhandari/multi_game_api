@@ -98,7 +98,20 @@ class CPanelReportController extends Controller
                 if((Cache::get(((String)$detail->play_master_id).'bonus')) == 1){
                     $detail->bonus = Cache::get(((String)$detail->play_master_id).'bonus');
                 }else{
-                    $detail->bonus = "Error";
+                    $result = ResultMaster::whereDrawMasterId($detail->draw_master_id)->whereGameDate($detail->created_at->format('Y-m-d'))->whereGameId($detail->game_id)->first();
+                    if($result){
+                        $resultDetails = ResultDetail::whereResultMasterId($result->id)->first();
+                        $bonus = $resultDetails->multiplexer;
+                        if($bonus !== null){
+                            $detail->bonus = Cache::remember(((String)$detail->play_master_id).'bonus', 3000000, function () use ($bonus) {
+                                return $bonus;
+                            });
+                        }else{
+                            $bonus = "---";
+                            $detail->bonus = $bonus;
+                        }
+                    }
+
                 }
             }else{
                 $result = ResultMaster::whereDrawMasterId($detail->draw_master_id)->whereGameDate($detail->created_at->format('Y-m-d'))->whereGameId($detail->game_id)->first();
