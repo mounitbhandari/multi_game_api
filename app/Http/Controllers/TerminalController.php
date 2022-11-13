@@ -56,6 +56,12 @@ class TerminalController extends Controller
         return response()->json(['success'=>1,'data'=>new TerminalResource($user)], 200);
     }
 
+    public function get_logged_in_terminal_balance($id){
+        $user = DB::select("select closing_balance from users where id = ?",[$id])[0];
+
+        return response()->json(['success'=>1,'balance'=>$user->closing_balance], 200);
+    }
+
 
     public function get_terminal_by_auth(Request $request){
         return TerminalResource::collection($request->user());
@@ -251,7 +257,7 @@ class TerminalController extends Controller
 
         $today= Carbon::today()->format('Y-m-d');
 
-        $playMasters =  DB::select("select * from play_masters where date(created_at) = ? and draw_master_id = ? and user_id = ".$user->id,[$today, $requestedData->draw_master_id]);
+        $playMasters =  DB::select("select * from play_masters where date(created_at) = ? and is_cancelled = 0 and draw_master_id = ? and user_id = ".$user->id,[$today, $requestedData->draw_master_id]);
 
         foreach ($playMasters as $x){
             $cpanelReportController =  new CPanelReportController();

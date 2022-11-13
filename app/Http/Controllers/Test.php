@@ -37,11 +37,11 @@ class Test extends Controller
 //        $x = Cache::remember('testCache', 3000000, function (){
 //            return 2.1;
 //        });
-        $terminals = collect(User::select('id')->whereUserTypeId(5)->get()->first());
+        $play_master = PlayMaster::whereId(3)->whereIsCancelled(0)->first();
 
 //        $activeUsers = PersonalAccessToken::whereTokenableId(collect($terminals))->get();
 
-        return $terminals;
+        return $play_master;
 //        return User::get();
 
 //        $x = Cache::get('testCache');

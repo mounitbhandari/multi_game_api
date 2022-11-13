@@ -178,6 +178,7 @@ Route::group(['middleware' => 'auth:sanctum'],
 
     Route::post('terminal/updateCancellation', [TerminalReportController::class, 'updateCancellation']);
     Route::post('terminal/updateCancellation/{id}', [TerminalReportController::class, 'updateCancellationGameWise']);
+    Route::get('terminalBalance/{id}',[TerminalController::class, 'get_logged_in_terminal_balance']);
 
 
     Route::patch('resetPassword', [TerminalController::class, 'reset_terminal_password']);
@@ -256,6 +257,7 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::post('cancelTicket',[PlayMasterController::class,'cancelPlay']);
 
     Route::get('terminal/{id}',[TerminalController::class, 'get_logged_in_terminal']);
+    Route::get('terminalBalance/{id}',[TerminalController::class, 'get_logged_in_terminal_balance']);
 
     Route::get('gameTotalReportToday', [GameController::class, 'get_game_total_sale_today']);
     Route::get('deleteDataExceptSevenDays', [CentralController::class, 'delete_data_except_seven_days']);
