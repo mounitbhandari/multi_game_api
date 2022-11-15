@@ -67,7 +67,7 @@ class CPanelReportController extends Controller
         });
 
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
-            ,'draw_masters.visible_time as draw_time','draw_masters.id as draw_master_id','play_masters.created_at',
+            ,'draw_masters.id as draw_master_id','play_masters.created_at',
             'play_masters.user_id','play_masters.created_at as ticket_taken_time','play_masters.is_claimed', 'game_types.game_id','play_masters.is_cancelled'
         )
             ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
@@ -80,8 +80,7 @@ class CPanelReportController extends Controller
 //            ->where('play_masters.created_at','<=',$end_date)
             ->whereRaw('date(play_masters.created_at) >= ?', [$start_date])
             ->whereRaw('date(play_masters.created_at) <= ?', [$end_date])
-            ->groupBy('play_masters.id','play_masters.barcode_number',
-                'draw_masters.visible_time','play_masters.created_at',
+            ->groupBy('play_masters.id','play_masters.barcode_number','play_masters.created_at',
                 'play_masters.is_claimed', 'game_types.game_id','draw_masters.id','play_masters.user_id','play_masters.is_cancelled')
             ->orderBy('play_masters.created_at','desc')
             ->get();
@@ -90,6 +89,10 @@ class CPanelReportController extends Controller
             $detail = (object)$x;
 
 //            $detail->game_name = (collect($allGame)->where('id', $detail->game_id)->first())->game_name;
+
+            $detail->draw_time = Cache::remember('barcode_wise_report_by_date_draw_time_cache'.((String)$detail->play_master_id), 3000000, function () use ($x) {
+                return  (DrawMaster::select('visible_time')->whereId($x->draw_master_id)->first())->visible_time;
+            });
 
             $detail->game_name = Cache::remember('barcode_wise_report_by_date_game_cache'.((String)$detail->play_master_id), 3000000, function () use ($detail, $allGame) {
                 return  (collect($allGame)->where('id', $detail->game_id)->first())->game_name;
