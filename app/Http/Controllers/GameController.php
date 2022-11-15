@@ -608,7 +608,7 @@ class GameController extends Controller
 
             foreach ($twelveCardAllPlayMasters as $twelveCardAllPlayMaster){
                 $twelveCardPrize = $twelveCardPrize + $CPanelReportController->get_prize_value_by_barcode($twelveCardAllPlayMaster->id);
-//                $twelveCard = $twelveCard + $CPanelReportController->total_sale_by_play_master_id($twelveCardAllPlayMaster->id);
+                $twelveCard = $twelveCard + $CPanelReportController->total_sale_by_play_master_id($twelveCardAllPlayMaster->id);
             }
 
             foreach ($sixteenCardAllPlayMasters as $sixteenCardAllPlayMaster){
@@ -665,17 +665,17 @@ class GameController extends Controller
 
             $totalTripleNumber = $totalTripleNumber + ($singleNumber + $doubleNumber + $tripleNumber);
 
-            $twelveCard = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as twelve_card from play_details
-            inner join game_types on play_details.game_type_id = game_types.id
-            inner join play_masters on play_details.play_master_id = play_masters.id
-            where date(play_details.created_at) = ? and play_details.game_type_id = 3 and play_masters.user_id = ?
-            group by game_types.mrp",[$today, $terminal->terminal_id]);
-
-            if(!empty($twelveCard)){
-                $twelveCardValue = $twelveCardValue + $twelveCard[0]->twelve_card;
-            }else{
-                $twelveCardValue = $twelveCardValue + 0;
-            }
+//            $twelveCard = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as twelve_card from play_details
+//            inner join game_types on play_details.game_type_id = game_types.id
+//            inner join play_masters on play_details.play_master_id = play_masters.id
+//            where date(play_details.created_at) = ? and play_details.game_type_id = 3 and play_masters.user_id = ?
+//            group by game_types.mrp",[$today, $terminal->terminal_id]);
+//
+//            if(!empty($twelveCard)){
+//                $twelveCardValue = $twelveCardValue + $twelveCard[0]->twelve_card;
+//            }else{
+//                $twelveCardValue = $twelveCardValue + 0;
+//            }
 
             $sixteenCard = DB::select("select ifnull(ifnull(sum(play_details.quantity),0) * game_types.mrp,0) as sixteen_card from play_details
             inner join game_types on play_details.game_type_id = game_types.id
