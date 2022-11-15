@@ -67,7 +67,7 @@ class CPanelReportController extends Controller
         });
 
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
-            ,'draw_masters.visible_time as draw_time','draw_masters.id as draw_master_id',
+            ,'draw_masters.visible_time as draw_time','draw_masters.id as draw_master_id','play_masters.created_at',
             'play_masters.user_id','play_masters.created_at as ticket_taken_time','play_masters.is_claimed', 'game_types.game_id','play_masters.is_cancelled'
         )
             ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
@@ -110,7 +110,7 @@ class CPanelReportController extends Controller
                 if((Cache::get(((String)$detail->play_master_id).'bonus')) == 1){
                     $detail->bonus = Cache::get(((String)$detail->play_master_id).'bonus');
                 }else{
-                    $result = ResultMaster::whereDrawMasterId($detail->draw_master_id)->whereGameDate($detail->created_at->format('Y-m-d'))->whereGameId($detail->game_id)->first();
+                    $result = ResultMaster::whereDrawMasterId($detail->draw_master_id)->whereGameDate($detail->ticket_taken_time->format('Y-m-d'))->whereGameId($detail->game_id)->first();
                     if($result){
                         $resultDetails = ResultDetail::whereResultMasterId($result->id)->first();
                         $bonus = $resultDetails->multiplexer;
@@ -125,7 +125,7 @@ class CPanelReportController extends Controller
                     }
                 }
             }else{
-                $result = ResultMaster::whereDrawMasterId($detail->draw_master_id)->whereGameDate($detail->created_at->format('Y-m-d'))->whereGameId($detail->game_id)->first();
+                $result = ResultMaster::whereDrawMasterId($detail->draw_master_id)->whereGameDate($detail->ticket_taken_time->format('Y-m-d'))->whereGameId($detail->game_id)->first();
                 if($result){
                     if($detail->game_id == 1){
                         $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(2)->first();
