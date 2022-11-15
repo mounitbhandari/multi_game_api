@@ -816,7 +816,7 @@ class CPanelReportController extends Controller
 ////                    return  (User::select('email')->whereId((UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first())->stockist_id)->first())->email;
 //                    return  (User::select('email')->whereId((UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first()))->stockist_id)->email;
 //                }),
-                'stockist_name' => (User::select('email')->whereId((UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first())->stockist_id)->first)->email,
+                'stockist_name' => (User::select('email')->whereId((UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first())->stockist_id)->first())->email,
                 'stockist_commission' => round($stockist_commission, 2),
                 'super_stockist_commission' => round($super_stockist_commission, 2),
                 'claimed_prize_value' => $newPrizeClaimed,
