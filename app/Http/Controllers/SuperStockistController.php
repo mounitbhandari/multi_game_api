@@ -254,7 +254,7 @@ class SuperStockistController extends Controller
                 'total' => $total_sale,
                 'commission' => round($terminal_commission, 2),
                 'stockist_id' => $stockist_id_temp,
-                'stockist_name' => Cache::remember('customer_sale_reports_admin_stockist_name'.$stockist_id_temp, 3000000, function () use ($user) {
+                'stokiest_name' => Cache::remember('customer_sale_reports_admin_stockist_name'.$stockist_id_temp, 3000000, function () use ($user) {
                     return  (User::select('email')->whereId((UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first())->stockist_id)->first())->email;
                 }),
                 'stockist_commission' => round($stockist_commission, 2),
