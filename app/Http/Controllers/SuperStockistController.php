@@ -224,7 +224,7 @@ class SuperStockistController extends Controller
         $returnArray = [];
 //        $users = PlayMaster::select('user_id')->whereRaw('date(created_at) >= ?', [$start_date])->whereRaw('date(created_at) <= ?', [$end_date])->distinct()->get();
         $users = DB::select("select distinct play_masters.user_id from play_masters
-            inner join user_relation_with_others
+            inner join user_relation_with_others on user_relation_with_others.terminal_id = play_masters.user_id
             where date(play_masters.created_at)>= ? and
             date(play_masters.created_at)<= ? and
             user_relation_with_others.super_stockist_id = ?",[$start_date,$end_date,$userID]);
