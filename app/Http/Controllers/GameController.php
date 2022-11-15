@@ -257,27 +257,27 @@ class GameController extends Controller
 
         $x = [
             'game_name' => '12 Card',
-            'total_bet' =>  (int)$twelveCardValue,
+            'total_bet' =>  (int)$twelveCard,
             'total_win' =>   $twelveCardPrize,
-            'profit' =>   (int)$twelveCardValue - $twelveCardPrize
+            'profit' =>   (int)$twelveCard - $twelveCardPrize
         ];
 
         array_push($returnArray , $x);
 
         $x = [
             'game_name' => '16 Card',
-            'total_bet' =>  (int)$sixteenCardValue,
+            'total_bet' =>  (int)$sixteenCard,
             'total_win' =>   $sixteenCardPrize,
-            'profit' =>   (int)$sixteenCardValue - $sixteenCardPrize
+            'profit' =>   (int)$sixteenCard - $sixteenCardPrize
         ];
 
         array_push($returnArray , $x);
 
         $x = [
             'game_name' => 'Single Number',
-            'total_bet' =>  (int)$singleNUmberValue,
+            'total_bet' =>  (int)$singleNUmber,
             'total_win' =>   $singleNumberPrize,
-            'profit' =>   (int)$singleNUmberValue - $singleNumberPrize
+            'profit' =>   (int)$singleNUmber - $singleNumberPrize
         ];
 
         array_push($returnArray , $x);
