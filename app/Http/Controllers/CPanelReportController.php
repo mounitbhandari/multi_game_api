@@ -807,14 +807,16 @@ class CPanelReportController extends Controller
                 'user_id' => $user->user_id,
                 'total' => $total_sale,
                 'commission' => round($terminal_commission, 2),
-                'stockist_id' => Cache::remember('customer_sale_reports_admin_stockist_id', 3000000, function () use ($user) {
-//                    return (UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first())->stockist_id;
-                    return DB::select("SELECT stockist_id FROM user_relation_with_others where terminal_id = ? and active = 1",[$user->user_id])[0]->stockist_id;
-                }),
-                'stockist_name' => Cache::remember('customer_sale_reports_admin_stockist_name', 3000000, function () use ($user) {
-//                    return  (User::select('email')->whereId((UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first())->stockist_id)->first())->email;
-                    return  (User::select('email')->whereId((UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first()))->stockist_id)->email;
-                }),
+//                'stockist_id' => Cache::remember('customer_sale_reports_admin_stockist_id', 3000000, function () use ($user) {
+////                    return (UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first())->stockist_id;
+//                    return DB::select("SELECT stockist_id FROM user_relation_with_others where terminal_id = ? and active = 1",[$user->user_id])[0]->stockist_id;
+//                }),
+                'stockist_id' => DB::select("SELECT stockist_id FROM user_relation_with_others where terminal_id = ? and active = 1",[$user->user_id])[0]->stockist_id,
+//                'stockist_name' => Cache::remember('customer_sale_reports_admin_stockist_name', 3000000, function () use ($user) {
+////                    return  (User::select('email')->whereId((UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first())->stockist_id)->first())->email;
+//                    return  (User::select('email')->whereId((UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first()))->stockist_id)->email;
+//                }),
+                'stockist_name' => (User::select('email')->whereId((UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first()))->stockist_id)->email,
                 'stockist_commission' => round($stockist_commission, 2),
                 'super_stockist_commission' => round($super_stockist_commission, 2),
                 'claimed_prize_value' => $newPrizeClaimed,
