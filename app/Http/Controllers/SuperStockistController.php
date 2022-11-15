@@ -239,12 +239,12 @@ class SuperStockistController extends Controller
             $newData = PlayMaster::select('id','is_claimed')->where('user_id',$user->user_id)->whereRaw('date(created_at) >= ?', [$start_date])->whereRaw('date(created_at) <= ?', [$end_date])->get();
 
             foreach ($newData as $x){
-                $total_sale = $total_sale + $this->total_sale_by_play_master_id($x->id);
-                $terminal_commission = $terminal_commission + $this->get_terminal_commission($x->id);
-                $stockist_commission = $stockist_commission + $this->get_stockist_commission_by_play_master_id($x->id);
-                $super_stockist_commission = $super_stockist_commission + $this->get_super_stockist_commission_by_play_master_id($x->id);
-                $newPrizeClaimed += $x->is_claimed == 1? $this->get_prize_value_by_barcode($x->id) : 0;
-                $newPrizeUnClaimed += $x->is_claimed == 0? $this->get_prize_value_by_barcode($x->id) : 0;
+                $total_sale = $total_sale + $cPanelRepotControllerObj->total_sale_by_play_master_id($x->id);
+                $terminal_commission = $terminal_commission + $cPanelRepotControllerObj->get_terminal_commission($x->id);
+                $stockist_commission = $stockist_commission + $cPanelRepotControllerObj->get_stockist_commission_by_play_master_id($x->id);
+                $super_stockist_commission = $super_stockist_commission + $cPanelRepotControllerObj->get_super_stockist_commission_by_play_master_id($x->id);
+                $newPrizeClaimed += $x->is_claimed == 1? $cPanelRepotControllerObj->get_prize_value_by_barcode($x->id) : 0;
+                $newPrizeUnClaimed += $x->is_claimed == 0? $cPanelRepotControllerObj->get_prize_value_by_barcode($x->id) : 0;
             }
 
             $stockist_id_temp = (UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first())->stockist_id;
