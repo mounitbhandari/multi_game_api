@@ -246,14 +246,14 @@ class SuperStockistController extends Controller
                 $newPrizeUnClaimed += $x->is_claimed == 0? $cPanelRepotControllerObj->get_prize_value_by_barcode($x->id) : 0;
             }
 
-            $stockist_id_temp = (UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first())->stockist_id;
-
             $temp = [
                 'user_id' => $user->user_id,
                 'total' => $total_sale,
                 'commission' => round($terminal_commission, 2),
-                'stockist_id' => $stockist_id_temp,
-                'stokiest_name' => Cache::remember('customer_sale_reports_admin_stockist_name'.$stockist_id_temp, 3000000, function () use ($user) {
+                'stockist_id' => Cache::remember('customer_sale_reports_admin_stockist_id'.$user->user_id, 3000000, function () use ($user) {
+                    return  (UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first())->stockist_id;
+                }),
+                'stokiest_name' => Cache::remember('customer_sale_reports_admin_stockist_name'.$user->user_id, 3000000, function () use ($user) {
                     return  (User::select('email')->whereId((UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first())->stockist_id)->first())->email;
                 }),
                 'stockist_commission' => round($stockist_commission, 2),
