@@ -110,7 +110,7 @@ class StockistController extends Controller
 
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
             ,'draw_masters.visible_time as draw_time','draw_masters.id as draw_master_id','play_masters.created_at',
-            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','games.game_name','play_masters.is_claimed', 'games.id as game_id'
+            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','games.game_name','play_masters.is_claimed', 'games.id as game_id','play_masters.is_cancelled'
         )
             ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
             ->join('users','users.id','play_masters.user_id')
@@ -118,13 +118,13 @@ class StockistController extends Controller
             ->join('game_types','game_types.id','play_details.game_type_id')
             ->join('games','games.id','game_types.game_id')
             ->join('user_relation_with_others','user_relation_with_others.terminal_id','play_masters.user_id')
-            ->where('play_masters.is_cancelled',0)
+//            ->where('play_masters.is_cancelled',0)
             ->where('user_relation_with_others.stockist_id',$userID)
             ->whereRaw('date(play_masters.created_at) >= ?', [$start_date])
             ->whereRaw('date(play_masters.created_at) <= ?', [$end_date])
             ->groupBy('play_masters.id','play_masters.barcode_number',
                 'draw_masters.visible_time','users.email','play_masters.created_at',
-                'games.game_name','play_masters.is_claimed', 'games.id','draw_masters.id')
+                'games.game_name','play_masters.is_claimed', 'games.id','draw_masters.id','play_masters.is_cancelled')
             ->orderBy('play_masters.created_at','desc')
             ->get();
 
