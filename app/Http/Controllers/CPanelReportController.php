@@ -89,8 +89,19 @@ class CPanelReportController extends Controller
         foreach($data as $x){
             $detail = (object)$x;
 
-            $detail->game_name = (collect($allGame)->where('id', $detail->game_id)->first())->game_name;
-            $detail->terminal_pin = (collect($terminals)->where('id', $detail->user_id)->first())->email;
+//            $detail->game_name = (collect($allGame)->where('id', $detail->game_id)->first())->game_name;
+
+            $detail->game_name = Cache::remember('barcode_wise_report_by_date_game_cache'.((String)$detail->play_master_id), 3000000, function () use ($detail, $allGame) {
+                return  (collect($allGame)->where('id', $detail->game_id)->first())->game_name;
+            });
+            
+//            $detail->terminal_pin = (collect($terminals)->where('id', $detail->user_id)->first())->email;
+
+
+            $detail->terminal_pin = Cache::remember('barcode_wise_report_by_date_terminal_pin_cache'.((String)$detail->play_master_id), 3000000, function () use ($detail, $terminals) {
+                return  (collect($terminals)->where('id', $detail->user_id)->first())->email;
+            });
+
 
 
             if((Cache::has(((String)$detail->play_master_id).'result')) == 1){
