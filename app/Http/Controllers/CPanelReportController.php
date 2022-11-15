@@ -14,6 +14,7 @@ use App\Models\ResultMaster;
 use App\Models\SingleNumber;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\UserRelationWithOther;
 use Faker\Core\Number;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
@@ -324,6 +325,40 @@ class CPanelReportController extends Controller
             return $commission;
         });
 
+
+        return $commission;
+    }
+
+    public function get_stockist_commission_by_play_master_id($id){
+        $commission = Cache::remember('get_stockist_commission_by_play_master_id'.$id, 3000000, function () use ($id) {
+
+            $get_total_sale = $this->total_sale_by_play_master_id($id);
+            $p_commission = (PlayDetails::wherePlayMasterId($id)->first());
+            if($p_commission){
+                $commission =  $get_total_sale * ($p_commission->stockist_commission/100);
+            }else{
+                $commission = 0;
+            }
+
+            return $commission;
+        });
+
+        return $commission;
+    }
+
+    public function get_super_stockist_commission_by_play_master_id($id){
+        $commission = Cache::remember('get_super_stockist_commission_by_play_master_id'.$id, 3000000, function () use ($id) {
+
+            $get_total_sale = $this->total_sale_by_play_master_id($id);
+            $p_commission = (PlayDetails::wherePlayMasterId($id)->first());
+            if($p_commission){
+                $commission =  $get_total_sale * ($p_commission->super_stockist_commission/100);
+            }else{
+                $commission = 0;
+            }
+
+            return $commission;
+        });
 
         return $commission;
     }
@@ -697,49 +732,98 @@ class CPanelReportController extends Controller
 //        left join users on table1.stockist_id = users.id",[$start_date,$end_date]);
         //end old code
 
-        $data = DB::select("select table1.play_master_id,table1.user_id, table1.stockist_id, table1.total, table1.commission,stockist_commission,super_stockist_commission, users.user_name as stockist_name from (select max(play_master_id) as play_master_id,user_id,stockist_id,
-        sum(total) as total,round(sum(commission),2) as commission,round(sum(stockist_commission),2) as stockist_commission,round(sum(super_stockist_commission),2) as super_stockist_commission from (
-        select max(play_masters.id) as play_master_id,
-        round(sum(play_details.quantity * play_details.mrp)) as total,
-        sum(play_details.quantity * play_details.mrp)* (max(play_details.commission)/100) as commission,
-        sum(play_details.quantity * play_details.mrp)* (max(play_details.stockist_commission)/100) as stockist_commission,
-        sum(play_details.quantity * play_details.mrp)* (max(play_details.super_stockist_commission)/100) as super_stockist_commission,
-        play_masters.user_id, user_relation_with_others.stockist_id
-        FROM play_masters
-        inner join play_details on play_details.play_master_id = play_masters.id
-        inner join game_types ON game_types.id = play_details.game_type_id
-        left join user_relation_with_others on play_masters.user_id = user_relation_with_others.terminal_id
-        where play_masters.is_cancelled=0 and date(play_masters.created_at) >= ? and date(play_masters.created_at) <= ? and user_relation_with_others.active = 1
-        group by user_relation_with_others.stockist_id, play_masters.user_id,play_details.game_type_id) as table1
-        group by user_id,stockist_id) as table1
-        left join users on table1.stockist_id = users.id",[$start_date,$end_date]);
+
+//        **********************************************************
+
+//        $data = DB::select("select table1.play_master_id,table1.user_id, table1.stockist_id, table1.total, table1.commission,stockist_commission,super_stockist_commission, users.user_name as stockist_name from (select max(play_master_id) as play_master_id,user_id,stockist_id,
+//        sum(total) as total,round(sum(commission),2) as commission,round(sum(stockist_commission),2) as stockist_commission,round(sum(super_stockist_commission),2) as super_stockist_commission from (
+//        select max(play_masters.id) as play_master_id,
+//        round(sum(play_details.quantity * play_details.mrp)) as total,
+//        sum(play_details.quantity * play_details.mrp)* (max(play_details.commission)/100) as commission,
+//        sum(play_details.quantity * play_details.mrp)* (max(play_details.stockist_commission)/100) as stockist_commission,
+//        sum(play_details.quantity * play_details.mrp)* (max(play_details.super_stockist_commission)/100) as super_stockist_commission,
+//        play_masters.user_id, user_relation_with_others.stockist_id
+//        FROM play_masters
+//        inner join play_details on play_details.play_master_id = play_masters.id
+//        inner join game_types ON game_types.id = play_details.game_type_id
+//        left join user_relation_with_others on play_masters.user_id = user_relation_with_others.terminal_id
+//        where play_masters.is_cancelled=0 and date(play_masters.created_at) >= ? and date(play_masters.created_at) <= ? and user_relation_with_others.active = 1
+//        group by user_relation_with_others.stockist_id, play_masters.user_id,play_details.game_type_id) as table1
+//        group by user_id,stockist_id) as table1
+//        left join users on table1.stockist_id = users.id",[$start_date,$end_date]);
+
+
 
 //        return response()->json(['success'=> 1, 'data' => $data], 200);
 
-        foreach($data as $x){
+//        foreach($data as $x){
+//            $newPrizeClaimed = 0;
+//            $newPrizeUnClaimed = 0;
+//            $tempntp = 0;
+//            $tempPrize = 0;
+//            $newData = PlayMaster::select('id','is_claimed')->where('user_id',$x->user_id)->whereRaw('date(created_at) >= ?', [$start_date])->whereRaw('date(created_at) <= ?', [$end_date])->get();
+//            foreach($newData as $y) {
+//                $tempData = 0;
+//                $tempPrize = $this->get_prize_value_by_barcode($y->id);
+////                if ($tempPrize > 0 && $y->is_claimed == 1) {
+//                if ($tempPrize > 0) {
+//                    $newPrizeClaimed += $y->is_claimed == 1? $this->get_prize_value_by_barcode($y->id) : 0;
+//                    $newPrizeUnClaimed += $y->is_claimed == 0? $this->get_prize_value_by_barcode($y->id) : 0;
+//                } else {
+//                    $newPrizeClaimed += 0;
+//                    $newPrizeUnClaimed += 0;
+//                }
+//            }
+//            $detail = (object)$x;
+//            $detail->claimed_prize_value = $newPrizeClaimed;
+//            $detail->unclaimed_prize_value = $newPrizeUnClaimed;
+//            $detail->terminal_pin = (collect($terminals)->where('id', $detail->user_id)->first())->email;
+//        }
+
+//        ***********************************************************
+
+        $returnArray = [];
+        $users = PlayMaster::select('user_id')->whereRaw('date(created_at) >= ?', [$start_date])->whereRaw('date(created_at) <= ?', [$end_date])->distinct()->get();
+        foreach ($users as $user){
+            $total_sale = 0;
+            $terminal_commission = 0;
+            $stockist_commission = 0;
+            $super_stockist_commission = 0;
             $newPrizeClaimed = 0;
             $newPrizeUnClaimed = 0;
-            $tempntp = 0;
-            $tempPrize = 0;
-            $newData = PlayMaster::select('id','is_claimed')->where('user_id',$x->user_id)->whereRaw('date(created_at) >= ?', [$start_date])->whereRaw('date(created_at) <= ?', [$end_date])->get();
-            foreach($newData as $y) {
-                $tempData = 0;
-                $tempPrize = $this->get_prize_value_by_barcode($y->id);
-//                if ($tempPrize > 0 && $y->is_claimed == 1) {
-                if ($tempPrize > 0) {
-                    $newPrizeClaimed += $y->is_claimed == 1? $this->get_prize_value_by_barcode($y->id) : 0;
-                    $newPrizeUnClaimed += $y->is_claimed == 0? $this->get_prize_value_by_barcode($y->id) : 0;
-                } else {
-                    $newPrizeClaimed += 0;
-                    $newPrizeUnClaimed += 0;
-                }
+
+            $newData = PlayMaster::select('id','is_claimed')->where('user_id',$user->user_id)->whereRaw('date(created_at) >= ?', [$start_date])->whereRaw('date(created_at) <= ?', [$end_date])->get();
+
+            foreach ($newData as $x){
+                $total_sale = $total_sale + $this->total_sale_by_play_master_id($x->id);
+                $terminal_commission = $terminal_commission + $this->get_terminal_commission($x->id);
+                $stockist_commission = $stockist_commission + $this->get_stockist_commission_by_play_master_id($x->id);
+                $super_stockist_commission = $super_stockist_commission + $this->get_super_stockist_commission_by_play_master_id($x->id);
+                $newPrizeClaimed += $x->is_claimed == 1? $this->get_prize_value_by_barcode($x->id) : 0;
+                $newPrizeUnClaimed += $x->is_claimed == 0? $this->get_prize_value_by_barcode($x->id) : 0;
             }
-            $detail = (object)$x;
-            $detail->claimed_prize_value = $newPrizeClaimed;
-            $detail->unclaimed_prize_value = $newPrizeUnClaimed;
-            $detail->terminal_pin = (collect($terminals)->where('id', $detail->user_id)->first())->email;
+
+            $temp = [
+                'user_id' => $user->user_id,
+                'total' => $total_sale,
+                'commission' => round($terminal_commission, 2),
+                'stockist_id' => Cache::remember('customer_sale_reports_admin_stockist_id', 3000000, function () use ($user) {
+                    return (UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first())->stockist_id;
+                }),
+                'stockist_name' => Cache::remember('customer_sale_reports_admin_stockist_name', 3000000, function () use ($user) {
+                    return  (User::select('email')->whereId((UserRelationWithOther::whereTerminalId($user->user_id)->whereActive(1)->first())->stockist_id)->first())->email;
+                }),
+                'stockist_commission' => round($stockist_commission, 2),
+                'super_stockist_commission' => round($super_stockist_commission, 2),
+                'claimed_prize_value' => $newPrizeClaimed,
+                'unclaimed_prize_value' => $newPrizeUnClaimed,
+                'terminal_pin' => (collect($terminals)->where('id', $user->user_id)->first())->email,
+            ];
+
+            array_push($returnArray,$temp);
         }
-        return response()->json(['success'=> 1, 'data' => $data], 200);
+
+        return response()->json(['success'=> 1, 'data' => $returnArray], 200);
 
 
 
