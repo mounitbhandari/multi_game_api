@@ -98,7 +98,7 @@ class CPanelReportController extends Controller
 //            $detail->terminal_pin = (collect($terminals)->where('id', $detail->user_id)->first())->email;
 
 
-            $detail->terminal_pin = Cache::remember('barcode_wise_report_by_date_terminal_pin_cache'.((String)$detail->play_master_id), 3000000, function () use ($terminals) {
+            $detail->terminal_pin = Cache::remember('barcode_wise_report_by_date_terminal_pin_cache'.((String)$detail->play_master_id), 3000000, function () use ($detail, $terminals) {
                 return  (collect($terminals)->where('id', $detail->user_id)->first())->email;
             });
 
