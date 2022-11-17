@@ -67,7 +67,7 @@ class TerminalReportController extends Controller
             ->join('games','games.id','game_types.game_id')
             ->whereRaw('date(play_masters.created_at) >= ?', [$start_date])
             ->whereRaw('date(play_masters.created_at) <= ?', [$end_date])
-            ->where('play_masters.is_cancelled',0)
+//            ->where('play_masters.is_cancelled',0)
             ->where('play_masters.user_id',$terminalId)
             ->groupBy('play_masters.id','play_masters.barcode_number','play_masters.is_claimed','draw_masters.visible_time','users.email','play_masters.created_at'
                 ,'play_masters.is_cancelled','play_masters.is_cancelable','games.game_name','games.id','draw_masters.id','play_masters.is_claimed'
