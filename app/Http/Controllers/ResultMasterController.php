@@ -642,12 +642,13 @@ class ResultMasterController extends Controller
                 inner join result_details on result_details.result_master_id = result_masters.id
                 inner join card_combinations on card_combinations.id = result_details.combination_number_id
                 inner join draw_masters on draw_masters.id = result_masters.draw_master_id
-                where result_masters.game_id = 2 and result_masters.game_date = ?",[$today]);
+                where result_masters.game_id = 2 and result_masters.game_date = ?
+                order by draw_masters.end_time",[$today]);
             $return_array = $twelveCard;
 
-            foreach ($twelveCard as $x){
-                array_push($draw_id,$x->draw_id);
-            }
+//            foreach ($twelveCard as $x){
+//                array_push($draw_id,$x->draw_id);
+//            }
 
 //            $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->whereNotIn('id', $draw_id)->get();
 //            foreach ($drawGameTimes as $drawGameTime){
@@ -667,12 +668,13 @@ class ResultMasterController extends Controller
                 inner join result_details on result_details.result_master_id = result_masters.id
                 inner join card_combinations on card_combinations.id = result_details.combination_number_id
                 inner join draw_masters on draw_masters.id = result_masters.draw_master_id
-                where result_masters.game_id = 3 and result_masters.game_date = ?",[$today]);
+                where result_masters.game_id = 3 and result_masters.game_date = ?
+                order by draw_masters.end_time",[$today]);
             $return_array = $sixteenCard;
 
-            foreach ($sixteenCard as $x){
-                array_push($draw_id,$x->draw_id);
-            }
+//            foreach ($sixteenCard as $x){
+//                array_push($draw_id,$x->draw_id);
+//            }
 
 //            $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->whereNotIn('id', $draw_id)->get();
 //            foreach ($drawGameTimes as $drawGameTime){
@@ -691,13 +693,14 @@ class ResultMasterController extends Controller
                 inner join result_details on result_details.result_master_id = result_masters.id
                 inner join single_numbers on single_numbers.id = result_details.combination_number_id
                 inner join draw_masters on draw_masters.id = result_masters.draw_master_id
-                where result_masters.game_id = 4 and result_masters.game_date = ?",[$today]);
+                where result_masters.game_id = 4 and result_masters.game_date = ?
+                order by draw_masters.end_time",[$today]);
 
             $return_array = $singleNumber;
 
-            foreach ($singleNumber as $x){
-                array_push($draw_id,$x->draw_id);
-            }
+//            foreach ($singleNumber as $x){
+//                array_push($draw_id,$x->draw_id);
+//            }
 
 
 //            $drawGameTimes = DrawMaster::select('id', 'visible_time')->whereGameId($id)->whereNotIn('id', $draw_id)->get();
