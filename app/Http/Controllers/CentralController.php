@@ -409,9 +409,9 @@ class CentralController extends Controller
             $andarValue = $playMasterControllerObj->get_total_sale($today,$lastDrawId,8);
             $baharValue = $playMasterControllerObj->get_total_sale($today,$lastDrawId,9);
 
-            $totalDoubleNumberSale = (int)($doubleValue * ($doubleNumber->payout)/100) + (int)($andarValue * ($andarNumber->payout)/100) + (int)($baharValue * ($baharNumber->payout)/100);
+            $totalDoubleNumberSale = ((int)($doubleValue * ($doubleNumber->payout)/100) + (int)($andarValue * ($andarNumber->payout)/100) + (int)($baharValue * ($baharNumber->payout)/100))/($game_multiplexer);
 
-            $doubleNumberQuantity = (int)($totalDoubleNumberSale/$doubleNumber->winning_price)/($game_multiplexer);
+            $doubleNumberQuantity = (int)($totalDoubleNumberSale/$doubleNumber->winning_price);
             $loopOn = 1;
             $gen = 0;
 
