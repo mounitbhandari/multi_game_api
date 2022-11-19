@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\StockistResource;
 use App\Http\Resources\SuperStockistResource;
 use App\Models\CardCombination;
 use App\Models\CustomVoucher;
