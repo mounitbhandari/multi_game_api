@@ -230,6 +230,7 @@ Route::group(['middleware' => 'auth:sanctum'],
     Route::post('adminTerminalOverStockist/turnOverReport', [GameController::class, 'admin_terminal_over_stockist_turnover_report']);
 
     Route::get('claimAllPrizes/{id}',[TerminalController::class, 'claimAllPrizes']);
+    Route::get('forceLogout/{id}',[TerminalController::class, 'force_logout_terminal']);
 
 });
 

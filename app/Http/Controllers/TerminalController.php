@@ -72,6 +72,11 @@ class TerminalController extends Controller
         return response()->json(['success'=>0], 200);
     }
 
+    public function force_logout_terminal($id){
+        $data = DB::select("delete from personal_access_tokens where tokenable_id = ?",[$id]);
+        return response()->json(['success'=>1], 200);
+    }
+
 
     public function get_terminal_by_auth(Request $request){
         return TerminalResource::collection($request->user());
