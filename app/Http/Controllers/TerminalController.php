@@ -62,6 +62,16 @@ class TerminalController extends Controller
         return response()->json(['success'=>1,'balance'=>$user->closing_balance], 200);
     }
 
+    public function is_user_logged_in($id){
+        $token = PersonalAccessToken::whereTokenableId($id)->first();
+
+        if($token){
+            return response()->json(['success'=>1], 200);
+        }
+
+        return response()->json(['success'=>0], 200);
+    }
+
 
     public function get_terminal_by_auth(Request $request){
         return TerminalResource::collection($request->user());
