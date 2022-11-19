@@ -26,7 +26,7 @@ class TerminalReportController extends Controller
         $terminalId = $requestedData->terminalId;
         $start_date = $requestedData->startDate;
         $end_date = $requestedData->endDate;
-        $data = $requestedData;
+//        $data = $requestedData;
 
 //        $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
 //            ,'draw_masters.visible_time as draw_time',

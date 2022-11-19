@@ -251,13 +251,13 @@ class TerminalController extends Controller
     }
 
     public function prize_value_by_terminal_id(Request $request){
-        $user = $request->user();
+//        $user = $request->user();
         $requestedData = (object)$request->json()->all();
         $data = 0;
 
         $today= Carbon::today()->format('Y-m-d');
 
-        $playMasters =  DB::select("select * from play_masters where date(created_at) = ? and is_cancelled = 0 and draw_master_id = ? and user_id = ".$user->id,[$today, $requestedData->draw_master_id]);
+        $playMasters =  DB::select("select * from play_masters where date(created_at) = ? and is_cancelled = 0 and draw_master_id = ? and user_id = ".$requestedData->id,[$today, $requestedData->draw_master_id]);
 
         foreach ($playMasters as $x){
             $cpanelReportController =  new CPanelReportController();
