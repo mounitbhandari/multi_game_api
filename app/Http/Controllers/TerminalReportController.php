@@ -192,7 +192,7 @@ class TerminalReportController extends Controller
         }
 
         $returnArray = [
-            'commission' => round($total_commission, 2),
+            'commission' => sprintf('%0.2f', $total_commission),
             'total' => $total_sale,
             'prize_value' => $total_prize_value,
             'user_name' => $data[0]->user_name,
