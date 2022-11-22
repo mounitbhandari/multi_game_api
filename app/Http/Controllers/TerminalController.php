@@ -88,7 +88,7 @@ class TerminalController extends Controller
 //            foreach ($users as $x){
                 $prize_value = 0;
 //                $y = PlayMaster::whereUserId($x->id)->whereIsClaimed(0)->whereIsCancelled(0)->get();
-                PlayMaster::select('id')->whereUserId($x)->whereIsClaimed(0)->whereIsCancelled(0)->chunk(300, function ($y) {
+                PlayMaster::select('id')->whereUserId($x)->whereIsClaimed(0)->whereIsCancelled(0)->where( 'created_at', '>', Carbon::now()->subDays(2)->format('Y-m-d'))->chunk(200, function ($y) {
 
                     if ($y) {
                         foreach ($y as $z) {

@@ -4,7 +4,8 @@
     <list default="true" id="5eca29a0-ed15-4037-b786-6b351566af54" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PlayMasterController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PlayMasterController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/TerminalReportController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/TerminalReportController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/TerminalController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/TerminalController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Test.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Test.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/api.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/api.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -319,7 +320,7 @@
       <workItem from="1669046957958" duration="2439000" />
       <workItem from="1669050756105" duration="645000" />
       <workItem from="1669083594866" duration="2133000" />
-      <workItem from="1669123303234" duration="2384000" />
+      <workItem from="1669123303234" duration="3230000" />
     </task>
     <servers />
   </component>

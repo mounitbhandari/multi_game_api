@@ -228,6 +228,8 @@ class PlayMasterController extends Controller
     public function claimPrize(Request $request){
         $requestedData = (object)$request->json()->all();
         $playMasterId = $requestedData->play_master_id;
+
+
         $play_master = PlayMaster::find($playMasterId);
         $playMasterDate = Carbon::parse($play_master->created_at)->format('Y-m-d');
         $dateWork = Carbon::createFromDate($playMasterDate);

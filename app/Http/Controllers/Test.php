@@ -37,11 +37,11 @@ class Test extends Controller
 //        $x = Cache::remember('testCache', 3000000, function (){
 //            return 2.1;
 //        });
-        $play_master = PlayMaster::whereId(3)->whereIsCancelled(0)->first();
+        $play_master = PlayMaster::where( 'created_at', '>', Carbon::now()->subDays(2)->format('Y-m-d'))->get();
 
 //        $activeUsers = PersonalAccessToken::whereTokenableId(collect($terminals))->get();
 
-        return $play_master;
+        return response()->json(['success'=>Carbon::now()->subDays(2),'data'=>$play_master], 200,[],JSON_NUMERIC_CHECK);
 //        return User::get();
 
 //        $x = Cache::get('testCache');
