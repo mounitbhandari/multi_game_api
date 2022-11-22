@@ -424,7 +424,7 @@ class CPanelReportController extends Controller
                 $total_sale = $total_sale + $this->total_sale_by_play_master_id($x->id);
 
                 $total_commission = Cache::remember('draw_wise_report_total_commission_single_play_master'.$x->id, 3000000, function () use ($x, $total_sale) {
-                    return ((DB::select("select ((max(commission)/100)*".$total_sale.") as commission from play_details where play_master_id = ".$x->id))[0]->commission);
+                    return ((DB::select("select (Round((max(commission)/100),2)*".$total_sale.") as commission from play_details where play_master_id = ".$x->id))[0]->commission);
                 });
 
                 $commission_percentage = Cache::remember('draw_wise_report_total_commission_percentage_single_play_master'.$x->id, 3000000, function () use ($x, $total_sale) {
