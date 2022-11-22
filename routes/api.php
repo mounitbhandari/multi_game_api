@@ -231,6 +231,8 @@ Route::group(['middleware' => 'auth:sanctum'],
 
     Route::get('claimAllPrizes/{id}',[TerminalController::class, 'claimAllPrizes']);
     Route::get('forceLogout/{id}',[TerminalController::class, 'force_logout_terminal']);
+    Route::get('clearCache',[GameController::class, 'clearAllCache']);
+    Route::get('getLiveDraw', [CentralController::class, 'getLiveDrawTime']);
 
 });
 
@@ -247,6 +249,8 @@ Route::group(array('prefix' => 'dev'), function() {
 
     Route::get('total_sale_by_play_master_id/{id}', [CPanelReportController::class, 'total_sale_by_play_master_id']);
     Route::get('get_terminal_commission/{id}', [CPanelReportController::class, 'get_terminal_commission']);
+
+    Route::get('getLiveDraw', [CentralController::class, 'getLiveDrawTime']);
 
     Route::get('superStockist/gameTotalReportToday/{id}', [GameController::class, 'get_game_total_sale_today_super_stockist']);
     Route::post('superStockist/turnOverReport', [GameController::class, 'super_stockist_turnover_report']);

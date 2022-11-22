@@ -10,7 +10,9 @@ use App\Models\PlayMaster;
 use App\Models\User;
 use App\Models\UserRelationWithOther;
 use Carbon\Carbon;
+use Illuminate\Filesystem\Cache;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\PersonalAccessToken;
 
@@ -21,6 +23,13 @@ class GameController extends Controller
         $game= Game::get();
 
         return response()->json(['success'=>1,'data'=> $game], 200,[],JSON_NUMERIC_CHECK);
+    }
+
+    public function clearAllCache(){
+        Artisan::call('optimize:clear');
+        Artisan::call('optimize');
+
+        return response()->json(['success'=>1], 200,[],JSON_NUMERIC_CHECK);
     }
 
     public function getGameWithTime()
