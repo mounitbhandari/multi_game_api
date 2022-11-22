@@ -144,6 +144,11 @@ class TerminalReportController extends Controller
         $start_date = $requestedData->startDate;
         $end_date = $requestedData->endDate;
 
+        //total
+        $total_commission = 0;
+        $total_sale = 0;
+        $total_prize_value = 0;
+
 //        return $terminalId;
 
         $cPanelRepotControllerObj = new CPanelReportController();
@@ -180,8 +185,25 @@ class TerminalReportController extends Controller
 //            $detail->ntp = $tempntp;
         }
 
+        foreach ($data as $x){
+            $total_commission = $total_commission + $x->commission;
+            $total_sale = $total_sale + $x->total;
+            $total_prize_value = $total_prize_value + $x->prize_value;
+        }
 
-        return response()->json(['success' => 1, 'data' => $data], 200,[],JSON_NUMERIC_CHECK);
+        $returnArray = [
+            'commission' => $total_commission,
+            'total' => $total_sale,
+            'prize_value' => $total_prize_value,
+            'user_name' => $data[0]->user_name,
+            'stokiest_name' => $data[0]->stokiest_name,
+            'terminal_pin' => $data[0]->terminal_pin,
+            'user_id' => $data[0]->user_id,
+            'stockist_id' => $data[0]->stockist_id
+        ];
+
+
+        return response()->json(['success' => 1, 'data' => $returnArray], 200,[],JSON_NUMERIC_CHECK);
 
 //        $returnArr = [];
 //
