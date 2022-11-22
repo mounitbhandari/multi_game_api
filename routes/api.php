@@ -239,6 +239,8 @@ Route::group(['middleware' => 'auth:sanctum'],
 
 Route::group(array('prefix' => 'dev'), function() {
 
+    Route::post('claimPrize',[PlayMasterController::class,'claimPrize']);
+
     Route::post('adminSuperStockist/turnOverReport', [GameController::class, 'admin_super_stockist_turnover_report']);
     Route::post('adminStockist/turnOverReport', [GameController::class, 'admin_stockist_turnover_report']);
     Route::post('adminStockistOverSuperStockist/turnOverReport', [GameController::class, 'admin_stockist_over_super_stockist_turnover_report']);

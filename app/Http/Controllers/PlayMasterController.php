@@ -9,6 +9,7 @@ use App\Models\PlayDetails;
 use App\Models\PlayMaster;
 use App\Models\Transaction;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -227,6 +228,14 @@ class PlayMasterController extends Controller
     public function claimPrize(Request $request){
         $requestedData = (object)$request->json()->all();
         $playMasterId = $requestedData->play_master_id;
+        $play_master = PlayMaster::find($playMasterId);
+        $playMasterDate = Carbon::parse($play_master->created_at)->format('Y-m-d');
+        $dateWork = Carbon::createFromDate($playMasterDate);
+        $now = Carbon::now();
+        $differenceDateCheck = $dateWork->diffInDays($now);
+        if($differenceDateCheck > 1){
+            return response()->json(['success' => 0, 'message' => 'Failed to claim'], 200,[],JSON_NUMERIC_CHECK);
+        }
 
         $cPanelReportControllerObj = new CPanelReportController();
         $data = $cPanelReportControllerObj->get_prize_value_by_barcode($playMasterId);
