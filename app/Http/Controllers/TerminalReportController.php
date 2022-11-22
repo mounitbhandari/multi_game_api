@@ -186,7 +186,7 @@ class TerminalReportController extends Controller
         }
 
         foreach ($data as $x){
-            $total_commission = $total_commission + $x->commission;
+            $total_commission = $total_commission + round($x->commission , 2);
             $total_sale = $total_sale + $x->total;
             $total_prize_value = $total_prize_value + $x->prize_value;
         }
