@@ -10,9 +10,9 @@ use App\Models\PlayMaster;
 use App\Models\User;
 use App\Models\UserRelationWithOther;
 use Carbon\Carbon;
-use Illuminate\Filesystem\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\PersonalAccessToken;
 
@@ -821,81 +821,254 @@ class GameController extends Controller
 
         $CPanelReportController = new CPanelReportController();
 
+        // triple chance
         $tripleAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(1)->get();
+
+        $tripleAllPlayMastersSizeCheck = Cache::remember('sizeOfTripleAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($tripleAllPlayMasters) {
+            return sizeof($tripleAllPlayMasters);
+        });
+
+
+        if($tripleAllPlayMastersSizeCheck === sizeof($tripleAllPlayMasters) && (Cache::has("tripleAllPlayMastersReturnArray") == 1)){
+            $x = Cache::get("tripleAllPlayMastersReturnArray");
+            array_push($returnArray , $x);
+        }else{
+            foreach ($tripleAllPlayMasters as $tripleAllPlayMaster){
+                $triplePrize = $triplePrize + $CPanelReportController->get_prize_value_by_barcode($tripleAllPlayMaster->id);
+                $totalTripleNumber = $totalTripleNumber + $CPanelReportController->total_sale_by_play_master_id($tripleAllPlayMaster->id);
+            }
+
+            $x = [
+                'game_name' => 'Triple Chance',
+                'total_bet' =>   $totalTripleNumber,
+                'total_win' =>   $triplePrize,
+                'profit' =>   $totalTripleNumber - $triplePrize
+            ];
+
+            array_push($returnArray , $x);
+            Cache::forget('tripleAllPlayMastersReturnArray');
+            Cache::forget('sizeOfTripleAllPlayMasters_get_game_total_sale_today');
+            Cache::remember('sizeOfTripleAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($tripleAllPlayMasters) {
+                return sizeof($tripleAllPlayMasters);
+            });
+            Cache::remember('tripleAllPlayMastersReturnArray', 3000000, function () use ($x) {
+                return $x;
+            });
+        }
+        //end of triple chance
+
+        // 12 card
         $twelveCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(2)->get();
+        $twelveCardAllPlayMastersSizeCheck = Cache::remember('sizeOfTwelveCardAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($twelveCardAllPlayMasters) {
+            return sizeof($twelveCardAllPlayMasters);
+        });
+
+//        return response()->json(['success'=>sizeof($twelveCardAllPlayMasters),'data'=> $twelveCardAllPlayMastersSizeCheck], 200);
+
+        if($twelveCardAllPlayMastersSizeCheck === sizeof($twelveCardAllPlayMasters) && (Cache::has("twelveCardAllPlayMastersReturnArray") == 1)){
+            $x = Cache::get("twelveCardAllPlayMastersReturnArray");
+            array_push($returnArray , $x);
+        }else{
+            foreach ($twelveCardAllPlayMasters as $twelveCardAllPlayMaster){
+                $twelveCardPrize = $twelveCardPrize + $CPanelReportController->get_prize_value_by_barcode($twelveCardAllPlayMaster->id);
+                $twelveCard = $twelveCard + $CPanelReportController->total_sale_by_play_master_id($twelveCardAllPlayMaster->id);
+            }
+
+            $x = [
+                'game_name' => '12 Card',
+                'total_bet' =>  (int)$twelveCard,
+                'total_win' =>   $twelveCardPrize,
+                'profit' =>   (int)$twelveCard - $twelveCardPrize
+            ];
+            array_push($returnArray , $x);
+            Cache::forget('twelveCardAllPlayMastersReturnArray');
+            Cache::forget('sizeOfTwelveCardAllPlayMasters_get_game_total_sale_today');
+            Cache::remember('sizeOfTwelveCardAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($twelveCardAllPlayMasters) {
+                return sizeof($twelveCardAllPlayMasters);
+            });
+            Cache::remember('twelveCardAllPlayMastersReturnArray', 3000000, function () use ($x) {
+                return $x;
+            });
+        }
+        //end of 12 card
+
+        // 16 card
         $sixteenCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(3)->get();
+        $sixteenCardAllPlayMastersSizeCheck = Cache::remember('sizeOfSixteenCardAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($sixteenCardAllPlayMasters) {
+            return sizeof($sixteenCardAllPlayMasters);
+        });
+
+        if($sixteenCardAllPlayMastersSizeCheck === sizeof($sixteenCardAllPlayMasters) && (Cache::has("sixteenCardAllPlayMastersReturnArray") == 1)){
+            $x = Cache::get("sixteenCardAllPlayMastersReturnArray");
+            array_push($returnArray , $x);
+//            return response()->json(['success'=>'cache 16 card','data'=> $returnArray], 200);
+        }else{
+            foreach ($sixteenCardAllPlayMasters as $sixteenCardAllPlayMaster){
+                $sixteenCardPrize = $sixteenCardPrize + $CPanelReportController->get_prize_value_by_barcode($sixteenCardAllPlayMaster->id);
+                $sixteenCard = $sixteenCard + $CPanelReportController->total_sale_by_play_master_id($sixteenCardAllPlayMaster->id);
+            }
+
+            $x = [
+                'game_name' => '16 Card',
+                'total_bet' =>  (int)$sixteenCard,
+                'total_win' =>   $sixteenCardPrize,
+                'profit' =>   (int)$sixteenCard - $sixteenCardPrize
+            ];
+            array_push($returnArray , $x);
+
+            Cache::forget('sixteenCardAllPlayMastersReturnArray');
+            Cache::forget('sizeOfSixteenCardAllPlayMasters_get_game_total_sale_today');
+            Cache::remember('sizeOfSixteenCardAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($sixteenCardAllPlayMasters) {
+                return sizeof($sixteenCardAllPlayMasters);
+            });
+            Cache::remember('sixteenCardAllPlayMastersReturnArray', 3000000, function () use ($x) {
+                return $x;
+            });
+        }
+        //end of 16 card
+
+
+        // single
         $singleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(4)->get();
+        $singleNumberAllPlayMastersSizeCheck = Cache::remember('sizeOfSingleNumberAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($singleNumberAllPlayMasters) {
+            return sizeof($singleNumberAllPlayMasters);
+        });
+
+        if($singleNumberAllPlayMastersSizeCheck === sizeof($singleNumberAllPlayMasters) && (Cache::has("singleNumberAllPlayMastersReturnArray") == 1)){
+            $x = Cache::get("singleNumberAllPlayMastersReturnArray");
+            array_push($returnArray , $x);
+        }else{
+            foreach ($singleNumberAllPlayMasters as $singleNumberAllPlayMaster){
+                $singleNumberPrize = $singleNumberPrize + $CPanelReportController->get_prize_value_by_barcode($singleNumberAllPlayMaster->id);
+                $singleNUmber = $singleNUmber + $CPanelReportController->total_sale_by_play_master_id($singleNumberAllPlayMaster->id);
+            }
+
+            $x = [
+                'game_name' => 'Single Number',
+                'total_bet' =>  (int)$singleNUmber,
+                'total_win' =>   $singleNumberPrize,
+                'profit' =>   (int)$singleNUmber - $singleNumberPrize
+            ];
+            array_push($returnArray , $x);
+
+            Cache::forget('singleNumberAllPlayMastersReturnArray');
+            Cache::forget('sizeOfSingleNumberAllPlayMasters_get_game_total_sale_today');
+            Cache::remember('sizeOfSingleNumberAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($singleNumberAllPlayMasters) {
+                return sizeof($singleNumberAllPlayMasters);
+            });
+            Cache::remember('singleNumberAllPlayMastersReturnArray', 3000000, function () use ($x) {
+                return $x;
+            });
+        }
+
+        // end of single
+
+//        return response()->json(['success'=>1,'data'=> $returnArray], 200);
+
+        // double
         $doubleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(5)->get();
+        $doubleNumberAllPlayMastersSizeCheck = Cache::remember('sizeOfDoubleNumberAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($doubleNumberAllPlayMasters) {
+            return sizeof($doubleNumberAllPlayMasters);
+        });
+
+        if($doubleNumberAllPlayMastersSizeCheck === sizeof($doubleNumberAllPlayMasters) && (Cache::has("doubleNumberAllPlayMastersReturnArray") == 1)){
+            $x = Cache::get("doubleNumberAllPlayMastersReturnArray");
+            array_push($returnArray , $x);
+        }else{
+            foreach ($doubleNumberAllPlayMasters as $doubleNumberAllPlayMaster){
+                $doubleNumberPrize = $doubleNumberPrize + $CPanelReportController->get_prize_value_by_barcode($doubleNumberAllPlayMaster->id);
+                $totalDoubleNumber = $totalDoubleNumber + $CPanelReportController->total_sale_by_play_master_id($doubleNumberAllPlayMaster->id);
+            }
+
+            $x = [
+                'game_name' => 'Double Number',
+                'total_bet' =>  (int)$totalDoubleNumber,
+                'total_win' =>   $doubleNumberPrize,
+                'profit' =>   (int)$totalDoubleNumber - $doubleNumberPrize
+            ];
+            array_push($returnArray , $x);
+
+            Cache::forget('doubleNumberAllPlayMastersReturnArray');
+            Cache::forget('sizeOfDoubleNumberAllPlayMasters_get_game_total_sale_today');
+            Cache::remember('sizeOfDoubleNumberAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($doubleNumberAllPlayMasters) {
+                return sizeof($doubleNumberAllPlayMasters);
+            });
+            Cache::remember('doubleNumberAllPlayMastersReturnArray', 3000000, function () use ($x) {
+                return $x;
+            });
+        }
+
+        //end of double
 
         $online_count = (DB::select("select COUNT(distinct users.id) as total_count from personal_access_tokens
             inner join users on personal_access_tokens.tokenable_id = users.id
             where date(personal_access_tokens.created_at) = ? and users.user_type_id = 5",[$today]))[0]->total_count;
 
 
-        foreach ($tripleAllPlayMasters as $tripleAllPlayMaster){
-            $triplePrize = $triplePrize + $CPanelReportController->get_prize_value_by_barcode($tripleAllPlayMaster->id);
-            $totalTripleNumber = $totalTripleNumber + $CPanelReportController->total_sale_by_play_master_id($tripleAllPlayMaster->id);
-        }
+//        foreach ($tripleAllPlayMasters as $tripleAllPlayMaster){
+//            $triplePrize = $triplePrize + $CPanelReportController->get_prize_value_by_barcode($tripleAllPlayMaster->id);
+//            $totalTripleNumber = $totalTripleNumber + $CPanelReportController->total_sale_by_play_master_id($tripleAllPlayMaster->id);
+//        }
 
-        foreach ($twelveCardAllPlayMasters as $twelveCardAllPlayMaster){
-            $twelveCardPrize = $twelveCardPrize + $CPanelReportController->get_prize_value_by_barcode($twelveCardAllPlayMaster->id);
-            $twelveCard = $twelveCard + $CPanelReportController->total_sale_by_play_master_id($twelveCardAllPlayMaster->id);
-        }
+//        foreach ($twelveCardAllPlayMasters as $twelveCardAllPlayMaster){
+//            $twelveCardPrize = $twelveCardPrize + $CPanelReportController->get_prize_value_by_barcode($twelveCardAllPlayMaster->id);
+//            $twelveCard = $twelveCard + $CPanelReportController->total_sale_by_play_master_id($twelveCardAllPlayMaster->id);
+//        }
 
-        foreach ($sixteenCardAllPlayMasters as $sixteenCardAllPlayMaster){
-            $sixteenCardPrize = $sixteenCardPrize + $CPanelReportController->get_prize_value_by_barcode($sixteenCardAllPlayMaster->id);
-            $sixteenCard = $sixteenCard + $CPanelReportController->total_sale_by_play_master_id($sixteenCardAllPlayMaster->id);
-        }
+//        foreach ($sixteenCardAllPlayMasters as $sixteenCardAllPlayMaster){
+//            $sixteenCardPrize = $sixteenCardPrize + $CPanelReportController->get_prize_value_by_barcode($sixteenCardAllPlayMaster->id);
+//            $sixteenCard = $sixteenCard + $CPanelReportController->total_sale_by_play_master_id($sixteenCardAllPlayMaster->id);
+//        }
 
-        foreach ($singleNumberAllPlayMasters as $singleNumberAllPlayMaster){
-            $singleNumberPrize = $singleNumberPrize + $CPanelReportController->get_prize_value_by_barcode($singleNumberAllPlayMaster->id);
-            $singleNUmber = $singleNUmber + $CPanelReportController->total_sale_by_play_master_id($singleNumberAllPlayMaster->id);
-        }
+//        foreach ($singleNumberAllPlayMasters as $singleNumberAllPlayMaster){
+//            $singleNumberPrize = $singleNumberPrize + $CPanelReportController->get_prize_value_by_barcode($singleNumberAllPlayMaster->id);
+//            $singleNUmber = $singleNUmber + $CPanelReportController->total_sale_by_play_master_id($singleNumberAllPlayMaster->id);
+//        }
 
-        foreach ($doubleNumberAllPlayMasters as $doubleNumberAllPlayMaster){
-            $doubleNumberPrize = $doubleNumberPrize + $CPanelReportController->get_prize_value_by_barcode($doubleNumberAllPlayMaster->id);
-            $totalDoubleNumber = $totalDoubleNumber + $CPanelReportController->total_sale_by_play_master_id($doubleNumberAllPlayMaster->id);
-        }
+//        foreach ($doubleNumberAllPlayMasters as $doubleNumberAllPlayMaster){
+//            $doubleNumberPrize = $doubleNumberPrize + $CPanelReportController->get_prize_value_by_barcode($doubleNumberAllPlayMaster->id);
+//            $totalDoubleNumber = $totalDoubleNumber + $CPanelReportController->total_sale_by_play_master_id($doubleNumberAllPlayMaster->id);
+//        }
 
-        $x = [
-          'game_name' => 'Triple Chance',
-          'total_bet' =>   $totalTripleNumber,
-          'total_win' =>   $triplePrize,
-          'profit' =>   $totalTripleNumber - $triplePrize
-        ];
-        array_push($returnArray , $x);
+//        $x = [
+//          'game_name' => 'Triple Chance',
+//          'total_bet' =>   $totalTripleNumber,
+//          'total_win' =>   $triplePrize,
+//          'profit' =>   $totalTripleNumber - $triplePrize
+//        ];
+//        array_push($returnArray , $x);
 
-        $x = [
-            'game_name' => '12 Card',
-            'total_bet' =>  (int)$twelveCard,
-            'total_win' =>   $twelveCardPrize,
-            'profit' =>   (int)$twelveCard - $twelveCardPrize
-        ];
-        array_push($returnArray , $x);
+//        $x = [
+//            'game_name' => '12 Card',
+//            'total_bet' =>  (int)$twelveCard,
+//            'total_win' =>   $twelveCardPrize,
+//            'profit' =>   (int)$twelveCard - $twelveCardPrize
+//        ];
+//        array_push($returnArray , $x);
 
-        $x = [
-            'game_name' => '16 Card',
-            'total_bet' =>  (int)$sixteenCard,
-            'total_win' =>   $sixteenCardPrize,
-            'profit' =>   (int)$sixteenCard - $sixteenCardPrize
-        ];
-        array_push($returnArray , $x);
+//        $x = [
+//            'game_name' => '16 Card',
+//            'total_bet' =>  (int)$sixteenCard,
+//            'total_win' =>   $sixteenCardPrize,
+//            'profit' =>   (int)$sixteenCard - $sixteenCardPrize
+//        ];
+//        array_push($returnArray , $x);
 
-        $x = [
-            'game_name' => 'Single Number',
-            'total_bet' =>  (int)$singleNUmber,
-            'total_win' =>   $singleNumberPrize,
-            'profit' =>   (int)$singleNUmber - $singleNumberPrize
-        ];
-        array_push($returnArray , $x);
+//        $x = [
+//            'game_name' => 'Single Number',
+//            'total_bet' =>  (int)$singleNUmber,
+//            'total_win' =>   $singleNumberPrize,
+//            'profit' =>   (int)$singleNUmber - $singleNumberPrize
+//        ];
+//        array_push($returnArray , $x);
 
-        $x = [
-            'game_name' => 'Double Number',
-            'total_bet' =>  (int)$totalDoubleNumber,
-            'total_win' =>   $doubleNumberPrize,
-            'profit' =>   (int)$totalDoubleNumber - $doubleNumberPrize
-        ];
-        array_push($returnArray , $x);
+//        $x = [
+//            'game_name' => 'Double Number',
+//            'total_bet' =>  (int)$totalDoubleNumber,
+//            'total_win' =>   $doubleNumberPrize,
+//            'profit' =>   (int)$totalDoubleNumber - $doubleNumberPrize
+//        ];
+//        array_push($returnArray , $x);
 
         $x = [
             'online' => $online_count
