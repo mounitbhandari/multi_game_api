@@ -959,10 +959,8 @@ class GameController extends Controller
                 return $x;
             });
         }
-
         // end of single
 
-//        return response()->json(['success'=>1,'data'=> $returnArray], 200);
 
         // double
         $doubleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(5)->get();
