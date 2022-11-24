@@ -828,7 +828,6 @@ class GameController extends Controller
             return sizeof($tripleAllPlayMasters);
         });
 
-
         if($tripleAllPlayMastersSizeCheck === sizeof($tripleAllPlayMasters) && (Cache::has("tripleAllPlayMastersReturnArray") == 1)){
             $x = Cache::get("tripleAllPlayMastersReturnArray");
             array_push($returnArray , $x);
@@ -859,11 +858,10 @@ class GameController extends Controller
 
         // 12 card
         $twelveCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(2)->get();
+
         $twelveCardAllPlayMastersSizeCheck = Cache::remember('sizeOfTwelveCardAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($twelveCardAllPlayMasters) {
             return sizeof($twelveCardAllPlayMasters);
         });
-
-//        return response()->json(['success'=>sizeof($twelveCardAllPlayMasters),'data'=> $twelveCardAllPlayMastersSizeCheck], 200);
 
         if($twelveCardAllPlayMastersSizeCheck === sizeof($twelveCardAllPlayMasters) && (Cache::has("twelveCardAllPlayMastersReturnArray") == 1)){
             $x = Cache::get("twelveCardAllPlayMastersReturnArray");
@@ -894,6 +892,7 @@ class GameController extends Controller
 
         // 16 card
         $sixteenCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(3)->get();
+
         $sixteenCardAllPlayMastersSizeCheck = Cache::remember('sizeOfSixteenCardAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($sixteenCardAllPlayMasters) {
             return sizeof($sixteenCardAllPlayMasters);
         });
@@ -901,7 +900,6 @@ class GameController extends Controller
         if($sixteenCardAllPlayMastersSizeCheck === sizeof($sixteenCardAllPlayMasters) && (Cache::has("sixteenCardAllPlayMastersReturnArray") == 1)){
             $x = Cache::get("sixteenCardAllPlayMastersReturnArray");
             array_push($returnArray , $x);
-//            return response()->json(['success'=>'cache 16 card','data'=> $returnArray], 200);
         }else{
             foreach ($sixteenCardAllPlayMasters as $sixteenCardAllPlayMaster){
                 $sixteenCardPrize = $sixteenCardPrize + $CPanelReportController->get_prize_value_by_barcode($sixteenCardAllPlayMaster->id);
@@ -930,6 +928,7 @@ class GameController extends Controller
 
         // single
         $singleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(4)->get();
+
         $singleNumberAllPlayMastersSizeCheck = Cache::remember('sizeOfSingleNumberAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($singleNumberAllPlayMasters) {
             return sizeof($singleNumberAllPlayMasters);
         });
@@ -967,6 +966,7 @@ class GameController extends Controller
 
         // double
         $doubleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(5)->get();
+
         $doubleNumberAllPlayMastersSizeCheck = Cache::remember('sizeOfDoubleNumberAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($doubleNumberAllPlayMasters) {
             return sizeof($doubleNumberAllPlayMasters);
         });
