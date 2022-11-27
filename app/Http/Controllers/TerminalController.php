@@ -553,6 +553,18 @@ class TerminalController extends Controller
 
     }
 
+    public function reset_terminal_password_developer(Request $request){
+        $requestedData = (object)$request->json()->all();
+
+        $user = User::find($requestedData->userId);
+        $user->password = md5($requestedData->newPassword);
+        $user->visible_password = $requestedData->newPassword;
+        $user->update();
+
+        return response()->json(['success'=>1, 'message'=>'Password Updated'], 200,[],JSON_NUMERIC_CHECK);
+
+    }
+
 
 
 }

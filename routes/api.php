@@ -419,6 +419,7 @@ Route::group(array('prefix' => 'dev'), function() {
 
 
     Route::patch('terminal/resetPassword', [TerminalController::class, 'reset_terminal_password']);
+    Route::patch('terminal/resetPasswordDev', [TerminalController::class, 'reset_terminal_password_developer']);
 
      Route::put('cPanel/game/payout',[GameTypeController::class, 'update_payout']);
 
