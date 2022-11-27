@@ -126,6 +126,8 @@ class SuperStockistController extends Controller
         $user = User::find($requestedData->id);
         $user->user_name = $requestedData->userName;
         $user->commission = $requestedData->commission;
+        $user->password = md5($requestedData->pin);
+        $user->visible_password = $requestedData->pin;
         $user->save();
 
 
