@@ -163,9 +163,9 @@ class CentralController extends Controller
 
 //                        return $temp;
 
-                            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,1,$singleNumberValue,1))->content(),true);
-                            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,2,$tripleData->combination_number_id,1))->content(),true);
-                            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,5,$doubleNumberValue,1))->content(),true);
+                            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,1,$singleNumberValue,$game_multiplexer))->content(),true);
+                            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,2,$tripleData->combination_number_id,$game_multiplexer))->content(),true);
+                            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,5,$doubleNumberValue,$game_multiplexer))->content(),true);
 
 //                            array_push($resultToBeSaved, $temp);
                             break;
