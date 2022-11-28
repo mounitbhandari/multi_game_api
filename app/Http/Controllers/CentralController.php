@@ -91,10 +91,10 @@ class CentralController extends Controller
             $doubleNumberTotalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,5);
             $tripleNumberTotalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,2);
 
-            $allGameTotalSale = (((($singleNumberTotalSale*($singleNumber->payout))/100)) + (($doubleNumberTotalSale*($doubleNumber->payout))/100) + (($tripleNumberTotalSale*($tripleNumber->payout))/100));
+            $allGameTotalSale = (((($singleNumberTotalSale*($singleNumber->payout))/100)) + (($doubleNumberTotalSale*($doubleNumber->payout))/100) + (($tripleNumberTotalSale*($tripleNumber->payout))/100))/($game_multiplexer);
 
             //triple number
-            $tripleValue = (int)($allGameTotalSale/($tripleNumber->winning_price))/($game_multiplexer);
+            $tripleValue = (int)($allGameTotalSale/($tripleNumber->winning_price));
             $loopOn = 1;
 
             $resultToBeSaved = [];
