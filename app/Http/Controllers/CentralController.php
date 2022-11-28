@@ -59,11 +59,11 @@ class CentralController extends Controller
 
         $game_multiplexer = (GameType::whereGameId($id)->first())->multiplexer;
 
-        if($game_multiplexer == 1){
-//            $tempM= [1,2,3];
-            $tempM= [1];
-            $game_multiplexer = $tempM[array_rand($tempM)];
-        }
+//        if($game_multiplexer == 1){
+////            $tempM= [1,2,3];
+//            $tempM= [1];
+//            $game_multiplexer = $tempM[array_rand($tempM)];
+//        }
 
 //        enable when concept of multiplexer comes
 //        $ManualGameCheck = ManualResult::whereGameDate($today)->whereGameTypeId((GameType::whereGameId($id)->first())->id)->first();
@@ -91,7 +91,7 @@ class CentralController extends Controller
             $doubleNumberTotalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,5);
             $tripleNumberTotalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,2);
 
-            $allGameTotalSale = ((($singleNumberTotalSale*($singleNumber->payout))/100) + (($doubleNumberTotalSale*($doubleNumber->payout))/100) + (($tripleNumberTotalSale*($tripleNumber->payout))/100));
+            $allGameTotalSale = (((($singleNumberTotalSale*($singleNumber->payout))/100)) + (($doubleNumberTotalSale*($doubleNumber->payout))/100) + (($tripleNumberTotalSale*($tripleNumber->payout))/100));
 
             //triple number
             $tripleValue = (int)($allGameTotalSale/($tripleNumber->winning_price))/($game_multiplexer);
@@ -198,9 +198,9 @@ class CentralController extends Controller
                     $singleNumberValue = (collect($single_numbers)->where('single_number', $splitNumber[2])->first())->id;
                     $doubleNumberValue = (collect($double_numbers)->where('double_number', $splitNumber[1].$splitNumber[2])->first())->id;
 
-                    $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,1,$singleNumberValue,1))->content(),true);
-                    $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,2,$tripleNumberTargetData[0]->combination_number_id,1))->content(),true);
-                    $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,5,$doubleNumberValue,1))->content(),true);
+                    $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,1,$singleNumberValue,$game_multiplexer))->content(),true);
+                    $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,2,$tripleNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
+                    $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,5,$doubleNumberValue,$game_multiplexer))->content(),true);
                 }
             }
 
