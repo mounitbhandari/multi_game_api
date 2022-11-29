@@ -364,7 +364,7 @@ class GameController extends Controller
             $CPanelReportController = new CPanelReportController();
 
             foreach ($terminals as $terminal) {
-                $allPlayMasters = DB::select("select * from play_masters where date(created_at) >= ? and DATE(created_at) <= ? and user_id = ?",
+                $allPlayMasters = DB::select("select * from play_masters where date(created_at) >= ? and DATE(created_at) <= ? and user_id = ? and is_cancelled = 0",
                     [$requestedData->start_date, $requestedData->end_date, $terminal->terminal_id]);
 
                 foreach ($allPlayMasters as $allPlayMaster) {
@@ -445,7 +445,7 @@ class GameController extends Controller
             $CPanelReportController = new CPanelReportController();
 
             foreach ($terminals as $terminal) {
-                $allPlayMasters = DB::select("select * from play_masters where date(created_at) >= ? and DATE(created_at) <= ? and user_id = ?",
+                $allPlayMasters = DB::select("select * from play_masters where date(created_at) >= ? and DATE(created_at) <= ? and user_id = ? and is_cancelled = 0",
                     [$requestedData->start_date, $requestedData->end_date, $terminal->terminal_id]);
 
                 foreach ($allPlayMasters as $allPlayMaster) {
@@ -491,7 +491,7 @@ class GameController extends Controller
 
             foreach ($terminals as $terminal) {
 
-                $allPlayMasters = DB::select("select * from play_masters where date(created_at) >= ? and DATE(created_at) <= ? and user_id = ?",
+                $allPlayMasters = DB::select("select * from play_masters where date(created_at) >= ? and DATE(created_at) <= ? and user_id = ? and is_cancelled = 0",
                     [$requestedData->start_date, $requestedData->end_date, $terminal->terminal_id]);
 
                 foreach ($allPlayMasters as $allPlayMaster) {
@@ -542,7 +542,7 @@ class GameController extends Controller
                 $totalBet = 0;
                 $totalCommission = 0;
 
-                $allPlayMasters = DB::select("select * from play_masters where date(created_at) >= ? and DATE(created_at) <= ? and user_id = ?",
+                $allPlayMasters = DB::select("select * from play_masters where date(created_at) >= ? and DATE(created_at) <= ? and user_id = ? and is_cancelled = 0",
                     [$requestedData->start_date, $requestedData->end_date, $terminal->terminal_id]);
 
                 foreach ($allPlayMasters as $allPlayMaster) {
