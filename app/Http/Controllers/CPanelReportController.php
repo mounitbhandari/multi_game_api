@@ -806,7 +806,7 @@ class CPanelReportController extends Controller
             $newPrizeClaimed = 0;
             $newPrizeUnClaimed = 0;
 
-            $newData = PlayMaster::select('id','is_claimed')->where('user_id',$user->user_id)->whereRaw('date(created_at) >= ?', [$start_date])->whereRaw('date(created_at) <= ?', [$end_date])->get();
+            $newData = PlayMaster::select('id','is_claimed')->whereIsCancelled(0)->where('user_id',$user->user_id)->whereRaw('date(created_at) >= ?', [$start_date])->whereRaw('date(created_at) <= ?', [$end_date])->get();
 
             foreach ($newData as $x){
                 $total_sale = $total_sale + $this->total_sale_by_play_master_id($x->id);
