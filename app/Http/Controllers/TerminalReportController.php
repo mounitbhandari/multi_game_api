@@ -144,108 +144,112 @@ class TerminalReportController extends Controller
         $start_date = $requestedData->startDate;
         $end_date = $requestedData->endDate;
 
-        //total
+//         //total
         $total_commission = 0;
         $total_sale = 0;
         $total_prize_value = 0;
 
-//        return $terminalId;
+// //        return $terminalId;
 
         $cPanelRepotControllerObj = new CPanelReportController();
 
 
-        $data = DB::select("select round(table1.commission,2) as commission, table1.total, table1.user_name, users.user_name as stokiest_name, table1.terminal_pin, table1.user_id, table1.stockist_id,
-        table1.`date` from (select sum(commission) as commission, sum(total) as total, user_name, terminal_pin, user_id, stockist_id, date(created_at) as date from (select max(play_masters.id) as play_master_id,users.user_name,users.email as terminal_pin,
-        round(sum(play_details.quantity * play_details.mrp)) as total,
-        sum(play_details.quantity * play_details.mrp)* (max(play_details.commission)/100) as commission,
-        play_masters.user_id, user_relation_with_others.stockist_id,play_masters.created_at
-        FROM play_masters
-        inner join play_details on play_details.play_master_id = play_masters.id
-        inner join game_types ON game_types.id = play_details.game_type_id
-        inner join users ON users.id = play_masters.user_id
-        left join user_relation_with_others on play_masters.user_id = user_relation_with_others.terminal_id
-        where play_masters.is_cancelled=0 and date(play_masters.created_at) >= ? and date(play_masters.created_at) <= ? and user_id = ?
-        group by user_relation_with_others.stockist_id, play_masters.user_id,users.user_name,play_details.game_type_id,users.email,play_masters.created_at) as table1
-        group by terminal_pin, date(created_at), user_name, terminal_pin, user_id, stockist_id) as table1
-        left join users on table1.stockist_id = users.id",[$start_date,$end_date,$terminalId]);
+//         $data = DB::select("select round(table1.commission,2) as commission, table1.total, table1.user_name, users.user_name as stokiest_name, table1.terminal_pin, table1.user_id, table1.stockist_id,
+//         table1.`date` from (select sum(commission) as commission, sum(total) as total, user_name, terminal_pin, user_id, stockist_id, date(created_at) as date from (select max(play_masters.id) as play_master_id,users.user_name,users.email as terminal_pin,
+//         round(sum(play_details.quantity * play_details.mrp)) as total,
+//         sum(play_details.quantity * play_details.mrp)* (max(play_details.commission)/100) as commission,
+//         play_masters.user_id, user_relation_with_others.stockist_id,play_masters.created_at
+//         FROM play_masters
+//         inner join play_details on play_details.play_master_id = play_masters.id
+//         inner join game_types ON game_types.id = play_details.game_type_id
+//         inner join users ON users.id = play_masters.user_id
+//         left join user_relation_with_others on play_masters.user_id = user_relation_with_others.terminal_id
+//         where play_masters.is_cancelled=0 and date(play_masters.created_at) >= ? and date(play_masters.created_at) <= ? and user_id = ?
+//         group by user_relation_with_others.stockist_id, play_masters.user_id,users.user_name,play_details.game_type_id,users.email,play_masters.created_at) as table1
+//         group by terminal_pin, date(created_at), user_name, terminal_pin, user_id, stockist_id) as table1
+//         left join users on table1.stockist_id = users.id",[$start_date,$end_date,$terminalId]);
 
-        foreach($data as $x) {
-            $newPrize = 0;
-            $tempntp = 0;
-            $newData = PlayMaster::whereRaw('date(created_at) >= ?', [$x->date])->where('user_id',$terminalId)->get();
-            foreach ($newData as $y){
-//                $tempData = 0;
-                $newPrize += $cPanelRepotControllerObj->get_prize_value_by_barcode($y->id);
-//                $tempData = (PlayDetails::select(DB::raw("if(game_type_id = 1,(mrp*22)*quantity-(commission/100),mrp*quantity-(commission/100)) as total"))
-//                    ->where('play_master_id',$y->id)->distinct()->get())[0];
-//                $tempntp += $tempData->total;
-            }
-            $detail = (object)$x;
-            $detail->prize_value = $newPrize;
-//            $detail->ntp = $tempntp;
+//         foreach($data as $x) {
+//             $newPrize = 0;
+//             $tempntp = 0;
+//             $newData = PlayMaster::whereRaw('date(created_at) >= ?', [$x->date])->where('user_id',$terminalId)->get();
+//             foreach ($newData as $y){
+// //                $tempData = 0;
+//                 $newPrize += $cPanelRepotControllerObj->get_prize_value_by_barcode($y->id);
+// //                $tempData = (PlayDetails::select(DB::raw("if(game_type_id = 1,(mrp*22)*quantity-(commission/100),mrp*quantity-(commission/100)) as total"))
+// //                    ->where('play_master_id',$y->id)->distinct()->get())[0];
+// //                $tempntp += $tempData->total;
+//             }
+//             $detail = (object)$x;
+//             $detail->prize_value = $newPrize;
+// //            $detail->ntp = $tempntp;
+//         }
+
+//         foreach ($data as $x){
+//             $total_commission = $total_commission + $x->commission;
+//             $total_sale = $total_sale + $x->total;
+//             $total_prize_value = $total_prize_value + $x->prize_value;
+//         }
+
+//         $returnArray = [
+//             'commission' => sprintf('%0.2f', $total_commission),
+//             'total' => $total_sale,
+//             'prize_value' => $total_prize_value,
+//             'user_name' => $data[0]->user_name,
+//             'stokiest_name' => $data[0]->stokiest_name,
+//             'terminal_pin' => $data[0]->terminal_pin,
+//             'user_id' => $data[0]->user_id,
+//             'stockist_id' => $data[0]->stockist_id
+//         ];
+
+
+//         return response()->json(['success' => 1, 'data' => $returnArray], 200,[],JSON_NUMERIC_CHECK);
+
+        $returnArr = [];
+
+        $terminals = Cache::remember('allTerminal', 3000000, function () {
+            return User::whereUserTypeId(5)->get();
+        });
+
+        $total_sale = 0;
+        $terminal_commission = 0;
+        $stockist_commission = 0;
+        $super_stockist_commission = 0;
+        $prize_value = 0;
+
+        $testArr = [];
+
+        $newData = PlayMaster::select('id','is_claimed')->whereIsCancelled(0)->where('user_id',$terminalId)->whereRaw('date(created_at) >= ?', [$start_date])->whereRaw('date(created_at) <= ?', [$end_date])->get();
+
+
+        foreach ($newData as $x){
+            $total_sale = $total_sale + $cPanelRepotControllerObj->total_sale_by_play_master_id($x->id);
+            $terminal_commission = $terminal_commission + $cPanelRepotControllerObj->get_terminal_commission($x->id);
+            $stockist_commission = $stockist_commission + $cPanelRepotControllerObj->get_stockist_commission_by_play_master_id($x->id);
+            $super_stockist_commission = $super_stockist_commission + $cPanelRepotControllerObj->get_super_stockist_commission_by_play_master_id($x->id);
+            $prize_value = $prize_value + $cPanelRepotControllerObj->get_prize_value_by_barcode($x->id);
         }
 
-        foreach ($data as $x){
-            $total_commission = $total_commission + $x->commission;
-            $total_sale = $total_sale + $x->total;
-            $total_prize_value = $total_prize_value + $x->prize_value;
-        }
-
-        $returnArray = [
-            'commission' => sprintf('%0.2f', $total_commission),
+        $temp = [
+            'user_id' => $terminalId,
             'total' => $total_sale,
-            'prize_value' => $total_prize_value,
-            'user_name' => $data[0]->user_name,
-            'stokiest_name' => $data[0]->stokiest_name,
-            'terminal_pin' => $data[0]->terminal_pin,
-            'user_id' => $data[0]->user_id,
-            'stockist_id' => $data[0]->stockist_id
+            // 'commission' => round($terminal_commission, 2),
+            'commission' => number_format($terminal_commission, 2),
+            'stockist_id' => Cache::remember('customer_sale_reports_admin_stockist_id'.$terminalId, 3000000, function () use ($terminalId) {
+                return  (UserRelationWithOther::whereTerminalId($terminalId)->whereActive(1)->first())->stockist_id;
+            }),
+            'stokiest_name' => Cache::remember('customer_sale_reports_admin_stockist_name'.$terminalId, 3000000, function () use ($terminalId) {
+                return  (User::select('email')->whereId((UserRelationWithOther::whereTerminalId($terminalId)->whereActive(1)->first())->stockist_id)->first())->email;
+            }),
+            'stockist_commission' => round($stockist_commission, 2),
+            'super_stockist_commission' => round($super_stockist_commission, 2),
+            'prize_value' => $prize_value,
+            'terminal_pin' => (collect($terminals)->where('id', $terminalId)->first())->email,
         ];
 
+        array_push($returnArr, $temp);
 
-        return response()->json(['success' => 1, 'data' => $returnArray], 200,[],JSON_NUMERIC_CHECK);
-
-//        $returnArr = [];
-//
-//        $terminals = Cache::remember('allTerminal', 3000000, function () {
-//            return User::whereUserTypeId(5)->get();
-//        });
-//
-//        $total_sale = 0;
-//        $terminal_commission = 0;
-//        $stockist_commission = 0;
-//        $super_stockist_commission = 0;
-//        $prize_value = 0;
-//
-//        $newData = PlayMaster::select('id','is_claimed')->where('user_id',$terminalId)->whereRaw('date(created_at) >= ?', [$start_date])->whereRaw('date(created_at) <= ?', [$end_date])->get();
-//
-//        foreach ($newData as $x){
-//            $total_sale = $total_sale + $cPanelRepotControllerObj->total_sale_by_play_master_id($x->id);
-//            $terminal_commission = $terminal_commission + $cPanelRepotControllerObj->get_terminal_commission($x->id);
-//            $stockist_commission = $stockist_commission + $cPanelRepotControllerObj->get_stockist_commission_by_play_master_id($x->id);
-//            $super_stockist_commission = $super_stockist_commission + $cPanelRepotControllerObj->get_super_stockist_commission_by_play_master_id($x->id);
-//            $prize_value += $prize_value + $cPanelRepotControllerObj->get_prize_value_by_barcode($x->id);
-//        }
-//
-//        $temp = [
-//            'user_id' => $terminalId,
-//            'total' => $total_sale,
-//            'commission' => round($terminal_commission, 2),
-//            'stockist_id' => Cache::remember('customer_sale_reports_admin_stockist_id'.$terminalId, 3000000, function () use ($terminalId) {
-//                return  (UserRelationWithOther::whereTerminalId($terminalId)->whereActive(1)->first())->stockist_id;
-//            }),
-//            'stokiest_name' => Cache::remember('customer_sale_reports_admin_stockist_name'.$terminalId, 3000000, function () use ($terminalId) {
-//                return  (User::select('email')->whereId((UserRelationWithOther::whereTerminalId($terminalId)->whereActive(1)->first())->stockist_id)->first())->email;
-//            }),
-//            'stockist_commission' => round($stockist_commission, 2),
-//            'super_stockist_commission' => round($super_stockist_commission, 2),
-//            'prize_value' => $prize_value,
-//            'terminal_pin' => (collect($terminals)->where('id', $terminalId)->first())->email,
-//        ];
-//
-//        array_push($returnArr, $temp);
-//
-//        return response()->json(['success' => 1, 'data' => $returnArr], 200,[],JSON_NUMERIC_CHECK);
+        return response()->json(['success' => 1, 'data' => $returnArr], 200,[],JSON_NUMERIC_CHECK);
     }
 
 
