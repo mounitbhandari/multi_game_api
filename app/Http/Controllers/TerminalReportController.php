@@ -241,8 +241,8 @@ class TerminalReportController extends Controller
             'stokiest_name' => Cache::remember('customer_sale_reports_admin_stockist_name'.$terminalId, 3000000, function () use ($terminalId) {
                 return  (User::select('email')->whereId((UserRelationWithOther::whereTerminalId($terminalId)->whereActive(1)->first())->stockist_id)->first())->email;
             }),
-            'stockist_commission' => round($stockist_commission, 2),
-            'super_stockist_commission' => round($super_stockist_commission, 2),
+            'stockist_commission' => number_format($stockist_commission, 2),
+            'super_stockist_commission' => number_format($super_stockist_commission, 2),
             'prize_value' => $prize_value,
             'terminal_pin' => (collect($terminals)->where('id', $terminalId)->first())->email,
         ];
