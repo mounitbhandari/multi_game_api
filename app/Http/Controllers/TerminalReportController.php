@@ -249,7 +249,7 @@ class TerminalReportController extends Controller
 
         array_push($returnArr, $temp);
 
-        return response()->json(['success' => 1, 'data' => $returnArr], 200,[],JSON_NUMERIC_CHECK);
+        return response()->json(['success' => 1, 'data' => $returnArr[0]], 200,[],JSON_NUMERIC_CHECK);
     }
 
 
