@@ -50,7 +50,7 @@ class Kernel extends ConsoleKernel
 //        $schedule->command('generateTripleChance:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
 
         //sleep(0)
-        $schedule->command('generateDouble:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
+        $schedule->command('generateDouble:result')->cron('*/3 * * * *')->timezone('Asia/Kolkata');
 
         //sleep(54);
         $schedule->command('generateTwelveCard:result')->cron('1-59/2 * * * *')->timezone('Asia/Kolkata');
