@@ -498,6 +498,9 @@ class CentralController extends Controller
             }
         }
 
+        //set payout at default 90
+        $this->checkAndSetDefaultPayout($id,$lastDrawId);
+
 
         $tempDrawMasterLastDraw = DrawMaster::whereId($lastDrawId)->whereGameId($id)->first();
         $tempDrawMasterLastDraw->active = 0;
@@ -548,113 +551,20 @@ class CentralController extends Controller
 
         DB::select("update game_types set multiplexer = 1 where game_id =  ".$id);
 
-
-//        $gameTypes = GameType::whereGameId($id)->get();
-//        foreach ($gameTypes as $x){
-//            $y = GameType::find($x->id);
-//            $y->multiplexer = 1;
-//            $y->save();
-//        }
-
         $terminalController = new TerminalController();
         $terminalController->claimPrizes();
 
-//        $users = DB::select("select * from users where auto_claim = 1");
-//        foreach ($users as $x){
-//            $y = PlayMaster::whereUserId($x->id)->get();
-//            foreach ($y as $z){
-//                $playMasterControllerObject = new PlayMasterController();
-//                $playMasterControllerObject->claimPrizes($z->id);
-//            }
-//        }
-
-
         return response()->json(['success'=>1, 'message' => 'Result added'], 200);
 
-//        return response()->json(['success'=>0, 'message' => 'Error Occurred'], 400);
+    }
 
-
-//        $playMasterObj = new TerminalReportController();
-//        $playMasterObj->updateCancellation();
-//
-//        $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId);
-//        $single = GameType::find(1);
-//
-////        return response()->json(['success'=>0, 'message' => $totalSale], 401);
-//
-//        $payout = ($totalSale*($single->payout))/100;
-//        $targetValue = floor($payout/$single->winning_price);
-//
-//        // result less than equal to target value
-//        $result = DB::select(DB::raw("select single_numbers.id as single_number_id,single_numbers.single_number,sum(play_details.quantity) as total_quantity  from play_details
-//        inner join play_masters ON play_masters.id = play_details.play_master_id
-//        inner join single_numbers ON single_numbers.id = play_details.single_number_id
-//        where play_masters.draw_master_id = $lastDrawId  and date(play_details.created_at)= "."'".$today."'"."
-//        group by single_numbers.single_number,single_numbers.id
-//        having sum(play_details.quantity)<= $targetValue
-//        order by rand() limit 1"));
-//
-//        // select empty item for result
-//        if(empty($result)){
-//            // empty value
-//            $result = DB::select(DB::raw("SELECT single_numbers.id as single_number_id FROM single_numbers WHERE id NOT IN(SELECT DISTINCT
-//        play_details.single_number_id FROM play_details
-//        INNER JOIN play_masters on play_details.play_master_id= play_masters.id
-//        WHERE  DATE(play_masters.created_at) = "."'".$today."'"." and play_masters.draw_master_id = $lastDrawId) ORDER by rand() LIMIT 1"));
-//        }
-//
-//        // result greater than equal to target value
-//
-//        if(empty($result)){
-//            $result = DB::select(DB::raw("select single_numbers.id as single_number_id,single_numbers.single_number,sum(play_details.quantity) as total_quantity  from play_details
-//            inner join play_masters ON play_masters.id = play_details.play_master_id
-//            inner join single_numbers ON single_numbers.id = play_details.single_number_id
-//            where play_masters.draw_master_id= $lastDrawId  and date(play_details.created_at)= "."'".$today."'"."
-//            group by single_numbers.single_number,single_numbers.id
-//            having sum(play_details.quantity)> $targetValue
-//            order by rand() limit 1"));
-//        }
-//
-//        $single_number_result_id = $result[0]->single_number_id;
-//
-//        DrawMaster::query()->update(['active' => 0]);
-//        if(!empty($nextGameDrawObj)){
-//            DrawMaster::findOrFail($nextDrawId)->update(['active' => 1]);
-//        }
-//
-//
-//        $resultMasterController = new ResultMasterController();
-//        $jsonData = $resultMasterController->save_auto_result($lastDrawId,$single_number_result_id);
-//
-//        $resultCreatedObj = json_decode($jsonData->content(),true);
-//
-//
-//        if( !empty($resultCreatedObj) && $resultCreatedObj['success']==1){
-//
-//            $totalDraw = DrawMaster::count();
-//            if($nextDrawId==$totalDraw){
-//                $nextDrawId = 1;
-//            }
-//            else {
-//                $nextDrawId = $nextDrawId + 1;
-//            }
-//
-//            if($lastDrawId==$totalDraw){
-//                $lastDrawId = 1;
-//            }
-//            else{
-//                $lastDrawId = $lastDrawId + 1;
-//            }
-//
-//            $nextGameDrawObj->next_draw_id = $nextDrawId;
-//            $nextGameDrawObj->last_draw_id = $lastDrawId;
-//            $nextGameDrawObj->save();
-//
-//            return response()->json(['success'=>1, 'message' => 'Result added'], 200);
-//        }else{
-//            return response()->json(['success'=>0, 'message' => 'Result not added'], 401);
-//        }
-
+    public function checkAndSetDefaultPayout($id, $lastDrawId){
+        $gameTypes = DB::select("select id,payout from game_types where id = ?",[$id])[0];
+        if(($gameTypes->payout > 100) && ($lastDrawId % 5 == 0)){
+            $gameTypes = GameType::find($gameTypes->id);
+            $gameTypes->payout = 90;
+            $gameTypes->save();
+        }
     }
 
     public function getLiveDrawTime(){

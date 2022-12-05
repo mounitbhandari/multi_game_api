@@ -60,10 +60,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('generateTripleChance:result')->cron('1-59/2 * * * *')->timezone('Asia/Kolkata');
 
         //database Backup
-        $schedule->call(function () {
-            $commonFunctionController = new CommonFunctionController();
-            $commonFunctionController->backup_database();
-        })->weekly()->mondays()->at('02:00');
+//        $schedule->call(function () {
+//            $commonFunctionController = new CommonFunctionController();
+//            $commonFunctionController->backup_database();
+//        })->weekly()->mondays()->at('02:00');
 
         //keep 42 days data only 2 days for security
         $schedule->call(function () {

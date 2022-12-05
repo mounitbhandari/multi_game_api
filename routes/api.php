@@ -293,10 +293,6 @@ Route::group(array('prefix' => 'dev'), function() {
 
     Route::get('getTodayLastResultByGame/{id}',[ResultMasterController::class, 'get_result_today_last_by_game']);
 
-    //card_api
-//    Route::get('getTwelveCards',[CardCombinationController::class, 'get_all_twelve_card']);
-//    Route::get('getSixteenCards',[CardCombinationController::class, 'get_all_sixteen_card']);
-
     Route::post('pinCheckValidation',[UserController::class, 'check_pin']);
 
     Route::post('loginApprove',[TerminalController::class, 'approve_login']);
@@ -318,9 +314,6 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::get('activateGame/{id}', [GameController::class, 'activate_game']);
     Route::get('getGameWithTime', [GameController::class, 'getGameWithTime']);
 
-    // Route::post('terminal/updateCancellation/{id}', [TerminalReportController::class, 'updateCancellationGameWise']);
-    // Route::post('updateDrawOver', [CentralController::class, 'update_is_draw_over']);
-
 //    Route::post('createAutoResult/{id}', [CentralController::class, 'createResult']);
     Route::post('createAutoResult/{id}', [CentralController::class, 'createAutoResult']);
 
@@ -336,20 +329,6 @@ Route::group(array('prefix' => 'dev'), function() {
     Route::post('stockist/barcodeReportByDate', [StockistController::class, 'barcode_wise_report_by_date']);
     Route::post('superStockist/barcodeReportByDate', [SuperStockistController::class, 'barcode_wise_report_by_date']);
 
-    // Route::get("users",[UserController::class,'getAllUsers']);
-    // Route::patch("users",[UserController::class,'update']);
-
-    //single_numbers
-//    Route::get("singleNumbers",[SingleNumberController::class,'index'])->middleware('lscache:max-age=86300;public');
-//    Route::get('getSingleNumber', [SingleNumberController::class, 'get_all_single_number'])->middleware('lscache:max-age=86300;public');
-    Route::get('getDoubleNumber', [DoubleNumberCombinationController::class, 'get_all_double_number'])->middleware('lscache:max-age=86300;public,esi=on');
-//    Route::get('getDoubleNumber', [DoubleNumberCombinationController::class, 'get_all_double_number'])->middleware('cache.headers:public;max_age=3600');
-
-
-    //number_combinations
-//     Route::get("numberCombinations",[NumberCombinationController::class,'index']);
-    // Route::get("numberCombinations/number/{number}",[NumberCombinationController::class,'getNumbersBySingleNumber']);
-//    Route::get("numberCombinations/matrix",[NumberCombinationController::class,'getAllInMatrix'])->middleware('lscache:max-age=86300;public');
 
     //draw_masters
     Route::get('drawTimes',[DrawMasterController::class,'index']);
@@ -362,7 +341,8 @@ Route::group(array('prefix' => 'dev'), function() {
 //    Route::get('gameTypes',[GameTypeController::class,'index'])->middleware('lscache:max-age=86300;public');
 
     //play_masters
-     Route::post('buyTicket',[PlayController::class,'save_play_details']);
+//     Route::post('buyTicket',[PlayController::class,'save_play_details']);
+
 
     //game
     // Route::get('playDetails/playId/{id}',[PlayMasterController::class,'get_play_details_by_play_master_id']);
@@ -388,17 +368,6 @@ Route::group(array('prefix' => 'dev'), function() {
 
 
      Route::get('stockists',[StockistController::class, 'get_all_stockists']);
-    // Route::get('stockists/{id}',[StockistController::class, 'get_stockist']);
-    // Route::post('stockists',[StockistController::class, 'create_stockist']);
-    // Route::put('stockists',[StockistController::class, 'update_stockist']);
-    // Route::put('stockists/balance',[StockistController::class, 'update_balance_to_stockist']);
-
-
-    // Route::get('terminals',[TerminalController::class, 'get_all_terminals']);
-    // Route::post('terminals',[TerminalController::class, 'create_terminal']);
-    // Route::put('terminals',[TerminalController::class, 'update_terminal']);
-    // Route::get('terminals/{id}',[TerminalController::class, 'get_stockist_by_terminal_id']);
-    // Route::put('terminals/balance',[TerminalController::class, 'update_balance_to_terminal']);
 
 
     // Route::post('createAutoResult', [CentralController::class, 'createResult']);
@@ -424,8 +393,6 @@ Route::group(array('prefix' => 'dev'), function() {
      Route::put('cPanel/game/payout',[GameTypeController::class, 'update_payout']);
 
     Route::get('getGame', [GameController::class, 'getGame']);
-
-    // Route::get('updateAutoGenerate/{id}', [GameController::class, 'update_auto_generate']);
 
 
 });
