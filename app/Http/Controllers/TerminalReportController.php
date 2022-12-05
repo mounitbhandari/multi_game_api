@@ -26,34 +26,6 @@ class TerminalReportController extends Controller
         $terminalId = $requestedData->terminalId;
         $start_date = $requestedData->startDate;
         $end_date = $requestedData->endDate;
-//        $data = $requestedData;
-
-//        $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
-//            ,'draw_masters.visible_time as draw_time',
-//            'users.email as terminal_pin','play_masters.created_at as ticket_taken_time','games.game_name','play_masters.is_claimed', 'games.id as game_id'
-//        )
-//            ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
-//            ->join('users','users.id','play_masters.user_id')
-//            ->join('play_details','play_details.play_master_id','play_masters.id')
-//            ->join('game_types','game_types.id','play_details.game_type_id')
-//            ->join('games','games.id','game_types.game_id')
-//            ->where('play_masters.is_cancelled',0)
-////            ->where('play_masters.created_at','>=',$start_date)
-////            ->where('play_masters.created_at','<=',$end_date)
-//            ->whereRaw('date(play_masters.created_at) >= ?', [$start_date])
-//            ->whereRaw('date(play_masters.created_at) <= ?', [$end_date])
-//            ->where('play_masters.user_id',$terminalId)
-//            ->groupBy('play_masters.id','play_masters.barcode_number','draw_masters.visible_time','users.email','play_masters.created_at','games.game_name','play_masters.is_claimed', 'games.id')
-//            ->orderBy('play_masters.created_at','desc')
-//            ->get();
-//
-//        $cPanelRepotControllerObj = new CPanelReportController();
-//        foreach($data as $x){
-//            $detail = (object)$x;
-//            $detail->total_quantity = $cPanelRepotControllerObj->get_total_quantity_by_barcode($detail->play_master_id);
-//            $detail->prize_value = $cPanelRepotControllerObj->get_prize_value_by_barcode($detail->play_master_id);
-//            $detail->amount = $cPanelRepotControllerObj->get_total_amount_by_barcode($detail->play_master_id);
-//        }
 
         $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
             ,'draw_masters.visible_time as draw_time','draw_masters.id as draw_master_id','play_masters.created_at',

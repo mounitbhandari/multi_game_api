@@ -2,11 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CardCombination;
+use App\Models\DoubleNumberCombination;
 use App\Models\DrawMaster;
 use App\Models\Game;
 use App\Http\Controllers\Controller;
+use App\Models\NumberCombination;
 use App\Models\PlayDetails;
 use App\Models\PlayMaster;
+use App\Models\ResultDetail;
+use App\Models\ResultMaster;
+use App\Models\SingleNumber;
 use App\Models\User;
 use App\Models\UserRelationWithOther;
 use Carbon\Carbon;
@@ -566,6 +572,137 @@ class GameController extends Controller
 //        }
 
         return response()->json(['success'=>1,'data'=> $returnArray], 200);
+    }
+
+    public function terminal_barcode_report_over_turn_over(Request $request){
+        $requestedData = (object)$request->json()->all();
+
+        $start_date = $requestedData->startDate;
+        $end_date = $requestedData->endDate;
+        $terminalId = $requestedData->terminalId;
+
+        $cpanelReportController = new CPanelReportController();
+
+        $allGame = Cache::remember('allGames', 3000000, function () {
+            return Game::get();
+        });
+
+        $terminals = Cache::remember('allTerminal', 3000000, function () {
+            return User::whereUserTypeId(5)->get();
+        });
+
+        $data = PlayMaster::select('play_masters.id as play_master_id', DB::raw('substr(play_masters.barcode_number, 1, 8) as barcode_number')
+            ,'play_masters.draw_master_id','play_masters.created_at',
+            'play_masters.user_id','play_masters.created_at as ticket_taken_time','play_masters.is_claimed', 'game_types.game_id','play_masters.is_cancelled'
+        )
+            ->join('play_details','play_details.play_master_id','play_masters.id')
+            ->join('game_types','game_types.id','play_details.game_type_id')
+            ->whereRaw('date(play_masters.created_at) >= ?', [$start_date])
+            ->whereRaw('date(play_masters.created_at) <= ?', [$end_date])
+            ->where('play_masters.user_id', [$terminalId])
+            ->groupBy('play_masters.id','play_masters.barcode_number','play_masters.created_at',
+                'play_masters.is_claimed', 'game_types.game_id','play_masters.draw_master_id','play_masters.user_id','play_masters.is_cancelled')
+            ->orderBy('play_masters.created_at','desc')
+            ->get();
+
+        foreach($data as $x){
+            $detail = (object)$x;
+
+//            $detail->game_name = (collect($allGame)->where('id', $detail->game_id)->first())->game_name;
+
+            $detail->draw_time = Cache::remember('barcode_wise_report_by_date_draw_time_cache'.((String)$detail->play_master_id), 3000000, function () use ($x) {
+                return  (DrawMaster::select('visible_time')->whereId($x->draw_master_id)->first())->visible_time;
+            });
+
+            $detail->game_name = Cache::remember('barcode_wise_report_by_date_game_cache'.((String)$detail->play_master_id), 3000000, function () use ($detail, $allGame) {
+                return  (collect($allGame)->where('id', $detail->game_id)->first())->game_name;
+            });
+
+//            $detail->terminal_pin = (collect($terminals)->where('id', $detail->user_id)->first())->email;
+
+
+            $detail->terminal_pin = Cache::remember('barcode_wise_report_by_date_terminal_pin_cache'.((String)$detail->play_master_id), 3000000, function () use ($detail, $terminals) {
+                return  (collect($terminals)->where('id', $detail->user_id)->first())->email;
+            });
+
+
+
+            if((Cache::has(((String)$detail->play_master_id).'result')) == 1){
+                $detail->result = Cache::get(((String)$detail->play_master_id).'result');
+//                $detail->bonus = Cache::get(((String)$detail->play_master_id).'bonus');
+                if((Cache::get(((String)$detail->play_master_id).'bonus')) == 1){
+                    $detail->bonus = Cache::get(((String)$detail->play_master_id).'bonus');
+                }else{
+                    $result = ResultMaster::whereDrawMasterId($detail->draw_master_id)->whereGameDate($detail->created_at->format('Y-m-d'))->whereGameId($detail->game_id)->first();
+                    if($result){
+                        $resultDetails = ResultDetail::whereResultMasterId($result->id)->first();
+                        $bonus = $resultDetails->multiplexer;
+                        if($bonus !== null){
+                            $detail->bonus = Cache::remember(((String)$detail->play_master_id).'bonus', 3000000, function () use ($bonus) {
+                                return $bonus;
+                            });
+                        }else{
+                            $bonus = "---";
+                            $detail->bonus = $bonus;
+                        }
+                    }
+                }
+            }else{
+                $result = ResultMaster::whereDrawMasterId($detail->draw_master_id)->whereGameDate($detail->created_at->format('Y-m-d'))->whereGameId($detail->game_id)->first();
+                if($result){
+                    if($detail->game_id == 1){
+                        $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(2)->first();
+                        $showNumber = (NumberCombination::find($resultDetails->combination_number_id))->visible_triple_number;
+                    }else if($detail->game_id == 2){
+                        $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(3)->first();
+                        $x = CardCombination::find($resultDetails->combination_number_id);
+                        $showNumber = $x->rank_name. ' ' .$x->suit_name;
+                    }else if($detail->game_id == 3){
+                        $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(4)->first();
+                        $x = CardCombination::find($resultDetails->combination_number_id);
+                        $showNumber = $x->rank_name. ' ' .$x->suit_name;
+                    }else if($detail->game_id == 4){
+                        $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(6)->first();
+                        $showNumber = (SingleNumber::find($resultDetails->combination_number_id))->single_number;
+                    }else if($detail->game_id == 5){
+                        $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(7)->first();
+                        $showNumber = (DoubleNumberCombination::find($resultDetails->combination_number_id))->visible_double_number;
+                    }
+                    $bonus = $resultDetails->multiplexer;
+                    $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 3000000, function () use ($showNumber) {
+                        return $showNumber;
+                    });
+                    if($bonus !== null){
+                        $detail->bonus = Cache::remember(((String)$detail->play_master_id).'bonus', 3000000, function () use ($bonus) {
+                            return $bonus;
+                        });
+                    }
+                }else{
+                    $showNumber = "---";
+                    $detail->result = $showNumber;
+                    $bonus = "---";
+                    $detail->bonus = $bonus;
+                }
+            }
+
+            $detail->total_quantity = Cache::remember(((String)$detail->play_master_id).'total_quantity', 3000000, function () use ($cpanelReportController, $detail) {
+                return  $cpanelReportController->get_total_quantity_by_barcode($detail->play_master_id);
+            });
+
+            if($detail->is_claimed == 1){
+                $detail->prize_value = Cache::remember(((String)$detail->play_master_id).'prize_value', 3000000, function () use ($cpanelReportController, $detail) {
+                    return $cpanelReportController->get_prize_value_by_barcode($detail->play_master_id);
+                });
+            }else{
+                $detail->prize_value = $cpanelReportController->get_prize_value_by_barcode($detail->play_master_id);
+            }
+
+            $detail->amount = Cache::remember(((String)$detail->play_master_id).'amount', 3000000, function () use ($cpanelReportController, $detail) {
+                return $cpanelReportController->get_total_amount_by_barcode($detail->play_master_id);
+            });
+        }
+
+        return response()->json(['success'=> 1, 'data' => $data], 200,[],JSON_NUMERIC_CHECK);
     }
 
     public function get_game_total_sale_today_super_stockist($id){

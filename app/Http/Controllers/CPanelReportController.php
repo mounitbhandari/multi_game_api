@@ -70,14 +70,8 @@ class CPanelReportController extends Controller
             ,'play_masters.draw_master_id','play_masters.created_at',
             'play_masters.user_id','play_masters.created_at as ticket_taken_time','play_masters.is_claimed', 'game_types.game_id','play_masters.is_cancelled'
         )
-//            ->join('draw_masters','play_masters.draw_master_id','draw_masters.id')
-//            ->join('users','users.id','play_masters.user_id')
             ->join('play_details','play_details.play_master_id','play_masters.id')
             ->join('game_types','game_types.id','play_details.game_type_id')
-//            ->join('games','games.id','game_types.game_id')
-//            ->where('play_masters.is_cancelled',0)
-//            ->where('play_masters.created_at','>=',$start_date)
-//            ->where('play_masters.created_at','<=',$end_date)
             ->whereRaw('date(play_masters.created_at) >= ?', [$start_date])
             ->whereRaw('date(play_masters.created_at) <= ?', [$end_date])
             ->groupBy('play_masters.id','play_masters.barcode_number','play_masters.created_at',
@@ -180,10 +174,6 @@ class CPanelReportController extends Controller
             $detail->amount = Cache::remember(((String)$detail->play_master_id).'amount', 3000000, function () use ($detail) {
                 return $this->get_total_amount_by_barcode($detail->play_master_id);
             });
-
-//            $detail->total_quantity = $this->get_total_quantity_by_barcode($detail->play_master_id);
-//            $detail->prize_value = $this->get_prize_value_by_barcode($detail->play_master_id);
-//            $detail->amount = $this->get_total_amount_by_barcode($detail->play_master_id);
         }
 
         return response()->json(['success'=> 1, 'data' => $data], 200,[],JSON_NUMERIC_CHECK);
