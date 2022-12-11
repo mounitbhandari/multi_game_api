@@ -741,159 +741,74 @@ class GameController extends Controller
             }
 
             $tripleAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(1)->get();
-            $tripleAllPlayMastersSizeCheck = Cache::remember('sizeOfTripleAllPlayMasters_get_game_total_sale_today_super_stockist', 3000000, function () use ($tripleAllPlayMasters) {
-                return sizeof($tripleAllPlayMasters);
-            });
-
-            if ($tripleAllPlayMastersSizeCheck === sizeof($tripleAllPlayMasters) && (Cache::has("tripleAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist") == 1)){
-                $x = Cache::get("tripleAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist");
-                array_push($returnArray , $x);
-            }else{
-                foreach ($tripleAllPlayMasters as $tripleAllPlayMaster){
-                    $triplePrize = $triplePrize + $CPanelReportController->get_prize_value_by_barcode($tripleAllPlayMaster->id);
-                    $totalTripleNumber = $totalTripleNumber + $CPanelReportController->total_sale_by_play_master_id($tripleAllPlayMaster->id);
-                }
-                $x = [
-                    'game_name' => 'Triple Chance',
-                    'total_bet' =>   $totalTripleNumber,
-                    'total_win' =>   $triplePrize,
-                    'profit' =>   $totalTripleNumber - $triplePrize
-                ];
-                array_push($returnArray , $x);
-                Cache::forget('tripleAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist');
-                Cache::forget('sizeOfTripleAllPlayMasters_get_game_total_sale_today_super_stockist');
-                Cache::remember('sizeOfTripleAllPlayMasters_get_game_total_sale_today_super_stockist', 3000000, function () use ($tripleAllPlayMasters) {
-                    return sizeof($tripleAllPlayMasters);
-                });
-                Cache::remember('tripleAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist', 3000000, function () use ($x) {
-                    return $x;
-                });
+            foreach ($tripleAllPlayMasters as $tripleAllPlayMaster){
+                $triplePrize = $triplePrize + $CPanelReportController->get_prize_value_by_barcode($tripleAllPlayMaster->id);
+                $totalTripleNumber = $totalTripleNumber + $CPanelReportController->total_sale_by_play_master_id($tripleAllPlayMaster->id);
             }
+            $x = [
+                'game_name' => 'Triple Chance',
+                'total_bet' =>   $totalTripleNumber,
+                'total_win' =>   $triplePrize,
+                'profit' =>   $totalTripleNumber - $triplePrize
+            ];
+            array_push($returnArray , $x);
 
 
             $twelveCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(2)->get();
-            $twelveCardAllPlayMastersSizeCheck = Cache::remember('sizeOfTwelveCardAllPlayMasters_get_game_total_sale_today_super_stockist', 3000000, function () use ($twelveCardAllPlayMasters) {
-                return sizeof($twelveCardAllPlayMasters);
-            });
-
-            if ($twelveCardAllPlayMastersSizeCheck === sizeof($twelveCardAllPlayMasters) && (Cache::has("twelveCardAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist") == 1)){
-                $x = Cache::get("twelveCardAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist");
-                array_push($returnArray , $x);
-            }else{
-                foreach ($twelveCardAllPlayMasters as $twelveCardAllPlayMaster){
-                    $twelveCardPrize = $twelveCardPrize + $CPanelReportController->get_prize_value_by_barcode($twelveCardAllPlayMaster->id);
-                    $twelveCard = $twelveCard + $CPanelReportController->total_sale_by_play_master_id($twelveCardAllPlayMaster->id);
-                }
-                $x = [
-                    'game_name' => '12 Card',
-                    'total_bet' =>  (int)$twelveCard,
-                    'total_win' =>   $twelveCardPrize,
-                    'profit' =>   (int)$twelveCard - $twelveCardPrize
-                ];
-                array_push($returnArray , $x);
-                Cache::forget('twelveCardAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist');
-                Cache::forget('sizeOfTwelveCardAllPlayMasters_get_game_total_sale_today_super_stockist');
-                Cache::remember('sizeOfTwelveCardAllPlayMasters_get_game_total_sale_today_super_stockist', 3000000, function () use ($twelveCardAllPlayMasters) {
-                    return sizeof($twelveCardAllPlayMasters);
-                });
-                Cache::remember('twelveCardAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist', 3000000, function () use ($x) {
-                    return $x;
-                });
+            foreach ($twelveCardAllPlayMasters as $twelveCardAllPlayMaster){
+                $twelveCardPrize = $twelveCardPrize + $CPanelReportController->get_prize_value_by_barcode($twelveCardAllPlayMaster->id);
+                $twelveCard = $twelveCard + $CPanelReportController->total_sale_by_play_master_id($twelveCardAllPlayMaster->id);
             }
-
+            $x = [
+                'game_name' => '12 Card',
+                'total_bet' =>  (int)$twelveCard,
+                'total_win' =>   $twelveCardPrize,
+                'profit' =>   (int)$twelveCard - $twelveCardPrize
+            ];
+            array_push($returnArray , $x);
 
 
             $sixteenCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(3)->get();
-            $sixteenCardAllPlayMastersSizeCheck = Cache::remember('sizeOfSixteenCardAllPlayMasters_get_game_total_sale_today_super_stockist', 3000000, function () use ($sixteenCardAllPlayMasters) {
-                return sizeof($sixteenCardAllPlayMasters);
-            });
-            if($sixteenCardAllPlayMastersSizeCheck === sizeof($sixteenCardAllPlayMasters) && (Cache::has("sixteenCardAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist") == 1)){
-                $x = Cache::get("sixteenCardAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist");
-                array_push($returnArray , $x);
-            }else{
-                foreach ($sixteenCardAllPlayMasters as $sixteenCardAllPlayMaster){
-                    $sixteenCardPrize = $sixteenCardPrize + $CPanelReportController->get_prize_value_by_barcode($sixteenCardAllPlayMaster->id);
-                    $sixteenCard = $sixteenCard + $CPanelReportController->total_sale_by_play_master_id($sixteenCardAllPlayMaster->id);
-                }
-                $x = [
-                    'game_name' => '16 Card',
-                    'total_bet' =>  (int)$sixteenCard,
-                    'total_win' =>   $sixteenCardPrize,
-                    'profit' =>   (int)$sixteenCard - $sixteenCardPrize
-                ];
-                Cache::forget('sixteenCardAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist');
-                Cache::forget('sizeOfSixteenCardAllPlayMasters_get_game_total_sale_today_super_stockist');
-                Cache::remember('sizeOfSixteenCardAllPlayMasters_get_game_total_sale_today_super_stockist', 3000000, function () use ($sixteenCardAllPlayMasters) {
-                    return sizeof($sixteenCardAllPlayMasters);
-                });
-                Cache::remember('sixteenCardAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist', 3000000, function () use ($x) {
-                    return $x;
-                });
+            foreach ($sixteenCardAllPlayMasters as $sixteenCardAllPlayMaster){
+                $sixteenCardPrize = $sixteenCardPrize + $CPanelReportController->get_prize_value_by_barcode($sixteenCardAllPlayMaster->id);
+                $sixteenCard = $sixteenCard + $CPanelReportController->total_sale_by_play_master_id($sixteenCardAllPlayMaster->id);
             }
+            $x = [
+                'game_name' => '16 Card',
+                'total_bet' =>  (int)$sixteenCard,
+                'total_win' =>   $sixteenCardPrize,
+                'profit' =>   (int)$sixteenCard - $sixteenCardPrize
+            ];
+            array_push($returnArray , $x);
 
 
             $singleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(4)->get();
-            $singleNumberAllPlayMastersSizeCheck = Cache::remember('sizeOfSingleNumberAllPlayMasters_get_game_total_sale_today_super_stockist', 3000000, function () use ($singleNumberAllPlayMasters) {
-                return sizeof($singleNumberAllPlayMasters);
-            });
-            if($singleNumberAllPlayMastersSizeCheck === sizeof($singleNumberAllPlayMasters) && (Cache::has("singleNumberAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist") == 1)){
-                $x = Cache::get("singleNumberAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist");
-                array_push($returnArray , $x);
-            }else{
-                foreach ($singleNumberAllPlayMasters as $singleNumberAllPlayMaster){
-                    $singleNumberPrize = $singleNumberPrize + $CPanelReportController->get_prize_value_by_barcode($singleNumberAllPlayMaster->id);
-                    $singleNUmber = $singleNUmber + $CPanelReportController->total_sale_by_play_master_id($singleNumberAllPlayMaster->id);
-                }
-                $x = [
-                    'game_name' => 'Single Number',
-                    'total_bet' =>  (int)$singleNUmber,
-                    'total_win' =>   $singleNumberPrize,
-                    'profit' =>   (int)$singleNUmber - $singleNumberPrize
-                ];
-                array_push($returnArray , $x);
-                Cache::forget('singleNumberAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist');
-                Cache::forget('sizeOfSingleNumberAllPlayMasters_get_game_total_sale_today_super_stockist');
-                Cache::remember('sizeOfSingleNumberAllPlayMasters_get_game_total_sale_today_super_stockist', 3000000, function () use ($singleNumberAllPlayMasters) {
-                    return sizeof($singleNumberAllPlayMasters);
-                });
-                Cache::remember('singleNumberAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist', 3000000, function () use ($x) {
-                    return $x;
-                });
+            foreach ($singleNumberAllPlayMasters as $singleNumberAllPlayMaster){
+                $singleNumberPrize = $singleNumberPrize + $CPanelReportController->get_prize_value_by_barcode($singleNumberAllPlayMaster->id);
+                $singleNUmber = $singleNUmber + $CPanelReportController->total_sale_by_play_master_id($singleNumberAllPlayMaster->id);
             }
+            $x = [
+                'game_name' => 'Single Number',
+                'total_bet' =>  (int)$singleNUmber,
+                'total_win' =>   $singleNumberPrize,
+                'profit' =>   (int)$singleNUmber - $singleNumberPrize
+            ];
+            array_push($returnArray , $x);
 
 
             $doubleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(5)->get();
-            $doubleNumberAllPlayMastersSizeCheck = Cache::remember('sizeOfDoubleNumberAllPlayMasters_get_game_total_sale_today_super_stockist', 3000000, function () use ($doubleNumberAllPlayMasters) {
-                return sizeof($doubleNumberAllPlayMasters);
-            });
-
-            if($doubleNumberAllPlayMastersSizeCheck === sizeof($doubleNumberAllPlayMasters) && (Cache::has("doubleNumberAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist") == 1)){
-                $x = Cache::get("doubleNumberAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist");
-                array_push($returnArray , $x);
-            }else{
-                foreach ($doubleNumberAllPlayMasters as $doubleNumberAllPlayMaster){
-                    $doubleNumberPrize = $doubleNumberPrize + $CPanelReportController->get_prize_value_by_barcode($doubleNumberAllPlayMaster->id);
-                    $totalDoubleNumber = $totalDoubleNumber + $CPanelReportController->total_sale_by_play_master_id($doubleNumberAllPlayMaster->id);
-                }
-                $x = [
-                    'game_name' => 'Double Number',
-                    'total_bet' =>  (int)$totalDoubleNumber,
-                    'total_win' =>   $doubleNumberPrize,
-                    'profit' =>   (int)$totalDoubleNumber - $doubleNumberPrize
-                ];
-                array_push($returnArray , $x);
-
-                Cache::forget('doubleNumberAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist');
-                Cache::forget('sizeOfDoubleNumberAllPlayMasters_get_game_total_sale_today_super_stockist');
-                Cache::remember('sizeOfDoubleNumberAllPlayMasters_get_game_total_sale_today_super_stockist', 3000000, function () use ($doubleNumberAllPlayMasters) {
-                    return sizeof($doubleNumberAllPlayMasters);
-                });
-                Cache::remember('doubleNumberAllPlayMastersReturnArray_get_game_total_sale_today_super_stockist', 3000000, function () use ($x) {
-                    return $x;
-                });
+            foreach ($doubleNumberAllPlayMasters as $doubleNumberAllPlayMaster){
+                $doubleNumberPrize = $doubleNumberPrize + $CPanelReportController->get_prize_value_by_barcode($doubleNumberAllPlayMaster->id);
+                $totalDoubleNumber = $totalDoubleNumber + $CPanelReportController->total_sale_by_play_master_id($doubleNumberAllPlayMaster->id);
             }
+            $x = [
+                'game_name' => 'Double Number',
+                'total_bet' =>  (int)$totalDoubleNumber,
+                'total_win' =>   $doubleNumberPrize,
+                'profit' =>   (int)$totalDoubleNumber - $doubleNumberPrize
+            ];
 
-
+            array_push($returnArray , $x);
 
 
 
