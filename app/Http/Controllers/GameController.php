@@ -801,14 +801,6 @@ class GameController extends Controller
                 $doubleNumberPrize = $doubleNumberPrize + $CPanelReportController->get_prize_value_by_barcode($doubleNumberAllPlayMaster->id);
                 $totalDoubleNumber = $totalDoubleNumber + $CPanelReportController->total_sale_by_play_master_id($doubleNumberAllPlayMaster->id);
             }
-            $x = [
-                'game_name' => 'Double Number',
-                'total_bet' =>  (int)$totalDoubleNumber,
-                'total_win' =>   $doubleNumberPrize,
-                'profit' =>   (int)$totalDoubleNumber - $doubleNumberPrize
-            ];
-
-            array_push($returnArray , $x);
 
 
 
@@ -927,6 +919,17 @@ class GameController extends Controller
 
 //        return $twelveCard;
 //        return response()->json(['success'=>1,'data'=> $twelveCard], 200);
+
+
+
+        $x = [
+            'game_name' => 'Double Number',
+            'total_bet' =>  (int)$totalDoubleNumber,
+            'total_win' =>   $doubleNumberPrize,
+            'profit' =>   (int)$totalDoubleNumber - $doubleNumberPrize
+        ];
+
+        array_push($returnArray , $x);
 
         $x = [
             'online' => $online_count
