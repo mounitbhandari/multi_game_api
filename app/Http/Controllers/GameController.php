@@ -745,13 +745,7 @@ class GameController extends Controller
                 $triplePrize = $triplePrize + $CPanelReportController->get_prize_value_by_barcode($tripleAllPlayMaster->id);
                 $totalTripleNumber = $totalTripleNumber + $CPanelReportController->total_sale_by_play_master_id($tripleAllPlayMaster->id);
             }
-            $x = [
-                'game_name' => 'Triple Chance',
-                'total_bet' =>   $totalTripleNumber,
-                'total_win' =>   $triplePrize,
-                'profit' =>   $totalTripleNumber - $triplePrize
-            ];
-            array_push($returnArray , $x);
+
 
 
             $twelveCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(2)->get();
@@ -759,13 +753,6 @@ class GameController extends Controller
                 $twelveCardPrize = $twelveCardPrize + $CPanelReportController->get_prize_value_by_barcode($twelveCardAllPlayMaster->id);
                 $twelveCard = $twelveCard + $CPanelReportController->total_sale_by_play_master_id($twelveCardAllPlayMaster->id);
             }
-            $x = [
-                'game_name' => '12 Card',
-                'total_bet' =>  (int)$twelveCard,
-                'total_win' =>   $twelveCardPrize,
-                'profit' =>   (int)$twelveCard - $twelveCardPrize
-            ];
-            array_push($returnArray , $x);
 
 
             $sixteenCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(3)->get();
@@ -773,13 +760,7 @@ class GameController extends Controller
                 $sixteenCardPrize = $sixteenCardPrize + $CPanelReportController->get_prize_value_by_barcode($sixteenCardAllPlayMaster->id);
                 $sixteenCard = $sixteenCard + $CPanelReportController->total_sale_by_play_master_id($sixteenCardAllPlayMaster->id);
             }
-            $x = [
-                'game_name' => '16 Card',
-                'total_bet' =>  (int)$sixteenCard,
-                'total_win' =>   $sixteenCardPrize,
-                'profit' =>   (int)$sixteenCard - $sixteenCardPrize
-            ];
-            array_push($returnArray , $x);
+
 
 
             $singleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(4)->get();
@@ -787,13 +768,7 @@ class GameController extends Controller
                 $singleNumberPrize = $singleNumberPrize + $CPanelReportController->get_prize_value_by_barcode($singleNumberAllPlayMaster->id);
                 $singleNUmber = $singleNUmber + $CPanelReportController->total_sale_by_play_master_id($singleNumberAllPlayMaster->id);
             }
-            $x = [
-                'game_name' => 'Single Number',
-                'total_bet' =>  (int)$singleNUmber,
-                'total_win' =>   $singleNumberPrize,
-                'profit' =>   (int)$singleNUmber - $singleNumberPrize
-            ];
-            array_push($returnArray , $x);
+
 
 
             $doubleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(5)->get();
@@ -920,7 +895,37 @@ class GameController extends Controller
 //        return $twelveCard;
 //        return response()->json(['success'=>1,'data'=> $twelveCard], 200);
 
+        $x = [
+            'game_name' => 'Triple Chance',
+            'total_bet' =>   $totalTripleNumber,
+            'total_win' =>   $triplePrize,
+            'profit' =>   $totalTripleNumber - $triplePrize
+        ];
+        array_push($returnArray , $x);
 
+        $x = [
+            'game_name' => '12 Card',
+            'total_bet' =>  (int)$twelveCard,
+            'total_win' =>   $twelveCardPrize,
+            'profit' =>   (int)$twelveCard - $twelveCardPrize
+        ];
+        array_push($returnArray , $x);
+
+        $x = [
+            'game_name' => '16 Card',
+            'total_bet' =>  (int)$sixteenCard,
+            'total_win' =>   $sixteenCardPrize,
+            'profit' =>   (int)$sixteenCard - $sixteenCardPrize
+        ];
+        array_push($returnArray , $x);
+
+        $x = [
+            'game_name' => 'Single Number',
+            'total_bet' =>  (int)$singleNUmber,
+            'total_win' =>   $singleNumberPrize,
+            'profit' =>   (int)$singleNUmber - $singleNumberPrize
+        ];
+        array_push($returnArray , $x);
 
         $x = [
             'game_name' => 'Double Number',
