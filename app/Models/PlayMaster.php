@@ -34,7 +34,8 @@ class PlayMaster extends Model
     {
         parent::boot();
         PlayMaster::saving(function ($model) {
-            $model->barcode_number = str_replace('-','x', ((string)Uuid::generate()));
+//            $model->barcode_number = str_replace('-','x', ((string)Uuid::generate()));
+            $model->barcode_number = rand(10000000000000000,99999999999999999);
         });
     }
 

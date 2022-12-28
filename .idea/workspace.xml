@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="5eca29a0-ed15-4037-b786-6b351566af54" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/PlayMaster.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/PlayMaster.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,7 +144,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../alpha_project/alpha_api" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -343,6 +344,9 @@
       <workItem from="1670300455688" duration="393000" />
       <workItem from="1670659093143" duration="5646000" />
       <workItem from="1670855690085" duration="57000" />
+      <workItem from="1671899834015" duration="1079000" />
+      <workItem from="1671901033063" duration="19000" />
+      <workItem from="1672195156326" duration="1086000" />
     </task>
     <servers />
   </component>
