@@ -84,6 +84,7 @@ class PlayController extends Controller
 
                         $playDetails = new PlayDetails();
                         $playDetails->play_master_id = $playMaster->id;
+                        $playDetails->barcode_number = rand(10000000000000000,99999999999999999);
                         $playDetails->game_type_id = $detail->gameTypeId;
                         $playDetails->combination_number_id = $detail->numberCombinationId;
                         $playDetails->quantity = $detail->quantity;

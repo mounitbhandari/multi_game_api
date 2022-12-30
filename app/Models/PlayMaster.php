@@ -30,14 +30,14 @@ class PlayMaster extends Model
      * @var int|mixed
      */
 
-    protected static function boot()
-    {
-        parent::boot();
-        PlayMaster::saving(function ($model) {
-//            $model->barcode_number = str_replace('-','x', ((string)Uuid::generate()));
-            $model->barcode_number = rand(10000000000000000,99999999999999999);
-        });
-    }
+//    protected static function boot()
+//    {
+//        parent::boot();
+//        PlayMaster::saving(function ($model) {
+////            $model->barcode_number = str_replace('-','x', ((string)Uuid::generate()));
+//            $model->barcode_number = rand(10000000000000000,99999999999999999);
+//        });
+//    }
 
     public function terminal(){
         return $this->belongsTo(User::class,'user_id');
