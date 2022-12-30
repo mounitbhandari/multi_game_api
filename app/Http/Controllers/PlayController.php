@@ -49,6 +49,7 @@ class PlayController extends Controller
 
             $playMaster = new PlayMaster();
             $playMaster->draw_master_id = $inputPlayMaster->drawMasterId;
+            $playMaster->barcode_number = rand(10000000000000000,99999999999999999);
             $playMaster->user_id = $inputPlayMaster->terminalId;
             $playMaster->game_id = $inputPlayMaster->gameId;
 //            $playMaster->user_relation_id = $inputPlayMaster->userRelationId;
@@ -84,7 +85,6 @@ class PlayController extends Controller
 
                         $playDetails = new PlayDetails();
                         $playDetails->play_master_id = $playMaster->id;
-                        $playDetails->barcode_number = rand(10000000000000000,99999999999999999);
                         $playDetails->game_type_id = $detail->gameTypeId;
                         $playDetails->combination_number_id = $detail->numberCombinationId;
                         $playDetails->quantity = $detail->quantity;
