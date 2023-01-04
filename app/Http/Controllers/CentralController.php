@@ -762,7 +762,7 @@ class CentralController extends Controller
 //            $y->payout = null;
 //            $y->update();
 //        }
-        DB::select("update draw_masters set is_draw_over = 'yes', payout = null");
+        DB::select("update draw_masters set is_draw_over = 'no', payout = null");
         return response()->json(['success'=>1], 200);
     }
 
