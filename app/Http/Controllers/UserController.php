@@ -79,7 +79,7 @@ class UserController extends Controller
             }
 
             $user->platform = $request->platform;
-            if($request->ver = 'NP'){
+            if($request->ver == 'NP'){
                 $user->auto_claim = 1;
             }
             $user->save();
