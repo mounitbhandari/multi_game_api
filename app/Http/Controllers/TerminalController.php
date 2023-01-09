@@ -352,7 +352,7 @@ class TerminalController extends Controller
             $user->visible_password = $requestedData->pin;
             $user->user_type_id = 5;
             $user->created_by = $requestedData->createdBy;
-            $user->pay_out_slab_id = $requestedData->payoutSlabId;
+            $user->pay_out_slab_id = 2;
             $user->commission = $requestedData->commission;
             $user->opening_balance = 0;
             $user->closing_balance = 0;
