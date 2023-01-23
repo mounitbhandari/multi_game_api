@@ -310,9 +310,13 @@ class TerminalController extends Controller
 
         $user = User::find($requestedData->id);
 
-        $macReset = User::whereMacAddress($user->temp_mac_address)->first();
-        $macReset->mac_address = 0;
-        $macReset->save();
+//        $macReset = User::whereMacAddress($user->temp_mac_address)->first();
+//        $macReset->mac_address = 0;
+//        $macReset->save();
+
+        if($user->mac_address !== null){
+            DB::select("update users set mac_address = '' where mac_address = $user->mac_address");
+        }
 
         $user->mac_address = $user->temp_mac_address;
         $user->login_activate = 2;
