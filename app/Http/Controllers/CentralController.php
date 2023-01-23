@@ -558,8 +558,13 @@ class CentralController extends Controller
 
     }
 
+    public function test(){
+        return $this->checkAndSetDefaultPayout(4,2450);
+
+    }
+
     public function checkAndSetDefaultPayout($id, $lastDrawId){
-        $gameTypes = DB::select("select id,payout from game_types where id = ?",[$id])[0];
+        $gameTypes = DB::select("select id,payout from game_types where game_id = ?",[$id]);
         if(($gameTypes->payout > 100) && ($lastDrawId % 5 == 0)){
             $gameTypes = GameType::find($gameTypes->id);
             $gameTypes->payout = 90;

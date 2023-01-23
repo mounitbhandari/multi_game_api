@@ -242,6 +242,7 @@ Route::group(['middleware' => 'auth:sanctum'],
 
 Route::group(array('prefix' => 'dev'), function() {
     Route::post('terminal/turnOverReport', [GameController::class, 'terminal_barcode_report_over_turn_over']);
+    Route::get('testttf', [CentralController::class, 'test']);
 
     Route::post('adminSuperStockist/turnOverReport', [GameController::class, 'admin_super_stockist_turnover_report']);
     Route::post('adminStockist/turnOverReport', [GameController::class, 'admin_stockist_turnover_report']);
