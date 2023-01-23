@@ -304,6 +304,8 @@ Route::group(array('prefix' => 'dev'), function() {
 
     Route::get('terminals',[TerminalController::class, 'get_all_terminals']);
 
+    Route::delete('terminals',[TerminalController::class, 'delete_user']);
+
     Route::post('superStockists',[SuperStockistController::class, 'create_super_stockist']);
     Route::get('superStockists',[SuperStockistController::class, 'get_super_stockist']);
     Route::get('getStockistBySuperStockistId/{id}',[SuperStockistController::class, 'getStockistBySuperStockistId']);
