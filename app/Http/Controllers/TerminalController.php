@@ -314,8 +314,8 @@ class TerminalController extends Controller
 //        $macReset->mac_address = 0;
 //        $macReset->save();
 
-        if($user->mac_address !== null){
-            DB::select("update users set mac_address = '' where mac_address = $user->mac_address");
+        if($user->mac_address != 'null'){
+            DB::select("update users set mac_address = '' where mac_address = ?", [$user->mac_address]);
         }
 
         $user->mac_address = $user->temp_mac_address;
