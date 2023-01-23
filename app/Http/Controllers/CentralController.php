@@ -565,7 +565,7 @@ class CentralController extends Controller
 
     public function checkAndSetDefaultPayout($id, $lastDrawId){
         $gameTypes = DB::select("select id,payout from game_types where game_id = ?",[$id]);
-        if(($gameTypes->payout > 100) && ($lastDrawId % 5 == 0)){
+        if(($gameTypes->payout > 100) && ($lastDrawId % 10 == 0)){
             $gameTypes = GameType::find($gameTypes->id);
             $gameTypes->payout = 90;
             $gameTypes->save();
