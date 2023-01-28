@@ -49,7 +49,6 @@ class Kernel extends ConsoleKernel
 
 //        $schedule->command('generateTripleChance:result')->cron('*/2 * * * *')->timezone('Asia/Kolkata');
 
-//        $schedule->command('generateMissing:result')->cron('* * * * *')->timezone('Asia/Kolkata');
         $schedule->command('generate:result')->cron('* * * * *')->timezone('Asia/Kolkata');
 
         //sleep(0)

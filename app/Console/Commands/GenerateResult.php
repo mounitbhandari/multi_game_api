@@ -44,10 +44,9 @@ class GenerateResult extends Command
      */
     public function handle()
     {
-        // LOG::info(Carbon::today());
         //triple chance
         $draw_master = DrawMaster::whereActive(1)->whereGameId(1)->first();
-        $min_draw = \Carbon\Carbon::parse($draw_master->end_time)->minute;
+        $min_draw = Carbon::parse($draw_master->end_time)->minute;
         $day_draw = Carbon::parse($draw_master->end_time)->day;
         $hour_draw = Carbon::parse($draw_master->end_time)->hour;
         $min_now = Carbon::now()->minute ;
