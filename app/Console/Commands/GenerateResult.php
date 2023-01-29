@@ -52,7 +52,7 @@ class GenerateResult extends Command
         $min_now = Carbon::now()->minute ;
         $day_now = Carbon::now()->day ;
         $hour_now = Carbon::now()->hour ;
-        if(($day_draw === $day_now) && (($min_draw<=$min_now) || ($hour_draw<$hour_now)) &&  (($min_now % $draw_master->time_diff) != 0)){
+        if(($day_draw === $day_now) && ($min_draw<=$min_now) && ($hour_draw==$hour_now) && (($min_now % $draw_master->time_diff) != 0)){
             $centralControllerObj = new CentralController();
             $ret = $centralControllerObj->createResult(1,1);
         }

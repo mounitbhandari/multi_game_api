@@ -44,8 +44,19 @@ class Test extends Controller
         $min_now = Carbon::now()->minute ;
         $day_now = Carbon::now()->day ;
         $hour_now = Carbon::now()->hour ;
-        if(($day_draw === $day_now) && (($min_draw<=$min_now) || ($hour_draw<$hour_now)) &&  (($min_now % $draw_master->time_diff) != 0)){
-            return response()->json(['success'=>1,'data'=>'Trigger'], 200,[],JSON_NUMERIC_CHECK);
+        if(($day_draw === $day_now) && ($min_draw<=$min_now) && ($hour_draw==$hour_now) && (($min_now % $draw_master->time_diff) != 0)){
+            return response()->json([
+                    'success'=>1
+                    ,'$day_draw'=>$day_draw
+                    ,'$day_now'=>$day_now
+                    ,'$min_draw'=>$min_draw
+                    ,'$min_now'=>$min_now
+                    ,'$hour_draw'=>$hour_draw
+                    ,'$hour_now'=>$hour_now
+                    ,'$draw_master->time_diff 00'=>$draw_master->time_diff,
+                    'status' => "trigger"
+                ]
+                , 200,[],JSON_NUMERIC_CHECK);
         }
         return response()->json([
             'success'=>0
