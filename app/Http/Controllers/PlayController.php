@@ -48,7 +48,8 @@ class PlayController extends Controller
         try{
 
             $playMaster = new PlayMaster();
-            $playMaster->draw_master_id = $inputPlayMaster->drawMasterId;
+//            $playMaster->draw_master_id = $inputPlayMaster->drawMasterId;
+            $playMaster->draw_master_id = DB::select("select id from draw_masters where game_id = $inputPlayMaster->gameId and active = 1")[0]->id;
             $playMaster->barcode_number = rand(10000000000000000,99999999999999999);
             $playMaster->user_id = $inputPlayMaster->terminalId;
             $playMaster->game_id = $inputPlayMaster->gameId;

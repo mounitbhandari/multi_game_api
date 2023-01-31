@@ -37,38 +37,38 @@ class Test extends Controller
 //        $x = Cache::remember('testCache', 3000000, function (){
 //            return 2.1;
 //        });
-        $draw_master = DrawMaster::whereActive(1)->whereGameId(1)->first();
-        $min_draw = Carbon::parse($draw_master->end_time)->minute;
-        $day_draw = Carbon::parse($draw_master->end_time)->day;
-        $hour_draw = Carbon::parse($draw_master->end_time)->hour;
-        $min_now = Carbon::now()->minute ;
-        $day_now = Carbon::now()->day ;
-        $hour_now = Carbon::now()->hour ;
-        if(($day_draw === $day_now) && ($min_draw<=$min_now) && ($hour_draw==$hour_now) && (($min_now % $draw_master->time_diff) != 0)){
-            return response()->json([
-                    'success'=>1
-                    ,'$day_draw'=>$day_draw
-                    ,'$day_now'=>$day_now
-                    ,'$min_draw'=>$min_draw
-                    ,'$min_now'=>$min_now
-                    ,'$hour_draw'=>$hour_draw
-                    ,'$hour_now'=>$hour_now
-                    ,'$draw_master->time_diff 00'=>$draw_master->time_diff,
-                    'status' => "trigger"
-                ]
-                , 200,[],JSON_NUMERIC_CHECK);
-        }
-        return response()->json([
-            'success'=>0
-                ,'$day_draw'=>$day_draw
-                ,'$day_now'=>$day_now
-                ,'$min_draw'=>$min_draw
-                ,'$min_now'=>$min_now
-                ,'$hour_draw'=>$hour_draw
-                ,'$hour_now'=>$hour_now
-                ,'$draw_master->time_diff 00'=>$draw_master->time_diff
-            ]
-            , 200,[],JSON_NUMERIC_CHECK);
+//        $draw_master = DrawMaster::whereActive(1)->whereGameId(1)->first();
+//        $min_draw = Carbon::parse($draw_master->end_time)->minute;
+//        $day_draw = Carbon::parse($draw_master->end_time)->day;
+//        $hour_draw = Carbon::parse($draw_master->end_time)->hour;
+//        $min_now = Carbon::now()->minute ;
+//        $day_now = Carbon::now()->day ;
+//        $hour_now = Carbon::now()->hour ;
+//        if(($day_draw === $day_now) && ($min_draw<=$min_now) && ($hour_draw==$hour_now) && (($min_now % $draw_master->time_diff) != 0)){
+//            return response()->json([
+//                    'success'=>1
+//                    ,'$day_draw'=>$day_draw
+//                    ,'$day_now'=>$day_now
+//                    ,'$min_draw'=>$min_draw
+//                    ,'$min_now'=>$min_now
+//                    ,'$hour_draw'=>$hour_draw
+//                    ,'$hour_now'=>$hour_now
+//                    ,'$draw_master->time_diff 00'=>$draw_master->time_diff,
+//                    'status' => "trigger"
+//                ]
+//                , 200,[],JSON_NUMERIC_CHECK);
+//        }
+//        return response()->json([
+//            'success'=>0
+//                ,'$day_draw'=>$day_draw
+//                ,'$day_now'=>$day_now
+//                ,'$min_draw'=>$min_draw
+//                ,'$min_now'=>$min_now
+//                ,'$hour_draw'=>$hour_draw
+//                ,'$hour_now'=>$hour_now
+//                ,'$draw_master->time_diff 00'=>$draw_master->time_diff
+//            ]
+//            , 200,[],JSON_NUMERIC_CHECK);
 //        $play_master = PlayMaster::where( 'created_at', '>', Carbon::now()->subDays(2)->format('Y-m-d'))->get();
 
 //        $activeUsers = PersonalAccessToken::whereTokenableId(collect($terminals))->get();
