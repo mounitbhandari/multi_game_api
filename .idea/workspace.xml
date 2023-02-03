@@ -2,8 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5eca29a0-ed15-4037-b786-6b351566af54" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/database/migrations/2022_05_05_152455_create_game_allocations_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2022_05_05_152455_create_game_allocations_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeders/GameSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/GameSeeder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CPanelReportController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CPanelReportController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/GameController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/GameController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PlayController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PlayController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2021_05_15_154458_create_play_masters_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_05_15_154458_create_play_masters_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/GameTypeSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/GameTypeSeeder.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -371,7 +375,10 @@
       <workItem from="1675091203864" duration="2115000" />
       <workItem from="1675137826313" duration="427000" />
       <workItem from="1675271313518" duration="3992000" />
-      <workItem from="1675395232068" duration="295000" />
+      <workItem from="1675395232068" duration="663000" />
+      <workItem from="1675397244463" duration="484000" />
+      <workItem from="1675401250077" duration="118000" />
+      <workItem from="1675429358841" duration="4821000" />
     </task>
     <servers />
   </component>

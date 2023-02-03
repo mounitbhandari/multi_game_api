@@ -53,6 +53,7 @@ class PlayController extends Controller
             $playMaster->barcode_number = rand(10000000000000000,99999999999999999);
             $playMaster->user_id = $inputPlayMaster->terminalId;
             $playMaster->game_id = $inputPlayMaster->gameId;
+            $playMaster->combined_number = (($inputPlayMaster->gameId) == 6)? $inputPlayMaster->combined_number: 1;
 //            $playMaster->user_relation_id = $inputPlayMaster->userRelationId;
             $playMaster->user_relation_id = $userRelationId->id;
             $playMaster->save();
@@ -248,6 +249,28 @@ class PlayController extends Controller
                         $playDetails->play_master_id = $playMaster->id;
                         $playDetails->game_type_id = $detail->gameTypeId;
                         $playDetails->combination_number_id = $detail->baharCombinationId;
+                        $playDetails->quantity = $detail->quantity;
+                        $playDetails->mrp = $gameType->mrp;
+                        $playDetails->commission = $user->commission;
+                        $playDetails->ps_commission = $ps_commission;
+                        $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
+                        $playDetails->pss_commission = User::find((UserRelationWithOther::whereTerminalId($inputPlayMaster->terminalId)->whereActive(1)->first())->super_stockist_id)->commission;;
+                        $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
+                        $playDetails->global_payout = $gameType->payout;
+                        $playDetails->terminal_payout = $payoutSlabValue;
+//                    $playDetails->multiplexer = $gameType->multiplexer;
+                        $playDetails->save();
+//                        $output_play_details[] = $playDetails;
+                    }else if($detail->gameTypeId == 10){
+
+                        if($detail->rolletCombinationId == 0){
+                            continue;
+                        }
+
+                        $playDetails = new PlayDetails();
+                        $playDetails->play_master_id = $playMaster->id;
+                        $playDetails->game_type_id = $detail->gameTypeId;
+                        $playDetails->combination_number_id = $detail->rolletCombinationId;
                         $playDetails->quantity = $detail->quantity;
                         $playDetails->mrp = $gameType->mrp;
                         $playDetails->commission = $user->commission;

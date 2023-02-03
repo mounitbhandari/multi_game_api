@@ -24,6 +24,7 @@ class CreatePlayMastersTable extends Migration
 
             $table->string('activity_done_by')->default('self');
 
+            $table->tinyInteger('combined_number')->default(1);
             $table->tinyInteger('is_claimed')->default(0);
             $table->tinyInteger('is_cancelled')->default(0);
             $table->tinyInteger('is_cancelable')->default(1);

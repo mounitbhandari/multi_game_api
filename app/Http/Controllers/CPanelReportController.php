@@ -556,7 +556,7 @@ class CPanelReportController extends Controller
             });
         }
 
-        return $prize_value;
+        return ($prize_value/$play_master->combined_number);
     }
 
 

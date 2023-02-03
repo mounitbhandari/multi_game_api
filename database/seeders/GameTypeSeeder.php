@@ -18,7 +18,8 @@ class GameTypeSeeder extends Seeder
             ['game_type_name'=>'single individual','game_id' => 4,'game_type_initial' => '' ,'mrp'=> 1.00, 'winning_price'=>9, 'winning_bonus_percent'=>0.2, 'commission'=>0.00, 'payout'=>100,'default_payout'=>100],
             ['game_type_name'=>'double individual','game_id' => 5,'game_type_initial' => '' ,'mrp'=> 1.00, 'winning_price'=>90, 'winning_bonus_percent'=>0.2, 'commission'=>0.00, 'payout'=>100,'default_payout'=>100],
             ['game_type_name'=>'Andar','game_id' => 5,'game_type_initial' => '' ,'mrp'=> 1.00, 'winning_price'=>9, 'winning_bonus_percent'=>0.2, 'commission'=>0.00, 'payout'=>100,'default_payout'=>100],
-            ['game_type_name'=>'Bahar','game_id' => 5,'game_type_initial' => '' ,'mrp'=> 1.00, 'winning_price'=>9, 'winning_bonus_percent'=>0.2, 'commission'=>0.00, 'payout'=>100,'default_payout'=>100]
+            ['game_type_name'=>'Bahar','game_id' => 5,'game_type_initial' => '' ,'mrp'=> 1.00, 'winning_price'=>9, 'winning_bonus_percent'=>0.2, 'commission'=>0.00, 'payout'=>100,'default_payout'=>100],
+            ['game_type_name'=>'Rollet','game_id' => 6,'game_type_initial' => '' ,'mrp'=> 1.00, 'winning_price'=>36, 'winning_bonus_percent'=>0.2, 'commission'=>0.00, 'payout'=>100,'default_payout'=>100]
         ]);
     }
 }
