@@ -16,6 +16,7 @@ class GameSeeder extends Seeder
             ['game_name'=> '16 CARD',],
             ['game_name'=> 'Single'],
             ['game_name'=> 'Double'],
+            ['game_name'=> 'Rollet'],
         ]);
     }
 }
