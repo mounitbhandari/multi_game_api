@@ -21,6 +21,7 @@ class CreateGameAllocationsTable extends Migration
             $table->tinyInteger('game3')->default(0);
             $table->tinyInteger('game4')->default(0);
             $table->tinyInteger('game5')->default(0);
+            $table->tinyInteger('game6')->default(0);
             $table->timestamps();
         });
     }

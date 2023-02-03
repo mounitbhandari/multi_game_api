@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5eca29a0-ed15-4037-b786-6b351566af54" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2022_05_05_152455_create_game_allocations_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2022_05_05_152455_create_game_allocations_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/seeders/GameSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeders/GameSeeder.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -370,6 +371,7 @@
       <workItem from="1675091203864" duration="2115000" />
       <workItem from="1675137826313" duration="427000" />
       <workItem from="1675271313518" duration="3992000" />
+      <workItem from="1675395232068" duration="295000" />
     </task>
     <servers />
   </component>
