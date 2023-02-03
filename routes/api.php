@@ -29,6 +29,7 @@ use App\Http\Controllers\AndarNumberController;
 use App\Http\Controllers\BaharNumberController;
 use App\Http\Controllers\RechargeToUserController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\RolletNumberController;
 
 /*
 |--------------------------------------------------------------------------
@@ -77,6 +78,7 @@ Route::group(['middleware' => 'auth:sanctum'],
 
         Route::get('unity/getAndarNumbers',[AndarNumberController::class, 'get_all_andar_number']);
         Route::get('unity/getBaharNumbers',[BaharNumberController::class, 'get_all_bahar_number']);
+        Route::get('unity/getRolletNumbers',[RolletNumberController::class, 'get_rollet_numbers']);
     });
 
 
