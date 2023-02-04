@@ -119,7 +119,7 @@ Route::group(['middleware' => 'auth:sanctum'],
 
         Route::get('terminals',[TerminalController::class, 'get_all_terminals']);
 
-        //    PAYOUT SLABS
+        //PAYOUT SLABS
         Route::get('payoutSlabs',[PayOutSlabController::class, 'get_all_payout_slabs']);
 
         //game_types

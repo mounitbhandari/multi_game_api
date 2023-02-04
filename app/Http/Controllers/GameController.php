@@ -42,7 +42,8 @@ class GameController extends Controller
     {
         $today = Carbon::today()->format('Y-m-d');
 
-        $games = Game::whereId(1)->whereId(2)->whereId(3)->whereId(4)->whereId(5)->get();
+//        $games = Game::whereId(1)->whereId(2)->whereId(3)->whereId(4)->whereId(5)->get();
+        $games = Game::get();
         $commonFunctionController = new CommonFunctionController();
         $serverTime = $commonFunctionController->getServerTime();
         $x = [];
