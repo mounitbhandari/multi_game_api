@@ -319,6 +319,16 @@ class ResultMasterController extends Controller
                 array_push($return_array,$temp);
                 array_push($draw_id,$resultMaster->draw_master_id);
             }
+        }else if($id == 6){
+            $rolletNumber = DB::select("select draw_masters.id as draw_id ,draw_masters.visible_time as draw_time ,result_details.multiplexer, rollet_numbers.rollet_number from result_masters
+                inner join result_details on result_details.result_master_id = result_masters.id
+                inner join rollet_numbers on rollet_numbers.id = result_details.combination_number_id
+                inner join draw_masters on draw_masters.id = result_masters.draw_master_id
+                where result_masters.game_id = 6 and result_masters.game_date = ?
+                order by draw_masters.end_time",[$today]);
+
+            $return_array = $rolletNumber;
+
         }
 
 
@@ -462,6 +472,15 @@ class ResultMasterController extends Controller
                 array_push($return_array,$temp);
                 array_push($draw_id,$resultMaster->draw_master_id);
             }
+        }else if($id == 6){
+            $rolletNumber = DB::select("select draw_masters.id as draw_id ,draw_masters.visible_time as draw_time ,result_details.multiplexer, rollet_numbers.rollet_number from result_masters
+                inner join result_details on result_details.result_master_id = result_masters.id
+                inner join rollet_numbers on rollet_numbers.id = result_details.combination_number_id
+                inner join draw_masters on draw_masters.id = result_masters.draw_master_id
+                where result_masters.game_id = 6 and result_masters.game_date = ?
+                order by draw_masters.end_time",[$today]);
+
+            $return_array = $rolletNumber;
         }
 
 
@@ -760,6 +779,15 @@ class ResultMasterController extends Controller
 //                array_push($return_array,$temp);
 //            }
 
+        }else if($id == 6){
+            $rolletNumber = DB::select("select draw_masters.id as draw_id ,draw_masters.visible_time as draw_time ,result_details.multiplexer, rollet_numbers.rollet_number from result_masters
+                inner join result_details on result_details.result_master_id = result_masters.id
+                inner join rollet_numbers on rollet_numbers.id = result_details.combination_number_id
+                inner join draw_masters on draw_masters.id = result_masters.draw_master_id
+                where result_masters.game_id = 6 and result_masters.game_date = ?
+                order by draw_masters.end_time",[$today]);
+
+            $return_array = $rolletNumber;
         }
 
         else{
