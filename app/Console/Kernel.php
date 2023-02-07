@@ -53,6 +53,7 @@ class Kernel extends ConsoleKernel
 
         //1 min 30 sec
         $schedule->command('generateRollet:result')->cron('* * * * *')->timezone('Asia/Kolkata');
+//        $schedule->command('generateRollet:result')->everyMinute();
 
         //sleep(0)
         $schedule->command('generateDouble:result')->cron('*/3 * * * *')->timezone('Asia/Kolkata');
