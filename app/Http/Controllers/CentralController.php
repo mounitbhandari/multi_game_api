@@ -59,6 +59,10 @@ class CentralController extends Controller
 
         $game_multiplexer = (GameType::whereGameId($id)->first())->multiplexer;
 
+        $null_multiplexer = [2,1,4,3];
+
+//        return $null_multiplexer[array_rand($null_multiplexer,1)];
+
 //        if($game_multiplexer == 1){
 ////            $tempM= [1,2,3];
 //            $tempM= [1];
@@ -270,6 +274,8 @@ class CentralController extends Controller
 
             if(($result[0]->total_quantity) > $targetValue){
                 $game_multiplexer = 1;
+            }elseif ($result[0]->total_quantity == 0){
+                $game_multiplexer = $null_multiplexer[array_rand($null_multiplexer,1)];
             }
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,3,$result[0]->card_combination_id,$game_multiplexer))->content(),true);
@@ -326,6 +332,8 @@ class CentralController extends Controller
 
             if(($result[0]->total_quantity) > $targetValue){
                 $game_multiplexer = 1;
+            }elseif ($result[0]->total_quantity == 0){
+                $game_multiplexer = $null_multiplexer[array_rand($null_multiplexer,1)];
             }
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,4,$result[0]->card_combination_id,$game_multiplexer))->content(),true);
@@ -388,6 +396,8 @@ class CentralController extends Controller
 
             if(($singleNumberTargetData[0]->quantity) > $singleValue){
                 $game_multiplexer = 1;
+            }elseif ($singleNumberTargetData[0]->quantity == 0){
+                $game_multiplexer = $null_multiplexer[array_rand($null_multiplexer,1)];
             }
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,6,$singleNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
@@ -524,6 +534,12 @@ class CentralController extends Controller
                 having sum(play_details.quantity)>= ?) as table1
                 order by quantity
                 LIMIT 1",[$lastDrawId,$today,$targetValue]);
+            }
+
+            if(($rolletNumberTargetData[0]->quantity) > $targetValue){
+                $game_multiplexer = 1;
+            }elseif ($rolletNumberTargetData[0]->quantity == 0){
+                $game_multiplexer = $null_multiplexer[array_rand($null_multiplexer,1)];
             }
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,10,$rolletNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
