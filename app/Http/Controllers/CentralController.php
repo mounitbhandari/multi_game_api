@@ -256,15 +256,16 @@ class CentralController extends Controller
             }
 
             if (empty($result)) {
-                $result = DB::select(DB::raw("select card_combinations.id as card_combination_id,
+                $result = DB::select(DB::raw("select * from (select card_combinations.id as card_combination_id,
                     sum(play_details.quantity) as total_quantity
                     from play_details
                     inner join play_masters ON play_masters.id = play_details.play_master_id
                     inner join card_combinations ON card_combinations.id = play_details.combination_number_id
                     where  play_details.game_type_id=3 and card_combination_type_id = 1 and play_masters.draw_master_id = $lastDrawId and date(play_details.created_at)= " . "'" . $today . "'" . "
                     group by card_combinations.id
-                    having sum(play_details.quantity)>= $targetValue
-                    order by rand() limit 1"));
+                    having sum(play_details.quantity)>= $targetValue) as table1
+                    order by total_quantity
+                    LIMIT 1"));
             }
 
             if(($result[0]->total_quantity) > $targetValue){
@@ -273,9 +274,9 @@ class CentralController extends Controller
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,3,$result[0]->card_combination_id,$game_multiplexer))->content(),true);
 
-            if($playMasterSaveCheck['success'] == 0){
-                return response()->json(['success'=>0, 'message' => 'Save error 12 Card'], 401);
-            }
+//            if($playMasterSaveCheck['success'] == 0){
+//                return response()->json(['success'=>0, 'message' => 'Save error 12 Card'], 401);
+//            }
         }
 
         if($id == 3){
@@ -311,15 +312,16 @@ class CentralController extends Controller
             }
 
             if (empty($result)) {
-                $result = DB::select(DB::raw("select card_combinations.id as card_combination_id,
+                $result = DB::select(DB::raw("select * from (select card_combinations.id as card_combination_id,
                     sum(play_details.quantity) as total_quantity
                     from play_details
                     inner join play_masters ON play_masters.id = play_details.play_master_id
                     inner join card_combinations ON card_combinations.id = play_details.combination_number_id
                     where  play_details.game_type_id=4 and card_combination_type_id = 2 and play_masters.draw_master_id = $lastDrawId and date(play_details.created_at)= " . "'" . $today . "'" . "
                     group by card_combinations.id
-                    having sum(play_details.quantity)>= $targetValue
-                    order by rand() limit 1"));
+                    having sum(play_details.quantity)>= $targetValue) as table1
+                    order by total_quantity
+                    LIMIT 1"));
             }
 
             if(($result[0]->total_quantity) > $targetValue){
@@ -328,9 +330,9 @@ class CentralController extends Controller
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,4,$result[0]->card_combination_id,$game_multiplexer))->content(),true);
 
-            if($playMasterSaveCheck['success'] == 0){
-                return response()->json(['success'=>0, 'message' => 'Save error 16 Card'], 401);
-            }
+//            if($playMasterSaveCheck['success'] == 0){
+//                return response()->json(['success'=>0, 'message' => 'Save error 16 Card'], 401);
+//            }
 
 //            return response()->json(['success'=>1, 'message' => 'Result added'], 200);
         }
@@ -375,13 +377,13 @@ class CentralController extends Controller
 
             // greater target value
             if(empty($singleNumberTargetData)){
-                $singleNumberTargetData = DB::select("select sum(quantity) as quantity,combination_number_id from play_details
+                $singleNumberTargetData = DB::select("select * from (select sum(quantity) as quantity,combination_number_id from play_details
                 inner join play_masters on play_details.play_master_id = play_masters.id
-                where play_masters.draw_master_id = ? and play_masters.game_id = 4 and play_details.game_type_id = 6 and date(play_masters.created_at) = ?
+                 where play_masters.draw_master_id = ? and play_masters.game_id = 4 and play_details.game_type_id = 6 and date(play_masters.created_at) = ?
                 GROUP by combination_number_id
-                having sum(play_details.quantity)>= ?
-                order by rand()
-                limit 1",[$lastDrawId,$today,$singleValue]);
+                having sum(play_details.quantity)>= ?) as table1
+                order by quantity
+                LIMIT 1",[$lastDrawId,$today,$singleValue]);
             }
 
             if(($singleNumberTargetData[0]->quantity) > $singleValue){
@@ -390,9 +392,9 @@ class CentralController extends Controller
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,6,$singleNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
 
-            if($playMasterSaveCheck['success'] == 0){
-                return response()->json(['success'=>0, 'message' => 'Save error single number'], 401);
-            }
+//            if($playMasterSaveCheck['success'] == 0){
+//                return response()->json(['success'=>0, 'message' => 'Save error single number'], 401);
+//            }
         }
 
         if($id == 5){
@@ -483,6 +485,48 @@ class CentralController extends Controller
                 }
             }
 
+        }
+
+        if($id == 6){
+            $nextDrawId = $nextGameDrawObj->next_draw_id;
+            $lastDrawId = $nextGameDrawObj->last_draw_id;
+
+            $rolletNumber = (GameType::find(10));
+
+            $totalSale = $playMasterControllerObj->get_total_sale($today,$lastDrawId,10);
+            $payout = (($totalSale * ($rolletNumber->payout)) / 100)/$game_multiplexer;
+            $targetValue = floor($payout / $rolletNumber->winning_price);
+
+            $rolletNumberTargetData = DB::select("select sum(quantity) as quantity,combination_number_id from play_details
+                inner join play_masters on play_details.play_master_id = play_masters.id
+                where play_masters.draw_master_id = ? and play_masters.game_id = 6 and play_details.game_type_id = 10 and date(play_masters.created_at) = ?
+                GROUP by combination_number_id
+                having sum(play_details.quantity)<= ?
+                order by rand()
+                limit 1",[$lastDrawId,$today,$targetValue]);
+
+            //empty check
+            if(empty($rolletNumberTargetData)) {
+                $rolletNumberTargetData = DB::select("select id as combination_number_id, 0 as quantity from rollet_numbers
+                    where id not in (select combination_number_id from play_details
+                    inner join play_masters on play_details.play_master_id = play_masters.id
+                    where game_type_id = 10 and date(play_details.created_at) = ? and play_masters.draw_master_id = ?)
+                    order by RAND()
+                    limit 1",[$today, $lastDrawId]);
+            }
+
+            // greater target value
+            if(empty($rolletNumberTargetData)){
+                $rolletNumberTargetData = DB::select("select * from (select sum(quantity) as quantity,combination_number_id from play_details
+                inner join play_masters on play_details.play_master_id = play_masters.id
+                 where play_masters.draw_master_id = ? and play_masters.game_id = 6 and play_details.game_type_id = 10 and date(play_masters.created_at) = ?
+                GROUP by combination_number_id
+                having sum(play_details.quantity)>= ?) as table1
+                order by quantity
+                LIMIT 1",[$lastDrawId,$today,$targetValue]);
+            }
+
+            $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,10,$rolletNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
         }
 
 
