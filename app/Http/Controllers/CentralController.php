@@ -546,10 +546,10 @@ class CentralController extends Controller
 
             if(($rolletNumberTargetData[0]->quantity) > $targetValue){
                 $game_multiplexer = 1;
+            }elseif ($rolletNumberTargetData[0]->quantity == 0){
+                $randNum = rand(0, 10);
+                $game_multiplexer = $randNum>5 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
             }
-//            elseif ($rolletNumberTargetData[0]->quantity == 0){
-//                $game_multiplexer = $null_multiplexer[array_rand($null_multiplexer,1)];
-//            }
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,10,$rolletNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
         }
