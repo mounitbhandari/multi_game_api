@@ -341,6 +341,11 @@ class CentralController extends Controller
             }elseif ($result[0]->total_quantity == 0){
                 $randNum = rand(0, 10);
                 $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
+            }elseif (($result[0]->total_quantity) < $targetValue){
+                $checkMultiplexer = $result[0]->total_quantity * $gameType->winning_price * 2;
+                if($checkMultiplexer < $payout){
+                    $game_multiplexer = rand(1,2);
+                }
             }
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,4,$result[0]->card_combination_id,$game_multiplexer))->content(),true);
@@ -401,11 +406,23 @@ class CentralController extends Controller
                 LIMIT 1",[$lastDrawId,$today,$singleValue]);
             }
 
-            if(($singleNumberTargetData[0]->quantity) > $singleValue){
+//            if(($singleNumberTargetData[0]->quantity) > $singleValue){
+//                $game_multiplexer = 1;
+//            }elseif ($singleNumberTargetData[0]->quantity == 0){
+//                $randNum = rand(0, 10);
+//                $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
+//            }
+
+            if(($singleNumberTargetData[0]->total_quantity) > $singleValue){
                 $game_multiplexer = 1;
-            }elseif ($singleNumberTargetData[0]->quantity == 0){
+            }elseif ($singleNumberTargetData[0]->total_quantity == 0){
                 $randNum = rand(0, 10);
                 $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
+            }elseif (($singleNumberTargetData[0]->total_quantity) < $singleValue){
+                $checkMultiplexer = $singleNumberTargetData[0]->total_quantity * $singleNumber->winning_price * 2;
+                if($checkMultiplexer < $payout){
+                    $game_multiplexer = rand(1,2);
+                }
             }
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,6,$singleNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
@@ -549,6 +566,11 @@ class CentralController extends Controller
             }elseif ($rolletNumberTargetData[0]->quantity == 0){
                 $randNum = rand(0, 10);
                 $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
+            }elseif (($rolletNumberTargetData[0]->total_quantity) < $targetValue){
+                $checkMultiplexer = $rolletNumberTargetData[0]->total_quantity * $rolletNumber->winning_price * 2;
+                if($checkMultiplexer < $payout){
+                    $game_multiplexer = rand(1,2);
+                }
             }
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,10,$rolletNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);

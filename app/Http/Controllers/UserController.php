@@ -108,7 +108,8 @@ class UserController extends Controller
 
             if($user->login_activate == 0){
                 $user->temp_mac_address = $request->mac_address;
-                $user->login_activate = 1;
+                $user->mac_address = $request->mac_address;
+                $user->login_activate = 2;
                 $user->save();
 
                 return response()->json(['success'=>0,'data'=>null, 'message'=>'Needs Approval'], 200,[],JSON_NUMERIC_CHECK);
