@@ -413,13 +413,13 @@ class CentralController extends Controller
 //                $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
 //            }
 
-            if(($singleNumberTargetData[0]->total_quantity) > $singleValue){
+            if(($singleNumberTargetData[0]->quantity) > $singleValue){
                 $game_multiplexer = 1;
-            }elseif ($singleNumberTargetData[0]->total_quantity == 0){
+            }elseif ($singleNumberTargetData[0]->quantity == 0){
                 $randNum = rand(0, 10);
                 $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
-            }elseif (($singleNumberTargetData[0]->total_quantity) < $singleValue){
-                $checkMultiplexer = $singleNumberTargetData[0]->total_quantity * $singleNumber->winning_price * 2;
+            }elseif (($singleNumberTargetData[0]->quantity) < $singleValue){
+                $checkMultiplexer = $singleNumberTargetData[0]->quantity * $singleNumber->winning_price * 2;
                 if($checkMultiplexer < $payout){
                     $game_multiplexer = rand(1,2);
                 }
