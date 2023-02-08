@@ -34,6 +34,7 @@ class Test extends Controller
     }
 
     public function testNew(){
+        return rand(0, 10);
 //        $x = Cache::remember('testCache', 3000000, function (){
 //            return 2.1;
 //        });
