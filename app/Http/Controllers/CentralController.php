@@ -276,7 +276,7 @@ class CentralController extends Controller
                 $game_multiplexer = 1;
             }elseif ($result[0]->total_quantity == 0){
                 $randNum = rand(0, 10);
-                $game_multiplexer = $randNum>5 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
+                $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
             }elseif (($result[0]->total_quantity) < $targetValue){
                 $checkMultiplexer = $result[0]->total_quantity * $gameType->winning_price * 2;
                 if($checkMultiplexer < $payout){
@@ -340,7 +340,7 @@ class CentralController extends Controller
                 $game_multiplexer = 1;
             }elseif ($result[0]->total_quantity == 0){
                 $randNum = rand(0, 10);
-                $game_multiplexer = $randNum>5 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
+                $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
             }
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,4,$result[0]->card_combination_id,$game_multiplexer))->content(),true);
@@ -405,7 +405,7 @@ class CentralController extends Controller
                 $game_multiplexer = 1;
             }elseif ($singleNumberTargetData[0]->quantity == 0){
                 $randNum = rand(0, 10);
-                $game_multiplexer = $randNum>5 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
+                $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
             }
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,6,$singleNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
@@ -548,7 +548,7 @@ class CentralController extends Controller
                 $game_multiplexer = 1;
             }elseif ($rolletNumberTargetData[0]->quantity == 0){
                 $randNum = rand(0, 10);
-                $game_multiplexer = $randNum>5 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
+                $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
             }
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,10,$rolletNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
