@@ -280,7 +280,7 @@ class CentralController extends Controller
             }elseif (($result[0]->total_quantity) < $targetValue){
                 $checkMultiplexer = $result[0]->total_quantity * $gameType->winning_price * 2;
                 if($checkMultiplexer < $payout){
-                    $game_multiplexer = 2;
+                    $game_multiplexer = rand(1,2);
                 }
             }
 
