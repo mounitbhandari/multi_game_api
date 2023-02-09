@@ -107,6 +107,8 @@ class GameController extends Controller
         $twelveCard = 0;
         $sixteenCard = 0;
         $singleNUmber = 0;
+        $rolletPrize = 0;
+        $totalRollet = 0;
 
 
         $CPanelReportController = new CPanelReportController();
@@ -123,6 +125,7 @@ class GameController extends Controller
             $sixteenCardAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(3)->get();
             $singleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(4)->get();
             $doubleNumberAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(5)->get();
+            $rolletAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(6)->get();
 
 
             foreach ($tripleAllPlayMasters as $tripleAllPlayMaster){
@@ -148,6 +151,11 @@ class GameController extends Controller
             foreach ($doubleNumberAllPlayMasters as $doubleNumberAllPlayMaster){
                 $doubleNumberPrize = $doubleNumberPrize + $CPanelReportController->get_prize_value_by_barcode($doubleNumberAllPlayMaster->id);
                 $totalDoubleNumber = $totalDoubleNumber + $CPanelReportController->total_sale_by_play_master_id($doubleNumberAllPlayMaster->id);
+            }
+
+            foreach ($rolletAllPlayMasters as $rolletAllPlayMaster){
+                $rolletPrize = $rolletPrize + $CPanelReportController->get_prize_value_by_barcode($rolletAllPlayMaster->id);
+                $totalRollet = $totalRollet + $CPanelReportController->total_sale_by_play_master_id($rolletAllPlayMaster->id);
             }
 
 
@@ -303,6 +311,15 @@ class GameController extends Controller
             'total_bet' =>  (int)$totalDoubleNumber,
             'total_win' =>   $doubleNumberPrize,
             'profit' =>   (int)$totalDoubleNumber - $doubleNumberPrize
+        ];
+
+        array_push($returnArray , $x);
+
+        $x = [
+            'game_name' => 'Rollet',
+            'total_bet' =>  (int)$totalRollet,
+            'total_win' =>   $rolletPrize,
+            'profit' =>   (int)$totalRollet - $rolletPrize
         ];
 
         array_push($returnArray , $x);
@@ -718,6 +735,8 @@ class GameController extends Controller
         $sixteenCardPrize = 0;
         $singleNumberPrize = 0;
         $doubleNumberPrize = 0;
+        $rolletPrize = 0;
+        $totalRollet = 0;
 
         $online_count = 0;
 
@@ -776,6 +795,12 @@ class GameController extends Controller
             foreach ($doubleNumberAllPlayMasters as $doubleNumberAllPlayMaster){
                 $doubleNumberPrize = $doubleNumberPrize + $CPanelReportController->get_prize_value_by_barcode($doubleNumberAllPlayMaster->id);
                 $totalDoubleNumber = $totalDoubleNumber + $CPanelReportController->total_sale_by_play_master_id($doubleNumberAllPlayMaster->id);
+            }
+
+            $rolletAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereUserId($terminal->terminal_id)->whereGameId(6)->get();
+            foreach ($rolletAllPlayMasters as $rolletAllPlayMaster){
+                $rolletPrize = $rolletPrize + $CPanelReportController->get_prize_value_by_barcode($rolletAllPlayMaster->id);
+                $totalRollet = $totalRollet + $CPanelReportController->total_sale_by_play_master_id($rolletAllPlayMaster->id);
             }
 
 
@@ -938,6 +963,15 @@ class GameController extends Controller
         array_push($returnArray , $x);
 
         $x = [
+            'game_name' => 'Rollet',
+            'total_bet' =>  (int)$totalRollet,
+            'total_win' =>   $rolletPrize,
+            'profit' =>   (int)$totalRollet - $rolletPrize
+        ];
+
+        array_push($returnArray , $x);
+
+        $x = [
             'online' => $online_count
         ];
         array_push($returnArray , $x);
@@ -961,6 +995,7 @@ class GameController extends Controller
         $sixteenCard = 0;
         $singleNUmber = 0;
         $totalDoubleNumber = 0;
+        $totalRolletNumber = 0;
 
         $CPanelReportController = new CPanelReportController();
 
@@ -1138,8 +1173,41 @@ class GameController extends Controller
                 return $x;
             });
         }
-
         //end of double
+
+        // rollet
+        $rolletAllPlayMasters = PlayMaster::where(DB::raw("date(created_at)"),$today)->whereGameId(6)->get();
+
+        $rolletAllPlayMastersSizeCheck = Cache::remember('sizeOfRolletAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($rolletAllPlayMasters) {
+            return sizeof($rolletAllPlayMasters);
+        });
+
+        if($rolletAllPlayMastersSizeCheck === sizeof($rolletAllPlayMasters) && (Cache::has("rolletAllPlayMastersReturnArray") == 1)){
+            $x = Cache::get("rolletAllPlayMastersReturnArray");
+            array_push($returnArray , $x);
+        }else{
+            foreach ($rolletAllPlayMasters as $rolletAllPlayMaster){
+                $triplePrize = $triplePrize + $CPanelReportController->get_prize_value_by_barcode($rolletAllPlayMaster->id);
+                $totalRolletNumber = $totalRolletNumber + $CPanelReportController->total_sale_by_play_master_id($rolletAllPlayMaster->id);
+            }
+
+            $x = [
+                'game_name' => 'Rollet',
+                'total_bet' =>   $totalRolletNumber,
+                'total_win' =>   $triplePrize,
+                'profit' =>   $totalRolletNumber - $triplePrize
+            ];
+
+            array_push($returnArray , $x);
+            Cache::forget('rolletAllPlayMastersReturnArray');
+            Cache::forget('sizeOfRolletAllPlayMasters_get_game_total_sale_today');
+            Cache::remember('sizeOfRolletAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($tripleAllPlayMasters) {
+                return sizeof($tripleAllPlayMasters);
+            });
+            Cache::remember('rolletAllPlayMastersReturnArray', 3000000, function () use ($x) {
+                return $x;
+            });
+        }
 
         $online_count = (DB::select("select COUNT(distinct users.id) as total_count from personal_access_tokens
             inner join users on personal_access_tokens.tokenable_id = users.id

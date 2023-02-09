@@ -11,6 +11,7 @@ use App\Models\PlayMaster;
 use App\Models\RechargeToUser;
 use App\Models\ResultDetail;
 use App\Models\ResultMaster;
+use App\Models\RolletNumber;
 use App\Models\SingleNumber;
 use App\Models\User;
 use App\Models\UserRelationWithOther;
@@ -194,6 +195,9 @@ class StockistController extends Controller
                         $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(7)->first();
                         $showNumber = (DoubleNumberCombination::find($resultDetails->combination_number_id))->visible_double_number;
                         $bonus = $resultDetails->multiplexer;
+                    }else if($detail->game_id == 6){
+                        $resultDetails = ResultDetail::whereResultMasterId($result->id)->whereGameTypeId(10)->first();
+                        $showNumber = (RolletNumber::find($resultDetails->combination_number_id))->rollet_number;
                     }
                     $detail->result = Cache::remember(((String)$detail->play_master_id).'result', 3000000, function () use ($showNumber) {
                         return $showNumber;

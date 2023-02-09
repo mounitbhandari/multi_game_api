@@ -77,6 +77,12 @@ class Kernel extends ConsoleKernel
             $centralController->delete_data_except_thirty_days();
         })->dailyAt('03:00')->timezone('Asia/Kolkata');
 
+        //reset everyday approve
+        $schedule->call(function () {
+            $centralController = new CentralController();
+            $centralController->reset_approve_everyday();
+        })->dailyAt('00:00')->timezone('Asia/Kolkata');
+
         //cache files
 //       $schedule->command('config:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');
 //       $schedule->command('route:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');

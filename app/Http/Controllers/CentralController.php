@@ -878,6 +878,10 @@ class CentralController extends Controller
         return response()->json(['success'=>1, 'message' => $today], 200);
     }
 
+    public function reset_approve_everyday(){
+        DB::select("update users set login_activate = 2 where login_activate = 1");
+    }
+
 
 //    public function createResult(){
 //
