@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Game;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -36,7 +37,8 @@ class GameTypeResource extends JsonResource
             'payout' => $this->payout,
             'defaultPayout' => $this->default_payout,
             'multiplexer' => $this->multiplexer,
-
+            'random_multiplexer' => (Game::select('multiplexer_random')->whereId($this->game_id)->first())->multiplexer_random,
+            'game_active' => (Game::select('active')->whereId($this->game_id)->first())->active
         ];
     }
 }

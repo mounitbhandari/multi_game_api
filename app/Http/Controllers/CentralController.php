@@ -57,7 +57,9 @@ class CentralController extends Controller
         $playMasterControllerObj = new PlayMasterController();
         $resultMasterControllerObj = new ResultMasterController();
 
-        $game_multiplexer = (GameType::whereGameId($id)->first())->multiplexer;
+        $checkMultiplexerStatus = (Game::select('multiplexer_random')->whereId($id)->first())->multiplexer_random;
+
+        $game_multiplexer = $checkMultiplexerStatus == 'yes'? 1 : (GameType::whereGameId($id)->first())->multiplexer;
 
         $null_multiplexer = [2,4,3];
 
@@ -272,15 +274,17 @@ class CentralController extends Controller
                     LIMIT 1"));
             }
 
-            if(($result[0]->total_quantity) > $targetValue){
-                $game_multiplexer = 1;
-            }elseif ($result[0]->total_quantity == 0){
-                $randNum = rand(0, 10);
-                $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
-            }elseif (($result[0]->total_quantity) < $targetValue){
-                $checkMultiplexer = $result[0]->total_quantity * $gameType->winning_price * 2;
-                if($checkMultiplexer < $payout){
-                    $game_multiplexer = rand(1,2);
+            if($checkMultiplexerStatus == 'yes'){
+                if(($result[0]->total_quantity) > $targetValue){
+                    $game_multiplexer = 1;
+                }elseif ($result[0]->total_quantity == 0){
+                    $randNum = rand(0, 10);
+                    $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
+                }elseif (($result[0]->total_quantity) < $targetValue){
+                    $checkMultiplexer = $result[0]->total_quantity * $gameType->winning_price * 2;
+                    if($checkMultiplexer < $payout){
+                        $game_multiplexer = rand(1,2);
+                    }
                 }
             }
 
@@ -336,15 +340,17 @@ class CentralController extends Controller
                     LIMIT 1"));
             }
 
-            if(($result[0]->total_quantity) > $targetValue){
-                $game_multiplexer = 1;
-            }elseif ($result[0]->total_quantity == 0){
-                $randNum = rand(0, 10);
-                $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
-            }elseif (($result[0]->total_quantity) < $targetValue){
-                $checkMultiplexer = $result[0]->total_quantity * $gameType->winning_price * 2;
-                if($checkMultiplexer < $payout){
-                    $game_multiplexer = rand(1,2);
+            if($checkMultiplexerStatus == 'yes') {
+                if (($result[0]->total_quantity) > $targetValue) {
+                    $game_multiplexer = 1;
+                } elseif ($result[0]->total_quantity == 0) {
+                    $randNum = rand(0, 10);
+                    $game_multiplexer = $randNum > 7 ? $null_multiplexer[array_rand($null_multiplexer, 1)] : 1;
+                } elseif (($result[0]->total_quantity) < $targetValue) {
+                    $checkMultiplexer = $result[0]->total_quantity * $gameType->winning_price * 2;
+                    if ($checkMultiplexer < $payout) {
+                        $game_multiplexer = rand(1, 2);
+                    }
                 }
             }
 
@@ -413,15 +419,17 @@ class CentralController extends Controller
 //                $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
 //            }
 
-            if(($singleNumberTargetData[0]->quantity) > $singleValue){
-                $game_multiplexer = 1;
-            }elseif ($singleNumberTargetData[0]->quantity == 0){
-                $randNum = rand(0, 10);
-                $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
-            }elseif (($singleNumberTargetData[0]->quantity) < $singleValue){
-                $checkMultiplexer = $singleNumberTargetData[0]->quantity * $singleNumber->winning_price * 2;
-                if($checkMultiplexer < $payout){
-                    $game_multiplexer = rand(1,2);
+            if($checkMultiplexerStatus == 'yes') {
+                if (($singleNumberTargetData[0]->quantity) > $singleValue) {
+                    $game_multiplexer = 1;
+                } elseif ($singleNumberTargetData[0]->quantity == 0) {
+                    $randNum = rand(0, 10);
+                    $game_multiplexer = $randNum > 7 ? $null_multiplexer[array_rand($null_multiplexer, 1)] : 1;
+                } elseif (($singleNumberTargetData[0]->quantity) < $singleValue) {
+                    $checkMultiplexer = $singleNumberTargetData[0]->quantity * $singleNumber->winning_price * 2;
+                    if ($checkMultiplexer < $payout) {
+                        $game_multiplexer = rand(1, 2);
+                    }
                 }
             }
 
@@ -561,15 +569,17 @@ class CentralController extends Controller
                 LIMIT 1",[$lastDrawId,$today,$targetValue]);
             }
 
-            if(($rolletNumberTargetData[0]->quantity) > $targetValue){
-                $game_multiplexer = 1;
-            }elseif ($rolletNumberTargetData[0]->quantity == 0){
-                $randNum = rand(0, 10);
-                $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
-            }elseif (($rolletNumberTargetData[0]->total_quantity) < $targetValue){
-                $checkMultiplexer = $rolletNumberTargetData[0]->total_quantity * $rolletNumber->winning_price * 2;
-                if($checkMultiplexer < $payout){
-                    $game_multiplexer = rand(1,2);
+            if($checkMultiplexerStatus == 'yes') {
+                if (($rolletNumberTargetData[0]->quantity) > $targetValue) {
+                    $game_multiplexer = 1;
+                } elseif ($rolletNumberTargetData[0]->quantity == 0) {
+                    $randNum = rand(0, 10);
+                    $game_multiplexer = $randNum > 7 ? $null_multiplexer[array_rand($null_multiplexer, 1)] : 1;
+                } elseif (($rolletNumberTargetData[0]->total_quantity) < $targetValue) {
+                    $checkMultiplexer = $rolletNumberTargetData[0]->total_quantity * $rolletNumber->winning_price * 2;
+                    if ($checkMultiplexer < $payout) {
+                        $game_multiplexer = rand(1, 2);
+                    }
                 }
             }
 

@@ -187,6 +187,7 @@ Route::group(['middleware' => 'auth:sanctum'],
     Route::patch('resetPassword', [TerminalController::class, 'reset_terminal_password']);
 
     Route::put('cPanel/game/payout',[GameTypeController::class, 'update_payout']);
+    Route::put('cPanel/game/autoMultiplexer',[GameTypeController::class, 'update_multiplexer']);
     Route::post('getResultByDate', [ResultMasterController::class, 'get_result_by_date']);
 
     Route::get('gameTotalReportToday', [GameController::class, 'get_game_total_sale_today']);

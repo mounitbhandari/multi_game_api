@@ -18,6 +18,15 @@ class GameTypeController extends Controller
         return response()->json(['success'=>1,'data'=> GameTypeResource::collection($result)], 200,[],JSON_NUMERIC_CHECK);
     }
 
+    public function update_multiplexer(Request $request){
+        $requestedData = (object)($request->json()->all());
+        $game = Game::find((GameType::find($requestedData->gameTypeId))->game_id);
+        $game->multiplexer_random = $requestedData->multiplexer;
+        $game->active = $requestedData->active;
+        $game->update();
+
+        return response()->json(['success'=>1,'data'=> GameTypeResource::collection(GameType::get())], 200,[],JSON_NUMERIC_CHECK);
+    }
 
     public function update_payout(Request $request){
         $requestedData = $request->json()->all();
