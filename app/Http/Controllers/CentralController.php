@@ -877,10 +877,18 @@ class CentralController extends Controller
 
         $today = Carbon::now()->subDays(42)->format('Y-m-d');
 
-        DB::select("delete from play_details where date(created_at) = ".$today);
-        DB::select("delete from play_masters where date(created_at) = ".$today);
-        DB::select("delete from result_details where date(created_at) = ".$today);
-        DB::select("delete from result_masters where date(created_at) = ".$today);
+//        DB::select("delete from play_details where date(created_at) = ".$today);
+//        DB::select("delete from play_masters where date(created_at) = ".$today);
+        DB::select("delete play_masters, play_details
+            from play_masters
+            inner join play_details on play_masters.id = play_details.play_master_id
+            where date(play_masters.created_at) <=  ".$today);
+//        DB::select("delete from result_details where date(created_at) = ".$today);
+        DB::select("delete result_masters,result_details
+            from result_masters
+            inner join result_details on result_masters.id = result_details.result_master_id
+            where date(game_date) <= ".$today);
+//        DB::select("delete from result_masters where date(created_at) = ".$today);
         DB::select("delete from manual_results where date(created_at) = ".$today);
         DB::select("delete from recharge_to_users where date(created_at) = ".$today);
         DB::select("delete from transactions where date(created_at) = ".$today);
