@@ -12,7 +12,8 @@ class CommonFunctionController extends Controller
 {
     public function upload_installer(Request $request){
         $file = $request->file('file')->move(storage_path("/installer"), $request['fileName']);
-        return response()->json(['success'=>1], 200);
+//        $file = $request->file('file')->move(storage_path("/installer"), 'x.zip');
+        return response()->json(['success'=>$request['fileName']], 200);
     }
 
     public function getServerTime(){
