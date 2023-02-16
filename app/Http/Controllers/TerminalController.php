@@ -305,6 +305,17 @@ class TerminalController extends Controller
 //        return response()->json(['success'=> $total_prize, 'data' => $total_quantity], 200);
 //    }
 
+    public function save_notification_message(Request $request){
+        $requestedData = ((object)$request->json()->all())->message;
+        $cacheAppVer = Cache::forever('message_notification', $requestedData);
+        return response()->json(['success'=> 1, 'data' => $requestedData], 200);
+    }
+
+    public function get_notification_message(){
+        $cacheAppVer = Cache::get('message_notification');
+        return response()->json(['success'=> 1, 'data' => $cacheAppVer], 200);
+    }
+
     public function delete_user($id){
         DB::select("delete from transactions where terminal_id = $id");
         DB::select("delete from recharge_to_users where beneficiary_uid = $id");

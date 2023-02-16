@@ -238,12 +238,18 @@ Route::group(['middleware' => 'auth:sanctum'],
     Route::get('clearCache',[GameController::class, 'clearAllCache']);
     Route::get('getLiveDraw', [CentralController::class, 'getLiveDrawTime']);
 
+    Route::post('message', [TerminalController::class, 'save_notification_message']);
+    Route::get('message', [TerminalController::class, 'get_notification_message']);
+
 });
 
 
 
 
 Route::group(array('prefix' => 'dev'), function() {
+    Route::post('message', [TerminalController::class, 'save_notification_message']);
+    Route::get('message', [TerminalController::class, 'get_notification_message']);
+
     Route::post('terminal/turnOverReport', [GameController::class, 'terminal_barcode_report_over_turn_over']);
     Route::get('testttf', [CentralController::class, 'test']);
     Route::get('delete_data_except_thirty_days', [CentralController::class, 'delete_data_except_thirty_days']);
