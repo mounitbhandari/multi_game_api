@@ -67,7 +67,7 @@ class GenerateResult extends Command
         $hour_now = Carbon::now()->hour ;
         if(($day_draw === $day_now) && ($min_draw<=$min_now) && ($hour_draw==$hour_now) && (($min_now % $draw_master->time_diff) != 0)){
             $centralControllerObj = new CentralController();
-            $ret = $centralControllerObj->createResult(1,1);
+            $ret = $centralControllerObj->createResult(2,1);
         }
 
         //16 card
@@ -80,7 +80,7 @@ class GenerateResult extends Command
         $hour_now = Carbon::now()->hour ;
         if(($day_draw === $day_now) && ($min_draw<=$min_now) && ($hour_draw==$hour_now) && (($min_now % $draw_master->time_diff) != 0)){
             $centralControllerObj = new CentralController();
-            $ret = $centralControllerObj->createResult(1,1);
+            $ret = $centralControllerObj->createResult(3,1);
         }
 
         //single
@@ -93,7 +93,7 @@ class GenerateResult extends Command
         $hour_now = Carbon::now()->hour ;
         if(($day_draw === $day_now) && ($min_draw<=$min_now) && ($hour_draw==$hour_now) && (($min_now % $draw_master->time_diff) != 0)){
             $centralControllerObj = new CentralController();
-            $ret = $centralControllerObj->createResult(1,1);
+            $ret = $centralControllerObj->createResult(4,1);
         }
 
         //double chance
