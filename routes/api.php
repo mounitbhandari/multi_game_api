@@ -241,6 +241,10 @@ Route::group(['middleware' => 'auth:sanctum'],
     Route::post('message', [TerminalController::class, 'save_notification_message']);
     Route::get('message', [TerminalController::class, 'get_notification_message']);
 
+    Route::post('uploadFile', [CommonFunctionController::class, 'upload_installer']);
+
+
+
 });
 
 

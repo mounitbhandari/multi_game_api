@@ -10,6 +10,11 @@ use Illuminate\Support\Str;
 
 class CommonFunctionController extends Controller
 {
+    public function upload_installer(Request $request){
+        $file = $request->file('file')->move(storage_path("/installer"), $request['fileName']);
+        return response()->json(['success'=>1], 200);
+    }
+
     public function getServerTime(){
 
 //        return request()->headers->get('referer');
