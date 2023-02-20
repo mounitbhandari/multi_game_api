@@ -134,6 +134,7 @@ Route::group(['middleware' => 'auth:sanctum'],
     Route::get("user",[UserController::class,'getCurrentUser']);
     Route::get("logout",[UserController::class,'logout']);
 
+    Route::get('drawTimes/active',[DrawMasterController::class,'getActiveDraw']);
 
     //get all users
     Route::get("users",[UserController::class,'getAllUsers']);
