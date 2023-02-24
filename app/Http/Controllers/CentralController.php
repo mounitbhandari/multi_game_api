@@ -35,7 +35,7 @@ class CentralController extends Controller
 
     public function createResult($id, $count){
 
-        $gameController = new GameController();
+//        $gameController = new GameController();
 //        $gameTotalReport = ($gameController->get_game_total_sale_today());
 //        $gameTotalReport = json_decode(($gameController->get_game_total_sale_today_result_generation(1))->content(),true);
 //
@@ -658,8 +658,15 @@ class CentralController extends Controller
 
         DB::select("update game_types set multiplexer = 1 where game_id =  ".$id);
 
-        $terminalController = new TerminalController();
-        $terminalController->claimPrizes();
+        dispatch(function () {
+
+            $terminalController = new TerminalController();
+            $terminalController->claimPrizes();
+
+        })->afterResponse();
+
+//        $terminalController = new TerminalController();
+//        $terminalController->claimPrizes();
 
         return response()->json(['success'=>1, 'message' => 'Result added'], 200);
 

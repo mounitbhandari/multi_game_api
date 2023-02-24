@@ -13,4 +13,8 @@ class GameType extends Model
         "created_at","updated_at"
     ];
 
+    public function games(){
+        return $this->belongsTo(Game::class,'game_id');
+    }
+
 }

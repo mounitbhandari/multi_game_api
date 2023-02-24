@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DrawMasterResource;
 use App\Models\DrawMaster;
 use App\Models\Game;
+use App\Models\GameType;
 use App\Models\NumberCombination;
 use App\Models\PlayDetails;
 use App\Models\PlayMaster;
@@ -34,7 +35,8 @@ class Test extends Controller
     }
 
     public function testNew(){
-        return rand(0, 10);
+        $gameTest = Game::find(1)->game_types;
+        return response()->json(['success'=>1,'data'=>$gameTest], 200,[],JSON_NUMERIC_CHECK);
 //        $x = Cache::remember('testCache', 3000000, function (){
 //            return 2.1;
 //        });
