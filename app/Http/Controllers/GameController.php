@@ -1201,8 +1201,8 @@ class GameController extends Controller
             array_push($returnArray , $x);
             Cache::forget('rolletAllPlayMastersReturnArray');
             Cache::forget('sizeOfRolletAllPlayMasters_get_game_total_sale_today');
-            Cache::remember('sizeOfRolletAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($tripleAllPlayMasters) {
-                return sizeof($tripleAllPlayMasters);
+            Cache::remember('sizeOfRolletAllPlayMasters_get_game_total_sale_today', 3000000, function () use ($rolletAllPlayMasters) {
+                return sizeof($rolletAllPlayMasters);
             });
             Cache::remember('rolletAllPlayMastersReturnArray', 3000000, function () use ($x) {
                 return $x;
@@ -1286,6 +1286,7 @@ class GameController extends Controller
 
         return response()->json(['success'=>1,'data'=> $returnArray], 200);
     }
+
 
     /**
      * Show the form for editing the specified resource.
