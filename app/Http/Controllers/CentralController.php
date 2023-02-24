@@ -37,9 +37,9 @@ class CentralController extends Controller
 
         $gameController = new GameController();
 //        $gameTotalReport = ($gameController->get_game_total_sale_today());
-        $gameTotalReport = json_decode(($gameController->get_game_total_sale_today_result_generation(1))->content(),true);
-
-        return response()->json(['success'=>2, 'message' => $gameTotalReport], 200);
+//        $gameTotalReport = json_decode(($gameController->get_game_total_sale_today_result_generation(1))->content(),true);
+//
+//        return response()->json(['success'=>2, 'message' => $gameTotalReport], 200);
 
         $game = Game::find($id);
         if(!$game){
