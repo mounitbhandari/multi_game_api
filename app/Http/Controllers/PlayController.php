@@ -44,9 +44,9 @@ class PlayController extends Controller
 
         $output_array = array();
 
-        if($inputPlayMaster->combined_number == 0){
-            return response()->json(['success'=>0,'data'=>null, 'message' => 'Invalid Combined number'], 406,[],JSON_NUMERIC_CHECK);
-        }
+//        if($inputPlayMaster->combined_number == 0){
+//            return response()->json(['success'=>0,'data'=>null, 'message' => 'Invalid Combined number'], 406,[],JSON_NUMERIC_CHECK);
+//        }
 
         DB::beginTransaction();
         try{
