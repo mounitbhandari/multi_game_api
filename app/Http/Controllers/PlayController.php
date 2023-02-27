@@ -57,7 +57,7 @@ class PlayController extends Controller
             $playMaster->barcode_number = rand(10000000000000000,99999999999999999);
             $playMaster->user_id = $inputPlayMaster->terminalId;
             $playMaster->game_id = $inputPlayMaster->gameId;
-            $playMaster->combined_number = (($inputPlayMaster->gameId) == 6)? $inputPlayMaster->combined_number: 1;
+//            $playMaster->combined_number = (($inputPlayMaster->gameId) == 6)? $inputPlayMaster->combined_number: 1;
 //            $playMaster->user_relation_id = $inputPlayMaster->userRelationId;
             $playMaster->user_relation_id = $userRelationId->id;
             $playMaster->save();
@@ -102,6 +102,7 @@ class PlayController extends Controller
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                         $playDetails->global_payout = $gameType->payout;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
+                        $playDetails->combined_number = 1;
                         $playDetails->terminal_payout = $payoutSlabValue;
                         $playDetails->save();
 //                        $output_play_details[] = $playDetails;
@@ -128,6 +129,7 @@ class PlayController extends Controller
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                         $playDetails->global_payout = $gameType->payout;
                         $playDetails->terminal_payout = $payoutSlabValue;
+                        $playDetails->combined_number = 1;
 //                        $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
 //                        $output_play_details[] = $playDetails;
@@ -152,6 +154,7 @@ class PlayController extends Controller
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                         $playDetails->global_payout = $gameType->payout;
                         $playDetails->terminal_payout = $payoutSlabValue;
+                        $playDetails->combined_number = 1;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
 //                        $output_play_details[] = $playDetails;
@@ -174,6 +177,7 @@ class PlayController extends Controller
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                         $playDetails->global_payout = $gameType->payout;
                         $playDetails->terminal_payout = $payoutSlabValue;
+                        $playDetails->combined_number = 1;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
 //                        $output_play_details[] = $playDetails;
@@ -196,6 +200,7 @@ class PlayController extends Controller
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                         $playDetails->global_payout = $gameType->payout;
                         $playDetails->terminal_payout = $payoutSlabValue;
+                        $playDetails->combined_number = 1;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
 //                        $output_play_details[] = $playDetails;
@@ -218,6 +223,7 @@ class PlayController extends Controller
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                         $playDetails->global_payout = $gameType->payout;
                         $playDetails->terminal_payout = $payoutSlabValue;
+                        $playDetails->combined_number = 1;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
 //                        $output_play_details[] = $playDetails;
@@ -240,6 +246,7 @@ class PlayController extends Controller
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                         $playDetails->global_payout = $gameType->payout;
                         $playDetails->terminal_payout = $payoutSlabValue;
+                        $playDetails->combined_number = 1;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
 //                        $output_play_details[] = $playDetails;
@@ -262,6 +269,7 @@ class PlayController extends Controller
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                         $playDetails->global_payout = $gameType->payout;
                         $playDetails->terminal_payout = $payoutSlabValue;
+                        $playDetails->combined_number = 1;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
 //                        $output_play_details[] = $playDetails;
@@ -284,6 +292,7 @@ class PlayController extends Controller
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
                         $playDetails->global_payout = $gameType->payout;
                         $playDetails->terminal_payout = $payoutSlabValue;
+                        $playDetails->combined_number = $detail->combined_number;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
 //                        $output_play_details[] = $playDetails;

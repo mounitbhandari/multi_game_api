@@ -531,13 +531,13 @@ class CPanelReportController extends Controller
 //                inner join game_types on game_types.id = play_details.game_type_id
 //                where play_masters.id = ".$play_master_id." and play_details.game_type_id = ".$game_id." and play_details.combination_number_id = ".$result_number_combination_id);
 
-            $data = DB::select("select (sum(quantity) * game_types.winning_price) as price_value from play_details
+            $data = DB::select("select (sum(quantity) * game_types.winning_price) as price_value, play_details.combined_number from play_details
                 inner join play_masters on play_details.play_master_id = play_masters.id
                 inner join game_types on game_types.id = play_details.game_type_id
                 where play_details.play_master_id = ".$play_master_id."  and date(play_details.created_at) = ?
                 and play_masters.draw_master_id = ".$play_master->draw_master_id."
                 and play_details.combination_number_id = ".$result_number_combination_id." and game_type_id = ".$game_id."
-                group by winning_price",[$play_date]);
+                group by winning_price, combined_number",[$play_date]);
 
 //            select (sum(quantity) * game_types.winning_price) as price_value from play_details
 //inner join play_masters on play_details.play_master_id = play_masters.id
@@ -546,6 +546,7 @@ class CPanelReportController extends Controller
 
             if($data){
                 $prize_value = ($data[0]->price_value + $prize_value) * $result_multiplier;
+                $prize_value = $prize_value/$data->combined_number;
             }
         }
 
@@ -560,7 +561,7 @@ class CPanelReportController extends Controller
             });
         }
 
-        return ($prize_value/$play_master->combined_number);
+        return $prize_value;
     }
 
 

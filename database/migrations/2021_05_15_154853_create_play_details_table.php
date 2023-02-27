@@ -26,6 +26,7 @@ class CreatePlayDetailsTable extends Migration
             $table->decimal('pss_commission',10,2)->default(0);
             $table->decimal('super_stockist_commission',10,2)->default(0);
             $table->decimal('terminal_payout',10,2)->default(0);
+            $table->tinyInteger('combined_number')->default(1);
 //            $table->integer('multiplexer')->nullable(false);
             $table->decimal('global_payout',10,2)->default(0);
 
