@@ -546,7 +546,7 @@ class CPanelReportController extends Controller
 
             if($data){
                 $prize_value = ($data[0]->price_value + $prize_value) * $result_multiplier;
-                $prize_value = $prize_value/$data->combined_number;
+                $prize_value = $prize_value/$data[0]->combined_number;
             }
         }
 
