@@ -293,6 +293,7 @@ class PlayController extends Controller
                         $playDetails->global_payout = $gameType->payout;
                         $playDetails->terminal_payout = $payoutSlabValue;
                         $playDetails->combined_number = $detail->combined_number;
+//                        $playDetails->combined_number = 1;
 //                    $playDetails->multiplexer = $gameType->multiplexer;
                         $playDetails->save();
 //                        $output_play_details[] = $playDetails;
