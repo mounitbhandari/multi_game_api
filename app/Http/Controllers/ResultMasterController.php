@@ -478,7 +478,7 @@ class ResultMasterController extends Controller
                 inner join rollet_numbers on rollet_numbers.id = result_details.combination_number_id
                 inner join draw_masters on draw_masters.id = result_masters.draw_master_id
                 where result_masters.game_id = 6 and result_masters.game_date = ?
-                order by draw_masters.end_time limit 7",[$today]);
+                order by draw_masters.end_time  DESC limit 7",[$today]);
 
             $return_array = $rolletNumber;
 
