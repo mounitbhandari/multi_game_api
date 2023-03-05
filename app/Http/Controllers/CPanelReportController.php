@@ -284,7 +284,7 @@ class CPanelReportController extends Controller
                 ->where('play_details.game_type_id',9)
                 ->get();
             $data['baharNumber'] = $baharNumber;
-            
+
 
             $rolletNumber = PlayDetails::select('rollet_numbers.rollet_number'
                 ,'play_details.quantity')
