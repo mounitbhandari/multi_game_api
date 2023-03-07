@@ -23,6 +23,7 @@ class CreateGameTypesTable extends Migration
             $table->decimal('winning_bonus_percent',10,2)->default(0);
             $table->decimal('commission',10,2)->default(0);
             $table->decimal('payout',10,2)->default(0);
+            $table->integer('counter')->default(0);
             $table->decimal('default_payout',10,2)->default(0);
             $table->integer('multiplexer')->default(1);
             $table->timestamps();

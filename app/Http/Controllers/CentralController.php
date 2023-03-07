@@ -67,7 +67,11 @@ class CentralController extends Controller
 
         $game_multiplexer = $checkMultiplexerStatus == 'yes'? 1 : (GameType::whereGameId($id)->first())->multiplexer;
 
+        $gameTemp_multiplexer = (GameType::whereGameId($id)->first())->multiplexer;
+
         $null_multiplexer = [2,4,3];
+
+        $checkCount = (GameType::whereGameId($id)->first())->counter;
 
 //        return $null_multiplexer[array_rand($null_multiplexer,1)];
 
@@ -280,19 +284,26 @@ class CentralController extends Controller
                     LIMIT 1"));
             }
 
-            if($checkMultiplexerStatus == 'yes'){
-                if(($result[0]->total_quantity) > $targetValue){
-                    $game_multiplexer = 1;
-                }elseif ($result[0]->total_quantity == 0){
-                    $randNum = rand(0, 10);
-                    $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
-                }elseif (($result[0]->total_quantity) < $targetValue){
-                    $checkMultiplexer = $result[0]->total_quantity * $gameType->winning_price * 2;
-                    if($checkMultiplexer < $payout){
-                        $game_multiplexer = rand(1,2);
+                if($checkMultiplexerStatus == 'yes'){
+                    if(($result[0]->total_quantity) > $targetValue){
+                        $game_multiplexer = 1;
+                    }elseif ($result[0]->total_quantity == 0){
+                        $randNum = rand(0, 10);
+                        $game_multiplexer = $randNum>7 ? $null_multiplexer[array_rand($null_multiplexer,1)] : 1;
+                    }elseif (($result[0]->total_quantity) < $targetValue){
+                        $checkMultiplexer = $result[0]->total_quantity * $gameType->winning_price * 2;
+                        if($checkMultiplexer < $payout){
+                            $game_multiplexer = rand(1,2);
+                        }
                     }
                 }
-            }
+
+//                if($checkCount == 0){
+//                    $this->checkAndSetDefaultPayout($id);
+//                }else{
+//                    DB::select("update game_types set counter = (counter - 1) where game_id = ".$id);
+//                }
+
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,3,$result[0]->card_combination_id,$game_multiplexer))->content(),true);
 
@@ -359,6 +370,12 @@ class CentralController extends Controller
                     }
                 }
             }
+
+//            if($checkCount == 0){
+//                $this->checkAndSetDefaultPayout($id);
+//            }else{
+//                DB::select("update game_types set counter = (counter - 1) where game_id = ".$id);
+//            }
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,4,$result[0]->card_combination_id,$game_multiplexer))->content(),true);
 
@@ -438,6 +455,12 @@ class CentralController extends Controller
                     }
                 }
             }
+
+//            if($checkCount == 0) {
+//                $this->checkAndSetDefaultPayout($id);
+//            }else{
+//                DB::select("update game_types set counter = (counter - 1) where game_id = ".$id);
+//            }
 
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,6,$singleNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
 
@@ -589,6 +612,12 @@ class CentralController extends Controller
                 }
             }
 
+//            if($checkCount == 0){
+//               $this->checkAndSetDefaultPayout($id);
+//            }else{
+//                DB::select("update game_types set counter = (counter - 1) where game_id = ".$id);
+//            }
+
             $playMasterSaveCheck = json_decode(($resultMasterControllerObj->save_auto_result($lastDrawId,10,$rolletNumberTargetData[0]->combination_number_id,$game_multiplexer))->content(),true);
         }
 
@@ -606,7 +635,7 @@ class CentralController extends Controller
         }
 
         //set payout at default 90
-        $this->checkAndSetDefaultPayout($id,$lastDrawId);
+//        $this->checkAndSetDefaultPayout($id,$lastDrawId);
 
 
         $tempDrawMasterLastDraw = DrawMaster::whereId($lastDrawId)->whereGameId($id)->first();
@@ -614,6 +643,12 @@ class CentralController extends Controller
         $tempDrawMasterLastDraw->is_draw_over = 'yes';
         $tempDrawMasterLastDraw->payout = DB::select("select payout from game_types where game_id = ? limit 1",[$id])[0]->payout;
         $tempDrawMasterLastDraw->update();
+
+        if($checkCount == 0){
+            $this->checkAndSetDefaultPayout($id);
+        }else{
+            DB::select("update game_types set counter = (counter - 1) where game_id = ".$id);
+        }
 
         $tempDrawMasterNextDraw = DrawMaster::whereId($nextDrawId)->whereGameId($id)->first();
         $tempDrawMasterNextDraw->active = 1;
@@ -677,13 +712,16 @@ class CentralController extends Controller
 
     }
 
-    public function checkAndSetDefaultPayout($id, $lastDrawId){
-        $gameTypes = DB::select("select id,payout from game_types where game_id = ?",[$id])[0];
-        if(($gameTypes->payout > 100) && ($lastDrawId % 10 == 0)){
-            $gameTypes = GameType::find($gameTypes->id);
-            $gameTypes->payout = 90;
-            $gameTypes->save();
-        }
+    public function checkAndSetDefaultPayout($id){
+//        $gameTypes = DB::select("select id,payout from game_types where game_id = ?",[$id])[0];
+//        if(($gameTypes->payout > 100) && ($lastDrawId % 10 == 0)){
+//            $gameTypes = GameType::find($gameTypes->id);
+//            $gameTypes->payout = 90;
+//            $gameTypes->save();
+//        }
+
+        DB::select("update game_types set payout = 90 where game_id = ".$id);
+
     }
 
     public function getLiveDrawTime(){

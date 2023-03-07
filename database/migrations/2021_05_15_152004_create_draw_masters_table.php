@@ -22,7 +22,7 @@ class CreateDrawMastersTable extends Migration
             $table->string('time_diff',20)->nullable(true);
             $table ->foreignId('game_id')->references('id')->on('games')->onDelete('cascade');
             $table->tinyInteger('active')->default(0);
-            $table->tinyInteger('payout')->nullable(true);
+            $table->integer('payout')->nullable(true);
             $table->enum('is_draw_over',['yes','no'])->default('no');
             $table->timestamps();
         });

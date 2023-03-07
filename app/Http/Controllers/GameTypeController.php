@@ -37,17 +37,20 @@ class GameTypeController extends Controller
                 $gameType = GameType::find($inputPayoutDetail['gameTypeId']);
                 $gameType->payout = $inputPayoutDetail['newPayout'];
                 $gameType->multiplexer = $inputPayoutDetail['multiplexer'];
+                $gameType->counter = $inputPayoutDetail['counter'];
                 $gameType->save();
 
                 if($inputPayoutDetail['gameTypeId'] == 1){
                     $gameType = GameType::find(2);
                     $gameType->payout = $inputPayoutDetail['newPayout'];
                     $gameType->multiplexer = $inputPayoutDetail['multiplexer'];
+                    $gameType->counter = $inputPayoutDetail['counter'];
                     $gameType->save();
 
                     $gameType = GameType::find(5);
                     $gameType->payout = $inputPayoutDetail['newPayout'];
                     $gameType->multiplexer = $inputPayoutDetail['multiplexer'];
+                    $gameType->counter = $inputPayoutDetail['counter'];
                     $gameType->save();
                 }
 
@@ -55,11 +58,13 @@ class GameTypeController extends Controller
                     $gameType = GameType::find(8);
                     $gameType->payout = $inputPayoutDetail['newPayout'];
                     $gameType->multiplexer = $inputPayoutDetail['multiplexer'];
+                    $gameType->counter = $inputPayoutDetail['counter'];
                     $gameType->save();
 
                     $gameType = GameType::find(9);
                     $gameType->payout = $inputPayoutDetail['newPayout'];
                     $gameType->multiplexer = $inputPayoutDetail['multiplexer'];
+                    $gameType->counter = $inputPayoutDetail['counter'];
                     $gameType->save();
                 }
             }

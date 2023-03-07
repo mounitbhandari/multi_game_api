@@ -35,6 +35,7 @@ class GameTypeResource extends JsonResource
             'winningBonusPercent' => $this->winning_bonus_percent,
             'commission' => $this->commission,
             'payout' => $this->payout,
+            'counter' => $this->counter,
             'defaultPayout' => $this->default_payout,
             'multiplexer' => $this->multiplexer,
             'random_multiplexer' => (Game::select('multiplexer_random')->whereId($this->game_id)->first())->multiplexer_random,
