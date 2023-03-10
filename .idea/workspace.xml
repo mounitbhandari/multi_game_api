@@ -3,11 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="5eca29a0-ed15-4037-b786-6b351566af54" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CentralController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CentralController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/GameTypeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/GameTypeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Resources/GameTypeResource.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Resources/GameTypeResource.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_05_15_152004_create_draw_masters_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_05_15_152004_create_draw_masters_table.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/migrations/2021_05_15_153417_create_game_types_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2021_05_15_153417_create_game_types_table.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -408,7 +403,9 @@
       <workItem from="1678025538529" duration="1706000" />
       <workItem from="1678072750602" duration="405000" />
       <workItem from="1678108324279" duration="730000" />
-      <workItem from="1678158621795" duration="6633000" />
+      <workItem from="1678158621795" duration="7000000" />
+      <workItem from="1678256812013" duration="394000" />
+      <workItem from="1678415751708" duration="627000" />
     </task>
     <servers />
   </component>

@@ -286,7 +286,7 @@ class CPanelReportController extends Controller
             $data['baharNumber'] = $baharNumber;
 
 
-            $rolletNumber = PlayDetails::select('rollet_numbers.rollet_number'
+            $rolletNumber = PlayDetails::select('rollet_numbers.rollet_number','play_details.combined_number'
                 ,'play_details.quantity')
                 ->join('rollet_numbers','play_details.combination_number_id','rollet_numbers.id')
                 ->where('play_details.play_master_id',$play_master_id)
