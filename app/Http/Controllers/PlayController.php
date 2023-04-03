@@ -302,9 +302,14 @@ class PlayController extends Controller
                 }
             }
 
-            $amount = $playMaster->play_details->sum(function($t){
-                return $t->quantity * $t->mrp;
-            });
+//            $amount = $playMaster->play_details->sum(function($t){
+//                return  $t->quantity * $t->mrp;
+//            });
+
+            $amount = DB::select("select distinct play_details.combination_number_id, play_details.quantity from play_masters
+                    inner join play_details on play_masters.id = play_details.play_master_id
+                    where play_masters.id = ?
+            ",[$playMaster->id]);
 
 //            $userClosingBalance = (User::find($inputPlayMaster->terminalId))->closing_balance;
             $userClosingBalance = $user->closing_balance;
