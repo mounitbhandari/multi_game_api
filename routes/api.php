@@ -361,7 +361,7 @@ Route::group(array('prefix' => 'dev'), function() {
 //    Route::get('gameTypes',[GameTypeController::class,'index'])->middleware('lscache:max-age=86300;public');
 
     //play_masters
-//     Route::post('buyTicket',[PlayController::class,'save_play_details']);
+     Route::post('buyTicket',[PlayController::class,'save_play_details']);
 
 
     //game

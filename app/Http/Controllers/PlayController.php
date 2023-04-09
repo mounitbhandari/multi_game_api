@@ -306,7 +306,7 @@ class PlayController extends Controller
 //                return  $t->quantity * $t->mrp;
 //            });
 
-            $amount = DB::select("select distinct play_details.combination_number_id, (play_details.quantity * game_types.mrp) as amount from play_masters
+            $amount = DB::select("select distinct play_masters.id, (play_details.quantity * game_types.mrp) as amount from play_masters
                     inner join play_details on play_masters.id = play_details.play_master_id
                     inner join game_types on play_details.game_type_id = game_types.id
                     where play_masters.id = ?
