@@ -307,7 +307,7 @@ class PlayController extends Controller
 //            });
 
             if($inputPlayMaster->gameId == 6){
-                $amount = DB::select("select sum(table1.amount) as amount from (select distinct  play_details.combined_number, if(play_details.combined_number>1, 1 , play_details.quantity * game_types.mrp ) as amount from play_masters
+                $amount = DB::select("select sum(table1.amount) as amount from (select distinct  play_details.combined_number, if(play_details.combined_number>1, play_details.quantity * 1, play_details.quantity * game_types.mrp ) as amount from play_masters
                     inner join play_details on play_masters.id = play_details.play_master_id
                     inner join game_types on play_details.game_type_id = game_types.id
                     where play_masters.id = ?) as table1
