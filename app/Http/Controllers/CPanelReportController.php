@@ -610,7 +610,7 @@ class CPanelReportController extends Controller
                 return (DB::select("select sum(quantity) as quantity from(select distinct  play_details.combined_number, play_details.quantity as quantity from play_masters
                     inner join play_details on play_masters.id = play_details.play_master_id
                     inner join game_types on play_details.game_type_id = game_types.id
-                    where play_masters.id = 14) as table1".$play_master_id)[0])->quantity;
+                    where play_masters.id = ?) as table1",[$play_master_id])[0]->quantity);
             });
         }else{
             $data = Cache::remember('get_total_quantity_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
