@@ -97,6 +97,7 @@ class PlayController extends Controller
                         $playDetails->mrp = $gameType->mrp;
                         $playDetails->commission = $user->commission;
                         $playDetails->ps_commission = $ps_commission;
+                        $playDetails->series_id = $detail->series_id;
                         $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
                         $playDetails->pss_commission = $pss_commission;
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
@@ -124,6 +125,7 @@ class PlayController extends Controller
                         $playDetails->mrp = $gameType->mrp;
                         $playDetails->commission = $user->commission;
                         $playDetails->ps_commission = $ps_commission;
+                        $playDetails->series_id = $detail->series_id;
                         $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
                         $playDetails->pss_commission = $pss_commission;
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
@@ -149,6 +151,7 @@ class PlayController extends Controller
                         $playDetails->mrp = $gameType->mrp;
                         $playDetails->commission = $user->commission;
                         $playDetails->ps_commission = $ps_commission;
+                        $playDetails->series_id = $detail->series_id;
                         $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
                         $playDetails->pss_commission = $pss_commission;
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
@@ -172,6 +175,7 @@ class PlayController extends Controller
                         $playDetails->mrp = $gameType->mrp;
                         $playDetails->commission = $user->commission;
                         $playDetails->ps_commission = $ps_commission;
+                        $playDetails->series_id = $detail->series_id;
                         $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
                         $playDetails->pss_commission = $pss_commission;
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
@@ -195,6 +199,7 @@ class PlayController extends Controller
                         $playDetails->mrp = $gameType->mrp;
                         $playDetails->commission = $user->commission;
                         $playDetails->ps_commission = $ps_commission;
+                        $playDetails->series_id = $detail->series_id;
                         $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
                         $playDetails->pss_commission = $pss_commission;
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
@@ -218,6 +223,7 @@ class PlayController extends Controller
                         $playDetails->mrp = $gameType->mrp;
                         $playDetails->commission = $user->commission;
                         $playDetails->ps_commission = $ps_commission;
+                        $playDetails->series_id = $detail->series_id;
                         $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
                         $playDetails->pss_commission = $pss_commission;
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
@@ -241,6 +247,7 @@ class PlayController extends Controller
                         $playDetails->mrp = $gameType->mrp;
                         $playDetails->commission = $user->commission;
                         $playDetails->ps_commission = $ps_commission;
+                        $playDetails->series_id = $detail->series_id;
                         $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
                         $playDetails->pss_commission = $pss_commission;
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
@@ -264,6 +271,7 @@ class PlayController extends Controller
                         $playDetails->mrp = $gameType->mrp;
                         $playDetails->commission = $user->commission;
                         $playDetails->ps_commission = $ps_commission;
+                        $playDetails->series_id = $detail->series_id;
                         $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
                         $playDetails->pss_commission = $pss_commission;
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
@@ -287,6 +295,7 @@ class PlayController extends Controller
                         $playDetails->mrp = $gameType->mrp;
                         $playDetails->commission = $user->commission;
                         $playDetails->ps_commission = $ps_commission;
+                        $playDetails->series_id = $detail->series_id;
                         $playDetails->stockist_commission = $playDetails->ps_commission - $user->commission;
                         $playDetails->pss_commission = $pss_commission;
                         $playDetails->super_stockist_commission = $playDetails->pss_commission - $playDetails->ps_commission;
