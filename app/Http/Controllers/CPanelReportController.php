@@ -603,9 +603,20 @@ class CPanelReportController extends Controller
 //        }
 //        return $total_quantity;
 
-        $data = Cache::remember('get_total_quantity_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
-            return (DB::select("select sum(play_details.quantity) as total_quantity from play_details where play_master_id = ".$play_master_id)[0])->total_quantity;
-        });
+        $game_id = PlayMaster::find($play_master_id)->game_id;
+
+        if($game_id == 6){
+            $data = Cache::remember('get_total_quantity_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
+                return (DB::select("select sum(quantity) as quantity from(select distinct  play_details.combined_number, play_details.quantity as quantity from play_masters
+                    inner join play_details on play_masters.id = play_details.play_master_id
+                    inner join game_types on play_details.game_type_id = game_types.id
+                    where play_masters.id = 14) as table1".$play_master_id)[0])->quantity;
+            });
+        }else{
+            $data = Cache::remember('get_total_quantity_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
+                return (DB::select("select sum(play_details.quantity) as total_quantity from play_details where play_master_id = ".$play_master_id)[0])->total_quantity;
+            });
+        }
 
 //        $data = (DB::select("select sum(play_details.quantity) as total_quantity from play_details where play_master_id = ".$play_master_id)[0])->total_quantity;
 
