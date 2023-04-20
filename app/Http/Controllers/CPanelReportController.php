@@ -296,7 +296,7 @@ class CPanelReportController extends Controller
                 ,play_details.quantity, play_details.series_id from play_details
                 inner join rollet_numbers on rollet_numbers.id = play_details.combination_number_id
                 where play_details.game_type_id = 10 and play_details.play_master_id = ?
-                order by series_id, play_details.combined_number"[$play_master_id]);
+                order by series_id, play_details.combined_number",[$play_master_id]);
             $data['rolletNumber'] = $rolletNumber;
 
             return $data;
