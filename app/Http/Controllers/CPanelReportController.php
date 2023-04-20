@@ -286,12 +286,17 @@ class CPanelReportController extends Controller
             $data['baharNumber'] = $baharNumber;
 
 
-            $rolletNumber = PlayDetails::select('rollet_numbers.rollet_number','play_details.combined_number'
-                ,'play_details.quantity')
-                ->join('rollet_numbers','play_details.combination_number_id','rollet_numbers.id')
-                ->where('play_details.play_master_id',$play_master_id)
-                ->where('play_details.game_type_id',10)
-                ->get();
+//            $rolletNumber = PlayDetails::select('rollet_numbers.rollet_number','play_details.combined_number'
+//                ,'play_details.quantity')
+//                ->join('rollet_numbers','play_details.combination_number_id','rollet_numbers.id')
+//                ->where('play_details.play_master_id',$play_master_id)
+//                ->where('play_details.game_type_id',10)
+//                ->get();
+            $rolletNumber = DB::select("select rollet_numbers.rollet_number,play_details.combined_number
+                ,play_details.quantity, play_details.series_id from play_details
+                inner join rollet_numbers on rollet_numbers.id = play_details.combination_number_id
+                where play_details.game_type_id = 10 and play_details.play_master_id = ?
+                order by series_id, play_details.combined_number"[$play_master_id]);
             $data['rolletNumber'] = $rolletNumber;
 
             return $data;
