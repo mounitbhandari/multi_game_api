@@ -661,7 +661,7 @@ class CPanelReportController extends Controller
 
         if($game_id == 6){
             $data = Cache::remember('get_total_amount_by_play_master_id'.$play_master_id, 3000000, function () use ($play_master_id) {
-                return (DB::select("select sum(table1.amount) as amount from (select distinct  play_details.combined_number,play_details.series_id , if(play_details.combined_number>1, play_details.quantity * 1, play_details.quantity * game_types.mrp ) as amount from play_masters
+                return (DB::select("select sum(table1.amount) as amount from (select  play_details.combined_number, if(play_details.combined_number>1, play_details.quantity * 1, play_details.quantity * game_types.mrp ) as amount from play_masters
                     inner join play_details on play_masters.id = play_details.play_master_id
                     inner join game_types on play_details.game_type_id = game_types.id
                     where play_masters.id = ?) as table1
