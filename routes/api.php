@@ -252,6 +252,9 @@ Route::group(['middleware' => 'auth:sanctum'],
 
 
 Route::group(array('prefix' => 'dev'), function() {
+
+    Route::get('getRolletNumbers',[RolletNumberController::class, 'get_rollet_numbers']);
+
     Route::post('message', [TerminalController::class, 'save_notification_message']);
     Route::get('message', [TerminalController::class, 'get_notification_message']);
 
