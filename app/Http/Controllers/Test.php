@@ -34,9 +34,22 @@ class Test extends Controller
         return response()->json(['success'=>1,'data'=>$result], 200,[],JSON_NUMERIC_CHECK);
     }
 
-    public function testNew(){
-        $gameTest = Game::find(1)->game_types;
-        return response()->json(['success'=>1,'data'=>$gameTest], 200,[],JSON_NUMERIC_CHECK);
+    public function testNew($id){
+
+        $data = DB::select("select ifnull(sum(table1.amount),0) as amount from (select  play_details.combined_number, if(play_details.combined_number>1, play_details.quantity * 1, play_details.quantity * game_types.mrp ) as amount from play_masters
+                    inner join play_details on play_masters.id = play_details.play_master_id
+                    inner join game_types on play_details.game_type_id = game_types.id
+                    where play_masters.id = ? and play_details.series_id = 0) as table1;",[$id])[0]->amount;
+
+        $data2 = DB::select("select ifnull(sum(table1.amount),0) as amount from (select distinct  play_details.combined_number, if(play_details.combined_number>1, play_details.quantity * 1, play_details.quantity * game_types.mrp ) as amount from play_masters
+                    inner join play_details on play_masters.id = play_details.play_master_id
+                    inner join game_types on play_details.game_type_id = game_types.id
+                    where play_masters.id = ? and play_details.series_id <> 0) as table1;",[$id])[0]->amount;
+
+        return response()->json(['success'=>$data,'data'=>$data2], 200,[],JSON_NUMERIC_CHECK);
+
+//        $gameTest = Game::find(1)->game_types;
+//        return response()->json(['success'=>1,'data'=>$gameTest], 200,[],JSON_NUMERIC_CHECK);
 //        $x = Cache::remember('testCache', 3000000, function (){
 //            return 2.1;
 //        });
