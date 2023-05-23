@@ -55,6 +55,7 @@ Route::post("register",[UserController::class,'register']);
 Route::get("serverTime",[CommonFunctionController::class,'getServerTime']);
 Route::get("checkTerminalToken/{id}",[TerminalController::class,'is_user_logged_in']);
 Route::get("backupDatabase",[CommonFunctionController::class,'backup_database']);
+Route::get("updateExpiration",[CentralController::class,'updateExpiration']);
 
 Route::group(['middleware' => 'auth:sanctum'],
     function(){

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\DoubleNumberCombination;
+use App\Models\Expiration;
 use App\Models\Game;
 use App\Models\GameType;
 use App\Models\ManualResult;
@@ -710,6 +711,14 @@ class CentralController extends Controller
     public function test(){
         return $this->checkAndSetDefaultPayout(4,2450);
 
+    }
+
+    public function updateExpiration(){
+        $expire = Expiration::first();
+
+        $expireObject = new Expiration();
+        $expireObject->days = $expire->days!=0? $expire->days - 1:0;
+        $expireObject->save();
     }
 
     public function checkAndSetDefaultPayout($id){

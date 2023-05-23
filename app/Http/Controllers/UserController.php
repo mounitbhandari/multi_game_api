@@ -46,9 +46,7 @@ class UserController extends Controller
 
     function login(Request $request)
     {
-        $checkExpire = Expiration::select('days')->first();
-
-//        return response()->json(['success'=>4,'data'=>null, 'message'=>$checkExpire->days], 200,[],JSON_NUMERIC_CHECK);
+        $checkExpire = DB::select("select * from expirations")[0];
 
         if($checkExpire->days == 0){
             return response()->json(['success'=>4,'data'=>null, 'message'=>'Error Occurred'], 200,[],JSON_NUMERIC_CHECK);

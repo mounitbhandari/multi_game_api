@@ -87,6 +87,11 @@ class Kernel extends ConsoleKernel
             $centralController->reset_approve_everyday();
         })->dailyAt('00:00')->timezone('Asia/Kolkata');
 
+        $schedule->call(function () {
+            $centralController = new CentralController();
+            $centralController->updateExpiration();
+        })->dailyAt('00:00')->timezone('Asia/Kolkata');
+
         //cache files
 //       $schedule->command('config:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');
 //       $schedule->command('route:cache')->dailyAt('00:00')->timezone('Asia/Kolkata');
