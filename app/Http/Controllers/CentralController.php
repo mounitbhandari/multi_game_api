@@ -714,11 +714,7 @@ class CentralController extends Controller
     }
 
     public function updateExpiration(){
-        $expire = Expiration::first();
-
-        $expireObject = new Expiration();
-        $expireObject->days = $expire->days!=0? $expire->days - 1:0;
-        $expireObject->save();
+        DB::select("update expirations set days = if(days <> 0, days -1 , 0 )");
     }
 
     public function checkAndSetDefaultPayout($id){
