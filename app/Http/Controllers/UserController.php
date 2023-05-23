@@ -6,6 +6,7 @@ use App\Http\Resources\StockistResource;
 use App\Http\Resources\SuperStockistResource;
 use App\Http\Resources\TerminalResource;
 use App\Http\Resources\UserResource;
+use App\Models\Expiration;
 use App\Models\PlayMaster;
 use App\Models\User;
 use App\Models\UserRelationWithOther;
@@ -45,6 +46,13 @@ class UserController extends Controller
 
     function login(Request $request)
     {
+        $checkExpire = Expiration::select('days')->first();
+
+//        return response()->json(['success'=>4,'data'=>null, 'message'=>$checkExpire->days], 200,[],JSON_NUMERIC_CHECK);
+
+        if($checkExpire->days == 0){
+            return response()->json(['success'=>4,'data'=>null, 'message'=>'Error Occurred'], 200,[],JSON_NUMERIC_CHECK);
+        }
 
         if(!($request->devToken)){
             return response()->json(['success'=>3,'data'=>null, 'message'=>'Dev token not found'], 200,[],JSON_NUMERIC_CHECK);

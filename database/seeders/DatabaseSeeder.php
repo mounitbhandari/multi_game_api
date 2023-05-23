@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\BaharNumber;
+//use App\Models\Expiration;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\ResultMaster;
@@ -52,5 +53,7 @@ class DatabaseSeeder extends Seeder
 //            ['draw_master_id'=>8,'number_combination_id'=>86,'game_id'=>1,'game_date'=>'2021-05-23'],
 //        ]);
 
+//        Expiration::create(['days' => 0]);
     }
+
 }
