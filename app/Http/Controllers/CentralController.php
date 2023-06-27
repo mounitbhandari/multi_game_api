@@ -363,7 +363,7 @@ class CentralController extends Controller
                     $game_multiplexer = 1;
                 } elseif ($result[0]->total_quantity == 0) {
                     $randNum = rand(0, 10);
-                    $game_multiplexer = $randNum > 7 ? $null_multiplexer[array_rand($null_multiplexer, 1)] : 1;
+                    $game_multiplexer = $randNum > 5 ? $null_multiplexer[array_rand($null_multiplexer, 1)] : 1;
                 } elseif (($result[0]->total_quantity) < $targetValue) {
                     $checkMultiplexer = $result[0]->total_quantity * $gameType->winning_price * 2;
                     if ($checkMultiplexer < $payout) {
