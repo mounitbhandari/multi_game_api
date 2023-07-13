@@ -70,7 +70,7 @@ class CentralController extends Controller
 
         $gameTemp_multiplexer = (GameType::whereGameId($id)->first())->multiplexer;
 
-        $null_multiplexer = [2,4,3];
+        $null_multiplexer = [1,2];
 
         $checkCount = (GameType::whereGameId($id)->first())->counter;
 
