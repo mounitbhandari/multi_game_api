@@ -160,6 +160,7 @@ Route::group(['middleware' => 'auth:sanctum'],
     Route::post('stockists',[StockistController::class, 'create_stockist']);
     Route::put('stockists',[StockistController::class, 'update_stockist']);
     Route::put('stockists/balance',[StockistController::class, 'update_balance_to_stockist']);
+    Route::get('stockists/deleteStockist/{id}',[StockistController::class, 'delete_stockist_by_admin']);
 
     Route::post('terminals',[TerminalController::class, 'create_terminal']);
     Route::get('terminal/{id}',[TerminalController::class, 'get_logged_in_terminal']);
@@ -167,6 +168,7 @@ Route::group(['middleware' => 'auth:sanctum'],
 //    Route::get('terminalLoggedId',[TerminalController::class, 'get_terminal_by_auth']);
     Route::get('updateAutoClaimTerminal/{id}',[TerminalController::class, 'update_auto_claim']);
     Route::put('terminals/balance',[TerminalController::class, 'update_balance_to_terminal']);
+    Route::get('terminals/deleteTerminal/{id}',[TerminalController::class, 'delete_terminal_by_admin']);
 
     Route::get('cPanel/barcodeReport', [CPanelReportController::class, 'barcode_wise_report']);
     Route::post('cPanel/barcodeReportByDate', [CPanelReportController::class, 'barcode_wise_report_by_date']);
@@ -200,7 +202,7 @@ Route::group(['middleware' => 'auth:sanctum'],
     Route::post('superStockists',[SuperStockistController::class, 'create_super_stockist']);
     Route::put('superStockists',[SuperStockistController::class, 'update_super_stockist']);
     Route::put('superStockists/balance',[SuperStockistController::class, 'update_balance_to_super_stockist']);
-
+    Route::get('superStockists/deleteSuperStockist/{id}',[SuperStockistController::class, 'delete_super_stockist_by_admin']);
 
 
     Route::post('cPanel/loadReport', [CPanelReportController::class, 'load_report']);
