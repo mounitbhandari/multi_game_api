@@ -666,7 +666,7 @@ class CPanelReportController extends Controller
                     inner join game_types on play_details.game_type_id = game_types.id
                     where play_masters.id = ? and play_details.series_id = 0) as table1;",[$play_master_id])[0]->amount;
 
-                $data2 = DB::select("select ifnull(sum(table1.amount),0) as amount from (select distinct  play_details.combined_number, if(play_details.combined_number>1, play_details.quantity * 1, play_details.quantity * game_types.mrp ) as amount from play_masters
+                $data2 = DB::select("select ifnull(sum(table1.amount),0) as amount from (select distinct  play_details.combined_number, if(play_details.combined_number>1, play_details.quantity * 1, play_details.quantity * game_types.mrp ) as amount, play_details.series_id from play_masters
                     inner join play_details on play_masters.id = play_details.play_master_id
                     inner join game_types on play_details.game_type_id = game_types.id
                     where play_masters.id = ? and play_details.series_id <> 0) as table1;",[$play_master_id])[0]->amount;
